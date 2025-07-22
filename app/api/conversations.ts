@@ -1,4 +1,9 @@
-// This file can be created to encapsulate fetching logic if it becomes more complex.
-// For now, we can call fetch directly from the hook.
-// This is a placeholder for future expansion.
-export {};
+import { Conversation } from '@/types/conversation';
+
+export const getConversations = async (): Promise<Conversation[]> => {
+    const res = await fetch('/api/conversations');
+    if (!res.ok) {
+        throw new Error('Failed to fetch conversations');
+    }
+    return res.json();
+}
