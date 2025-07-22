@@ -43,25 +43,26 @@ const AccountPage = () => {
         <h1 className="text-2xl md:text-3xl font-bold">내 계정</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-1">계정 정보를 관리하고 설정을 변경합니다.</p>
       </header>
-      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-        <aside className="w-full md:w-1/4 lg:w-1/5">
-          <nav className="flex flex-row md:flex-col gap-1">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-3 p-3 rounded-lg text-left transition-colors w-full ${
-                  activeTab === tab.id
-                    ? 'bg-gray-100 dark:bg-neutral-800 font-bold text-gray-900 dark:text-gray-100'
-                    : 'hover:bg-gray-100/50 dark:hover:bg-neutral-800/50 text-gray-600 dark:text-gray-300'
-                }`}
-              >
-                <tab.icon className="w-6 h-6 flex-shrink-0" />
-                <span className="hidden md:inline">{tab.name}</span>
-              </button>
-            ))}
-          </nav>
-        </aside>
+      <div className="flex flex-col">
+        {/* Tab navigation */}
+        <nav className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-3 font-semibold transition-colors ${
+                activeTab === tab.id
+                  ? 'border-b-2 border-blue-500 text-blue-500'
+                  : 'border-b-2 border-transparent text-gray-500 hover:text-blue-500 hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+            >
+              <tab.icon className="w-5 h-5" />
+              <span>{tab.name}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Tab content */}
         <main className="flex-1">
           <div className="bg-white dark:bg-neutral-900/50 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
             {renderContent()}
