@@ -8,8 +8,8 @@ import {
   AtSymbolIcon,
 } from '@heroicons/react/24/solid';
 import Image from 'next/image';
-
-import notifications from '@/data/notifications.json';
+import { useNotifications } from '@/hooks/useNotifications';
+import { Notification } from '@/types/notification';
 
 const NotificationIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -26,7 +26,7 @@ const NotificationIcon = ({ type }: { type: string }) => {
   }
 };
 
-const NotificationItem = ({ notification }: { notification: any }) => {
+const NotificationItem = ({ notification }: { notification: Notification }) => {
   const { type, user, postContent, time, read } = notification;
 
   const renderContent = () => {
@@ -88,16 +88,39 @@ const NotificationItem = ({ notification }: { notification: any }) => {
   );
 };
 
-
 const NotificationsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
+  const { data: notifications, isLoading, error } = useNotifications();
 
-  const filteredNotifications = notifications.filter(notification => {
+  const filteredNotifications = notifications?.filter(notification => {
       if (activeTab === 'mentions') {
           return notification.type === 'mention';
       }
       return true;
-  })
+  });
+
+  const renderContent = () => {
+    if (isLoading) {
+      return <div className="p-8 text-center">알림을 불러오는 중...</div>;
+    }
+
+    if (error) {
+      return <div className="p-8 text-center text-red-500">알림을 불러오는 중 오류가 발생했습니다.</div>;
+    }
+
+    if (!filteredNotifications || filteredNotifications.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+          <h2 className="text-2xl font-bold">알림이 없습니다</h2>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">다른 사람들과 소통을 시작하면 여기에 알림이 표시됩니다.</p>
+        </div>
+      );
+    }
+
+    return filteredNotifications.map(notification => (
+      <NotificationItem key={notification.id} notification={notification} />
+    ));
+  };
 
   return (
     <div className="text-black dark:text-white h-full">
@@ -116,16 +139,7 @@ const NotificationsPage = () => {
         </nav>
       </header>
       <section>
-        {filteredNotifications.length > 0 ? (
-            filteredNotifications.map(notification => (
-                <NotificationItem key={notification.id} notification={notification} />
-            ))
-        ) : (
-            <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                <h2 className="text-2xl font-bold">알림이 없습니다</h2>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">다른 사람들과 소통을 시작하면 여기에 알림이 표시됩니다.</p>
-            </div>
-        )}
+        {renderContent()}
       </section>
     </div>
   );
