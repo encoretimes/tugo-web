@@ -41,7 +41,14 @@ const conversations = [
   },
 ];
 
-const initialMessages = {
+interface Message {
+  id: number;
+  text: string;
+  sender: 'me' | 'other';
+  time: string;
+}
+
+const initialMessages: { [key: number]: Message[] } = {
   1: [
     { id: 1, text: '안녕하세요, 김진보입니다. 보내주신 자료 잘 보았습니다.', sender: 'other', time: '오후 3:40' },
     { id: 2, text: '특히 마지막 부분의 통계 자료가 인상 깊었습니다.', sender: 'other', time: '오후 3:41' },
