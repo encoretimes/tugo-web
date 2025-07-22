@@ -2,55 +2,9 @@ import React from 'react';
 import PartyCard from './PartyCard';
 import { PlusIcon } from '@heroicons/react/24/solid';
 
-const myParties = [
-  {
-    id: 1,
-    name: '대한민국 정책 토론방',
-    description: '부동산, 교육, 외교 등 대한민국의 주요 정책에 대해 심도 깊게 토론합니다.',
-    memberCount: 12500,
-    bannerImageUrl: '/banners/policy.svg', // Replace with actual banner images
-    isJoined: true,
-  },
-  {
-    id: 2,
-    name: '2030 정치 이슈',
-    description: '청년 세대가 직면한 정치, 사회적 문제들을 논의하고 해결책을 모색합니다.',
-    memberCount: 8700,
-    bannerImageUrl: '/banners/youth.svg',
-    isJoined: true,
-  },
-];
+import partiesData from '@/data/parties.json';
 
-const recommendedParties = [
-  {
-    id: 3,
-    name: '환경과 미래',
-    description: '기후 변화, 지속 가능한 에너지 등 환경 문제에 관심 있는 사람들의 모임입니다.',
-    memberCount: 5400,
-    bannerImageUrl: '/banners/environment.svg',
-  },
-  {
-    id: 4,
-    name: '자유 시장 경제 포럼',
-    description: '자유주의와 시장 경제 원칙에 입각하여 경제 현안을 분석하고 토론합니다.',
-    memberCount: 9800,
-    bannerImageUrl: '/banners/economy.svg',
-  },
-  {
-    id: 5,
-    name: '글로벌 외교/안보',
-    description: '급변하는 국제 정세와 한반도 주변의 외교, 안보 이슈를 다룹니다.',
-    memberCount: 7200,
-    bannerImageUrl: '/banners/security.svg',
-  },
-    {
-    id: 6,
-    name: 'Tugo 공식 건의사항',
-    description: 'Tugo 플랫폼의 발전과 개선을 위한 아이디어를 제안하고 토론하는 공간입니다.',
-    memberCount: 21300,
-    bannerImageUrl: '/banners/official.svg',
-  },
-];
+const { myParties, recommendedParties } = partiesData;
 
 const PartiesPage = () => {
   return (

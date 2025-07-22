@@ -3,43 +3,7 @@
 import { useState } from 'react';
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, BanknotesIcon } from '@heroicons/react/24/solid';
 
-const pointHistory = [
-  {
-    id: 1,
-    type: 'earn',
-    description: '출석 체크 보상',
-    amount: 100,
-    date: '2025-07-21',
-  },
-  {
-    id: 2,
-    type: 'spend',
-    description: "'진보논객' 크리에이터 구독",
-    amount: -49,
-    date: '2025-07-20',
-  },
-  {
-    id: 3,
-    type: 'earn',
-    description: '이벤트 참여 보상',
-    amount: 500,
-    date: '2025-07-19',
-  },
-  {
-    id: 4,
-    type: 'earn',
-    description: '출석 체크 보상',
-    amount: 100,
-    date: '2025-07-18',
-  },
-    {
-    id: 5,
-    type: 'spend',
-    description: "'보수논객' 크리에이터 후원",
-    amount: -100,
-    date: '2025-07-17',
-  },
-];
+import pointHistory from '@/data/points.json';
 
 const PointsPage = () => {
   const [activeTab, setActiveTab] = useState('all');

@@ -8,38 +8,8 @@ import {
 } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 
-const conversations = [
-  {
-    id: 1,
-    user: {
-      name: '김진보',
-      profileImageUrl: 'https://i.pravatar.cc/150?u=progressive_kim',
-    },
-    lastMessage: '네, 좋은 의견입니다. 한번 더 생각해볼게요.',
-    time: '오후 3:45',
-    unreadCount: 2,
-  },
-  {
-    id: 2,
-    user: {
-      name: '이보수',
-      profileImageUrl: 'https://i.pravatar.cc/150?u=conservative_lee',
-    },
-    lastMessage: '자료 확인했습니다. 감사합니다.',
-    time: '오전 11:20',
-    unreadCount: 0,
-  },
-  {
-    id: 3,
-    user: {
-      name: '박중도',
-      profileImageUrl: 'https://i.pravatar.cc/150?u=neutral_park',
-    },
-    lastMessage: '회의록 정리해서 보내드렸습니다.',
-    time: '어제',
-    unreadCount: 0,
-  },
-];
+import conversations from '@/data/conversations.json';
+import initialMessages from '@/data/messages.json';
 
 interface Message {
   id: number;
@@ -48,23 +18,13 @@ interface Message {
   time: string;
 }
 
-const initialMessages: { [key: number]: Message[] } = {
-  1: [
-    { id: 1, text: '안녕하세요, 김진보입니다. 보내주신 자료 잘 보았습니다.', sender: 'other', time: '오후 3:40' },
-    { id: 2, text: '특히 마지막 부분의 통계 자료가 인상 깊었습니다.', sender: 'other', time: '오후 3:41' },
-    { id: 3, text: '안녕하세요. 확인해주셔서 감사합니다. 혹시 다른 의견 있으신가요?', sender: 'me', time: '오후 3:42' },
-    { id: 4, text: '네, 좋은 의견입니다. 한번 더 생각해볼게요.', sender: 'other', time: '오후 3:45' },
-  ],
-  2: [
-     { id: 1, text: '이보수입니다. 요청하신 자료 첨부합니다.', sender: 'other', time: '오전 11:18' },
-     { id: 2, text: '자료 확인했습니다. 감사합니다.', sender: 'me', time: '오전 11:20' },
-  ],
-  3: [],
-};
+interface MessagesData {
+  [key: string]: Message[];
+}
 
 const MessagesPage = () => {
   const [selectedConversationId, setSelectedConversationId] = useState(conversations[0].id);
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<MessagesData>(initialMessages as MessagesData);
 
   const selectedConversation = conversations.find(c => c.id === selectedConversationId);
 

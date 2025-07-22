@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "author": {
+      "name": "김민준",
+      "username": "minjun.kim",
+      "profileImageUrl": null
+    },
+    "content": "새로운 정치 플랫폼 Tugo, 정말 기대되네요! 여기서 자유롭게 의견을 나눌 수 있기를 바랍니다.",
+    "createdAt": "2시간 전",
+    "stats": {
+      "comments": 12,
+      "reposts": 5,
+      "likes": 34
+    }
+  },
+  {
+    "id": "2",
+    "author": {
+      "name": "이서연",
+      "username": "seoyeon.lee",
+      "profileImageUrl": "https://i.pravatar.cc/150?u=seoyeon.lee"
+    },
+    "content": "투표 기능이 가장 마음에 들어요. 우리들의 생각이 실제로 통계로 보여진다는 점이 의미있네요.",
+    "createdAt": "3시간 전",
+    "stats": {
+      "comments": 8,
+      "reposts": 2,
+      "likes": 21
+    }
+  },
+  {
+    "id": "3",
+    "author": {
+      "name": "박지훈",
+      "username": "jihun.park",
+      "profileImageUrl": "https://i.pravatar.cc/150?u=jihun.park"
+    },
+    "content": "크리에이터 후원 기능도 신선하네요. 좋은 콘텐츠를 만드는 분들께 힘이 될 것 같아요.",
+    "createdAt": "5시간 전",
+    "stats": {
+      "comments": 23,
+      "reposts": 11,
+      "likes": 89
+    }
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "type": "follow",
+    "user": {
+      "name": "김진보",
+      "handle": "progressive_kim",
+      "profileImageUrl": "https://i.pravatar.cc/150?u=progressive_kim"
+    },
+    "time": "2시간 전",
+    "read": false
+  },
+  {
+    "id": 2,
+    "type": "like",
+    "user": {
+      "name": "이보수",
+      "handle": "conservative_lee",
+      "profileImageUrl": "https://i.pravatar.cc/150?u=conservative_lee"
+    },
+    "postContent": "정부의 새로운 부동산 정책에 대한 당신의 생각은?",
+    "time": "5시간 전",
+    "read": false
+  },
+  {
+    "id": 3,
+    "type": "reply",
+    "user": {
+      "name": "박중도",
+      "handle": "neutral_park",
+      "profileImageUrl": "https://i.pravatar.cc/150?u=neutral_park"
+    },
+    "postContent": "저는 양측의 의견 모두 일리가 있다고 생각합니다. 다만...",
+    "time": "1일 전",
+    "read": true
+  },
+  {
+    "id": 4,
+    "type": "mention",
+    "user": {
+      "name": "최고관리자",
+      "handle": "admin_choi",
+      "profileImageUrl": "https://i.pravatar.cc/150?u=admin_choi"
+    },
+    "postContent": "@tugo_official 새로운 기능이 업데이트 되었습니다! 확인해보세요.",
+    "time": "3일 전",
+    "read": true
+  }
+]
