@@ -6,9 +6,6 @@ import { UserIcon, PhotoIcon } from '@heroicons/react/24/solid';
 const ProfileSection = () => {
   const { user } = useUserStore();
 
-  // In a real app, you'd use state for form fields, e.g., useState(user.name)
-  // For this dummy component, we'll just display the data.
-
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
@@ -44,10 +41,17 @@ const ProfileSection = () => {
                   className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
                 >
                   <PhotoIcon className="h-8 w-8 text-white" />
-                  <input id="profile-image-upload" type="file" className="sr-only" />
+                  <input
+                    id="profile-image-upload"
+                    type="file"
+                    className="sr-only"
+                  />
                 </label>
               </div>
-               <button type="button" className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-neutral-800">
+              <button
+                type="button"
+                className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-neutral-800"
+              >
                 이미지 변경
               </button>
             </div>

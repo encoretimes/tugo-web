@@ -1,4 +1,4 @@
-import { Notification } from '@/types/notification'; // Assuming Notification type exists
+import { Notification } from '@/types/notification';
 
 const API_URL = '/api/notifications';
 

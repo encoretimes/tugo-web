@@ -9,13 +9,21 @@ const PartiesPage = () => {
   const { data, isLoading, error } = useParties();
 
   const renderMyParties = () => {
-    if (isLoading) return <div className="text-center">파티 목록을 불러오는 중...</div>;
-    if (error) return <div className="text-center text-red-500">오류가 발생했습니다.</div>;
+    if (isLoading)
+      return <div className="text-center">파티 목록을 불러오는 중...</div>;
+    if (error)
+      return (
+        <div className="text-center text-red-500">오류가 발생했습니다.</div>
+      );
     if (!data || data.myParties.length === 0) {
       return (
         <div className="text-center py-12 px-6 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-          <h3 className="text-lg font-semibold">아직 가입한 파티가 없습니다.</h3>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">추천 파티에 가입하여 활동을 시작해보세요!</p>
+          <h3 className="text-lg font-semibold">
+            아직 가입한 파티가 없습니다.
+          </h3>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            추천 파티에 가입하여 활동을 시작해보세요!
+          </p>
         </div>
       );
     }
@@ -45,12 +53,14 @@ const PartiesPage = () => {
     <div className="p-4 md:p-6 text-black dark:text-white">
       <header className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-gray-200 dark:border-gray-800 pb-4 mb-6">
         <div>
-            <h1 className="text-2xl md:text-3xl font-bold">파티</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">관심 주제에 대한 커뮤니티에 참여해보세요.</p>
+          <h1 className="text-2xl md:text-3xl font-bold">파티</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
+            관심 주제에 대한 커뮤니티에 참여해보세요.
+          </p>
         </div>
         <button className="mt-4 sm:mt-0 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors font-bold">
-            <PlusIcon className="w-5 h-5" />
-            <span>파티 만들기</span>
+          <PlusIcon className="w-5 h-5" />
+          <span>파티 만들기</span>
         </button>
       </header>
 
