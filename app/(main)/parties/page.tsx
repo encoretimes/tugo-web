@@ -1,12 +1,46 @@
+'use client';
+
 import React from 'react';
 import PartyCard from './PartyCard';
 import { PlusIcon } from '@heroicons/react/24/solid';
-
-import partiesData from '@/data/parties.json';
-
-const { myParties, recommendedParties } = partiesData;
+import { useParties } from '@/hooks/useParties';
 
 const PartiesPage = () => {
+  const { data, isLoading, error } = useParties();
+
+  const renderMyParties = () => {
+    if (isLoading) return <div className="text-center">파티 목록을 불러오는 중...</div>;
+    if (error) return <div className="text-center text-red-500">오류가 발생했습니다.</div>;
+    if (!data || data.myParties.length === 0) {
+      return (
+        <div className="text-center py-12 px-6 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
+          <h3 className="text-lg font-semibold">아직 가입한 파티가 없습니다.</h3>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">추천 파티에 가입하여 활동을 시작해보세요!</p>
+        </div>
+      );
+    }
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {data.myParties.map((party) => (
+          <PartyCard key={party.id} party={party} />
+        ))}
+      </div>
+    );
+  };
+
+  const renderRecommendedParties = () => {
+    if (isLoading) return null; // Avoid showing loader twice
+    if (error) return null;
+    if (!data) return null;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {data.recommendedParties.map((party) => (
+          <PartyCard key={party.id} party={party} />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="p-4 md:p-6 text-black dark:text-white">
       <header className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-gray-200 dark:border-gray-800 pb-4 mb-6">
@@ -22,27 +56,12 @@ const PartiesPage = () => {
 
       <section className="mb-12">
         <h2 className="text-xl font-bold mb-4">내가 가입한 파티</h2>
-        {myParties.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {myParties.map((party) => (
-              <PartyCard key={party.id} party={party} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 px-6 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <h3 className="text-lg font-semibold">아직 가입한 파티가 없습니다.</h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">추천 파티에 가입하여 활동을 시작해보세요!</p>
-          </div>
-        )}
+        {renderMyParties()}
       </section>
 
       <section>
         <h2 className="text-xl font-bold mb-4">추천 파티</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recommendedParties.map((party) => (
-            <PartyCard key={party.id} party={party} />
-          ))}
-        </div>
+        {renderRecommendedParties()}
       </section>
     </div>
   );
