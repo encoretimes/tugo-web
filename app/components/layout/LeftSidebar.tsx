@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { Fragment } from 'react';
+import Link from 'next/link';
 import NavItem from '@/components/nav/NavItem';
 import {
   HomeIcon,
@@ -10,78 +11,110 @@ import {
   CurrencyDollarIcon,
   UserIcon as UserIconOutline,
   EllipsisHorizontalIcon,
+  Cog6ToothIcon,
+  ArchiveBoxIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
+import { Popover, Transition } from '@headlessui/react';
 
 const LeftSidebar = () => {
   const { user } = useUserStore();
 
   return (
-    <aside className="flex h-screen flex-col justify-between border-r p-4">
+    <aside className="sticky top-0 flex h-screen flex-col justify-between border-r border-gray-200 dark:border-neutral-800 p-2 md:p-4">
       <div>
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold">Tugo</h2>
-          <nav>
-            <ul>
-              <NavItem
-                href="/"
-                icon={<HomeIcon className="h-6 w-6" />}
-                label="홈"
-              />
-              <NavItem
-                href="/notifications"
-                icon={<BellIcon className="h-6 w-6" />}
-                label="알림"
-              />
-              <NavItem
-                href="/messages"
-                icon={<EnvelopeIcon className="h-6 w-6" />}
-                label="쪽지"
-              />
-              <NavItem
-                href="/parties"
-                icon={<UserGroupIcon className="h-6 w-6" />}
-                label="파티"
-              />
-              <NavItem
-                href="/points"
-                icon={<CurrencyDollarIcon className="h-6 w-6" />}
-                label="포인트"
-              />
-              <NavItem
-                href="/account"
-                icon={<UserIconOutline className="h-6 w-6" />}
-                label="내 계정"
-              />
-              <NavItem
-                href="/more"
-                icon={<EllipsisHorizontalIcon className="h-6 w-6" />}
-                label="더보기"
-              />
-            </ul>
-          </nav>
-          <button className="w-full rounded-full bg-gray-800 py-2 font-bold text-white hover:bg-gray-900">
-            투고하기
-          </button>
-        </div>
+        <Link href="/" className="text-2xl font-bold p-3 block">Tugo</Link>
+        <nav className="mt-4">
+          <ul>
+            <NavItem
+              href="/"
+              icon={<HomeIcon className="h-7 w-7" />}
+              label="홈"
+            />
+            <NavItem
+              href="/notifications"
+              icon={<BellIcon className="h-7 w-7" />}
+              label="알림"
+            />
+            <NavItem
+              href="/messages"
+              icon={<EnvelopeIcon className="h-7 w-7" />}
+              label="쪽지"
+            />
+            <NavItem
+              href="/parties"
+              icon={<UserGroupIcon className="h-7 w-7" />}
+              label="파티"
+            />
+            <NavItem
+              href="/points"
+              icon={<CurrencyDollarIcon className="h-7 w-7" />}
+              label="포인트"
+            />
+            <NavItem
+              href="/account"
+              icon={<UserIconOutline className="h-7 w-7" />}
+              label="내 계정"
+            />
+            <Popover className="relative">
+              {({ open }) => (
+                <>
+                  <Popover.Button
+                    className={`w-full flex items-center gap-4 p-3 rounded-full transition-colors duration-200 text-lg hover:bg-gray-100 dark:hover:bg-neutral-800 ${open ? 'bg-gray-100 dark:bg-neutral-800' : ''}`}
+                  >
+                    <EllipsisHorizontalIcon className="h-7 w-7" />
+                    <span className="hidden xl:inline">더보기</span>
+                  </Popover.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 translate-y-1"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                  >
+                    <Popover.Panel className="absolute bottom-full mb-2 w-64 rounded-xl bg-white dark:bg-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5">
+                      <div className="p-2">
+                        <Link href="/settings" className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                          <Cog6ToothIcon className="h-6 w-6" />
+                          <span className="font-semibold">설정</span>
+                        </Link>
+                        <Link href="/archive" className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                          <ArchiveBoxIcon className="h-6 w-6" />
+                          <span className="font-semibold">보관함</span>
+                        </Link>
+                      </div>
+                    </Popover.Panel>
+                  </Transition>
+                </>
+              )}
+            </Popover>
+          </ul>
+        </nav>
+        <button className="mt-4 w-full rounded-full bg-blue-500 py-3 text-lg font-bold text-white hover:bg-blue-600">
+          투고하기
+        </button>
       </div>
       {user && (
-        <div className="flex items-center space-x-2">
-          {user.profileImageUrl ? (
-            <img
-              src={user.profileImageUrl}
-              alt={user.name}
-              className="h-10 w-10 rounded-full"
-            />
-          ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300">
-              <UserIconOutline className="h-6 w-6 text-gray-500" />
+        <div className="p-2">
+            <div className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer">
+            {user.profileImageUrl ? (
+                <img
+                src={user.profileImageUrl}
+                alt={user.name}
+                className="h-10 w-10 rounded-full"
+                />
+            ) : (
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
+                <UserIconOutline className="h-6 w-6 text-gray-500" />
+                </div>
+            )}
+            <div className="hidden xl:block">
+                <div className="font-bold">{user.name}</div>
+                <div className="text-sm text-gray-500">@{user.username}</div>
             </div>
-          )}
-          <div>
-            <div className="font-bold">{user.name}</div>
-            <div className="text-sm text-gray-500">@{user.username}</div>
-          </div>
+            </div>
         </div>
       )}
     </aside>
