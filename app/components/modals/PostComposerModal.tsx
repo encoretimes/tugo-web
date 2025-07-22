@@ -1,13 +1,15 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import {
   PhotoIcon,
   ChartBarIcon,
   FaceSmileIcon,
   UserIcon,
   XMarkIcon,
+  ArrowsPointingOutIcon,
+  ArrowsPointingInIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
 
@@ -21,10 +23,11 @@ export default function PostComposerModal({
   onClose,
 }: PostComposerModalProps) {
   const { user } = useUserStore();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onClose}>
+      <Dialog as="div" className="relative z-50" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -34,7 +37,7 @@ export default function PostComposerModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-black bg-opacity-25 dark:bg-opacity-50" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -48,14 +51,36 @@ export default function PostComposerModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel
+                className={`w-full ${
+                  isExpanded ? 'max-w-3xl' : 'max-w-md'
+                } transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all duration-300`}
+              >
                 <div className="flex items-center justify-between">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
+                  >
                     새 게시물 작성
                   </Dialog.Title>
-                  <button onClick={onClose}>
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setIsExpanded(!isExpanded)}
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    >
+                      {isExpanded ? (
+                        <ArrowsPointingInIcon className="h-6 w-6" />
+                      ) : (
+                        <ArrowsPointingOutIcon className="h-6 w-6" />
+                      )}
+                    </button>
+                    <button
+                      onClick={onClose}
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    >
+                      <XMarkIcon className="h-6 w-6" />
+                    </button>
+                  </div>
                 </div>
                 <div className="mt-4">
                   <div className="flex space-x-4">
@@ -67,32 +92,32 @@ export default function PostComposerModal({
                           className="h-12 w-12 rounded-full"
                         />
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                          <UserIcon className="h-8 w-8 text-gray-500" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
+                          <UserIcon className="h-8 w-8 text-gray-500 dark:text-neutral-400" />
                         </div>
                       )}
                     </div>
                     <div className="flex-grow">
                       <textarea
-                        className="w-full resize-none border-none p-2 focus:ring-0"
+                        className="w-full resize-none border-none bg-transparent p-2 text-black dark:text-white focus:ring-0"
                         placeholder="무슨 생각을 하고 계신가요?"
-                        rows={4}
+                        rows={isExpanded ? 10 : 4}
                       ></textarea>
                     </div>
                   </div>
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex space-x-2">
-                      <button className="text-gray-500 hover:text-gray-700">
+                      <button className="text-blue-500 hover:text-blue-700">
                         <PhotoIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-gray-500 hover:text-gray-700">
+                      <button className="text-blue-500 hover:text-blue-700">
                         <ChartBarIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-gray-500 hover:text-gray-700">
+                      <button className="text-blue-500 hover:text-blue-700">
                         <FaceSmileIcon className="h-6 w-6" />
                       </button>
                     </div>
-                    <button className="rounded-full bg-gray-800 px-4 py-2 font-bold text-white hover:bg-gray-900">
+                    <button className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 disabled:opacity-50">
                       투고하기
                     </button>
                   </div>
