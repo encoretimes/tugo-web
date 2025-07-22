@@ -2,18 +2,48 @@
 
 import { useState } from 'react';
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, BanknotesIcon } from '@heroicons/react/24/solid';
-
-import pointHistory from '@/data/points.json';
+import { usePoints } from '@/hooks/usePoints';
 
 const PointsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
+  const { data: pointHistory, isLoading, error } = usePoints();
 
-  const currentPoints = pointHistory.reduce((acc, curr) => acc + curr.amount, 3000);
+  const currentPoints = pointHistory?.reduce((acc, curr) => acc + curr.amount, 3000) ?? 3000;
 
-  const filteredHistory = pointHistory.filter(item => {
+  const filteredHistory = pointHistory?.filter(item => {
     if (activeTab === 'all') return true;
     return item.type === activeTab;
   });
+
+  const renderHistory = () => {
+    if (isLoading) return <div className="text-center">포인트 내역을 불러오는 중...</div>;
+    if (error) return <div className="text-center text-red-500">오류가 발생했습니다.</div>;
+    if (!filteredHistory || filteredHistory.length === 0) {
+      return <div className="text-center text-gray-500">포인트 내역이 없습니다.</div>;
+    }
+    return (
+      <div className="space-y-3">
+        {filteredHistory.map(item => (
+          <div key={item.id} className="flex items-center justify-between p-4 rounded-lg bg-white dark:bg-neutral-900/50 border border-gray-200 dark:border-gray-800">
+            <div className="flex items-center gap-4">
+              {item.type === 'earn' ? (
+                <ArrowDownCircleIcon className="w-8 h-8 text-green-500" />
+              ) : (
+                <ArrowUpCircleIcon className="w-8 h-8 text-red-500" />
+              )}
+              <div>
+                <p className="font-semibold text-gray-800 dark:text-gray-200">{item.description}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{item.date}</p>
+              </div>
+            </div>
+            <p className={`text-lg font-bold ${item.type === 'earn' ? 'text-green-600' : 'text-red-600'}`}>
+              {item.amount > 0 ? '+' : ''}{item.amount.toLocaleString()} P
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="p-4 md:p-6 text-black dark:text-white">
@@ -52,27 +82,7 @@ const PointsPage = () => {
             </button>
           </nav>
         </div>
-
-        <div className="space-y-3">
-          {filteredHistory.map(item => (
-            <div key={item.id} className="flex items-center justify-between p-4 rounded-lg bg-white dark:bg-neutral-900/50 border border-gray-200 dark:border-gray-800">
-              <div className="flex items-center gap-4">
-                {item.type === 'earn' ? (
-                  <ArrowDownCircleIcon className="w-8 h-8 text-green-500" />
-                ) : (
-                  <ArrowUpCircleIcon className="w-8 h-8 text-red-500" />
-                )}
-                <div>
-                  <p className="font-semibold text-gray-800 dark:text-gray-200">{item.description}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{item.date}</p>
-                </div>
-              </div>
-              <p className={`text-lg font-bold ${item.type === 'earn' ? 'text-green-600' : 'text-red-600'}`}>
-                {item.amount > 0 ? '+' : ''}{item.amount.toLocaleString()} P
-              </p>
-            </div>
-          ))}
-        </div>
+        {renderHistory()}
       </section>
     </div>
   );
