@@ -1,4 +1,4 @@
-name: Build Tugo-Web Docker Image
+name: Build Docker
 
 on:
   push:
