@@ -120,3 +120,6 @@ next-env.d.ts
 code.sh
 response.txt
 GEMINI.md
+
+.claude
+CLAUDE.md
