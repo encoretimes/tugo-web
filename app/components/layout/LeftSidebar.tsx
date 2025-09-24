@@ -2,6 +2,7 @@
 
 import React, { Fragment } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import NavItem from '@/components/nav/NavItem';
 import {
   HomeIcon,
@@ -108,9 +109,11 @@ const LeftSidebar = () => {
         <div className="p-2">
           <div className="flex items-center space-x-2 p-2 rounded-full hover:bg-neutral-100 cursor-pointer">
             {user.profileImageUrl ? (
-              <img
+              <Image
                 src={user.profileImageUrl}
                 alt={user.name}
+                width={40}
+                height={40}
                 className="h-10 w-10 rounded-full"
               />
             ) : (

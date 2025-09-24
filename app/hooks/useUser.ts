@@ -4,9 +4,9 @@ import usersData from '@/data/users.json';
 
 const fetchUser = async (username: string): Promise<User | null> => {
   // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  const user = usersData.find(u => u.username === username);
+  const user = usersData.find((u) => u.username === username);
   return user || null;
 };
 

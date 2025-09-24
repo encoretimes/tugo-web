@@ -45,7 +45,9 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
           <p>
             <span className="font-bold">{user.name}</span>님이 회원님의 게시물을
             좋아합니다:
-            <span className="text-gray-500 ml-2">&ldquo;{postContent}&rdquo;</span>
+            <span className="text-gray-500 ml-2">
+              &ldquo;{postContent}&rdquo;
+            </span>
           </p>
         );
       case 'reply':
@@ -53,7 +55,9 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
           <p>
             <span className="font-bold">{user.name}</span>님이 회원님의 게시물에
             답글을 남겼습니다:
-            <span className="text-gray-500 ml-2">&ldquo;{postContent}&rdquo;</span>
+            <span className="text-gray-500 ml-2">
+              &ldquo;{postContent}&rdquo;
+            </span>
           </p>
         );
       case 'mention':
@@ -61,7 +65,9 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
           <p>
             <span className="font-bold">{user.name}</span>님이 회원님을
             멘션했습니다:
-            <span className="text-gray-500 ml-2">&ldquo;{postContent}&rdquo;</span>
+            <span className="text-gray-500 ml-2">
+              &ldquo;{postContent}&rdquo;
+            </span>
           </p>
         );
       default:

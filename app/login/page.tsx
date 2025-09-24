@@ -1,6 +1,14 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 export default function LoginPage() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   const handleSocialLogin = (provider: 'kakao' | 'naver') => {
     if (provider === 'kakao') {
       window.location.href = 'http://localhost:30000/oauth/kakao/login';
@@ -10,69 +18,186 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
-            <span className="text-white text-2xl font-bold">T</span>
+    <div className="min-h-screen bg-white overflow-hidden">
+      <div className="flex min-h-screen">
+        {/* Left Brand Section */}
+        <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 overflow-hidden">
+          {/* Background Animation Elements */}
+          <div className="absolute inset-0">
+            <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full animate-pulse"></div>
+            <div className="absolute top-40 right-32 w-24 h-24 bg-white/5 rounded-full animate-pulse delay-1000"></div>
+            <div className="absolute bottom-32 left-16 w-40 h-40 bg-white/5 rounded-full animate-pulse delay-500"></div>
+            <div className="absolute bottom-20 right-20 w-28 h-28 bg-white/10 rounded-full animate-pulse delay-700"></div>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">투고</h1>
-          <p className="text-gray-600">차세대 정치 커뮤니티 플랫폼</p>
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col justify-center items-start px-16 py-20 text-white">
+            <div
+              className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            >
+              <div className="flex items-center mb-8">
+                <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-4 shadow-lg">
+                  <span className="text-2xl font-bold text-primary-600">T</span>
+                </div>
+                <h1 className="text-4xl font-bold">Tugo</h1>
+              </div>
+
+              <h2 className="text-3xl font-bold mb-6 leading-tight">
+                차세대 정치 커뮤니티
+                <br />
+                플랫폼에 오신 걸<br />
+                환영합니다
+              </h2>
+
+              <div className="space-y-4 text-lg text-white/90">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                  <span>투명하고 건전한 정치 토론</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                  <span>다양한 의견 교환과 소통</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                  <span>신뢰할 수 있는 정보 공유</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`mt-12 transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            >
+              <p className="text-white/70 text-sm">
+                &ldquo;정치는 우리 모두의 일입니다.
+                <br />
+                함께 더 나은 미래를 만들어가요.&rdquo;
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">로그인</h2>
-            <p className="text-gray-600">소셜 계정으로 간편하게 시작하세요</p>
-          </div>
+        {/* Right Login Section */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-16">
+          <div className="w-full max-w-md">
+            {/* Mobile Logo (shown only on mobile) */}
+            <div className="lg:hidden text-center mb-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-full mb-4">
+                <span className="text-white text-2xl font-bold">T</span>
+              </div>
+              <h1 className="text-3xl font-bold text-neutral-800 mb-2">Tugo</h1>
+              <p className="text-neutral-600">차세대 정치 커뮤니티 플랫폼</p>
+            </div>
 
-          <div className="space-y-4">
-            {/* Kakao Login Button */}
-            <button
-              onClick={() => handleSocialLogin('kakao')}
-              className="w-full flex items-center justify-center gap-3 bg-[#FEE500] hover:bg-[#FBDC00] text-[#191919] font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:ring-offset-2"
+            <div
+              className={`transition-all duration-1000 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 01-1.727-.11L7.5 21l.11-2.717C4.62 16.93 1.5 14.582 1.5 11.185 1.5 6.665 6.201 3 12 3z"/>
-              </svg>
-              카카오로 로그인
-            </button>
+              <div className="text-center lg:text-left mb-8">
+                <h2 className="text-3xl font-bold text-neutral-800 mb-3">
+                  로그인
+                </h2>
+                <p className="text-neutral-600 text-lg">
+                  소셜 계정으로 간편하게 시작하세요
+                </p>
+              </div>
 
-            {/* Naver Login Button */}
-            <button
-              onClick={() => handleSocialLogin('naver')}
-              className="w-full flex items-center justify-center gap-3 bg-[#03C75A] hover:bg-[#02B351] text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[#03C75A] focus:ring-offset-2"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L7.5 7.5H12V22l4.5-4.5V7.5H21L12 2z"/>
-              </svg>
-              네이버로 로그인
-            </button>
-          </div>
+              <div className="space-y-4 mb-8">
+                {/* Kakao Login Button */}
+                <button
+                  onClick={() => handleSocialLogin('kakao')}
+                  className="w-full flex items-center justify-center gap-4 bg-[#FEE500] hover:bg-[#FBDC00] text-[#191919] font-semibold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#FEE500] focus:ring-offset-2 group"
+                >
+                  <svg
+                    className="w-6 h-6 transition-transform group-hover:scale-110"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 01-1.727-.11L7.5 21l.11-2.717C4.62 16.93 1.5 14.582 1.5 11.185 1.5 6.665 6.201 3 12 3z" />
+                  </svg>
+                  <span className="text-lg">카카오로 로그인</span>
+                </button>
 
-          {/* Divider */}
-          <div className="my-8 flex items-center">
-            <div className="flex-1 border-t border-gray-200"></div>
-            <div className="px-4 text-sm text-gray-500 bg-white">또는</div>
-            <div className="flex-1 border-t border-gray-200"></div>
-          </div>
+                {/* Naver Login Button */}
+                <button
+                  onClick={() => handleSocialLogin('naver')}
+                  className="w-full flex items-center justify-center gap-4 bg-[#03C75A] hover:bg-[#02B351] text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#03C75A] focus:ring-offset-2 group"
+                >
+                  <svg
+                    className="w-6 h-6 transition-transform group-hover:scale-110"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
+                  </svg>
+                  <span className="text-lg">네이버로 로그인</span>
+                </button>
+              </div>
 
-          {/* Guest Access */}
-          <div className="text-center">
-            <p className="text-sm text-gray-500 mb-4">
-              계정 없이 둘러보기
-            </p>
-            <button className="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
-              게스트로 시작하기 →
-            </button>
+              {/* Divider */}
+              <div className="flex items-center mb-8">
+                <div className="flex-1 border-t border-neutral-300"></div>
+                <div className="px-6 text-sm text-neutral-500 bg-white font-medium">
+                  또는
+                </div>
+                <div className="flex-1 border-t border-neutral-300"></div>
+              </div>
+
+              {/* Guest Access */}
+              <div className="text-center mb-8">
+                <p className="text-neutral-600 mb-4">계정 없이 둘러보기</p>
+                <button className="text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-200 flex items-center justify-center mx-auto gap-2">
+                  게스트로 시작하기
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Footer */}
-        <div className="text-center mt-8 text-sm text-gray-500">
-          <p>로그인 시 <span className="text-blue-600">이용약관</span> 및 <span className="text-blue-600">개인정보처리방침</span>에 동의하게 됩니다.</p>
+      {/* Footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 px-4 py-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center lg:justify-between gap-4 text-sm text-neutral-500">
+            <div className="flex flex-wrap items-center gap-6">
+              <a href="#" className="hover:text-neutral-700 transition-colors">
+                이용약관
+              </a>
+              <a
+                href="#"
+                className="hover:text-neutral-700 transition-colors font-semibold"
+              >
+                개인정보처리방침
+              </a>
+              <a href="#" className="hover:text-neutral-700 transition-colors">
+                쿠키 설정
+              </a>
+              <a href="#" className="hover:text-neutral-700 transition-colors">
+                고객센터
+              </a>
+              <a href="#" className="hover:text-neutral-700 transition-colors">
+                회사소개
+              </a>
+            </div>
+            <div className="text-center lg:text-right">
+              <p>&copy; 2025 Tugo.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

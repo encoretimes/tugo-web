@@ -7,6 +7,7 @@ import {
   FaceSmileIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 
@@ -23,9 +24,11 @@ const PostComposer = () => {
         <div className="flex space-x-4">
           <div className="flex-shrink-0">
             {user?.profileImageUrl ? (
-              <img
+              <Image
                 src={user.profileImageUrl}
                 alt={user.name}
+                width={48}
+                height={48}
                 className="h-12 w-12 rounded-full"
               />
             ) : (

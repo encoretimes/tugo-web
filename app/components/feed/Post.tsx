@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ChatBubbleOvalLeftIcon,
   ArrowPathRoundedSquareIcon,
@@ -21,9 +22,11 @@ const Post: React.FC<PostProps> = ({ post }) => {
       <div className="flex space-x-4">
         <Link href={`/profile/${author.username}`} className="flex-shrink-0">
           {author.profileImageUrl ? (
-            <img
+            <Image
               src={author.profileImageUrl}
               alt={author.name}
+              width={48}
+              height={48}
               className="h-12 w-12 rounded-full hover:opacity-80 transition-opacity"
             />
           ) : (
@@ -34,10 +37,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
         </Link>
         <div className="flex-grow">
           <div className="flex items-center space-x-2">
-            <Link href={`/profile/${author.username}`} className="font-bold hover:underline">
+            <Link
+              href={`/profile/${author.username}`}
+              className="font-bold hover:underline"
+            >
               {author.name}
             </Link>
-            <Link href={`/profile/${author.username}`} className="text-neutral-500 hover:underline">
+            <Link
+              href={`/profile/${author.username}`}
+              className="text-neutral-500 hover:underline"
+            >
               @{author.username}
             </Link>
             <span className="text-neutral-500">· {createdAt}</span>

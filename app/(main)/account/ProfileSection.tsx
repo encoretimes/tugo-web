@@ -2,6 +2,7 @@
 
 import { useUserStore } from '@/store/userStore';
 import { UserIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 
 const ProfileSection = () => {
   const { user } = useUserStore();
@@ -24,9 +25,11 @@ const ProfileSection = () => {
             <div className="flex items-center gap-4">
               <div className="relative h-24 w-24">
                 {user?.profileImageUrl ? (
-                  <img
+                  <Image
                     src={user.profileImageUrl}
                     alt={user.name}
+                    width={96}
+                    height={96}
                     className="h-full w-full rounded-full object-cover"
                   />
                 ) : (

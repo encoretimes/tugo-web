@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const RightSidebar = () => {
@@ -34,10 +35,15 @@ const RightSidebar = () => {
         <h3 className="mb-2 text-lg font-bold">추천 팔로우</h3>
         <ul className="space-y-2">
           <li className="flex items-center justify-between">
-            <Link href="/profile/minjun.kim" className="flex items-center space-x-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2">
-              <img
+            <Link
+              href="/profile/minjun.kim"
+              className="flex items-center space-x-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2"
+            >
+              <Image
                 src="https://i.pravatar.cc/150?u=minjun.kim"
                 alt="김민준"
+                width={40}
+                height={40}
                 className="h-10 w-10 rounded-full"
               />
               <div>
@@ -50,10 +56,15 @@ const RightSidebar = () => {
             </button>
           </li>
           <li className="flex items-center justify-between">
-            <Link href="/profile/seoyeon.lee" className="flex items-center space-x-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2">
-              <img
+            <Link
+              href="/profile/seoyeon.lee"
+              className="flex items-center space-x-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2"
+            >
+              <Image
                 src="https://i.pravatar.cc/150?u=seoyeon.lee"
                 alt="이서연"
+                width={40}
+                height={40}
                 className="h-10 w-10 rounded-full"
               />
               <div>

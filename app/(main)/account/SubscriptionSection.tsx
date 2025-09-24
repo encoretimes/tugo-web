@@ -1,6 +1,7 @@
 'use client';
 
 import { CreditCardIcon, UserIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 
 const subscribedCreators = [
   {
@@ -47,9 +48,11 @@ const SubscriptionSection = () => {
           >
             <div className="flex items-center gap-4 mb-4 sm:mb-0">
               {creator.profileImageUrl ? (
-                <img
+                <Image
                   src={creator.profileImageUrl}
                   alt={creator.name}
+                  width={48}
+                  height={48}
                   className="h-12 w-12 rounded-full object-cover"
                 />
               ) : (

@@ -2,6 +2,7 @@
 
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import Image from 'next/image';
 import {
   PhotoIcon,
   ChartBarIcon,
@@ -86,9 +87,11 @@ export default function PostComposerModal({
                   <div className="flex space-x-4">
                     <div className="flex-shrink-0">
                       {user?.profileImageUrl ? (
-                        <img
+                        <Image
                           src={user.profileImageUrl}
                           alt={user.name}
+                          width={48}
+                          height={48}
                           className="h-12 w-12 rounded-full"
                         />
                       ) : (
