@@ -22,10 +22,10 @@ const Feed = () => {
     onClick: (id: string) => void;
   }) => (
     <button
-      className={`w-1/2 py-4 text-center font-bold transition-colors duration-200 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-neutral-800/50 ${
+      className={`w-1/2 py-4 text-center font-bold transition-colors duration-200 hover:bg-neutral-100 ${
         activeTab === id
-          ? 'border-b-2 border-black dark:border-white text-black dark:text-white'
-          : ''
+          ? 'border-b-2 border-primary-600 text-neutral-800 bg-white'
+          : 'text-neutral-600 hover:text-neutral-800'
       }`}
       onClick={() => onClick(id)}
     >
@@ -34,9 +34,9 @@ const Feed = () => {
   );
 
   return (
-    <div className="border-r border-gray-200 dark:border-gray-800">
+    <div className="border-r border-neutral-200">
       <PostComposer />
-      <div className="border-b border-gray-200 dark:border-gray-800">
+      <div className="border-b border-neutral-200 bg-white sticky top-0 z-10">
         <div className="flex">
           <TabButton
             id="for-you"
