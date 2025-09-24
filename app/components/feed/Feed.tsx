@@ -64,7 +64,10 @@ const Feed = () => {
         ) : error ? (
           <div className="p-8 text-center text-red-500">
             <h3 className="text-lg font-bold">오류 발생</h3>
-            <p>게시물을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</p>
+            <p>
+              게시물을 불러오는 중 오류가 발생했습니다. 잠시 후 다시
+              시도해주세요.
+            </p>
           </div>
         ) : (
           posts?.map((post) => <Post key={post.id} post={post} />)

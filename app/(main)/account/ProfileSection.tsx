@@ -8,9 +8,7 @@ const ProfileSection = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-        프로필 수정
-      </h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-900">프로필 수정</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -20,7 +18,7 @@ const ProfileSection = () => {
         <div className="space-y-8">
           {/* Profile Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               프로필 사진
             </label>
             <div className="flex items-center gap-4">
@@ -32,8 +30,8 @@ const ProfileSection = () => {
                     className="h-full w-full rounded-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-700">
-                    <UserIcon className="h-12 w-12 text-gray-500 dark:text-neutral-400" />
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gray-200">
+                    <UserIcon className="h-12 w-12 text-gray-500" />
                   </div>
                 )}
                 <label
@@ -50,7 +48,7 @@ const ProfileSection = () => {
               </div>
               <button
                 type="button"
-                className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-neutral-800"
+                className="px-4 py-2 text-sm font-medium rounded-md border border-gray-300 hover:bg-gray-50"
               >
                 이미지 변경
               </button>
@@ -69,7 +67,7 @@ const ProfileSection = () => {
               type="text"
               id="username"
               defaultValue={user?.name}
-              className="mt-1 block w-full rounded-md border-gray-300 bg-white dark:bg-neutral-800 dark:border-neutral-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
             />
           </div>
 
@@ -85,7 +83,7 @@ const ProfileSection = () => {
               id="bio"
               rows={4}
               defaultValue="Tugo의 열정적인 사용자입니다. 정치와 사회 문제에 대해 토론하는 것을 좋아합니다."
-              className="mt-1 block w-full rounded-md border-gray-300 bg-white dark:bg-neutral-800 dark:border-neutral-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
             ></textarea>
           </div>
         </div>
@@ -93,7 +91,7 @@ const ProfileSection = () => {
         <div className="mt-8 flex justify-end">
           <button
             type="submit"
-            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+            className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-700"
           >
             변경사항 저장
           </button>

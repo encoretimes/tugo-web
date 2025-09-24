@@ -54,19 +54,19 @@ export default function PostComposerModal({
               <Dialog.Panel
                 className={`w-full ${
                   isExpanded ? 'max-w-3xl' : 'max-w-md'
-                } transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all duration-300`}
+                } transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all duration-300`}
               >
                 <div className="flex items-center justify-between">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
+                    className="text-lg font-medium leading-6 text-gray-900"
                   >
                     새 게시물 작성
                   </Dialog.Title>
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
-                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      className="text-gray-500 hover:text-gray-700"
                     >
                       {isExpanded ? (
                         <ArrowsPointingInIcon className="h-6 w-6" />
@@ -76,7 +76,7 @@ export default function PostComposerModal({
                     </button>
                     <button
                       onClick={onClose}
-                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      className="text-gray-500 hover:text-gray-700"
                     >
                       <XMarkIcon className="h-6 w-6" />
                     </button>
@@ -92,14 +92,14 @@ export default function PostComposerModal({
                           className="h-12 w-12 rounded-full"
                         />
                       ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
-                          <UserIcon className="h-8 w-8 text-gray-500 dark:text-neutral-400" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
+                          <UserIcon className="h-8 w-8 text-gray-500" />
                         </div>
                       )}
                     </div>
                     <div className="flex-grow">
                       <textarea
-                        className="w-full resize-none border-none bg-transparent p-2 text-black dark:text-white focus:ring-0"
+                        className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
                         placeholder="무슨 생각을 하고 계신가요?"
                         rows={isExpanded ? 10 : 4}
                       ></textarea>
@@ -107,17 +107,17 @@ export default function PostComposerModal({
                   </div>
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex space-x-2">
-                      <button className="text-blue-500 hover:text-blue-700">
+                      <button className="text-primary-500 hover:text-primary-700">
                         <PhotoIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-blue-500 hover:text-blue-700">
+                      <button className="text-primary-500 hover:text-primary-700">
                         <ChartBarIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-blue-500 hover:text-blue-700">
+                      <button className="text-primary-500 hover:text-primary-700">
                         <FaceSmileIcon className="h-6 w-6" />
                       </button>
                     </div>
-                    <button className="rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 disabled:opacity-50">
+                    <button className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50">
                       투고하기
                     </button>
                   </div>

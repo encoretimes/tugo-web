@@ -21,9 +21,11 @@ const LeftSidebar = () => {
   const { user } = useUserStore();
 
   return (
-    <aside className="sticky top-0 flex h-screen flex-col justify-between border-r border-gray-200 dark:border-neutral-800 p-2 md:p-4">
+    <aside className="sticky top-0 flex h-screen flex-col justify-between border-r border-neutral-200 p-2 md:p-4">
       <div>
-        <Link href="/" className="text-2xl font-bold p-3 block">Tugo</Link>
+        <Link href="/" className="text-2xl font-bold p-3 block">
+          Tugo
+        </Link>
         <nav className="mt-4">
           <ul>
             <NavItem
@@ -60,7 +62,7 @@ const LeftSidebar = () => {
               {({ open }) => (
                 <>
                   <Popover.Button
-                    className={`w-full flex items-center gap-4 p-3 rounded-full transition-colors duration-200 text-lg hover:bg-gray-100 dark:hover:bg-neutral-800 ${open ? 'bg-gray-100 dark:bg-neutral-800' : ''}`}
+                    className={`w-full flex items-center gap-4 p-3 rounded-full transition-colors duration-200 text-lg hover:bg-neutral-100 ${open ? 'bg-neutral-100' : ''}`}
                   >
                     <EllipsisHorizontalIcon className="h-7 w-7" />
                     <span className="hidden xl:inline">더보기</span>
@@ -74,13 +76,19 @@ const LeftSidebar = () => {
                     leaveFrom="opacity-100 translate-y-0"
                     leaveTo="opacity-0 translate-y-1"
                   >
-                    <Popover.Panel className="absolute bottom-full mb-2 w-64 rounded-xl bg-white dark:bg-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5">
+                    <Popover.Panel className="absolute bottom-full mb-2 w-64 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="p-2">
-                        <Link href="/settings" className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                        <Link
+                          href="/settings"
+                          className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-neutral-100"
+                        >
                           <Cog6ToothIcon className="h-6 w-6" />
                           <span className="font-semibold">설정</span>
                         </Link>
-                        <Link href="/archive" className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                        <Link
+                          href="/archive"
+                          className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-neutral-100"
+                        >
                           <ArchiveBoxIcon className="h-6 w-6" />
                           <span className="font-semibold">보관함</span>
                         </Link>
@@ -92,29 +100,29 @@ const LeftSidebar = () => {
             </Popover>
           </ul>
         </nav>
-        <button className="mt-4 w-full rounded-full bg-blue-500 py-3 text-lg font-bold text-white hover:bg-blue-600">
+        <button className="mt-4 w-full rounded-full bg-primary-600 py-3 text-lg font-bold text-white hover:bg-primary-700">
           투고하기
         </button>
       </div>
       {user && (
         <div className="p-2">
-            <div className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 cursor-pointer">
+          <div className="flex items-center space-x-2 p-2 rounded-full hover:bg-neutral-100 cursor-pointer">
             {user.profileImageUrl ? (
-                <img
+              <img
                 src={user.profileImageUrl}
                 alt={user.name}
                 className="h-10 w-10 rounded-full"
-                />
+              />
             ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
-                <UserIconOutline className="h-6 w-6 text-gray-500" />
-                </div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300">
+                <UserIconOutline className="h-6 w-6 text-neutral-500" />
+              </div>
             )}
             <div className="hidden xl:block">
-                <div className="font-bold">{user.name}</div>
-                <div className="text-sm text-gray-500">@{user.username}</div>
+              <div className="font-bold">{user.name}</div>
+              <div className="text-sm text-neutral-500">@{user.username}</div>
             </div>
-            </div>
+          </div>
         </div>
       )}
     </aside>

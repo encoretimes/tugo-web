@@ -1,0 +1,61 @@
+[
+  {
+    "id": "1",
+    "name": "김민준",
+    "username": "minjun.kim",
+    "profileImageUrl": "https://i.pravatar.cc/150?u=minjun.kim",
+    "backgroundImageUrl": "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=300&fit=crop",
+    "bio": "정치에 관심이 많은 대학생입니다. 합리적이고 건설적인 토론을 지향합니다.",
+    "location": "서울, 대한민국",
+    "website": "https://blog.minjun.kim",
+    "joinedDate": "2024년 1월",
+    "isVerified": false,
+    "stats": {
+      "posts": 42,
+      "media": 8,
+      "followers": 1240,
+      "following": 385
+    },
+    "isFollowing": false,
+    "isSubscribed": false
+  },
+  {
+    "id": "2",
+    "name": "이서연",
+    "username": "seoyeon.lee",
+    "profileImageUrl": "https://i.pravatar.cc/150?u=seoyeon.lee",
+    "backgroundImageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=300&fit=crop",
+    "bio": "사회 정의와 평등을 추구하는 시민 활동가입니다. 함께 더 나은 세상을 만들어가요!",
+    "location": "부산, 대한민국",
+    "joinedDate": "2023년 11월",
+    "isVerified": true,
+    "stats": {
+      "posts": 128,
+      "media": 24,
+      "followers": 3520,
+      "following": 672
+    },
+    "isFollowing": true,
+    "isSubscribed": false
+  },
+  {
+    "id": "3",
+    "name": "박지훈",
+    "username": "jihun.park",
+    "profileImageUrl": "https://i.pravatar.cc/150?u=jihun.park",
+    "backgroundImageUrl": "https://images.unsplash.com/photo-1519681393784-d120c3b35eae?w=800&h=300&fit=crop",
+    "bio": "경제 정책 전문가 | 팟캐스트 '정치와 경제' 진행 | 합리적 보수주의자",
+    "location": "대구, 대한민국",
+    "website": "https://podcast.jihun.com",
+    "joinedDate": "2023년 8월",
+    "isVerified": true,
+    "stats": {
+      "posts": 256,
+      "media": 45,
+      "followers": 8934,
+      "following": 234
+    },
+    "isFollowing": false,
+    "isSubscribed": true
+  }
+]

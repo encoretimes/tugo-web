@@ -54,7 +54,7 @@ const PostComposer = () => {
                 </button>
               </div>
               <button
-                className="rounded-full bg-gray-800 px-4 py-2 font-bold text-white hover:bg-gray-900"
+                className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700"
                 onClick={openModal}
               >
                 투고하기

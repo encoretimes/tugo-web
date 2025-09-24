@@ -29,11 +29,11 @@ const BottomNavBar = () => {
             <Link href={href} className="flex flex-col items-center p-2">
               <Icon
                 className={`h-7 w-7 ${
-                  pathname === href ? 'text-black' : 'text-gray-500'
+                  pathname === href ? 'text-primary-600' : 'text-gray-500'
                 }`}
               />
               <span
-                className={`text-xs ${pathname === href ? 'font-bold' : ''}`}
+                className={`text-xs ${pathname === href ? 'font-bold text-primary-600' : ''}`}
               >
                 {label}
               </span>

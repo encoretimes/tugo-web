@@ -12,7 +12,7 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon, label }) => {
     <li>
       <Link
         href={href}
-        className="flex items-center space-x-2 rounded-full p-2 hover:bg-gray-100"
+        className="flex items-center space-x-2 rounded-full p-2 hover:bg-primary-50 hover:text-primary-700 transition-colors"
       >
         {icon}
         <span>{label}</span>

@@ -1,0 +1,88 @@
+{
+  "minjun.kim": [
+    {
+      "id": "1",
+      "content": "새로운 정치 플랫폼 Tugo, 정말 기대되네요! 여기서 자유롭게 의견을 나눌 수 있기를 바랍니다.",
+      "createdAt": "2시간 전",
+      "stats": {
+        "comments": 12,
+        "reposts": 5,
+        "likes": 34
+      }
+    },
+    {
+      "id": "2",
+      "content": "오늘 대학교에서 정치학 세미나에 참석했습니다. 젊은 세대의 정치 참여가 얼마나 중요한지 다시 한번 느꼈어요.",
+      "createdAt": "1일 전",
+      "mediaUrls": [
+        "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=400&fit=crop"
+      ],
+      "stats": {
+        "comments": 8,
+        "reposts": 3,
+        "likes": 28
+      }
+    },
+    {
+      "id": "3",
+      "content": "정치는 어려운 것이 아니라 우리의 일상과 직결된 문제입니다. 모든 시민이 관심을 가져야 한다고 생각해요.",
+      "createdAt": "3일 전",
+      "stats": {
+        "comments": 15,
+        "reposts": 7,
+        "likes": 52
+      }
+    }
+  ],
+  "seoyeon.lee": [
+    {
+      "id": "4",
+      "content": "투표 기능이 가장 마음에 들어요. 우리들의 생각이 실제로 통계로 보여진다는 점이 의미있네요.",
+      "createdAt": "3시간 전",
+      "stats": {
+        "comments": 8,
+        "reposts": 2,
+        "likes": 21
+      }
+    },
+    {
+      "id": "5",
+      "content": "부산에서 열린 시민 토론회에 참석했습니다. 지역 사회 문제에 대해 많은 것을 배웠어요.",
+      "createdAt": "6시간 전",
+      "mediaUrls": [
+        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=600&h=400&fit=crop"
+      ],
+      "stats": {
+        "comments": 12,
+        "reposts": 6,
+        "likes": 45
+      }
+    }
+  ],
+  "jihun.park": [
+    {
+      "id": "6",
+      "content": "크리에이터 후원 기능도 신선하네요. 좋은 콘텐츠를 만드는 분들께 힘이 될 것 같아요.",
+      "createdAt": "5시간 전",
+      "stats": {
+        "comments": 23,
+        "reposts": 11,
+        "likes": 89
+      }
+    },
+    {
+      "id": "7",
+      "content": "오늘 팟캐스트에서 다룰 주제는 '디지털 시대의 정치 참여'입니다. 많은 관심 부탁드려요!",
+      "createdAt": "1일 전",
+      "mediaUrls": [
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&h=400&fit=crop"
+      ],
+      "stats": {
+        "comments": 34,
+        "reposts": 18,
+        "likes": 126
+      }
+    }
+  ]
+}
