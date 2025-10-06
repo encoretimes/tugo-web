@@ -10,10 +10,11 @@ export default function LoginPage() {
   }, []);
 
   const handleSocialLogin = (provider: 'kakao' | 'naver') => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
     if (provider === 'kakao') {
-      window.location.href = 'http://localhost:30000/oauth/kakao/login';
+      window.location.href = `${apiUrl}/oauth/kakao/login`;
     } else if (provider === 'naver') {
-      window.location.href = 'http://localhost:30000/oauth/naver/login';
+      window.location.href = `${apiUrl}/oauth/naver/login`;
     }
   };
 
@@ -145,11 +146,16 @@ export default function LoginPage() {
                 <div className="flex-1 border-t border-neutral-300"></div>
               </div>
 
-              {/* Guest Access */}
+              {/* About Link */}
               <div className="text-center mb-8">
-                <p className="text-neutral-600 mb-4">계정 없이 둘러보기</p>
-                <button className="text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-200 flex items-center justify-center mx-auto gap-2">
-                  게스트로 시작하기
+                <p className="text-neutral-600 mb-4">
+                  Tugo가 처음이신가요?
+                </p>
+                <a
+                  href="/about"
+                  className="text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-200 inline-flex items-center gap-2 group"
+                >
+                  브랜딩 쇼케이스 둘러보기
                   <svg
                     className="w-4 h-4 transition-transform group-hover:translate-x-1"
                     fill="none"
@@ -163,7 +169,7 @@ export default function LoginPage() {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </button>
+                </a>
               </div>
             </div>
           </div>

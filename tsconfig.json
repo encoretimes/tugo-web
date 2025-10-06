@@ -29,7 +29,9 @@
       "@/app/*": ["app/*"],
       "@/store/*": ["app/store/*"],
       "@/api/*": ["app/api/*"],
-      "@/data/*": ["app/data/*"]
+      "@/data/*": ["app/data/*"],
+      "@/lib/*": ["app/lib/*"],
+      "@/config/*": ["app/config/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

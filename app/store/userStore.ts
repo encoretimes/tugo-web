@@ -1,23 +1,45 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface User {
+  id: number;
   name: string;
-  username: string;
-  profileImageUrl: string | null;
+  email?: string;
+  role: string;
+  profileImageUrl?: string | null;
 }
 
 interface UserState {
   user: User | null;
-  login: (user: User) => void;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  setUser: (user: User | null) => void;
+  setLoading: (loading: boolean) => void;
   logout: () => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
-  user: {
-    name: 'Tugo 사용자',
-    username: 'tugouser',
-    profileImageUrl: null,
-  },
-  login: (user) => set({ user }),
-  logout: () => set({ user: null }),
-}));
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      user: null,
+      isAuthenticated: false,
+      isLoading: true,
+      setUser: (user) =>
+        set({
+          user,
+          isAuthenticated: user !== null,
+          isLoading: false,
+        }),
+      setLoading: (loading) => set({ isLoading: loading }),
+      logout: () =>
+        set({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+        }),
+    }),
+    {
+      name: 'user-storage',
+    }
+  )
+);

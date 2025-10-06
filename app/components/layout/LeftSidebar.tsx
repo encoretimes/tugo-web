@@ -123,7 +123,7 @@ const LeftSidebar = () => {
             )}
             <div className="hidden xl:block">
               <div className="font-bold">{user.name}</div>
-              <div className="text-sm text-neutral-500">@{user.username}</div>
+              <div className="text-sm text-neutral-500">{user.role}</div>
             </div>
           </div>
         </div>
