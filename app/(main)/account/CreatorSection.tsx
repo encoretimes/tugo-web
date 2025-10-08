@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { apiClient } from '@/lib/api-client';
 
@@ -11,6 +11,30 @@ const CreatorSection = () => {
   const [showConvertConfirm, setShowConvertConfirm] = useState(false);
   const [showRevertConfirm, setShowRevertConfirm] = useState(false);
   const [error, setError] = useState('');
+  const [postCount, setPostCount] = useState<number | null>(null);
+  const [isLoadingPostCount, setIsLoadingPostCount] = useState(false);
+
+  // Creator인 경우 게시물 수 조회
+  useEffect(() => {
+    const fetchPostCount = async () => {
+      if (user?.hasCreator && user?.username) {
+        setIsLoadingPostCount(true);
+        try {
+          const profileData = await apiClient.get<{
+            stats: { posts: number };
+          }>(`/api/v1/profiles/${user.username}`);
+          setPostCount(profileData.stats.posts);
+        } catch (err) {
+          console.error('Failed to fetch post count:', err);
+          setPostCount(null);
+        } finally {
+          setIsLoadingPostCount(false);
+        }
+      }
+    };
+
+    fetchPostCount();
+  }, [user?.hasCreator, user?.username]);
 
   const handleConvertToCreator = async () => {
     if (!user?.username) {
@@ -22,13 +46,21 @@ const CreatorSection = () => {
     setError('');
     try {
       const response = await apiClient.post<{
+        id: number;
+        email: string;
+        name: string;
+        role: string;
+        createdAt: string;
+        updatedAt: string;
         hasCreator: boolean;
         creatorId: number | null;
+        username: string | null;
       }>('/api/v1/members/me/convert-to-creator');
 
       // User 정보 업데이트
       setUser({
         ...user,
+        role: response.role,
         hasCreator: response.hasCreator,
         creatorId: response.creatorId,
       });
@@ -50,14 +82,22 @@ const CreatorSection = () => {
     setError('');
     try {
       const response = await apiClient.post<{
+        id: number;
+        email: string;
+        name: string;
+        role: string;
+        createdAt: string;
+        updatedAt: string;
         hasCreator: boolean;
         creatorId: number | null;
+        username: string | null;
       }>('/api/v1/members/me/revert-from-creator');
 
       // User 정보 업데이트
       if (user) {
         setUser({
           ...user,
+          role: response.role,
           hasCreator: response.hasCreator,
           creatorId: response.creatorId,
         });
@@ -165,6 +205,30 @@ const CreatorSection = () => {
                 주의: 게시물이 0개일 때만 복귀할 수 있습니다
               </p>
 
+              {/* 게시물 수 표시 */}
+              {isLoadingPostCount ? (
+                <div className="mb-4 p-4 bg-gray-50 border border-gray-300">
+                  <p className="text-sm text-gray-600">게시물 수 확인 중...</p>
+                </div>
+              ) : postCount !== null && (
+                <div
+                  className={`mb-4 p-4 border ${
+                    postCount === 0
+                      ? 'bg-green-50 border-green-300'
+                      : 'bg-yellow-50 border-yellow-300'
+                  }`}
+                >
+                  <p className="text-sm font-medium text-gray-800">
+                    현재 게시물 수: {postCount}개
+                  </p>
+                  {postCount > 0 && (
+                    <p className="text-sm text-gray-700 mt-1">
+                      게시물을 모두 삭제한 후 복귀할 수 있습니다
+                    </p>
+                  )}
+                </div>
+              )}
+
               {error && (
                 <div className="mb-4 p-4 bg-red-50 border border-red-300">
                   <p className="text-sm text-red-800">{error}</p>
@@ -174,7 +238,8 @@ const CreatorSection = () => {
               {!showRevertConfirm ? (
                 <button
                   onClick={() => setShowRevertConfirm(true)}
-                  className="px-6 py-2.5 border-2 border-gray-900 bg-white text-gray-900 text-sm font-medium hover:bg-gray-50"
+                  disabled={postCount === null || postCount > 0}
+                  className="px-6 py-2.5 border-2 border-gray-900 bg-white text-gray-900 text-sm font-medium hover:bg-gray-50 disabled:bg-gray-100 disabled:border-gray-400 disabled:text-gray-500 disabled:cursor-not-allowed"
                 >
                   일반 회원으로 복귀
                 </button>

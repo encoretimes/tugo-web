@@ -1,9 +1,9 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
   ChatBubbleOvalLeftIcon,
-  ArrowPathRoundedSquareIcon,
+  BookmarkIcon,
   HeartIcon,
   ArrowUpOnSquareIcon,
   UserIcon,
@@ -11,12 +11,15 @@ import {
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
+import { HeartIcon as HeartIconSolid, BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 import { Post as PostType } from '@/types/post';
 import { apiClient } from '@/lib/api-client';
 import { useUserStore } from '@/store/userStore';
+import { useToastStore } from '@/store/toastStore';
+import { useToggleBookmark } from '@/hooks/useBookmarks';
 import { Menu, Transition } from '@headlessui/react';
 import EditPostModal from '@/app/components/modals/EditPostModal';
+import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
 
 interface PostProps {
   post: PostType;
@@ -26,32 +29,48 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const { user } = useUserStore();
+  const addToast = useToastStore((state) => state.addToast);
+  const { toggleBookmark } = useToggleBookmark();
   const { author, contentText, createdAt, stats } = post;
   const [isLiked, setIsLiked] = useState(post.isLiked);
+  const [isSaved, setIsSaved] = useState(post.isSaved);
   const [likeCount, setLikeCount] = useState(stats.likes);
+  const [commentCount, setCommentCount] = useState(stats.comments);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState<
-    Array<{ id: number; content: string; createdAt: string }>
+    Array<{
+      id: number;
+      author: { name: string; username: string; profileImageUrl: string | null };
+      content: string;
+      createdAt: string;
+    }>
   >([]);
   const [isLoadingComments, setIsLoadingComments] = useState(false);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // 현재 사용자가 게시물 작성자인지 확인
   const isAuthor = user?.username === author.username;
 
+  // Sync local state with prop when post data changes (e.g., after refresh)
+  useEffect(() => {
+    setIsLiked(post.isLiked);
+    setIsSaved(post.isSaved);
+    setLikeCount(stats.likes);
+    setCommentCount(stats.comments);
+  }, [post.isLiked, post.isSaved, stats.likes, stats.comments]);
+
   const handleLikeToggle = async () => {
     if (!user) {
-      alert('로그인이 필요합니다.');
+      addToast('로그인이 필요합니다', 'warning');
       return;
     }
 
     try {
       if (isLiked) {
-        await apiClient.delete('/api/v1/likes', {
-          body: JSON.stringify({ postId: post.postId }),
-        });
+        await apiClient.delete(`/api/v1/likes/${post.postId}`);
         setIsLiked(false);
         setLikeCount((prev) => prev - 1);
       } else {
@@ -61,7 +80,18 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
       }
     } catch (error) {
       console.error('Failed to toggle like:', error);
+      addToast('좋아요 처리에 실패했습니다', 'error');
     }
+  };
+
+  const handleBookmarkToggle = () => {
+    if (!user) {
+      addToast('로그인이 필요합니다', 'warning');
+      return;
+    }
+
+    toggleBookmark(post.postId, isSaved);
+    setIsSaved(!isSaved);
   };
 
   const handleCommentToggle = async () => {
@@ -69,7 +99,16 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
       setIsLoadingComments(true);
       try {
         const response = await apiClient.get<{
-          content: Array<{ id: number; content: string; createdAt: string }>;
+          content: Array<{
+            id: number;
+            author: {
+              name: string;
+              username: string;
+              profileImageUrl: string | null;
+            };
+            content: string;
+            createdAt: string;
+          }>;
         }>(`/api/v1/comments?postId=${post.postId}&page=0&size=10`);
         setComments(response.content);
       } catch (error) {
@@ -83,7 +122,7 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
 
   const handleCommentSubmit = async () => {
     if (!user) {
-      alert('로그인이 필요합니다.');
+      addToast('로그인이 필요합니다', 'warning');
       return;
     }
 
@@ -93,6 +132,11 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
       setIsSubmittingComment(true);
       const response = await apiClient.post<{
         id: number;
+        author: {
+          name: string;
+          username: string;
+          profileImageUrl: string | null;
+        };
         content: string;
         createdAt: string;
       }>('/api/v1/comments', {
@@ -100,29 +144,27 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
         postId: post.postId,
       });
       setComments([response, ...comments]);
+      setCommentCount((prev) => prev + 1);
       setCommentText('');
+      addToast('댓글이 작성되었습니다', 'success');
     } catch (error) {
       console.error('Failed to submit comment:', error);
-      alert('댓글 작성에 실패했습니다.');
+      addToast('댓글 작성에 실패했습니다', 'error');
     } finally {
       setIsSubmittingComment(false);
     }
   };
 
   const handleDeletePost = async () => {
-    if (!confirm('정말로 이 게시물을 삭제하시겠습니까?')) {
-      return;
-    }
-
     try {
       await apiClient.delete(`/api/v1/posts/${post.postId}`);
-      alert('게시물이 삭제되었습니다.');
+      addToast('게시물이 삭제되었습니다', 'success');
       if (onPostDeleted) {
         onPostDeleted();
       }
     } catch (error) {
       console.error('Failed to delete post:', error);
-      alert('게시물 삭제에 실패했습니다.');
+      addToast('게시물 삭제에 실패했습니다', 'error');
     }
   };
 
@@ -193,7 +235,7 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                       <Menu.Item>
                         {({ active }) => (
                           <button
-                            onClick={handleDeletePost}
+                            onClick={() => setShowDeleteConfirm(true)}
                             className={`${
                               active ? 'bg-red-50' : ''
                             } flex w-full items-center px-4 py-2 text-sm text-red-600`}
@@ -218,11 +260,7 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
               className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors"
             >
               <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-              <span>{stats.comments}</span>
-            </button>
-            <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
-              <ArrowPathRoundedSquareIcon className="h-5 w-5" />
-              <span>{stats.reposts}</span>
+              <span>{commentCount}</span>
             </button>
             <button
               onClick={handleLikeToggle}
@@ -238,6 +276,20 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                 <HeartIcon className="h-5 w-5" />
               )}
               <span>{likeCount}</span>
+            </button>
+            <button
+              onClick={handleBookmarkToggle}
+              className={`flex items-center space-x-2 rounded-full px-2 py-1 transition-colors ${
+                isSaved
+                  ? 'text-primary-600 hover:bg-primary-50'
+                  : 'text-neutral-500 hover:text-primary-600 hover:bg-primary-50'
+              }`}
+            >
+              {isSaved ? (
+                <BookmarkIconSolid className="h-5 w-5" />
+              ) : (
+                <BookmarkIcon className="h-5 w-5" />
+              )}
             </button>
             <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
               <ArrowUpOnSquareIcon className="h-5 w-5" />
@@ -291,12 +343,28 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                 <div className="space-y-3">
                   {comments.map((comment) => (
                     <div key={comment.id} className="flex space-x-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                        <UserIcon className="h-5 w-5 text-neutral-500" />
-                      </div>
+                      {comment.author.profileImageUrl ? (
+                        <Image
+                          src={comment.author.profileImageUrl}
+                          alt={comment.author.name}
+                          width={32}
+                          height={32}
+                          className="h-8 w-8 rounded-full"
+                        />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
+                          <UserIcon className="h-5 w-5 text-neutral-500" />
+                        </div>
+                      )}
                       <div className="flex-1">
                         <div className="rounded-lg bg-neutral-100 p-2">
-                          <p className="text-sm">{comment.content}</p>
+                          <p className="text-xs font-semibold text-neutral-900">
+                            {comment.author.name}{' '}
+                            <span className="font-normal text-neutral-500">
+                              @{comment.author.username}
+                            </span>
+                          </p>
+                          <p className="text-sm mt-1">{comment.content}</p>
                         </div>
                         <p className="mt-1 text-xs text-neutral-500">
                           {new Date(comment.createdAt).toLocaleString('ko-KR')}
@@ -320,7 +388,20 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
         onClose={() => setShowEditModal(false)}
         postId={post.postId}
         initialContent={contentText}
+        initialPostType={post.postType}
+        initialPpvPrice={post.ppvPrice}
         onPostUpdated={onPostUpdated}
+      />
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDeletePost}
+        title="게시물 삭제"
+        message="정말로 이 게시물을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+        confirmText="삭제"
+        cancelText="취소"
+        type="danger"
       />
     </div>
   );

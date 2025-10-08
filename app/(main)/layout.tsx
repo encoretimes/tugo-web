@@ -41,13 +41,13 @@ export default function MainLayout({
   return (
     <div className="relative min-h-screen">
       <div className="mx-auto flex max-w-screen-xl">
-        <header className="hidden lg:block lg:w-1/4">
+        <header className="hidden lg:block lg:w-1/4 sticky top-0 h-screen overflow-y-auto">
           <LeftSidebar />
         </header>
         <main className="min-h-screen w-full border-x lg:w-1/2">
           {children}
         </main>
-        <aside className="hidden lg:block lg:w-1/4">
+        <aside className="hidden lg:block lg:w-1/4 sticky top-0 h-screen overflow-y-auto">
           <RightSidebar />
         </aside>
       </div>

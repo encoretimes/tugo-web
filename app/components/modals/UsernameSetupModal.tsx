@@ -74,7 +74,7 @@ export default function UsernameSetupModal({
 
     setIsSubmitting(true);
     try {
-      const response = await apiClient.put<{ username: string }>(
+      await apiClient.put(
         `/api/v1/members/me/username?username=${username}`
       );
 
@@ -82,7 +82,7 @@ export default function UsernameSetupModal({
       if (user) {
         setUser({
           ...user,
-          username: response.username,
+          username: username,
         });
       }
 
@@ -90,7 +90,8 @@ export default function UsernameSetupModal({
       if (onClose) {
         onClose();
       }
-    } catch {
+    } catch (err) {
+      console.error('Username update error:', err);
       setError('사용자명 설정에 실패했습니다');
     } finally {
       setIsSubmitting(false);

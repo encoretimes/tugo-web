@@ -62,6 +62,7 @@ export default {
         'fade-in-up-delayed': 'fade-in-up 1.2s ease-in-out 0.5s forwards',
         'dropdown-in': 'dropdown-in 0.2s ease-out forwards',
         'dropdown-out': 'dropdown-out 0.2s ease-in forwards',
+        'slide-in': 'fade-in-up 0.3s ease-out forwards',
       },
     },
   },

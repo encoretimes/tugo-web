@@ -16,13 +16,13 @@ import { UserIcon } from '@heroicons/react/24/solid';
 import { useUserStore } from '@/store/userStore';
 import EditProfileModal from '@/components/modals/EditProfileModal';
 import Post from '@/components/feed/Post';
+import { useBookmarks } from '@/hooks/useBookmarks';
+import PostSkeleton from '@/components/feed/PostSkeleton';
 
 const ProfilePage = () => {
   const params = useParams();
   const router = useRouter();
   const username = params.username as string;
-  const [activeTab, setActiveTab] = useState<'posts' | 'media'>('posts');
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { user: currentUser } = useUserStore();
 
   const {
@@ -31,6 +31,26 @@ const ProfilePage = () => {
     error: userError,
     refetch,
   } = useUser(username);
+
+  // Creator 여부에 따라 기본 탭 설정
+  const [activeTab, setActiveTab] = useState<'posts' | 'media' | 'archives'>(
+    user?.isCreator ? 'posts' : 'archives'
+  );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // 보관함 데이터 가져오기 (현재 사용자의 프로필일 때만)
+  const {
+    data: bookmarksData,
+    isLoading: isBookmarksLoading,
+    refetch: refetchBookmarks,
+  } = useBookmarks(0, 20);
+
+  // user가 로드되면 기본 탭 재설정
+  useEffect(() => {
+    if (user) {
+      setActiveTab(user.isCreator ? 'posts' : 'archives');
+    }
+  }, [user]);
 
   // Check if this is the current user's profile
   const isOwnProfile = currentUser && currentUser.username === username;
@@ -246,6 +266,14 @@ const ProfilePage = () => {
                 <strong>{user.stats.followers.toLocaleString()}</strong>{' '}
                 <span className="text-gray-500">팔로워</span>
               </span>
+              {isOwnProfile && (
+                <span>
+                  <strong>
+                    {(bookmarksData?.totalElements || 0).toLocaleString()}
+                  </strong>{' '}
+                  <span className="text-gray-500">보관함</span>
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -288,26 +316,42 @@ const ProfilePage = () => {
       {/* Tabs */}
       <div className="border-b border-gray-200 sticky top-[73px] bg-white/90 backdrop-blur-sm z-10">
         <div className="flex">
-          <button
-            onClick={() => setActiveTab('posts')}
-            className={`flex-1 p-4 font-semibold text-center transition-colors ${
-              activeTab === 'posts'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            게시물 {user.stats.posts}
-          </button>
-          <button
-            onClick={() => setActiveTab('media')}
-            className={`flex-1 p-4 font-semibold text-center transition-colors ${
-              activeTab === 'media'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            미디어 {user.stats.media}
-          </button>
+          {user.isCreator && (
+            <>
+              <button
+                onClick={() => setActiveTab('posts')}
+                className={`flex-1 p-4 font-semibold text-center transition-colors ${
+                  activeTab === 'posts'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                게시물 {user.stats.posts}
+              </button>
+              <button
+                onClick={() => setActiveTab('media')}
+                className={`flex-1 p-4 font-semibold text-center transition-colors ${
+                  activeTab === 'media'
+                    ? 'text-primary-600 border-b-2 border-primary-600'
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                미디어 {user.stats.media}
+              </button>
+            </>
+          )}
+          {isOwnProfile && (
+            <button
+              onClick={() => setActiveTab('archives')}
+              className={`flex-1 p-4 font-semibold text-center transition-colors ${
+                activeTab === 'archives'
+                  ? 'text-primary-600 border-b-2 border-primary-600'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              보관함 {bookmarksData?.totalElements || 0}
+            </button>
+          )}
         </div>
       </div>
 
@@ -364,14 +408,45 @@ const ProfilePage = () => {
             )}
           </div>
         )}
+
+        {activeTab === 'archives' && (
+          <div>
+            {isBookmarksLoading ? (
+              <div>
+                {[...Array(3)].map((_, i) => (
+                  <PostSkeleton key={i} />
+                ))}
+              </div>
+            ) : bookmarksData && bookmarksData.content.length > 0 ? (
+              bookmarksData.content.map((post) => (
+                <Post
+                  key={post.postId}
+                  post={post}
+                  onPostDeleted={() => {
+                    refetch();
+                    refetchBookmarks();
+                  }}
+                  onPostUpdated={() => {
+                    refetch();
+                    refetchBookmarks();
+                  }}
+                />
+              ))
+            ) : (
+              <div className="p-8 text-center text-gray-500">
+                보관한 게시물이 없습니다.
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Edit Profile Modal */}
-      {isOwnProfile && user && currentUser?.creatorId && (
+      {isOwnProfile && user && (
         <EditProfileModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          creatorId={currentUser.creatorId}
+          creatorId={currentUser?.creatorId || 0}
           currentPublicName={user.username}
           currentIntroduction={user.bio}
           currentProfileUrl={user.profileImageUrl || undefined}

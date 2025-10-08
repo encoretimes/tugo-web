@@ -31,21 +31,7 @@ const PostComposer = ({ onPostCreated }: PostComposerProps) => {
 
   // 크리에이터가 아니면 PostComposer를 표시하지 않음
   if (!user?.hasCreator) {
-    return (
-      <div className="border-b p-4 bg-gray-50">
-        <div className="text-center py-8">
-          <p className="text-gray-600 mb-4">
-            게시물을 작성하려면 크리에이터로 전환해야 합니다
-          </p>
-          <a
-            href="/account"
-            className="inline-block rounded-full bg-primary-600 px-6 py-2.5 font-bold text-white hover:bg-primary-700"
-          >
-            크리에이터 되기
-          </a>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (

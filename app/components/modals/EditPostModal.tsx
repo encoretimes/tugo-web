@@ -10,6 +10,8 @@ interface EditPostModalProps {
   onClose: () => void;
   postId: number;
   initialContent: string;
+  initialPostType: 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV';
+  initialPpvPrice: number | null;
   onPostUpdated?: () => void;
 }
 
@@ -18,9 +20,17 @@ export default function EditPostModal({
   onClose,
   postId,
   initialContent,
+  initialPostType,
+  initialPpvPrice,
   onPostUpdated,
 }: EditPostModalProps) {
   const [content, setContent] = useState(initialContent);
+  const [postType, setPostType] = useState<'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'>(
+    initialPostType
+  );
+  const [ppvPrice, setPpvPrice] = useState<string>(
+    initialPpvPrice ? String(initialPpvPrice) : ''
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -37,6 +47,8 @@ export default function EditPostModal({
       setIsSubmitting(true);
       await apiClient.put(`/api/v1/posts/${postId}`, {
         contentText: content,
+        postType: postType,
+        ppvPrice: postType === 'PPV' && ppvPrice ? Number(ppvPrice) : null,
       });
 
       if (onPostUpdated) {
@@ -54,6 +66,8 @@ export default function EditPostModal({
   const handleClose = () => {
     if (!isSubmitting) {
       setContent(initialContent);
+      setPostType(initialPostType);
+      setPpvPrice(initialPpvPrice ? String(initialPpvPrice) : '');
       setError('');
       onClose();
     }
@@ -120,6 +134,44 @@ export default function EditPostModal({
                         <span className="text-sm text-red-600">{error}</span>
                       )}
                     </div>
+                  </div>
+
+                  {/* PostType & PPV Price Selection */}
+                  <div className="mb-4 border-t pt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      게시물 타입
+                    </label>
+                    <select
+                      value={postType}
+                      onChange={(e) =>
+                        setPostType(
+                          e.target.value as 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'
+                        )
+                      }
+                      disabled={isSubmitting}
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    >
+                      <option value="FREE">무료 (모두 공개)</option>
+                      <option value="SUBSCRIBER_ONLY">구독자 전용</option>
+                      <option value="PPV">PPV (개별 결제)</option>
+                    </select>
+
+                    {postType === 'PPV' && (
+                      <div className="mt-3">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          PPV 가격 (원)
+                        </label>
+                        <input
+                          type="number"
+                          value={ppvPrice}
+                          onChange={(e) => setPpvPrice(e.target.value)}
+                          placeholder="예: 1000"
+                          min="0"
+                          disabled={isSubmitting}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-end space-x-3">

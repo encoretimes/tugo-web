@@ -22,7 +22,7 @@ const LeftSidebar = () => {
   const { user } = useUserStore();
 
   return (
-    <aside className="sticky top-0 flex h-screen flex-col justify-between border-r border-neutral-200 p-2 md:p-4">
+    <aside className="flex h-full flex-col justify-between border-r border-neutral-200 p-2 md:p-4">
       <div>
         <Link href="/" className="text-2xl font-bold p-3 block">
           Tugo
@@ -87,7 +87,7 @@ const LeftSidebar = () => {
                           <span className="font-semibold">설정</span>
                         </Link>
                         <Link
-                          href="/archive"
+                          href="/bookmarks"
                           className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-neutral-100"
                         >
                           <ArchiveBoxIcon className="h-6 w-6" />

@@ -29,6 +29,10 @@ export default function PostComposerModal({
   const { user } = useUserStore();
   const [isExpanded, setIsExpanded] = useState(false);
   const [content, setContent] = useState('');
+  const [postType, setPostType] = useState<'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'>(
+    'FREE'
+  );
+  const [ppvPrice, setPpvPrice] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
@@ -38,11 +42,13 @@ export default function PostComposerModal({
       setIsSubmitting(true);
       await apiClient.post('/api/v1/posts', {
         contentText: content,
-        postType: 'FREE',
-        ppvPrice: null,
+        postType: postType,
+        ppvPrice: postType === 'PPV' && ppvPrice ? Number(ppvPrice) : null,
       });
 
       setContent('');
+      setPostType('FREE');
+      setPpvPrice('');
       onClose();
       onPostCreated?.();
     } catch (error) {
@@ -56,6 +62,8 @@ export default function PostComposerModal({
   const handleClose = () => {
     if (!isSubmitting) {
       setContent('');
+      setPostType('FREE');
+      setPpvPrice('');
       setIsExpanded(false);
       onClose();
     }
@@ -147,6 +155,45 @@ export default function PostComposerModal({
                       ></textarea>
                     </div>
                   </div>
+
+                  {/* PostType & PPV Price Selection */}
+                  <div className="mt-4 border-t pt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      게시물 타입
+                    </label>
+                    <select
+                      value={postType}
+                      onChange={(e) =>
+                        setPostType(
+                          e.target.value as 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'
+                        )
+                      }
+                      disabled={isSubmitting}
+                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    >
+                      <option value="FREE">무료 (모두 공개)</option>
+                      <option value="SUBSCRIBER_ONLY">구독자 전용</option>
+                      <option value="PPV">PPV (개별 결제)</option>
+                    </select>
+
+                    {postType === 'PPV' && (
+                      <div className="mt-3">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          PPV 가격 (원)
+                        </label>
+                        <input
+                          type="number"
+                          value={ppvPrice}
+                          onChange={(e) => setPpvPrice(e.target.value)}
+                          placeholder="예: 1000"
+                          min="0"
+                          disabled={isSubmitting}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      </div>
+                    )}
+                  </div>
+
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex space-x-2">
                       <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>

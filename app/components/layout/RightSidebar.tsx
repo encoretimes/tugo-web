@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 const RightSidebar = () => {
   return (
-    <aside className="sticky top-0 h-screen overflow-y-auto p-4 text-black border-l border-neutral-200">
+    <aside className="h-full p-4 text-black border-l border-neutral-200">
       <div className="relative mb-4">
         <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
         <input

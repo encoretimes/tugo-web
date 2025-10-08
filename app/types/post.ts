@@ -19,4 +19,5 @@ export interface Post {
   };
   mediaUrls?: string[];
   isLiked: boolean;
+  isSaved: boolean;
 }

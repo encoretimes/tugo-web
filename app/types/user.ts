@@ -11,11 +11,14 @@ export interface User {
   website?: string;
   joinedDate: string;
   isVerified: boolean;
+  isCreator?: boolean;
+  creatorId?: number | null;
   stats: {
     posts: number;
     media: number;
     followers: number;
     following: number;
+    bookmarks: number;
   };
   isFollowing?: boolean;
   isSubscribed?: boolean;
