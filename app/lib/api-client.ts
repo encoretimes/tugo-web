@@ -31,6 +31,16 @@ class ApiClient {
     const response = await fetch(url, { ...defaultOptions, ...options });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        if (
+          typeof window !== 'undefined' &&
+          !window.location.pathname.startsWith('/login')
+        ) {
+          const returnUrl = window.location.pathname + window.location.search;
+          window.location.href = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+        }
+      }
+
       const errorData = await response.json().catch(() => ({
         message: 'An error occurred',
       }));

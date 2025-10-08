@@ -1,11 +1,10 @@
 import { Message } from '@/types/message';
+import { apiClient } from '@/lib/api-client';
 
 export const getMessages = async (
   conversationId: number
 ): Promise<Message[]> => {
-  const res = await fetch(`/api/messages?conversationId=${conversationId}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch messages');
-  }
-  return res.json();
+  return apiClient.get<Message[]>(
+    `/api/v1/messages?conversationId=${conversationId}`
+  );
 };

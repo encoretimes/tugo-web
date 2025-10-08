@@ -1,6 +1,5 @@
 'use client';
 
-import { LockClosedIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 
 const SecuritySection = () => {
@@ -8,98 +7,32 @@ const SecuritySection = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6 text-gray-900">
-        비밀번호 및 보안
+      <h2 className="text-xl font-semibold mb-6 text-gray-900 pb-3 border-b border-gray-200">
+        보안
       </h2>
-
-      {/* Change Password Form */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
-          <LockClosedIcon className="w-5 h-5" />
-          비밀번호 변경
-        </h3>
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="space-y-4 max-w-md"
-        >
-          <div>
-            <label
-              htmlFor="current-password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              현재 비밀번호
-            </label>
-            <input
-              type="password"
-              id="current-password"
-              className="mt-1 block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="new-password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              새 비밀번호
-            </label>
-            <input
-              type="password"
-              id="new-password"
-              className="mt-1 block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              새 비밀번호 확인
-            </label>
-            <input
-              type="password"
-              id="confirm-password"
-              className="mt-1 block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-primary-600 focus:ring-primary-600 sm:text-sm"
-            />
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-700"
-            >
-              비밀번호 변경
-            </button>
-          </div>
-        </form>
-      </div>
 
       {/* Two-Factor Authentication */}
       <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
-          <ShieldCheckIcon className="w-5 h-5" />
-          2단계 인증 (2FA)
+        <h3 className="text-base font-medium mb-4 text-gray-900">
+          2단계 인증
         </h3>
-        <div className="flex items-center justify-between p-4 rounded-lg bg-gray-50 border border-gray-200">
-          <div>
-            <p className="font-medium">
-              상태:
-              <span
-                className={`ml-2 font-bold ${
-                  isTwoFactorEnabled ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
+        <div className="flex items-start justify-between p-5 bg-gray-50 border border-gray-300 max-w-2xl">
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-900 mb-1">
+              상태: <span className={`${isTwoFactorEnabled ? 'text-green-700' : 'text-gray-600'}`}>
                 {isTwoFactorEnabled ? '활성화됨' : '비활성화됨'}
               </span>
             </p>
-            <p className="text-sm text-gray-500 mt-1">
-              계정 보안을 강화하려면 2단계 인증을 활성화하세요.
+            <p className="text-sm text-gray-600">
+              계정 보안을 강화하려면 2단계 인증을 활성화하세요
             </p>
           </div>
           <button
             onClick={() => setIsTwoFactorEnabled(!isTwoFactorEnabled)}
-            className={`px-4 py-2 text-sm font-semibold rounded-md ${
+            className={`ml-6 px-4 py-2 text-sm font-medium border ${
               isTwoFactorEnabled
-                ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                : 'bg-green-100 text-green-700 hover:bg-green-200'
+                ? 'bg-white border-gray-400 text-gray-700 hover:bg-gray-50'
+                : 'bg-gray-900 border-gray-900 text-white hover:bg-gray-800'
             }`}
           >
             {isTwoFactorEnabled ? '비활성화' : '활성화'}

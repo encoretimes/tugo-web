@@ -1,13 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+function LoginContent() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     setIsLoaded(true);
-  }, []);
+
+    const returnUrl = searchParams.get('returnUrl');
+    if (returnUrl) {
+      sessionStorage.setItem('returnUrl', returnUrl);
+    }
+  }, [searchParams]);
 
   const handleSocialLogin = (provider: 'kakao' | 'naver') => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
@@ -207,5 +214,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white" />}>
+      <LoginContent />
+    </Suspense>
   );
 }

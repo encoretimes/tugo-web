@@ -13,18 +13,53 @@ import {
   ArrowsPointingInIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
+import { apiClient } from '@/lib/api-client';
 
 interface PostComposerModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onPostCreated?: () => void;
 }
 
 export default function PostComposerModal({
   isOpen,
   onClose,
+  onPostCreated,
 }: PostComposerModalProps) {
   const { user } = useUserStore();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!content.trim() || isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      await apiClient.post('/api/v1/posts', {
+        contentText: content,
+        postType: 'FREE',
+        ppvPrice: null,
+      });
+
+      setContent('');
+      onClose();
+      onPostCreated?.();
+    } catch (error) {
+      console.error('Failed to create post:', error);
+      alert('게시물 작성에 실패했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (!isSubmitting) {
+      setContent('');
+      setIsExpanded(false);
+      onClose();
+    }
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -76,8 +111,9 @@ export default function PostComposerModal({
                       )}
                     </button>
                     <button
-                      onClick={onClose}
+                      onClick={handleClose}
                       className="text-gray-500 hover:text-gray-700"
+                      disabled={isSubmitting}
                     >
                       <XMarkIcon className="h-6 w-6" />
                     </button>
@@ -105,23 +141,30 @@ export default function PostComposerModal({
                         className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
                         placeholder="무슨 생각을 하고 계신가요?"
                         rows={isExpanded ? 10 : 4}
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        disabled={isSubmitting}
                       ></textarea>
                     </div>
                   </div>
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex space-x-2">
-                      <button className="text-primary-500 hover:text-primary-700">
+                      <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>
                         <PhotoIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-primary-500 hover:text-primary-700">
+                      <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>
                         <ChartBarIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-primary-500 hover:text-primary-700">
+                      <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>
                         <FaceSmileIcon className="h-6 w-6" />
                       </button>
                     </div>
-                    <button className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50">
-                      투고하기
+                    <button
+                      onClick={handleSubmit}
+                      disabled={!content.trim() || isSubmitting}
+                      className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
+                    >
+                      {isSubmitting ? '작성 중...' : '투고하기'}
                     </button>
                   </div>
                 </div>

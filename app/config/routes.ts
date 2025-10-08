@@ -8,11 +8,14 @@ export const RouteConfig = {
    */
   PUBLIC_ROUTES: [
     '/login',
+    '/login/success',
+    '/setup/profile',
     '/about',
     '/terms',
     '/privacy',
     '/help',
     '/contact',
+    '/',
   ],
 
   /**
@@ -28,7 +31,6 @@ export const RouteConfig = {
     '/notifications',
     '/account',
     '/points',
-    '/',
     '/parties',
   ],
 

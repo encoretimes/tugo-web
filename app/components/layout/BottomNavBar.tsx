@@ -9,16 +9,22 @@ import {
 } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useUserStore } from '@/store/userStore';
 
 const BottomNavBar = () => {
   const pathname = usePathname();
+  const { user } = useUserStore();
+
+  const profileHref = user?.username
+    ? `/profile/${user.username}`
+    : '/account';
 
   const navItems = [
     { href: '/', icon: HomeIcon, label: '홈' },
     { href: '/search', icon: MagnifyingGlassIcon, label: '검색' },
     { href: '/compose/post', icon: PlusCircleIcon, label: '투고하기' },
     { href: '/notifications', icon: BellIcon, label: '알림' },
-    { href: '/account', icon: UserCircleIcon, label: '내 계정' },
+    { href: profileHref, icon: UserCircleIcon, label: '프로필' },
   ];
 
   return (

@@ -7,6 +7,9 @@ interface User {
   email?: string;
   role: string;
   profileImageUrl?: string | null;
+  hasCreator?: boolean;
+  creatorId?: number | null;
+  username?: string | null; // publicName → username으로 변경
 }
 
 interface UserState {

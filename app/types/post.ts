@@ -1,15 +1,22 @@
+export type PostType = 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV';
+
 export interface Post {
-  id: string;
+  postId: number;
   author: {
     name: string;
     username: string;
     profileImageUrl: string | null;
   };
-  content: string;
+  contentText: string;
+  postType: PostType;
+  ppvPrice: number | null;
   createdAt: string;
+  updatedAt: string;
   stats: {
     comments: number;
     reposts: number;
     likes: number;
   };
+  mediaUrls?: string[];
+  isLiked: boolean;
 }

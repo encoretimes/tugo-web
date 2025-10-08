@@ -6,6 +6,7 @@ import RightSidebar from '@/components/layout/RightSidebar';
 import LoginPromptModal from '@/components/modals/LoginPromptModal';
 import { useRouteGuard } from '@/hooks/useRouteGuard';
 import { useInteractionGuard } from '@/hooks/useInteractionGuard';
+import { useUserStore } from '@/store/userStore';
 import React from 'react';
 
 export default function MainLayout({
@@ -13,14 +14,29 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { showLoginPrompt, closeLoginPrompt, triggerLoginPrompt, isProtectedRoute } =
-    useRouteGuard();
+  const { isLoading } = useUserStore();
+  const {
+    showLoginPrompt,
+    closeLoginPrompt,
+    triggerLoginPrompt,
+    isProtectedRoute,
+  } = useRouteGuard();
 
-  // SEO 프리뷰 페이지에서 사용자 상호작용 감지
   useInteractionGuard({
     onInteractionDetected: triggerLoginPrompt,
     isModalOpen: showLoginPrompt,
   });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent mb-4"></div>
+          <p className="text-neutral-600 text-lg">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen">

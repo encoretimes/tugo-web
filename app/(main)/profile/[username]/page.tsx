@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -9,30 +9,69 @@ import {
   LinkIcon,
   CalendarDaysIcon,
   CheckBadgeIcon,
-  ChatBubbleOvalLeftIcon,
-  ArrowPathRoundedSquareIcon,
-  HeartIcon,
-  ArrowUpOnSquareIcon,
+  ShareIcon,
 } from '@heroicons/react/24/outline';
 import { useUser } from '@/hooks/useUser';
-import { useUserPosts } from '@/hooks/useUserPosts';
 import { UserIcon } from '@heroicons/react/24/solid';
+import { useUserStore } from '@/store/userStore';
+import EditProfileModal from '@/components/modals/EditProfileModal';
+import Post from '@/components/feed/Post';
 
 const ProfilePage = () => {
   const params = useParams();
   const router = useRouter();
   const username = params.username as string;
   const [activeTab, setActiveTab] = useState<'posts' | 'media'>('posts');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { user: currentUser } = useUserStore();
 
   const {
     data: user,
     isLoading: isUserLoading,
     error: userError,
+    refetch,
   } = useUser(username);
-  const { data: posts, isLoading: isPostsLoading } = useUserPosts(username);
 
-  const handleBack = () => {
+  // Check if this is the current user's profile
+  const isOwnProfile = currentUser && currentUser.username === username;
+
+  const handleBack = useCallback(() => {
     router.back();
+  }, [router]);
+
+  // 날짜 포맷팅 함수
+  const formatJoinedDate = (dateString: string | Date) => {
+    try {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}년 ${month}월 ${day}일`;
+    } catch {
+      return dateString.toString().split('T')[0];
+    }
+  };
+
+  // 프로필 공유하기
+  const handleShare = async () => {
+    if (!user) return;
+
+    const profileUrl = `${window.location.origin}/profile/${username}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `${user.name} (@${user.username})`,
+          text: `${user.name}님의 프로필을 확인해보세요`,
+          url: profileUrl,
+        });
+      } else {
+        // Fallback: URL 복사
+        await navigator.clipboard.writeText(profileUrl);
+        alert('프로필 링크가 복사되었습니다!');
+      }
+    } catch (error) {
+      console.error('공유 실패:', error);
+    }
   };
 
   // ESC 키로 닫기
@@ -45,7 +84,7 @@ const ProfilePage = () => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [handleBack]);
 
   if (isUserLoading) {
     return (
@@ -80,6 +119,7 @@ const ProfilePage = () => {
     );
   }
 
+  const posts = user.posts || [];
   const mediaItems =
     posts?.filter((post) => post.mediaUrls && post.mediaUrls.length > 0) || [];
 
@@ -94,7 +134,7 @@ const ProfilePage = () => {
           >
             <ArrowLeftIcon className="h-6 w-6" />
           </button>
-          <div className="ml-4">
+          <div className="ml-4 flex-1">
             <h1 className="text-xl font-bold">{user.name}</h1>
             <p className="text-sm text-gray-500">{user.stats.posts}개 게시물</p>
           </div>
@@ -140,14 +180,35 @@ const ProfilePage = () => {
 
           {/* User Info */}
           <div className="space-y-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-bold">{user.name}</h2>
-                {user.isVerified && (
-                  <CheckBadgeIcon className="h-6 w-6 text-primary-600" />
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-2xl font-bold">{user.name}</h2>
+                  {user.isVerified && (
+                    <CheckBadgeIcon className="h-6 w-6 text-primary-600" />
+                  )}
+                </div>
+                <p className="text-gray-500">@{user.username}</p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={handleShare}
+                  className="p-2 bg-transparent border border-primary-600 text-gray-900 rounded-md hover:bg-primary-50 transition-colors"
+                  title="공유하기"
+                >
+                  <ShareIcon className="h-4 w-4" />
+                </button>
+                {isOwnProfile && (
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="px-3 py-1.5 text-sm bg-transparent border border-primary-600 text-gray-900 font-semibold rounded-md hover:bg-primary-50 transition-colors"
+                  >
+                    프로필 수정
+                  </button>
                 )}
               </div>
-              <p className="text-gray-500">@{user.username}</p>
             </div>
 
             <p className="text-gray-900">{user.bio}</p>
@@ -172,7 +233,7 @@ const ProfilePage = () => {
               )}
               <div className="flex items-center gap-1">
                 <CalendarDaysIcon className="h-4 w-4" />
-                <span>{user.joinedDate}에 가입</span>
+                <span>{formatJoinedDate(user.joinedDate)}에 가입</span>
               </div>
             </div>
 
@@ -189,37 +250,39 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Follow/Subscribe Button */}
-        <div className="px-4 pb-4">
-          <div className="bg-gray-50 rounded-xl p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-semibold">
-                  이 사용자를 팔로우하시겠습니까?
-                </h3>
-                <p className="text-sm text-gray-500">
-                  최신 게시물을 받아보세요
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                    user.isFollowing
-                      ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                      : 'bg-primary-600 text-white hover:bg-primary-700'
-                  }`}
-                >
-                  {user.isFollowing ? '팔로잉' : '팔로우'}
-                </button>
-                {!user.isSubscribed && (
-                  <button className="px-4 py-2 rounded-full text-sm font-semibold bg-primary-100 text-primary-700 hover:bg-primary-200">
-                    구독
+        {/* Follow/Subscribe Button - only show if not own profile */}
+        {!isOwnProfile && (
+          <div className="px-4 pb-4">
+            <div className="bg-gray-50 rounded-xl p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold">
+                    이 사용자를 팔로우하시겠습니까?
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    최신 게시물을 받아보세요
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                      user.isFollowing
+                        ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                        : 'bg-primary-600 text-white hover:bg-primary-700'
+                    }`}
+                  >
+                    {user.isFollowing ? '팔로잉' : '팔로우'}
                   </button>
-                )}
+                  {!user.isSubscribed && (
+                    <button className="px-4 py-2 rounded-full text-sm font-semibold bg-primary-100 text-primary-700 hover:bg-primary-200">
+                      구독
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Tabs */}
@@ -252,86 +315,19 @@ const ProfilePage = () => {
       <div>
         {activeTab === 'posts' && (
           <div>
-            {isPostsLoading ? (
+            {isUserLoading ? (
               <div className="p-8 text-center">
                 <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent mx-auto mb-4"></div>
                 <p className="text-gray-500">게시물을 불러오는 중...</p>
               </div>
             ) : posts && posts.length > 0 ? (
               posts.map((post) => (
-                <div key={post.id} className="border-b border-gray-200 p-4">
-                  <div className="flex space-x-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                      {user.profileImageUrl ? (
-                        <Image
-                          src={user.profileImageUrl}
-                          alt={user.name}
-                          width={40}
-                          height={40}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                          <UserIcon className="h-6 w-6 text-gray-500" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold">{user.name}</span>
-                        {user.isVerified && (
-                          <CheckBadgeIcon className="h-4 w-4 text-primary-600" />
-                        )}
-                        <span className="text-gray-500">@{user.username}</span>
-                        <span className="text-gray-500">·</span>
-                        <span className="text-gray-500">{post.createdAt}</span>
-                      </div>
-                      <p className="text-gray-900 mb-3">{post.content}</p>
-
-                      {post.mediaUrls && post.mediaUrls.length > 0 && (
-                        <div
-                          className={`grid gap-2 mb-3 ${
-                            post.mediaUrls.length === 1
-                              ? 'grid-cols-1'
-                              : 'grid-cols-2'
-                          }`}
-                        >
-                          {post.mediaUrls.map((url, index) => (
-                            <div
-                              key={index}
-                              className="relative aspect-video rounded-lg overflow-hidden"
-                            >
-                              <Image
-                                src={url}
-                                alt={`Media ${index + 1}`}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      <div className="flex justify-between max-w-md text-gray-500">
-                        <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
-                          <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-                          <span>{post.stats.comments}</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
-                          <ArrowPathRoundedSquareIcon className="h-5 w-5" />
-                          <span>{post.stats.reposts}</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
-                          <HeartIcon className="h-5 w-5" />
-                          <span>{post.stats.likes}</span>
-                        </button>
-                        <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
-                          <ArrowUpOnSquareIcon className="h-5 w-5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Post
+                  key={post.postId}
+                  post={post}
+                  onPostDeleted={() => refetch()}
+                  onPostUpdated={() => refetch()}
+                />
               ))
             ) : (
               <div className="p-8 text-center text-gray-500">
@@ -348,7 +344,7 @@ const ProfilePage = () => {
                 {mediaItems.map((post) =>
                   post.mediaUrls?.map((url, index) => (
                     <div
-                      key={`${post.id}-${index}`}
+                      key={`${post.postId}-${index}`}
                       className="aspect-square relative"
                     >
                       <Image
@@ -369,6 +365,22 @@ const ProfilePage = () => {
           </div>
         )}
       </div>
+
+      {/* Edit Profile Modal */}
+      {isOwnProfile && user && currentUser?.creatorId && (
+        <EditProfileModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          creatorId={currentUser.creatorId}
+          currentPublicName={user.username}
+          currentIntroduction={user.bio}
+          currentProfileUrl={user.profileImageUrl || undefined}
+          currentBannerImageUrl={user.backgroundImageUrl || undefined}
+          onSuccess={() => {
+            refetch();
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -8,7 +8,7 @@ import PostSkeleton from './PostSkeleton';
 
 const Feed = () => {
   const [activeTab, setActiveTab] = useState('for-you');
-  const { data: posts, isLoading, error } = usePosts();
+  const { data: posts, isLoading, error, refetch } = usePosts();
 
   const TabButton = ({
     id,
@@ -35,7 +35,7 @@ const Feed = () => {
 
   return (
     <div className="border-r border-neutral-200">
-      <PostComposer />
+      <PostComposer onPostCreated={() => refetch()} />
       <div className="border-b border-neutral-200 bg-white sticky top-0 z-10">
         <div className="flex">
           <TabButton
@@ -70,7 +70,14 @@ const Feed = () => {
             </p>
           </div>
         ) : (
-          posts?.map((post) => <Post key={post.id} post={post} />)
+          posts?.map((post) => (
+            <Post
+              key={post.postId}
+              post={post}
+              onPostDeleted={() => refetch()}
+              onPostUpdated={() => refetch()}
+            />
+          ))
         )}
       </div>
     </div>

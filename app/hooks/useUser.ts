@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@/types/user';
-import usersData from '@/data/users.json';
+import { apiClient } from '@/lib/api-client';
 
 const fetchUser = async (username: string): Promise<User | null> => {
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  const user = usersData.find((u) => u.username === username);
-  return user || null;
+  try {
+    const user = await apiClient.get<User>(`/api/v1/profiles/${username}`);
+    return user;
+  } catch (error) {
+    console.error(`Failed to fetch user ${username}:`, error);
+    return null;
+  }
 };
 
 export const useUser = (username: string) => {

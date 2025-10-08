@@ -1,3 +1,5 @@
+import { Post } from '@/types/post';
+
 export interface User {
   id: string;
   name: string;
@@ -17,6 +19,7 @@ export interface User {
   };
   isFollowing?: boolean;
   isSubscribed?: boolean;
+  posts?: Post[];
 }
 
 export interface UserPost {

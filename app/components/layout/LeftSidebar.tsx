@@ -107,7 +107,10 @@ const LeftSidebar = () => {
       </div>
       {user && (
         <div className="p-2">
-          <div className="flex items-center space-x-2 p-2 rounded-full hover:bg-neutral-100 cursor-pointer">
+          <Link
+            href={user.username ? `/profile/${user.username}` : '/account'}
+            className="flex items-center space-x-2 p-2 rounded-full hover:bg-neutral-100 transition-colors"
+          >
             {user.profileImageUrl ? (
               <Image
                 src={user.profileImageUrl}
@@ -123,9 +126,11 @@ const LeftSidebar = () => {
             )}
             <div className="hidden xl:block">
               <div className="font-bold">{user.name}</div>
-              <div className="text-sm text-neutral-500">{user.role}</div>
+              <div className="text-sm text-neutral-500">
+                {user.username ? `@${user.username}` : 'username 미설정'}
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       )}
     </aside>
