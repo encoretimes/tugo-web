@@ -262,40 +262,40 @@ export default function PostComposerModal({
                   )}
 
                   <div className="mt-4 flex items-center justify-between border-t pt-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex space-x-2">
-                        <label
-                          className="text-primary-500 hover:text-primary-700 cursor-pointer"
-                        >
-                          <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageSelect}
-                            disabled={createPostMutation.isPending}
-                            className="hidden"
-                          />
-                          <PhotoIcon className="h-6 w-6" />
-                        </label>
-                        <button
-                          className="text-primary-500 hover:text-primary-700"
+                    <div className="flex space-x-2">
+                      <label
+                        className="text-primary-500 hover:text-primary-700 cursor-pointer"
+                      >
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageSelect}
                           disabled={createPostMutation.isPending}
-                        >
-                          <ChartBarIcon className="h-6 w-6" />
-                        </button>
-                        <button
-                          className="text-primary-500 hover:text-primary-700"
-                          disabled={createPostMutation.isPending}
-                        >
-                          <FaceSmileIcon className="h-6 w-6" />
-                        </button>
-                      </div>
+                          className="hidden"
+                        />
+                        <PhotoIcon className="h-6 w-6" />
+                      </label>
+                      <button
+                        className="text-primary-500 hover:text-primary-700"
+                        disabled={createPostMutation.isPending}
+                      >
+                        <ChartBarIcon className="h-6 w-6" />
+                      </button>
+                      <button
+                        className="text-primary-500 hover:text-primary-700"
+                        disabled={createPostMutation.isPending}
+                      >
+                        <FaceSmileIcon className="h-6 w-6" />
+                      </button>
+                    </div>
 
+                    <div className="flex items-center gap-2">
                       {/* Post Type Dropdown Menu */}
                       <Menu as="div" className="relative">
                         <Menu.Button
                           disabled={createPostMutation.isPending}
-                          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                          className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-bold text-gray-700 border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                         >
                           {postType === 'FREE' ? (
                             <>
@@ -361,15 +361,15 @@ export default function PostComposerModal({
                           </Menu.Items>
                         </Transition>
                       </Menu>
-                    </div>
 
-                    <button
-                      onClick={handleSubmit}
-                      disabled={!content.trim() || createPostMutation.isPending}
-                      className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
-                    >
-                      {createPostMutation.isPending ? '작성 중...' : '투고하기'}
-                    </button>
+                      <button
+                        onClick={handleSubmit}
+                        disabled={!content.trim() || createPostMutation.isPending}
+                        className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
+                      >
+                        {createPostMutation.isPending ? '작성 중...' : '투고하기'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </Dialog.Panel>
