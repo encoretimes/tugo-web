@@ -25,6 +25,7 @@ import { useDeletePost } from '@/hooks/usePosts';
 import { Menu, Transition } from '@headlessui/react';
 import EditPostModal from '@/app/components/modals/EditPostModal';
 import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
+import ExpandableText from '@/app/components/ui/ExpandableText';
 
 interface PostProps {
   post: PostType;
@@ -234,8 +235,89 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
             )}
           </div>
           <div>
-            <p>{contentText}</p>
+            <ExpandableText text={contentText} maxLines={20} />
           </div>
+
+          {post.mediaUrls && post.mediaUrls.length > 0 && (
+            <div className="mt-3">
+              {post.mediaUrls.length === 1 ? (
+                <div className="relative w-full rounded-2xl overflow-hidden border border-neutral-200">
+                  <Image
+                    src={post.mediaUrls[0]}
+                    alt="Post image"
+                    width={600}
+                    height={400}
+                    className="w-full object-cover"
+                    style={{ maxHeight: '500px' }}
+                  />
+                </div>
+              ) : post.mediaUrls.length === 2 ? (
+                <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
+                  {post.mediaUrls.map((url, index) => (
+                    <div key={index} className="relative aspect-square">
+                      <Image
+                        src={url}
+                        alt={`Post image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : post.mediaUrls.length === 3 ? (
+                <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
+                  <div className="relative row-span-2">
+                    <Image
+                      src={post.mediaUrls[0]}
+                      alt="Post image 1"
+                      width={300}
+                      height={600}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="relative">
+                    <Image
+                      src={post.mediaUrls[1]}
+                      alt="Post image 2"
+                      width={300}
+                      height={300}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="relative">
+                    <Image
+                      src={post.mediaUrls[2]}
+                      alt="Post image 3"
+                      width={300}
+                      height={300}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
+                  {post.mediaUrls.slice(0, 4).map((url, index) => (
+                    <div key={index} className="relative aspect-square">
+                      <Image
+                        src={url}
+                        alt={`Post image ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                      {index === 3 && post.mediaUrls!.length > 4 && (
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                          <span className="text-white text-2xl font-bold">
+                            +{post.mediaUrls!.length - 4}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="mt-4 flex justify-between">
             <button
               onClick={handleCommentToggle}
