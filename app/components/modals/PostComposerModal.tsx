@@ -11,11 +11,13 @@ import {
   XMarkIcon,
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
+  PencilIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
 import { useCreatePost } from '@/hooks/usePosts';
 import { uploadImages } from '@/api/media';
 import { useToastStore } from '@/store/toastStore';
+import ImageEditor from './ImageEditor';
 
 interface PostComposerModalProps {
   isOpen: boolean;
@@ -38,6 +40,9 @@ export default function PostComposerModal({
   /* PPV 기능 (향후 사용) */
   // const [ppvPrice, setPpvPrice] = useState<string>('');
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [editingImageIndex, setEditingImageIndex] = useState<number | null>(
+    null
+  );
 
   const createPostMutation = useCreatePost();
 
@@ -105,6 +110,23 @@ export default function PostComposerModal({
 
   const handleRemoveImage = (index: number) => {
     setSelectedImages(selectedImages.filter((_, i) => i !== index));
+  };
+
+  const handleEditImage = (index: number) => {
+    setEditingImageIndex(index);
+  };
+
+  const handleImageEditorSave = (editedFile: File) => {
+    if (editingImageIndex !== null) {
+      const updatedImages = [...selectedImages];
+      updatedImages[editingImageIndex] = editedFile;
+      setSelectedImages(updatedImages);
+      setEditingImageIndex(null);
+    }
+  };
+
+  const handleImageEditorClose = () => {
+    setEditingImageIndex(null);
   };
 
   return (
@@ -240,19 +262,35 @@ export default function PostComposerModal({
                       <div className="grid grid-cols-5 gap-2">
                         {selectedImages.map((file, index) => (
                           <div key={index} className="relative group">
-                            <Image
-                              src={URL.createObjectURL(file)}
-                              alt={`Preview ${index + 1}`}
-                              width={100}
-                              height={100}
-                              className="h-20 w-20 object-cover rounded-lg"
-                            />
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleEditImage(index)}
+                            >
+                              <Image
+                                src={URL.createObjectURL(file)}
+                                alt={`Preview ${index + 1}`}
+                                width={100}
+                                height={100}
+                                className="h-20 w-20 object-cover rounded-lg"
+                              />
+                            </div>
+                            {/* Edit Button */}
+                            <button
+                              onClick={() => handleEditImage(index)}
+                              className="absolute bottom-1 left-1 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                              disabled={createPostMutation.isPending}
+                              title="편집"
+                            >
+                              <PencilIcon className="h-3.5 w-3.5" />
+                            </button>
+                            {/* Remove Button */}
                             <button
                               onClick={() => handleRemoveImage(index)}
-                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
                               disabled={createPostMutation.isPending}
+                              title="삭제"
                             >
-                              <XMarkIcon className="h-4 w-4" />
+                              <XMarkIcon className="h-3.5 w-3.5" />
                             </button>
                           </div>
                         ))}
@@ -301,6 +339,16 @@ export default function PostComposerModal({
             </Transition.Child>
           </div>
         </div>
+
+        {/* Image Editor Modal */}
+        {editingImageIndex !== null && selectedImages[editingImageIndex] && (
+          <ImageEditor
+            isOpen={editingImageIndex !== null}
+            onClose={handleImageEditorClose}
+            imageFile={selectedImages[editingImageIndex]}
+            onSave={handleImageEditorSave}
+          />
+        )}
       </Dialog>
     </Transition>
   );
