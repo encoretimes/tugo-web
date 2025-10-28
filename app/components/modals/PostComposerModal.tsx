@@ -1,6 +1,6 @@
 'use client';
 
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, Transition, Menu } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import Image from 'next/image';
 import {
@@ -12,6 +12,9 @@ import {
   ArrowsPointingOutIcon,
   ArrowsPointingInIcon,
   PencilIcon,
+  LockOpenIcon,
+  LockClosedIcon,
+  CheckIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
 import { useCreatePost } from '@/hooks/usePosts';
@@ -216,46 +219,6 @@ export default function PostComposerModal({
                     </div>
                   </div>
 
-                  {/* PostType Selection */}
-                  <div className="mt-4 border-t pt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      게시물 타입
-                    </label>
-                    <select
-                      value={postType}
-                      onChange={(e) =>
-                        setPostType(
-                          e.target.value as 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'
-                        )
-                      }
-                      disabled={createPostMutation.isPending}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    >
-                      <option value="FREE">무료 (모두 공개)</option>
-                      <option value="SUBSCRIBER_ONLY">구독자 전용</option>
-                      {/* PPV 기능 (향후 사용) */}
-                      {/* <option value="PPV">PPV (개별 결제)</option> */}
-                    </select>
-
-                    {/* PPV 기능 (향후 사용) */}
-                    {/* {postType === 'PPV' && (
-                      <div className="mt-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          PPV 가격 (원)
-                        </label>
-                        <input
-                          type="number"
-                          value={ppvPrice}
-                          onChange={(e) => setPpvPrice(e.target.value)}
-                          placeholder="예: 1000"
-                          min="0"
-                          disabled={createPostMutation.isPending}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        />
-                      </div>
-                    )} */}
-                  </div>
-
                   {/* Image Preview Grid */}
                   {selectedImages.length > 0 && (
                     <div className="mt-4">
@@ -298,34 +261,108 @@ export default function PostComposerModal({
                     </div>
                   )}
 
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="flex space-x-2">
-                      <label
-                        className="text-primary-500 hover:text-primary-700 cursor-pointer"
-                      >
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          onChange={handleImageSelect}
+                  <div className="mt-4 flex items-center justify-between border-t pt-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex space-x-2">
+                        <label
+                          className="text-primary-500 hover:text-primary-700 cursor-pointer"
+                        >
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageSelect}
+                            disabled={createPostMutation.isPending}
+                            className="hidden"
+                          />
+                          <PhotoIcon className="h-6 w-6" />
+                        </label>
+                        <button
+                          className="text-primary-500 hover:text-primary-700"
                           disabled={createPostMutation.isPending}
-                          className="hidden"
-                        />
-                        <PhotoIcon className="h-6 w-6" />
-                      </label>
-                      <button
-                        className="text-primary-500 hover:text-primary-700"
-                        disabled={createPostMutation.isPending}
-                      >
-                        <ChartBarIcon className="h-6 w-6" />
-                      </button>
-                      <button
-                        className="text-primary-500 hover:text-primary-700"
-                        disabled={createPostMutation.isPending}
-                      >
-                        <FaceSmileIcon className="h-6 w-6" />
-                      </button>
+                        >
+                          <ChartBarIcon className="h-6 w-6" />
+                        </button>
+                        <button
+                          className="text-primary-500 hover:text-primary-700"
+                          disabled={createPostMutation.isPending}
+                        >
+                          <FaceSmileIcon className="h-6 w-6" />
+                        </button>
+                      </div>
+
+                      {/* Post Type Dropdown Menu */}
+                      <Menu as="div" className="relative">
+                        <Menu.Button
+                          disabled={createPostMutation.isPending}
+                          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                        >
+                          {postType === 'FREE' ? (
+                            <>
+                              <LockOpenIcon className="h-5 w-5" />
+                              <span>모두 공개</span>
+                            </>
+                          ) : (
+                            <>
+                              <LockClosedIcon className="h-5 w-5" />
+                              <span>구독자 전용</span>
+                            </>
+                          )}
+                        </Menu.Button>
+
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute bottom-full mb-2 left-0 w-48 origin-bottom-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                            <div className="py-1">
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                    onClick={() => setPostType('FREE')}
+                                    className={`${
+                                      active ? 'bg-gray-100' : ''
+                                    } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <LockOpenIcon className="h-5 w-5 text-gray-500" />
+                                      <span>모두 공개</span>
+                                    </div>
+                                    {postType === 'FREE' && (
+                                      <CheckIcon className="h-5 w-5 text-primary-600" />
+                                    )}
+                                  </button>
+                                )}
+                              </Menu.Item>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <button
+                                    onClick={() => setPostType('SUBSCRIBER_ONLY')}
+                                    className={`${
+                                      active ? 'bg-gray-100' : ''
+                                    } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <LockClosedIcon className="h-5 w-5 text-gray-500" />
+                                      <span>구독자 전용</span>
+                                    </div>
+                                    {postType === 'SUBSCRIBER_ONLY' && (
+                                      <CheckIcon className="h-5 w-5 text-primary-600" />
+                                    )}
+                                  </button>
+                                )}
+                              </Menu.Item>
+                            </div>
+                          </Menu.Items>
+                        </Transition>
+                      </Menu>
                     </div>
+
                     <button
                       onClick={handleSubmit}
                       disabled={!content.trim() || createPostMutation.isPending}
