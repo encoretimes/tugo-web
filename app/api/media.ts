@@ -12,14 +12,10 @@ export const uploadImage = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append('file', file);
 
+  // FormData 사용 시 Content-Type 헤더를 명시하지 않음 (브라우저가 자동 설정)
   const result = await apiClient.post<UploadedFile>(
     '/api/v1/media/upload/image',
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }
+    formData
   );
 
   return result.path;

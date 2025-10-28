@@ -20,12 +20,17 @@ class ApiClient {
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
+    // FormData인 경우 Content-Type 헤더를 설정하지 않음 (브라우저가 자동 설정)
+    const isFormData = options.body instanceof FormData;
+
     const defaultOptions: RequestInit = {
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers: isFormData
+        ? { ...options.headers }
+        : {
+            'Content-Type': 'application/json',
+            ...options.headers,
+          },
     };
 
     const response = await fetch(url, { ...defaultOptions, ...options });
@@ -62,10 +67,13 @@ class ApiClient {
     data?: unknown,
     options?: RequestInit
   ): Promise<T> {
+    // FormData는 그대로 전달, 그 외에는 JSON.stringify
+    const body = data instanceof FormData ? data : JSON.stringify(data);
+
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
-      body: JSON.stringify(data),
+      body: body,
     });
   }
 
