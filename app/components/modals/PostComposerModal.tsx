@@ -295,7 +295,7 @@ export default function PostComposerModal({
                       <Menu as="div" className="relative">
                         <Menu.Button
                           disabled={createPostMutation.isPending}
-                          className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-bold text-gray-700 border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                          className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-bold text-gray-500 border-[1.5px] border-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                         >
                           {postType === 'FREE' ? (
                             <>
