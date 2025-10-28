@@ -1,14 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import Post from './Post';
 import PostComposer from './PostComposer';
-import { usePosts } from '@/hooks/usePosts';
+import { useInfinitePosts } from '@/hooks/usePosts';
 import PostSkeleton from './PostSkeleton';
 
 const Feed = () => {
   const [activeTab, setActiveTab] = useState('for-you');
-  const { data: posts, isLoading, error, refetch } = usePosts();
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useInfinitePosts();
+
+  const { ref, inView } = useInView();
+
+  const posts = data?.pages.flatMap((page) => page.content) ?? [];
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const TabButton = ({
     id,
@@ -35,7 +53,7 @@ const Feed = () => {
 
   return (
     <div className="border-r border-neutral-200">
-      <PostComposer onPostCreated={() => refetch()} />
+      <PostComposer />
       <div className="border-b border-neutral-200 bg-white sticky top-0 z-10">
         <div className="flex">
           <TabButton
@@ -70,14 +88,30 @@ const Feed = () => {
             </p>
           </div>
         ) : (
-          posts?.map((post) => (
-            <Post
-              key={post.postId}
-              post={post}
-              onPostDeleted={() => refetch()}
-              onPostUpdated={() => refetch()}
-            />
-          ))
+          <>
+            {posts.map((post) => (
+              <Post key={post.postId} post={post} />
+            ))}
+            {hasNextPage && (
+              <div ref={ref} className="py-8">
+                {isFetchingNextPage ? (
+                  <div>
+                    <PostSkeleton />
+                    <PostSkeleton />
+                  </div>
+                ) : (
+                  <div className="text-center text-neutral-500">
+                    스크롤하여 더 보기
+                  </div>
+                )}
+              </div>
+            )}
+            {!hasNextPage && posts.length > 0 && (
+              <div className="py-8 text-center text-neutral-500">
+                모든 게시물을 불러왔습니다
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

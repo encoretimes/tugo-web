@@ -129,7 +129,8 @@ const CreatorSection = () => {
               크리에이터 전환
             </h3>
             <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-              크리에이터로 전환하면 게시물을 작성하고 구독자를 관리할 수 있습니다. 기본 크리에이터 계정은 무료로 전환할 수 있습니다.
+              크리에이터로 전환하면 게시물을 작성하고 구독자를 관리할 수
+              있습니다. 기본 크리에이터 계정은 무료로 전환할 수 있습니다.
             </p>
 
             {!user?.username && (
@@ -189,7 +190,8 @@ const CreatorSection = () => {
               크리에이터 활성화됨
             </h3>
             <p className="text-sm text-gray-600">
-              현재 크리에이터 계정을 사용 중입니다. 게시물을 작성하고 구독자를 관리할 수 있습니다.
+              현재 크리에이터 계정을 사용 중입니다. 게시물을 작성하고 구독자를
+              관리할 수 있습니다.
             </p>
           </div>
 
@@ -210,23 +212,25 @@ const CreatorSection = () => {
                 <div className="mb-4 p-4 bg-gray-50 border border-gray-300">
                   <p className="text-sm text-gray-600">게시물 수 확인 중...</p>
                 </div>
-              ) : postCount !== null && (
-                <div
-                  className={`mb-4 p-4 border ${
-                    postCount === 0
-                      ? 'bg-green-50 border-green-300'
-                      : 'bg-yellow-50 border-yellow-300'
-                  }`}
-                >
-                  <p className="text-sm font-medium text-gray-800">
-                    현재 게시물 수: {postCount}개
-                  </p>
-                  {postCount > 0 && (
-                    <p className="text-sm text-gray-700 mt-1">
-                      게시물을 모두 삭제한 후 복귀할 수 있습니다
+              ) : (
+                postCount !== null && (
+                  <div
+                    className={`mb-4 p-4 border ${
+                      postCount === 0
+                        ? 'bg-green-50 border-green-300'
+                        : 'bg-yellow-50 border-yellow-300'
+                    }`}
+                  >
+                    <p className="text-sm font-medium text-gray-800">
+                      현재 게시물 수: {postCount}개
                     </p>
-                  )}
-                </div>
+                    {postCount > 0 && (
+                      <p className="text-sm text-gray-700 mt-1">
+                        게시물을 모두 삭제한 후 복귀할 수 있습니다
+                      </p>
+                    )}
+                  </div>
+                )
               )}
 
               {error && (

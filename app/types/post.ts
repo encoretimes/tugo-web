@@ -14,7 +14,6 @@ export interface Post {
   updatedAt: string;
   stats: {
     comments: number;
-    reposts: number;
     likes: number;
   };
   mediaUrls?: string[];

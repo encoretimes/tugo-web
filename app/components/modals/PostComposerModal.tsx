@@ -13,7 +13,7 @@ import {
   ArrowsPointingInIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
-import { apiClient } from '@/lib/api-client';
+import { useCreatePost } from '@/hooks/usePosts';
 
 interface PostComposerModalProps {
   isOpen: boolean;
@@ -33,34 +33,32 @@ export default function PostComposerModal({
     'FREE'
   );
   const [ppvPrice, setPpvPrice] = useState<string>('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const createPostMutation = useCreatePost();
 
   const handleSubmit = async () => {
-    if (!content.trim() || isSubmitting) return;
+    if (!content.trim() || createPostMutation.isPending) return;
 
-    try {
-      setIsSubmitting(true);
-      await apiClient.post('/api/v1/posts', {
+    createPostMutation.mutate(
+      {
         contentText: content,
         postType: postType,
-        ppvPrice: postType === 'PPV' && ppvPrice ? Number(ppvPrice) : null,
-      });
-
-      setContent('');
-      setPostType('FREE');
-      setPpvPrice('');
-      onClose();
-      onPostCreated?.();
-    } catch (error) {
-      console.error('Failed to create post:', error);
-      alert('게시물 작성에 실패했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
+        ppvPrice: postType === 'PPV' && ppvPrice ? Number(ppvPrice) : undefined,
+      },
+      {
+        onSuccess: () => {
+          setContent('');
+          setPostType('FREE');
+          setPpvPrice('');
+          onClose();
+          onPostCreated?.();
+        },
+      }
+    );
   };
 
   const handleClose = () => {
-    if (!isSubmitting) {
+    if (!createPostMutation.isPending) {
       setContent('');
       setPostType('FREE');
       setPpvPrice('');
@@ -121,7 +119,7 @@ export default function PostComposerModal({
                     <button
                       onClick={handleClose}
                       className="text-gray-500 hover:text-gray-700"
-                      disabled={isSubmitting}
+                      disabled={createPostMutation.isPending}
                     >
                       <XMarkIcon className="h-6 w-6" />
                     </button>
@@ -151,7 +149,7 @@ export default function PostComposerModal({
                         rows={isExpanded ? 10 : 4}
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        disabled={isSubmitting}
+                        disabled={createPostMutation.isPending}
                       ></textarea>
                     </div>
                   </div>
@@ -168,7 +166,7 @@ export default function PostComposerModal({
                           e.target.value as 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'
                         )
                       }
-                      disabled={isSubmitting}
+                      disabled={createPostMutation.isPending}
                       className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     >
                       <option value="FREE">무료 (모두 공개)</option>
@@ -187,7 +185,7 @@ export default function PostComposerModal({
                           onChange={(e) => setPpvPrice(e.target.value)}
                           placeholder="예: 1000"
                           min="0"
-                          disabled={isSubmitting}
+                          disabled={createPostMutation.isPending}
                           className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
                       </div>
@@ -196,22 +194,31 @@ export default function PostComposerModal({
 
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex space-x-2">
-                      <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>
+                      <button
+                        className="text-primary-500 hover:text-primary-700"
+                        disabled={createPostMutation.isPending}
+                      >
                         <PhotoIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>
+                      <button
+                        className="text-primary-500 hover:text-primary-700"
+                        disabled={createPostMutation.isPending}
+                      >
                         <ChartBarIcon className="h-6 w-6" />
                       </button>
-                      <button className="text-primary-500 hover:text-primary-700" disabled={isSubmitting}>
+                      <button
+                        className="text-primary-500 hover:text-primary-700"
+                        disabled={createPostMutation.isPending}
+                      >
                         <FaceSmileIcon className="h-6 w-6" />
                       </button>
                     </div>
                     <button
                       onClick={handleSubmit}
-                      disabled={!content.trim() || isSubmitting}
+                      disabled={!content.trim() || createPostMutation.isPending}
                       className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
                     >
-                      {isSubmitting ? '작성 중...' : '투고하기'}
+                      {createPostMutation.isPending ? '작성 중...' : '투고하기'}
                     </button>
                   </div>
                 </div>

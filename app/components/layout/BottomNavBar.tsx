@@ -15,9 +15,7 @@ const BottomNavBar = () => {
   const pathname = usePathname();
   const { user } = useUserStore();
 
-  const profileHref = user?.username
-    ? `/profile/${user.username}`
-    : '/account';
+  const profileHref = user?.username ? `/profile/${user.username}` : '/account';
 
   const navItems = [
     { href: '/', icon: HomeIcon, label: '홈' },

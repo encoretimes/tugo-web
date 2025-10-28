@@ -155,9 +155,7 @@ function LoginContent() {
 
               {/* About Link */}
               <div className="text-center mb-8">
-                <p className="text-neutral-600 mb-4">
-                  Tugo가 처음이신가요?
-                </p>
+                <p className="text-neutral-600 mb-4">Tugo가 처음이신가요?</p>
                 <a
                   href="/about"
                   className="text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-200 inline-flex items-center gap-2 group"

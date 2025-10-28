@@ -55,9 +55,7 @@ export default function BookmarksPage() {
 
       {posts.length === 0 ? (
         <div className="p-8 text-center">
-          <p className="text-neutral-600">
-            보관한 게시물이 없습니다.
-          </p>
+          <p className="text-neutral-600">보관한 게시물이 없습니다.</p>
           <p className="text-sm text-neutral-500 mt-2">
             게시물의 보관함 아이콘을 눌러 저장하세요.
           </p>

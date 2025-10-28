@@ -11,18 +11,16 @@ import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 
-interface PostComposerProps {
-  onPostCreated?: () => void;
-}
-
-const PostComposer = ({ onPostCreated }: PostComposerProps) => {
+const PostComposer = () => {
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
     // 크리에이터가 아니면 경고
     if (!user?.hasCreator) {
-      alert('게시물을 작성하려면 크리에이터로 전환해야 합니다.\n내 계정 > 크리에이터 탭에서 전환할 수 있습니다.');
+      alert(
+        '게시물을 작성하려면 크리에이터로 전환해야 합니다.\n내 계정 > 크리에이터 탭에서 전환할 수 있습니다.'
+      );
       return;
     }
     setIsModalOpen(true);
@@ -82,11 +80,7 @@ const PostComposer = ({ onPostCreated }: PostComposerProps) => {
           </div>
         </div>
       </div>
-      <PostComposerModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onPostCreated={onPostCreated}
-      />
+      <PostComposerModal isOpen={isModalOpen} onClose={closeModal} />
     </>
   );
 };

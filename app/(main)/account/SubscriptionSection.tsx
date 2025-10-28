@@ -38,7 +38,9 @@ const SubscriptionSection = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-6 text-gray-900 pb-3 border-b border-gray-200">구독 관리</h2>
+      <h2 className="text-xl font-semibold mb-6 text-gray-900 pb-3 border-b border-gray-200">
+        구독 관리
+      </h2>
 
       <div className="space-y-3">
         {subscribedCreators.map((creator) => (
@@ -70,9 +72,7 @@ const SubscriptionSection = () => {
                 <div className="font-medium text-gray-900">
                   {creator.monthlyPrice.toLocaleString()}원/월
                 </div>
-                <div className="text-sm text-gray-500">
-                  {creator.tier} 등급
-                </div>
+                <div className="text-sm text-gray-500">{creator.tier} 등급</div>
               </div>
               <button className="px-4 py-2 text-sm font-medium border border-gray-400 bg-white hover:bg-gray-50 text-gray-700">
                 취소
@@ -83,9 +83,7 @@ const SubscriptionSection = () => {
       </div>
 
       <div className="mt-8 p-5 bg-gray-50 border border-gray-300 flex items-center justify-between">
-        <h3 className="text-base font-medium text-gray-900">
-          월간 총 구독료
-        </h3>
+        <h3 className="text-base font-medium text-gray-900">월간 총 구독료</h3>
         <p className="text-lg font-semibold text-gray-900">
           {totalMonthlyCost.toLocaleString()}원
         </p>

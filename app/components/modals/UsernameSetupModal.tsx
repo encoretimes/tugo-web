@@ -74,9 +74,7 @@ export default function UsernameSetupModal({
 
     setIsSubmitting(true);
     try {
-      await apiClient.put(
-        `/api/v1/members/me/username?username=${username}`
-      );
+      await apiClient.put(`/api/v1/members/me/username?username=${username}`);
 
       // User 정보 업데이트
       if (user) {
@@ -160,7 +158,9 @@ export default function UsernameSetupModal({
                         type="text"
                         id="username"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                        onChange={(e) =>
+                          setUsername(e.target.value.toLowerCase())
+                        }
                         className="w-full pl-8 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         placeholder="username"
                         required

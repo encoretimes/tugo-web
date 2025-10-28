@@ -73,5 +73,11 @@ export function useInteractionGuard({
     return () => {
       detachListeners();
     };
-  }, [pathname, isAuthenticated, isModalOpen, attachListeners, detachListeners]);
+  }, [
+    pathname,
+    isAuthenticated,
+    isModalOpen,
+    attachListeners,
+    detachListeners,
+  ]);
 }

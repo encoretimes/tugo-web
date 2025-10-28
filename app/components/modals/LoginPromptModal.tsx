@@ -40,7 +40,8 @@ export default function LoginPromptModal({
           </svg>
         ),
         title: '로그인이 필요한 기능입니다',
-        description: '이 기능을 사용하려면 로그인이 필요합니다.\n로그인하고 Tugo의 다양한 기능을 경험해보세요!',
+        description:
+          '이 기능을 사용하려면 로그인이 필요합니다.\n로그인하고 Tugo의 다양한 기능을 경험해보세요!',
         features: [
           '크리에이터 구독 및 후원',
           '메시지 및 알림 확인',
@@ -67,7 +68,8 @@ export default function LoginPromptModal({
         </svg>
       ),
       title: '더 많은 기능을 이용해보세요',
-      description: '로그인하면 Tugo의 모든 기능을 제한 없이 이용하실 수 있습니다.',
+      description:
+        '로그인하면 Tugo의 모든 기능을 제한 없이 이용하실 수 있습니다.',
       features: [
         '댓글 작성 및 좋아요',
         '정치인과 소통하기',
@@ -187,7 +189,6 @@ export default function LoginPromptModal({
                     >
                       지금 로그인하기
                     </button>
-
                   </div>
                 </div>
               </Dialog.Panel>

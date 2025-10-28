@@ -9,7 +9,9 @@ const ProfileSection = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-6 text-gray-900 pb-3 border-b border-gray-200">프로필</h2>
+      <h2 className="text-xl font-semibold mb-6 text-gray-900 pb-3 border-b border-gray-200">
+        프로필
+      </h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();

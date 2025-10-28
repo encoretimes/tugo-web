@@ -3,7 +3,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { apiClient } from '@/lib/api-client';
+import { useUpdatePost } from '@/hooks/usePosts';
 
 interface EditPostModalProps {
   isOpen: boolean;
@@ -31,8 +31,9 @@ export default function EditPostModal({
   const [ppvPrice, setPpvPrice] = useState<string>(
     initialPpvPrice ? String(initialPpvPrice) : ''
   );
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const updatePostMutation = useUpdatePost();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,28 +44,32 @@ export default function EditPostModal({
       return;
     }
 
-    try {
-      setIsSubmitting(true);
-      await apiClient.put(`/api/v1/posts/${postId}`, {
-        contentText: content,
-        postType: postType,
-        ppvPrice: postType === 'PPV' && ppvPrice ? Number(ppvPrice) : null,
-      });
-
-      if (onPostUpdated) {
-        onPostUpdated();
+    updatePostMutation.mutate(
+      {
+        postId,
+        data: {
+          contentText: content,
+          postType: postType,
+          ppvPrice:
+            postType === 'PPV' && ppvPrice ? Number(ppvPrice) : undefined,
+        },
+      },
+      {
+        onSuccess: () => {
+          if (onPostUpdated) {
+            onPostUpdated();
+          }
+          onClose();
+        },
+        onError: () => {
+          setError('게시물 수정에 실패했습니다.');
+        },
       }
-      onClose();
-    } catch (err) {
-      console.error('Failed to update post:', err);
-      setError('게시물 수정에 실패했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    );
   };
 
   const handleClose = () => {
-    if (!isSubmitting) {
+    if (!updatePostMutation.isPending) {
       setContent(initialContent);
       setPostType(initialPostType);
       setPpvPrice(initialPpvPrice ? String(initialPpvPrice) : '');
@@ -109,7 +114,7 @@ export default function EditPostModal({
                   </Dialog.Title>
                   <button
                     onClick={handleClose}
-                    disabled={isSubmitting}
+                    disabled={updatePostMutation.isPending}
                     className="rounded-full p-1 hover:bg-gray-100 transition-colors"
                   >
                     <XMarkIcon className="h-6 w-6 text-gray-500" />
@@ -123,7 +128,7 @@ export default function EditPostModal({
                       onChange={(e) => setContent(e.target.value)}
                       placeholder="무슨 일이 일어나고 있나요?"
                       className="w-full resize-none rounded-lg border border-neutral-300 p-3 text-base focus:border-primary-600 focus:outline-none min-h-[150px]"
-                      disabled={isSubmitting}
+                      disabled={updatePostMutation.isPending}
                       maxLength={1000}
                     />
                     <div className="mt-2 flex justify-between items-center">
@@ -148,7 +153,7 @@ export default function EditPostModal({
                           e.target.value as 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV'
                         )
                       }
-                      disabled={isSubmitting}
+                      disabled={updatePostMutation.isPending}
                       className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     >
                       <option value="FREE">무료 (모두 공개)</option>
@@ -167,7 +172,7 @@ export default function EditPostModal({
                           onChange={(e) => setPpvPrice(e.target.value)}
                           placeholder="예: 1000"
                           min="0"
-                          disabled={isSubmitting}
+                          disabled={updatePostMutation.isPending}
                           className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
                       </div>
@@ -178,17 +183,17 @@ export default function EditPostModal({
                     <button
                       type="button"
                       onClick={handleClose}
-                      disabled={isSubmitting}
+                      disabled={updatePostMutation.isPending}
                       className="rounded-full px-6 py-2 font-semibold text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-50"
                     >
                       취소
                     </button>
                     <button
                       type="submit"
-                      disabled={!content.trim() || isSubmitting}
+                      disabled={!content.trim() || updatePostMutation.isPending}
                       className="rounded-full bg-primary-600 px-6 py-2 font-semibold text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
                     >
-                      {isSubmitting ? '수정 중...' : '수정하기'}
+                      {updatePostMutation.isPending ? '수정 중...' : '수정하기'}
                     </button>
                   </div>
                 </form>

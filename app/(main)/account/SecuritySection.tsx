@@ -13,13 +13,14 @@ const SecuritySection = () => {
 
       {/* Two-Factor Authentication */}
       <div>
-        <h3 className="text-base font-medium mb-4 text-gray-900">
-          2단계 인증
-        </h3>
+        <h3 className="text-base font-medium mb-4 text-gray-900">2단계 인증</h3>
         <div className="flex items-start justify-between p-5 bg-gray-50 border border-gray-300 max-w-2xl">
           <div className="flex-1">
             <p className="text-sm font-medium text-gray-900 mb-1">
-              상태: <span className={`${isTwoFactorEnabled ? 'text-green-700' : 'text-gray-600'}`}>
+              상태:{' '}
+              <span
+                className={`${isTwoFactorEnabled ? 'text-green-700' : 'text-gray-600'}`}
+              >
                 {isTwoFactorEnabled ? '활성화됨' : '비활성화됨'}
               </span>
             </p>

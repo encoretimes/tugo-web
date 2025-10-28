@@ -11,12 +11,17 @@ import {
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartIconSolid, BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
+import {
+  HeartIcon as HeartIconSolid,
+  BookmarkIcon as BookmarkIconSolid,
+} from '@heroicons/react/24/solid';
 import { Post as PostType } from '@/types/post';
-import { apiClient } from '@/lib/api-client';
 import { useUserStore } from '@/store/userStore';
 import { useToastStore } from '@/store/toastStore';
 import { useToggleBookmark } from '@/hooks/useBookmarks';
+import { useToggleLike } from '@/hooks/useLikes';
+import { useComments, useCreateComment } from '@/hooks/useComments';
+import { useDeletePost } from '@/hooks/usePosts';
 import { Menu, Transition } from '@headlessui/react';
 import EditPostModal from '@/app/components/modals/EditPostModal';
 import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
@@ -31,6 +36,10 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const { user } = useUserStore();
   const addToast = useToastStore((state) => state.addToast);
   const { toggleBookmark } = useToggleBookmark();
+  const { likeMutation, unlikeMutation } = useToggleLike();
+  const createCommentMutation = useCreateComment();
+  const deletePostMutation = useDeletePost();
+
   const { author, contentText, createdAt, stats } = post;
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [isSaved, setIsSaved] = useState(post.isSaved);
@@ -38,18 +47,15 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const [commentCount, setCommentCount] = useState(stats.comments);
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState<
-    Array<{
-      id: number;
-      author: { name: string; username: string; profileImageUrl: string | null };
-      content: string;
-      createdAt: string;
-    }>
-  >([]);
-  const [isLoadingComments, setIsLoadingComments] = useState(false);
-  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  // 댓글 목록 조회 (showComments가 true일 때만 활성화)
+  const { data: commentsData, isLoading: isLoadingComments } = useComments(
+    post.postId
+  );
+
+  const comments = commentsData || [];
 
   // 현재 사용자가 게시물 작성자인지 확인
   const isAuthor = user?.username === author.username;
@@ -62,25 +68,39 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
     setCommentCount(stats.comments);
   }, [post.isLiked, post.isSaved, stats.likes, stats.comments]);
 
-  const handleLikeToggle = async () => {
+  const handleLikeToggle = () => {
     if (!user) {
       addToast('로그인이 필요합니다', 'warning');
       return;
     }
 
-    try {
-      if (isLiked) {
-        await apiClient.delete(`/api/v1/likes/${post.postId}`);
-        setIsLiked(false);
-        setLikeCount((prev) => prev - 1);
-      } else {
-        await apiClient.post('/api/v1/likes', { postId: post.postId });
-        setIsLiked(true);
-        setLikeCount((prev) => prev + 1);
-      }
-    } catch (error) {
-      console.error('Failed to toggle like:', error);
-      addToast('좋아요 처리에 실패했습니다', 'error');
+    // 낙관적 업데이트
+    const previousIsLiked = isLiked;
+    const previousLikeCount = likeCount;
+
+    if (isLiked) {
+      setIsLiked(false);
+      setLikeCount((prev) => prev - 1);
+      unlikeMutation.mutate(post.postId, {
+        onError: () => {
+          // 실패 시 롤백
+          setIsLiked(previousIsLiked);
+          setLikeCount(previousLikeCount);
+        },
+      });
+    } else {
+      setIsLiked(true);
+      setLikeCount((prev) => prev + 1);
+      likeMutation.mutate(
+        { postId: post.postId },
+        {
+          onError: () => {
+            // 실패 시 롤백
+            setIsLiked(previousIsLiked);
+            setLikeCount(previousLikeCount);
+          },
+        }
+      );
     }
   };
 
@@ -94,78 +114,40 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
     setIsSaved(!isSaved);
   };
 
-  const handleCommentToggle = async () => {
-    if (!showComments && comments.length === 0) {
-      setIsLoadingComments(true);
-      try {
-        const response = await apiClient.get<{
-          content: Array<{
-            id: number;
-            author: {
-              name: string;
-              username: string;
-              profileImageUrl: string | null;
-            };
-            content: string;
-            createdAt: string;
-          }>;
-        }>(`/api/v1/comments?postId=${post.postId}&page=0&size=10`);
-        setComments(response.content);
-      } catch (error) {
-        console.error('Failed to load comments:', error);
-      } finally {
-        setIsLoadingComments(false);
-      }
-    }
+  const handleCommentToggle = () => {
     setShowComments(!showComments);
   };
 
-  const handleCommentSubmit = async () => {
+  const handleCommentSubmit = () => {
     if (!user) {
       addToast('로그인이 필요합니다', 'warning');
       return;
     }
 
-    if (!commentText.trim() || isSubmittingComment) return;
+    if (!commentText.trim() || createCommentMutation.isPending) return;
 
-    try {
-      setIsSubmittingComment(true);
-      const response = await apiClient.post<{
-        id: number;
-        author: {
-          name: string;
-          username: string;
-          profileImageUrl: string | null;
-        };
-        content: string;
-        createdAt: string;
-      }>('/api/v1/comments', {
-        content: commentText,
+    createCommentMutation.mutate(
+      {
         postId: post.postId,
-      });
-      setComments([response, ...comments]);
-      setCommentCount((prev) => prev + 1);
-      setCommentText('');
-      addToast('댓글이 작성되었습니다', 'success');
-    } catch (error) {
-      console.error('Failed to submit comment:', error);
-      addToast('댓글 작성에 실패했습니다', 'error');
-    } finally {
-      setIsSubmittingComment(false);
-    }
+        content: commentText,
+      },
+      {
+        onSuccess: () => {
+          setCommentText('');
+          setCommentCount((prev) => prev + 1);
+        },
+      }
+    );
   };
 
-  const handleDeletePost = async () => {
-    try {
-      await apiClient.delete(`/api/v1/posts/${post.postId}`);
-      addToast('게시물이 삭제되었습니다', 'success');
-      if (onPostDeleted) {
-        onPostDeleted();
-      }
-    } catch (error) {
-      console.error('Failed to delete post:', error);
-      addToast('게시물 삭제에 실패했습니다', 'error');
-    }
+  const handleDeletePost = () => {
+    deletePostMutation.mutate(post.postId, {
+      onSuccess: () => {
+        if (onPostDeleted) {
+          onPostDeleted();
+        }
+      },
+    });
   };
 
   return (
@@ -320,15 +302,19 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                       placeholder="댓글을 입력하세요..."
                       className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
                       rows={2}
-                      disabled={isSubmittingComment}
+                      disabled={createCommentMutation.isPending}
                     />
                     <div className="mt-2 flex justify-end">
                       <button
                         onClick={handleCommentSubmit}
-                        disabled={!commentText.trim() || isSubmittingComment}
+                        disabled={
+                          !commentText.trim() || createCommentMutation.isPending
+                        }
                         className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
                       >
-                        {isSubmittingComment ? '작성 중...' : '댓글 달기'}
+                        {createCommentMutation.isPending
+                          ? '작성 중...'
+                          : '댓글 달기'}
                       </button>
                     </div>
                   </div>
