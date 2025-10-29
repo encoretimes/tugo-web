@@ -1,12 +1,11 @@
 'use client';
 
 import { Dialog, Transition, Menu } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef } from 'react';
 import Image from 'next/image';
 import {
   PhotoIcon,
   ChartBarIcon,
-  FaceSmileIcon,
   UserIcon,
   XMarkIcon,
   ArrowsPointingOutIcon,
@@ -21,6 +20,9 @@ import { useCreatePost } from '@/hooks/usePosts';
 import { uploadImages } from '@/api/media';
 import { useToastStore } from '@/store/toastStore';
 import ImageEditor from './ImageEditor';
+import EmojiPickerButton from '../feed/EmojiPicker';
+import PollCreator from '../feed/PollCreator';
+import { PollCreateData } from '@/app/types/poll';
 
 interface PostComposerModalProps {
   isOpen: boolean;
@@ -46,6 +48,9 @@ export default function PostComposerModal({
   const [editingImageIndex, setEditingImageIndex] = useState<number | null>(
     null
   );
+  const [showPoll, setShowPoll] = useState(false);
+  const [pollData, setPollData] = useState<PollCreateData | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const createPostMutation = useCreatePost();
 
@@ -71,6 +76,7 @@ export default function PostComposerModal({
         /* PPV 기능 (향후 사용) */
         // ppvPrice: postType === 'PPV' && ppvPrice ? Number(ppvPrice) : undefined,
         mediaUrls: mediaUrls.length > 0 ? mediaUrls : undefined,
+        pollData: pollData || undefined,
       },
       {
         onSuccess: () => {
@@ -78,6 +84,8 @@ export default function PostComposerModal({
           setPostType('FREE');
           // setPpvPrice('');
           setSelectedImages([]);
+          setPollData(null);
+          setShowPoll(false);
           onClose();
           onPostCreated?.();
         },
@@ -91,9 +99,30 @@ export default function PostComposerModal({
       setPostType('FREE');
       // setPpvPrice('');
       setSelectedImages([]);
+      setPollData(null);
+      setShowPoll(false);
       setIsExpanded(false);
       onClose();
     }
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setContent(content + emoji);
+      return;
+    }
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const newContent = content.substring(0, start) + emoji + content.substring(end);
+    setContent(newContent);
+
+    // 커서 위치를 이모지 뒤로 이동
+    setTimeout(() => {
+      textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+      textarea.focus();
+    }, 0);
   };
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,7 +190,7 @@ export default function PostComposerModal({
               <Dialog.Panel
                 className={`w-full ${
                   isExpanded ? 'max-w-3xl' : 'max-w-md'
-                } transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all duration-300`}
+                } transform overflow-visible rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all duration-300`}
               >
                 <div className="flex items-center justify-between">
                   <Dialog.Title
@@ -209,6 +238,7 @@ export default function PostComposerModal({
                     </div>
                     <div className="flex-grow">
                       <textarea
+                        ref={textareaRef}
                         className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
                         placeholder="무슨 생각을 하고 계신가요?"
                         rows={isExpanded ? 10 : 4}
@@ -218,6 +248,14 @@ export default function PostComposerModal({
                       ></textarea>
                     </div>
                   </div>
+
+                  {/* Poll Creator */}
+                  {showPoll && (
+                    <PollCreator
+                      onPollDataChange={setPollData}
+                      initialData={pollData}
+                    />
+                  )}
 
                   {/* Image Preview Grid */}
                   {selectedImages.length > 0 && (
@@ -275,17 +313,16 @@ export default function PostComposerModal({
                         <PhotoIcon className="h-6 w-6" />
                       </label>
                       <button
-                        className="text-primary-500 hover:text-primary-700"
+                        onClick={() => setShowPoll(!showPoll)}
+                        className={`${showPoll ? 'text-blue-600' : 'text-primary-500 hover:text-primary-700'}`}
                         disabled={createPostMutation.isPending}
                       >
                         <ChartBarIcon className="h-6 w-6" />
                       </button>
-                      <button
-                        className="text-primary-500 hover:text-primary-700"
-                        disabled={createPostMutation.isPending}
-                      >
-                        <FaceSmileIcon className="h-6 w-6" />
-                      </button>
+                      <EmojiPickerButton
+                        onEmojiSelect={handleEmojiSelect}
+                        buttonClassName="text-primary-500 hover:text-primary-700"
+                      />
                     </div>
 
                     <div className="flex items-center gap-2">

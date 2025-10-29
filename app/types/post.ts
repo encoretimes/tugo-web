@@ -1,3 +1,5 @@
+import { Poll } from "./poll";
+
 export type PostType = 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV';
 
 export interface Post {
@@ -17,6 +19,7 @@ export interface Post {
     likes: number;
   };
   mediaUrls?: string[];
+  poll?: Poll;
   isLiked: boolean;
   isSaved: boolean;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -22,10 +22,13 @@ import { useToggleBookmark } from '@/hooks/useBookmarks';
 import { useToggleLike } from '@/hooks/useLikes';
 import { useComments, useCreateComment } from '@/hooks/useComments';
 import { useDeletePost } from '@/hooks/usePosts';
+import { useVote } from '@/hooks/useVote';
 import { Menu, Transition } from '@headlessui/react';
 import EditPostModal from '@/app/components/modals/EditPostModal';
 import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
 import ExpandableText from '@/app/components/ui/ExpandableText';
+import PollCard from './PollCard';
+import EmojiPickerButton from './EmojiPicker';
 import { formatRelativeTime } from '@/lib/date-utils';
 
 interface PostProps {
@@ -51,6 +54,7 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const [commentText, setCommentText] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   // 댓글 목록 조회 (showComments가 true일 때만 활성화)
   const { data: commentsData, isLoading: isLoadingComments } = useComments(
@@ -58,6 +62,9 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   );
 
   const comments = commentsData || [];
+
+  // Poll vote hook (always call hooks at top level)
+  const { vote: voteOnPoll } = useVote(post.poll?.pollId || 0);
 
   // 현재 사용자가 게시물 작성자인지 확인
   const isAuthor = user?.username === author.username;
@@ -238,8 +245,13 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
             )}
           </div>
           <div>
-            <ExpandableText text={contentText} maxLines={20} />
+            <ExpandableText text={contentText} maxLines={post.poll ? 10 : 20} />
           </div>
+
+          {/* Poll Card */}
+          {post.poll && (
+            <PollCard poll={post.poll} onVote={voteOnPoll} />
+          )}
 
           {post.mediaUrls && post.mediaUrls.length > 0 && (
             <div className="mt-3">
@@ -382,6 +394,7 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                   )}
                   <div className="flex-1">
                     <textarea
+                      ref={commentTextareaRef}
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
                       placeholder="댓글을 입력하세요..."
@@ -389,7 +402,25 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                       rows={2}
                       disabled={createCommentMutation.isPending}
                     />
-                    <div className="mt-2 flex justify-end">
+                    <div className="mt-2 flex justify-between items-center">
+                      <EmojiPickerButton
+                        onEmojiSelect={(emoji) => {
+                          const textarea = commentTextareaRef.current;
+                          if (!textarea) {
+                            setCommentText(commentText + emoji);
+                            return;
+                          }
+                          const start = textarea.selectionStart;
+                          const end = textarea.selectionEnd;
+                          const newText = commentText.substring(0, start) + emoji + commentText.substring(end);
+                          setCommentText(newText);
+                          setTimeout(() => {
+                            textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+                            textarea.focus();
+                          }, 0);
+                        }}
+                        buttonClassName="text-gray-500 hover:text-gray-700"
+                      />
                       <button
                         onClick={handleCommentSubmit}
                         disabled={
