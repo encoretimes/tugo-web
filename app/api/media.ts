@@ -18,7 +18,10 @@ export const uploadImage = async (file: File): Promise<string> => {
     formData
   );
 
-  return result.path;
+  // Convert relative path to full URL for Next.js Image component
+  const backendUrl =
+    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+  return `${backendUrl}${result.path}`;
 };
 
 export const uploadImages = async (files: File[]): Promise<string[]> => {
