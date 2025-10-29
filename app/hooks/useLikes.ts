@@ -17,8 +17,18 @@ export const useToggleLike = () => {
 
   const likeMutation = useMutation({
     mutationFn: likePost,
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      // 모든 관련 쿼리 키 무효화하여 전역 동기화
       queryClient.invalidateQueries({ queryKey: queryKeys.posts });
+      queryClient.invalidateQueries({
+        queryKey: [...queryKeys.posts, 'infinite'],
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarks() });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.post(variables.postId),
+      });
+      // 프로필 페이지의 user.posts 동기화
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: (error: Error) => {
       console.error('Failed to like post:', error);
@@ -31,8 +41,16 @@ export const useToggleLike = () => {
 
   const unlikeMutation = useMutation({
     mutationFn: unlikePost,
-    onSuccess: () => {
+    onSuccess: (_data, postId) => {
+      // 모든 관련 쿼리 키 무효화하여 전역 동기화
       queryClient.invalidateQueries({ queryKey: queryKeys.posts });
+      queryClient.invalidateQueries({
+        queryKey: [...queryKeys.posts, 'infinite'],
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarks() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
+      // 프로필 페이지의 user.posts 동기화
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: (error: Error) => {
       console.error('Failed to unlike post:', error);

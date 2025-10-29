@@ -45,21 +45,20 @@ const ProfilePage = () => {
     refetch: refetchBookmarks,
   } = useBookmarks(0, 20);
 
-  // user가 로드되면 기본 탭 재설정
   useEffect(() => {
     if (user) {
       setActiveTab(user.isCreator ? 'posts' : 'archives');
     }
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.isCreator]);
 
-  // Check if this is the current user's profile
   const isOwnProfile = currentUser && currentUser.username === username;
 
   const handleBack = useCallback(() => {
     router.back();
   }, [router]);
 
-  // 날짜 포맷팅 함수
+  // 날짜 포맷팅
   const formatJoinedDate = (dateString: string | Date) => {
     try {
       const date = new Date(dateString);
@@ -90,6 +89,9 @@ const ProfilePage = () => {
         alert('프로필 링크가 복사되었습니다!');
       }
     } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
       console.error('공유 실패:', error);
     }
   };

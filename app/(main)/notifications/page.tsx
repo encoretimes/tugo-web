@@ -10,6 +10,7 @@ import {
 import Image from 'next/image';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Notification } from '@/types/notification';
+import { formatRelativeTime } from '@/lib/date-utils';
 
 const NotificationIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -93,7 +94,9 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
           className="rounded-full mb-2"
         />
         <div className="text-gray-800">{renderContent()}</div>
-        <div className="text-sm text-gray-400 mt-1">{time}</div>
+        <div className="text-sm text-gray-400 mt-1">
+          {formatRelativeTime(time)}
+        </div>
       </div>
       {!read && (
         <div className="h-3 w-3 rounded-full bg-primary-500 self-center flex-shrink-0"></div>

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addBookmark, getBookmarks, removeBookmark } from '@/api/bookmarks';
 import { useToastStore } from '@/store/toastStore';
+import { queryKeys } from '@/lib/query-keys';
 
 export const useBookmarks = (page = 0, size = 10) => {
   return useQuery({
@@ -15,9 +16,16 @@ export const useToggleBookmark = () => {
 
   const addMutation = useMutation({
     mutationFn: addBookmark,
-    onSuccess: () => {
+    onSuccess: (_data, postId) => {
+      // 모든 관련 쿼리 키 무효화하여 전역 동기화
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.posts });
+      queryClient.invalidateQueries({
+        queryKey: [...queryKeys.posts, 'infinite'],
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
+      // 프로필 페이지의 user.posts 동기화
+      queryClient.invalidateQueries({ queryKey: ['user'] });
       addToast('보관함에 저장되었습니다', 'success');
     },
     onError: () => {
@@ -27,9 +35,16 @@ export const useToggleBookmark = () => {
 
   const removeMutation = useMutation({
     mutationFn: removeBookmark,
-    onSuccess: () => {
+    onSuccess: (_data, postId) => {
+      // 모든 관련 쿼리 키 무효화하여 전역 동기화
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.posts });
+      queryClient.invalidateQueries({
+        queryKey: [...queryKeys.posts, 'infinite'],
+      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
+      // 프로필 페이지의 user.posts 동기화
+      queryClient.invalidateQueries({ queryKey: ['user'] });
       addToast('보관함에서 제거되었습니다', 'info');
     },
     onError: () => {

@@ -26,6 +26,7 @@ import { Menu, Transition } from '@headlessui/react';
 import EditPostModal from '@/app/components/modals/EditPostModal';
 import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
 import ExpandableText from '@/app/components/ui/ExpandableText';
+import { formatRelativeTime } from '@/lib/date-utils';
 
 interface PostProps {
   post: PostType;
@@ -184,7 +185,9 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
               >
                 @{author.username}
               </Link>
-              <span className="text-neutral-500">· {createdAt}</span>
+              <span className="text-neutral-500">
+                · {formatRelativeTime(createdAt)}
+              </span>
             </div>
             {isAuthor && (
               <Menu as="div" className="relative">
@@ -435,7 +438,7 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                           <p className="text-sm mt-1">{comment.content}</p>
                         </div>
                         <p className="mt-1 text-xs text-neutral-500">
-                          {new Date(comment.createdAt).toLocaleString('ko-KR')}
+                          {formatRelativeTime(comment.createdAt)}
                         </p>
                       </div>
                     </div>
