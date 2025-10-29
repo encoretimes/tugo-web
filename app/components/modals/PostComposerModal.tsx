@@ -263,9 +263,7 @@ export default function PostComposerModal({
 
                   <div className="mt-4 flex items-center justify-between border-t pt-4">
                     <div className="flex space-x-2">
-                      <label
-                        className="text-primary-500 hover:text-primary-700 cursor-pointer"
-                      >
+                      <label className="text-primary-500 hover:text-primary-700 cursor-pointer">
                         <input
                           type="file"
                           accept="image/*"
@@ -295,7 +293,7 @@ export default function PostComposerModal({
                       <Menu as="div" className="relative">
                         <Menu.Button
                           disabled={createPostMutation.isPending}
-                          className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-bold text-gray-500 border-[1.5px] border-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                          className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-bold text-gray-500 border-[1.5px] border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                         >
                           {postType === 'FREE' ? (
                             <>
@@ -342,7 +340,9 @@ export default function PostComposerModal({
                               <Menu.Item>
                                 {({ active }) => (
                                   <button
-                                    onClick={() => setPostType('SUBSCRIBER_ONLY')}
+                                    onClick={() =>
+                                      setPostType('SUBSCRIBER_ONLY')
+                                    }
                                     className={`${
                                       active ? 'bg-gray-100' : ''
                                     } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900`}
@@ -364,10 +364,14 @@ export default function PostComposerModal({
 
                       <button
                         onClick={handleSubmit}
-                        disabled={!content.trim() || createPostMutation.isPending}
+                        disabled={
+                          !content.trim() || createPostMutation.isPending
+                        }
                         className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
                       >
-                        {createPostMutation.isPending ? '작성 중...' : '투고하기'}
+                        {createPostMutation.isPending
+                          ? '작성 중...'
+                          : '투고하기'}
                       </button>
                     </div>
                   </div>

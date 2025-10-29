@@ -34,9 +34,7 @@ export default function ExpandableText({
       <p
         ref={textRef}
         className={`whitespace-pre-wrap ${
-          !isExpanded && needsExpansion
-            ? `line-clamp-${maxLines}`
-            : ''
+          !isExpanded && needsExpansion ? `line-clamp-${maxLines}` : ''
         }`}
         style={
           !isExpanded && needsExpansion
