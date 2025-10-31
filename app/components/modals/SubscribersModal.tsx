@@ -63,7 +63,7 @@ export default function SubscribersModal({
                 </div>
 
                 {/* Content */}
-                <div className="max-h-96 overflow-y-auto">
+                <div className="h-96 overflow-y-auto">
                   {isLoading ? (
                     <div className="p-6 text-center text-gray-500">
                       로딩 중...
