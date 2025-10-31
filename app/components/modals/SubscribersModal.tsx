@@ -93,10 +93,12 @@ export default function SubscribersModal({
                           </div>
                           <div className="flex-1">
                             <div className="font-semibold">
-                              {subscription.fanName || `구독자 #${subscription.fanId}`}
+                              {subscription.fanName ||
+                                `구독자 #${subscription.fanId}`}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {subscription.fanUsername && `@${subscription.fanUsername} · `}
+                              {subscription.fanUsername &&
+                                `@${subscription.fanUsername} · `}
                               {new Date(
                                 subscription.createdAt
                               ).toLocaleDateString('ko-KR')}

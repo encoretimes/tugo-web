@@ -5,7 +5,6 @@ import { Fragment, useState } from 'react';
 import Image from 'next/image';
 import {
   PhotoIcon,
-  ChartBarIcon,
   UserIcon,
   XMarkIcon,
   ArrowsPointingOutIcon,
@@ -14,14 +13,16 @@ import {
   LockOpenIcon,
   LockClosedIcon,
   CheckIcon,
+  ListBulletIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
 import { useCreatePost } from '@/hooks/usePosts';
 import { uploadImages } from '@/api/media';
 import { useToastStore } from '@/store/toastStore';
 import ImageEditor from './ImageEditor';
+import MultiImageEditor from './MultiImageEditor';
 import EmojiPickerButton from '../feed/EmojiPicker';
-import PollCreator from '../feed/PollCreator';
+import PollCreatorModal from './PollCreatorModal';
 import MentionInput from '../feed/MentionInput';
 import { PollCreateData } from '@/app/types/poll';
 
@@ -49,8 +50,10 @@ export default function PostComposerModal({
   const [editingImageIndex, setEditingImageIndex] = useState<number | null>(
     null
   );
-  const [showPoll, setShowPoll] = useState(false);
   const [pollData, setPollData] = useState<PollCreateData | null>(null);
+  const [pendingImages, setPendingImages] = useState<File[]>([]);
+  const [showMultiImageEditor, setShowMultiImageEditor] = useState(false);
+  const [showPollModal, setShowPollModal] = useState(false);
 
   const createPostMutation = useCreatePost();
 
@@ -85,7 +88,6 @@ export default function PostComposerModal({
           // setPpvPrice('');
           setSelectedImages([]);
           setPollData(null);
-          setShowPoll(false);
           onClose();
           onPostCreated?.();
         },
@@ -100,8 +102,10 @@ export default function PostComposerModal({
       // setPpvPrice('');
       setSelectedImages([]);
       setPollData(null);
-      setShowPoll(false);
       setIsExpanded(false);
+      setPendingImages([]);
+      setShowMultiImageEditor(false);
+      setShowPollModal(false);
       onClose();
     }
   };
@@ -122,11 +126,46 @@ export default function PostComposerModal({
       return;
     }
 
-    setSelectedImages([...selectedImages, ...newFiles]);
+    // 이미지 편집 모달을 바로 열기
+    setPendingImages(newFiles);
+    setShowMultiImageEditor(true);
+
+    // 파일 입력 초기화
+    e.target.value = '';
   };
 
   const handleRemoveImage = (index: number) => {
     setSelectedImages(selectedImages.filter((_, i) => i !== index));
+  };
+
+  const handleImageEditComplete = (editedFiles: File[]) => {
+    setSelectedImages([...selectedImages, ...editedFiles]);
+    setShowMultiImageEditor(false);
+    setPendingImages([]);
+  };
+
+  const handleImageEditCancel = () => {
+    setShowMultiImageEditor(false);
+    setPendingImages([]);
+  };
+
+  const handlePollButtonClick = () => {
+    if (pollData) {
+      // 이미 투표가 있으면 제거
+      setPollData(null);
+    } else {
+      // 투표가 없으면 모달 열기
+      setShowPollModal(true);
+    }
+  };
+
+  const handlePollCreate = (newPollData: PollCreateData) => {
+    setPollData(newPollData);
+    setShowPollModal(false);
+  };
+
+  const handlePollModalCancel = () => {
+    setShowPollModal(false);
   };
 
   const handleEditImage = (index: number) => {
@@ -233,59 +272,97 @@ export default function PostComposerModal({
                     </div>
                   </div>
 
-                  {/* Poll Creator */}
-                  {showPoll && (
-                    <PollCreator
-                      onPollDataChange={setPollData}
-                      initialData={pollData}
-                    />
+                  {/* Poll Preview */}
+                  {pollData && (
+                    <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900 mb-3">
+                            {pollData.question}
+                          </h3>
+                          <div className="space-y-2">
+                            {pollData.options.map((option, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center p-2 border border-gray-300 rounded-lg bg-white"
+                              >
+                                <div className="w-4 h-4 border border-gray-400 rounded-full mr-3 flex-shrink-0"></div>
+                                <span className="text-sm text-gray-700">
+                                  {option}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                          <p className="text-xs text-gray-500 mt-2">
+                            {pollData.pollType === 'MULTIPLE_CHOICE'
+                              ? '복수 선택 가능'
+                              : '단일 선택'}
+                            {pollData.endDate &&
+                              ` • ${new Date(pollData.endDate).toLocaleDateString('ko-KR')}까지`}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setPollData(null)}
+                          className="ml-3 p-1 text-gray-400 hover:text-gray-600"
+                        >
+                          <XMarkIcon className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
                   )}
 
                   {/* Image Preview Grid */}
                   {selectedImages.length > 0 && (
                     <div className="mt-4">
                       <div className="grid grid-cols-5 gap-2">
-                        {selectedImages.map((file, index) => (
-                          <div key={index} className="relative group">
+                        {selectedImages.map((file, index) => {
+                          const imageUrl = URL.createObjectURL(file);
+                          return (
                             <div
-                              className="cursor-pointer"
-                              onClick={() => handleEditImage(index)}
+                              key={`${file.name}-${index}`}
+                              className="relative group"
                             >
-                              <Image
-                                src={URL.createObjectURL(file)}
-                                alt={`Preview ${index + 1}`}
-                                width={100}
-                                height={100}
-                                className="h-20 w-20 object-cover rounded-lg"
-                              />
+                              <div
+                                className="cursor-pointer overflow-hidden rounded-lg"
+                                onClick={() => handleEditImage(index)}
+                              >
+                                <Image
+                                  src={imageUrl}
+                                  alt={`Preview ${index + 1}`}
+                                  width={100}
+                                  height={100}
+                                  className="h-20 w-20 object-cover"
+                                  unoptimized
+                                />
+                              </div>
+                              {/* Edit Button */}
+                              <button
+                                onClick={() => handleEditImage(index)}
+                                className="absolute bottom-1 left-1 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+                                disabled={createPostMutation.isPending}
+                                title="편집"
+                              >
+                                <PencilIcon className="h-3.5 w-3.5" />
+                              </button>
+                              {/* Remove Button */}
+                              <button
+                                onClick={() => handleRemoveImage(index)}
+                                className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 shadow-md"
+                                disabled={createPostMutation.isPending}
+                                title="삭제"
+                              >
+                                <XMarkIcon className="h-3 w-3" />
+                              </button>
                             </div>
-                            {/* Edit Button */}
-                            <button
-                              onClick={() => handleEditImage(index)}
-                              className="absolute bottom-1 left-1 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
-                              disabled={createPostMutation.isPending}
-                              title="편집"
-                            >
-                              <PencilIcon className="h-3.5 w-3.5" />
-                            </button>
-                            {/* Remove Button */}
-                            <button
-                              onClick={() => handleRemoveImage(index)}
-                              className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
-                              disabled={createPostMutation.isPending}
-                              title="삭제"
-                            >
-                              <XMarkIcon className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
 
                   <div className="mt-4 flex items-center justify-between border-t pt-4">
-                    <div className="flex space-x-2">
-                      <label className="text-primary-500 hover:text-primary-700 cursor-pointer">
+                    <div className="flex items-center space-x-2">
+                      <label className="flex items-center justify-center text-primary-500 hover:text-primary-700 cursor-pointer">
                         <input
                           type="file"
                           accept="image/*"
@@ -297,15 +374,15 @@ export default function PostComposerModal({
                         <PhotoIcon className="h-6 w-6" />
                       </label>
                       <button
-                        onClick={() => setShowPoll(!showPoll)}
-                        className={`${showPoll ? 'text-blue-600' : 'text-primary-500 hover:text-primary-700'}`}
+                        onClick={handlePollButtonClick}
+                        className={`flex items-center justify-center ${pollData ? 'text-blue-600' : 'text-primary-500 hover:text-primary-700'}`}
                         disabled={createPostMutation.isPending}
                       >
-                        <ChartBarIcon className="h-6 w-6" />
+                        <ListBulletIcon className="h-6 w-6" />
                       </button>
                       <EmojiPickerButton
                         onEmojiSelect={handleEmojiSelect}
-                        buttonClassName="text-primary-500 hover:text-primary-700"
+                        buttonClassName="flex items-center justify-center text-primary-500 hover:text-primary-700"
                       />
                     </div>
 
@@ -411,6 +488,20 @@ export default function PostComposerModal({
             onSave={handleImageEditorSave}
           />
         )}
+
+        <MultiImageEditor
+          isOpen={showMultiImageEditor}
+          onClose={handleImageEditCancel}
+          imageFiles={pendingImages}
+          onSave={handleImageEditComplete}
+        />
+
+        <PollCreatorModal
+          isOpen={showPollModal}
+          onClose={handlePollModalCancel}
+          onPollCreate={handlePollCreate}
+          initialData={pollData}
+        />
       </Dialog>
     </Transition>
   );

@@ -174,11 +174,7 @@ export default function PollCreator({
   };
 
   return (
-    <div className="border-t border-gray-200 pt-4 mt-4">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-gray-900">투표 만들기</h3>
-      </div>
-
+    <div>
       {/* 투표 질문 (선택사항) */}
       <div className="mb-3">
         <input

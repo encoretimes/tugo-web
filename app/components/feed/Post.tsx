@@ -27,6 +27,7 @@ import { Menu, Transition } from '@headlessui/react';
 import EditPostModal from '@/app/components/modals/EditPostModal';
 import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
 import ExpandableText from '@/app/components/ui/ExpandableText';
+import ImageGalleryModal from '@/app/components/modals/ImageGalleryModal';
 import PollCard from './PollCard';
 import EmojiPickerButton from './EmojiPicker';
 import MentionInput from './MentionInput';
@@ -56,6 +57,8 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const [commentText, setCommentText] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showImageGallery, setShowImageGallery] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // 댓글 목록 조회 (showComments가 true일 때만 활성화)
   const { data: commentsData, isLoading: isLoadingComments } = useComments(
@@ -162,6 +165,11 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
     });
   };
 
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
+    setShowImageGallery(true);
+  };
+
   return (
     <div className="border-b p-4">
       <div className="flex space-x-4">
@@ -263,7 +271,10 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
           {post.mediaUrls && post.mediaUrls.length > 0 && (
             <div className="mt-3">
               {post.mediaUrls.length === 1 ? (
-                <div className="relative w-full rounded-2xl overflow-hidden border border-neutral-200">
+                <div
+                  className="relative w-full rounded-2xl overflow-hidden border border-neutral-200 cursor-pointer hover:opacity-95 transition-opacity"
+                  onClick={() => handleImageClick(0)}
+                >
                   <Image
                     src={post.mediaUrls[0]}
                     alt="Post image"
@@ -276,7 +287,11 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
               ) : post.mediaUrls.length === 2 ? (
                 <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
                   {post.mediaUrls.map((url, index) => (
-                    <div key={index} className="relative aspect-square">
+                    <div
+                      key={index}
+                      className="relative aspect-square cursor-pointer hover:opacity-95 transition-opacity"
+                      onClick={() => handleImageClick(index)}
+                    >
                       <Image
                         src={url}
                         alt={`Post image ${index + 1}`}
@@ -288,7 +303,10 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                 </div>
               ) : post.mediaUrls.length === 3 ? (
                 <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
-                  <div className="relative row-span-2">
+                  <div
+                    className="relative row-span-2 cursor-pointer hover:opacity-95 transition-opacity"
+                    onClick={() => handleImageClick(0)}
+                  >
                     <Image
                       src={post.mediaUrls[0]}
                       alt="Post image 1"
@@ -297,7 +315,10 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="relative">
+                  <div
+                    className="relative cursor-pointer hover:opacity-95 transition-opacity"
+                    onClick={() => handleImageClick(1)}
+                  >
                     <Image
                       src={post.mediaUrls[1]}
                       alt="Post image 2"
@@ -306,7 +327,10 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="relative">
+                  <div
+                    className="relative cursor-pointer hover:opacity-95 transition-opacity"
+                    onClick={() => handleImageClick(2)}
+                  >
                     <Image
                       src={post.mediaUrls[2]}
                       alt="Post image 3"
@@ -319,7 +343,11 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
               ) : (
                 <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
                   {post.mediaUrls.slice(0, 4).map((url, index) => (
-                    <div key={index} className="relative aspect-square">
+                    <div
+                      key={index}
+                      className="relative aspect-square cursor-pointer hover:opacity-95 transition-opacity"
+                      onClick={() => handleImageClick(index)}
+                    >
                       <Image
                         src={url}
                         alt={`Post image ${index + 1}`}
@@ -501,6 +529,13 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
         confirmText="삭제"
         cancelText="취소"
         type="danger"
+      />
+
+      <ImageGalleryModal
+        isOpen={showImageGallery}
+        onClose={() => setShowImageGallery(false)}
+        images={post.mediaUrls || []}
+        initialIndex={selectedImageIndex}
       />
     </div>
   );

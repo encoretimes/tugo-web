@@ -19,7 +19,7 @@ export default function EmojiPickerButton({
       {({ close }) => (
         <>
           <Popover.Button className={buttonClassName}>
-            <FaceSmileIcon className="w-5 h-5" />
+            <FaceSmileIcon className="w-6 h-6" />
           </Popover.Button>
 
           <Transition

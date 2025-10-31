@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {
   PhotoIcon,
-  ChartBarIcon,
+  ListBulletIcon,
   FaceSmileIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
@@ -59,14 +59,14 @@ const PostComposer = () => {
               무슨 생각을 하고 계신가요?
             </div>
             <div className="mt-2 flex items-center justify-between">
-              <div className="flex space-x-2">
-                <button className="text-gray-500 hover:text-gray-700">
+              <div className="flex items-center space-x-2">
+                <button className="flex items-center justify-center text-gray-500 hover:text-gray-700">
                   <PhotoIcon className="h-6 w-6" />
                 </button>
-                <button className="text-gray-500 hover:text-gray-700">
-                  <ChartBarIcon className="h-6 w-6" />
+                <button className="flex items-center justify-center text-gray-500 hover:text-gray-700">
+                  <ListBulletIcon className="h-6 w-6" />
                 </button>
-                <button className="text-gray-500 hover:text-gray-700">
+                <button className="flex items-center justify-center text-gray-500 hover:text-gray-700">
                   <FaceSmileIcon className="h-6 w-6" />
                 </button>
               </div>
