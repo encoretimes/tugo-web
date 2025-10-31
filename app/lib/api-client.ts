@@ -1,12 +1,6 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
 
-interface ApiResponse<T> {
-  status: number;
-  message: string;
-  data: T;
-}
-
 class ApiClient {
   private baseURL: string;
 
@@ -54,8 +48,24 @@ class ApiClient {
       );
     }
 
-    const apiResponse: ApiResponse<T> = await response.json();
-    return apiResponse.data;
+    if (response.status === 204 || response.status === 205) {
+      return undefined as T;
+    }
+
+    const contentLength = response.headers.get('content-length');
+    if (contentLength === '0') {
+      return undefined as T;
+    }
+
+    const data = await response.json();
+
+    // 백엔드가 ApiResponse 형태로 감싸서 반환하는 경우
+    if (data && typeof data === 'object' && 'data' in data) {
+      return data.data as T;
+    }
+
+    // 백엔드가 직접 데이터를 반환하는 경우
+    return data as T;
   }
 
   async get<T>(endpoint: string, options?: RequestInit): Promise<T> {

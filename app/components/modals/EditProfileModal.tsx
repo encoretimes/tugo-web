@@ -2,22 +2,24 @@
 
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import { apiClient } from '@/lib/api-client';
+import { uploadImage } from '@/api/media';
+import { useToastStore } from '@/store/toastStore';
 
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  creatorId: number;
-  currentPublicName: string;
+  currentName: string;
   currentIntroduction?: string;
   currentProfileUrl?: string;
   currentBannerImageUrl?: string;
   onSuccess: () => void;
 }
 
-interface CreatorUpdateRequest {
-  publicName: string;
+interface ProfileUpdateRequest {
+  name: string;
   introduction?: string;
   profileUrl?: string;
   bannerImageUrl?: string;
@@ -26,65 +28,95 @@ interface CreatorUpdateRequest {
 export default function EditProfileModal({
   isOpen,
   onClose,
-  creatorId,
-  currentPublicName,
+  currentName,
   currentIntroduction,
   currentProfileUrl,
   currentBannerImageUrl,
   onSuccess,
 }: EditProfileModalProps) {
-  const [publicName, setPublicName] = useState(currentPublicName);
+  const [name, setName] = useState(currentName);
   const [introduction, setIntroduction] = useState(currentIntroduction || '');
-  const [profileUrl, setProfileUrl] = useState(currentProfileUrl || '');
-  const [bannerImageUrl, setBannerImageUrl] = useState(
-    currentBannerImageUrl || ''
-  );
+  const [profileFile, setProfileFile] = useState<File | null>(null);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { addToast } = useToastStore();
+
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProfileFile(file);
+      setProfilePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleBannerImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setBannerFile(file);
+      setBannerPreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!publicName.trim()) {
-      setError('공개 이름을 입력해주세요.');
-      return;
-    }
-
-    // 공개 이름 유효성 검사
-    if (!/^[a-zA-Z0-9_]+$/.test(publicName)) {
-      setError('공개 이름은 영문, 숫자, 밑줄(_)만 사용할 수 있습니다.');
-      return;
-    }
-
-    if (publicName.length < 3 || publicName.length > 20) {
-      setError('공개 이름은 3자 이상 20자 이하로 입력해주세요.');
+    if (!name.trim()) {
+      setError('이름을 입력해주세요.');
       return;
     }
 
     try {
       setIsLoading(true);
 
-      const requestData: CreatorUpdateRequest = {
-        publicName,
-        introduction: introduction || undefined,
-        profileUrl: profileUrl || undefined,
-        bannerImageUrl: bannerImageUrl || undefined,
+      let finalProfileUrl = currentProfileUrl;
+      let finalBannerUrl = currentBannerImageUrl;
+
+      // Upload profile image if selected
+      if (profileFile) {
+        try {
+          finalProfileUrl = await uploadImage(profileFile);
+        } catch {
+          setError('프로필 이미지 업로드에 실패했습니다.');
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // Upload banner image if selected
+      if (bannerFile) {
+        try {
+          finalBannerUrl = await uploadImage(bannerFile);
+        } catch {
+          setError('배너 이미지 업로드에 실패했습니다.');
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      const requestData: ProfileUpdateRequest = {
+        name: name.trim(),
+        introduction: introduction.trim() || undefined,
+        profileUrl: finalProfileUrl || undefined,
+        bannerImageUrl: finalBannerUrl || undefined,
       };
 
-      await apiClient.put(`/api/v1/creators/${creatorId}`, requestData);
+      await apiClient.put(`/api/v1/profiles/me`, requestData);
+
+      // 성공 알림
+      addToast('프로필이 성공적으로 수정되었습니다!', 'success');
 
       onSuccess();
       onClose();
     } catch (err) {
       console.error('프로필 수정 실패:', err);
       const error = err as Error;
-      if (error.message?.includes('이미 존재')) {
-        setError('이미 사용 중인 공개 이름입니다. 다른 이름을 입력해주세요.');
-      } else {
-        setError('프로필 수정에 실패했습니다. 다시 시도해주세요.');
-      }
-    } finally {
+      setError(
+        error.message || '프로필 수정에 실패했습니다. 다시 시도해주세요.'
+      );
       setIsLoading(false);
     }
   };
@@ -132,24 +164,20 @@ export default function EditProfileModal({
                   <div className="space-y-4">
                     <div>
                       <label
-                        htmlFor="publicName"
+                        htmlFor="name"
                         className="block text-sm font-semibold text-neutral-700 mb-2"
                       >
-                        공개 이름 (username){' '}
-                        <span className="text-red-500">*</span>
+                        이름 <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
-                        id="publicName"
-                        value={publicName}
-                        onChange={(e) => setPublicName(e.target.value)}
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"
                         disabled={isLoading}
-                        maxLength={20}
+                        maxLength={50}
                       />
-                      <p className="mt-1 text-xs text-neutral-500">
-                        3-20자, 영문, 숫자, 밑줄(_)만 사용 가능
-                      </p>
                     </div>
 
                     <div>
@@ -174,39 +202,74 @@ export default function EditProfileModal({
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="profileUrl"
-                        className="block text-sm font-semibold text-neutral-700 mb-2"
-                      >
-                        프로필 이미지 URL
+                      <label className="block text-sm font-semibold text-neutral-700 mb-2">
+                        프로필 이미지
                       </label>
-                      <input
-                        type="url"
-                        id="profileUrl"
-                        value={profileUrl}
-                        onChange={(e) => setProfileUrl(e.target.value)}
-                        placeholder="https://example.com/profile.jpg"
-                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                        disabled={isLoading}
-                      />
+                      <div className="flex items-center gap-4">
+                        {(profilePreview || currentProfileUrl) && (
+                          <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-gray-200">
+                            <Image
+                              src={
+                                (profilePreview || currentProfileUrl) as string
+                              }
+                              alt="프로필 미리보기"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <label className="flex-1 cursor-pointer">
+                          <div className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 transition-colors">
+                            <PhotoIcon className="h-5 w-5 text-gray-400" />
+                            <span className="text-sm text-gray-600">
+                              {profileFile ? profileFile.name : '이미지 선택'}
+                            </span>
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleProfileImageChange}
+                            disabled={isLoading}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="bannerImageUrl"
-                        className="block text-sm font-semibold text-neutral-700 mb-2"
-                      >
-                        배너 이미지 URL
+                      <label className="block text-sm font-semibold text-neutral-700 mb-2">
+                        배너 이미지
                       </label>
-                      <input
-                        type="url"
-                        id="bannerImageUrl"
-                        value={bannerImageUrl}
-                        onChange={(e) => setBannerImageUrl(e.target.value)}
-                        placeholder="https://example.com/banner.jpg"
-                        className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"
-                        disabled={isLoading}
-                      />
+                      <div className="space-y-2">
+                        {(bannerPreview || currentBannerImageUrl) && (
+                          <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                            <Image
+                              src={
+                                (bannerPreview ||
+                                  currentBannerImageUrl) as string
+                              }
+                              alt="배너 미리보기"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <label className="cursor-pointer block">
+                          <div className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 transition-colors">
+                            <PhotoIcon className="h-5 w-5 text-gray-400" />
+                            <span className="text-sm text-gray-600">
+                              {bannerFile ? bannerFile.name : '이미지 선택'}
+                            </span>
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleBannerImageChange}
+                            disabled={isLoading}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
                     </div>
 
                     {error && (

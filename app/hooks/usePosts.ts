@@ -102,6 +102,9 @@ export const useUpdatePost = () => {
 
       return { previousData };
     },
+    onSuccess: () => {
+      addToast('게시물이 수정되었습니다', 'success');
+    },
     onError: (error: Error, _, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(

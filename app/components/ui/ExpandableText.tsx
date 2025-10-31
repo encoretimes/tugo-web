@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import MentionText from '@/components/feed/MentionText';
 
 interface ExpandableTextProps {
   text: string;
@@ -15,7 +16,7 @@ export default function ExpandableText({
 }: ExpandableTextProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
-  const textRef = useRef<HTMLParagraphElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (textRef.current) {
@@ -31,7 +32,7 @@ export default function ExpandableText({
 
   return (
     <div className={className}>
-      <p
+      <div
         ref={textRef}
         className={`whitespace-pre-wrap ${
           !isExpanded && needsExpansion ? `line-clamp-${maxLines}` : ''
@@ -47,8 +48,8 @@ export default function ExpandableText({
             : undefined
         }
       >
-        {text}
-      </p>
+        <MentionText content={text} />
+      </div>
       {needsExpansion && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}

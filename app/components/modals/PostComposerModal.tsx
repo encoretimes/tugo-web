@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, Transition, Menu } from '@headlessui/react';
-import { Fragment, useState, useRef } from 'react';
+import { Fragment, useState } from 'react';
 import Image from 'next/image';
 import {
   PhotoIcon,
@@ -22,6 +22,7 @@ import { useToastStore } from '@/store/toastStore';
 import ImageEditor from './ImageEditor';
 import EmojiPickerButton from '../feed/EmojiPicker';
 import PollCreator from '../feed/PollCreator';
+import MentionInput from '../feed/MentionInput';
 import { PollCreateData } from '@/app/types/poll';
 
 interface PostComposerModalProps {
@@ -50,7 +51,6 @@ export default function PostComposerModal({
   );
   const [showPoll, setShowPoll] = useState(false);
   const [pollData, setPollData] = useState<PollCreateData | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const createPostMutation = useCreatePost();
 
@@ -107,22 +107,7 @@ export default function PostComposerModal({
   };
 
   const handleEmojiSelect = (emoji: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) {
-      setContent(content + emoji);
-      return;
-    }
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const newContent = content.substring(0, start) + emoji + content.substring(end);
-    setContent(newContent);
-
-    // 커서 위치를 이모지 뒤로 이동
-    setTimeout(() => {
-      textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-      textarea.focus();
-    }, 0);
+    setContent(content + emoji);
   };
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -237,15 +222,14 @@ export default function PostComposerModal({
                       )}
                     </div>
                     <div className="flex-grow">
-                      <textarea
-                        ref={textareaRef}
-                        className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
+                      <MentionInput
+                        value={content}
+                        onChange={setContent}
                         placeholder="무슨 생각을 하고 계신가요?"
                         rows={isExpanded ? 10 : 4}
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
                         disabled={createPostMutation.isPending}
-                      ></textarea>
+                        className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
+                      />
                     </div>
                   </div>
 

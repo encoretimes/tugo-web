@@ -1,4 +1,4 @@
-import { Poll } from "./poll";
+import { Poll } from './poll';
 
 export type PostType = 'FREE' | 'SUBSCRIBER_ONLY' | 'PPV';
 

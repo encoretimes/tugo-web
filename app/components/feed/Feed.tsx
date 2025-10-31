@@ -106,11 +106,6 @@ const Feed = () => {
                 )}
               </div>
             )}
-            {!hasNextPage && posts.length > 0 && (
-              <div className="py-8 text-center text-neutral-500">
-                모든 게시물을 불러왔습니다
-              </div>
-            )}
           </>
         )}
       </div>

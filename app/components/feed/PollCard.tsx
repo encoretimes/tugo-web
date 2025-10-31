@@ -2,23 +2,29 @@
 
 import { Poll, PollOption } from '@/app/types/poll';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 interface PollCardProps {
   poll: Poll;
   onVote?: (optionIds: number[]) => void;
+  onRevote?: (optionIds: number[]) => void;
   disabled?: boolean;
 }
 
 export default function PollCard({
   poll,
   onVote,
+  onRevote,
   disabled = false,
 }: PollCardProps) {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+  const [isRevoting, setIsRevoting] = useState(false);
 
   const handleOptionClick = (optionId: number) => {
-    if (poll.hasVoted || poll.isEnded || disabled) return;
+    // 다시 투표하기 모드가 아니고, 이미 투표했거나 종료되었으면 클릭 불가
+    if (!isRevoting && (poll.hasVoted || poll.isEnded || disabled)) return;
+    // 다시 투표하기 모드일 때는 투표 가능
 
     if (poll.pollType === 'SINGLE_CHOICE') {
       setSelectedOptions([optionId]);
@@ -35,6 +41,27 @@ export default function PollCard({
   const handleVote = () => {
     if (selectedOptions.length === 0 || !onVote) return;
     onVote(selectedOptions);
+    setIsRevoting(false);
+  };
+
+  const handleRevote = () => {
+    if (selectedOptions.length === 0 || !onRevote) return;
+    onRevote(selectedOptions);
+    setIsRevoting(false);
+  };
+
+  const startRevoting = () => {
+    // 현재 선택된 옵션으로 초기화
+    const currentlySelected = poll.options
+      .filter((opt) => opt.isSelectedByMe)
+      .map((opt) => opt.optionId);
+    setSelectedOptions(currentlySelected);
+    setIsRevoting(true);
+  };
+
+  const cancelRevoting = () => {
+    setSelectedOptions([]);
+    setIsRevoting(false);
   };
 
   const getPercentage = (option: PollOption) => {
@@ -44,7 +71,7 @@ export default function PollCard({
     return Math.round((option.voteCount / poll.totalVoters) * 100);
   };
 
-  const showResults = poll.hasVoted || poll.isEnded;
+  const showResults = (poll.hasVoted || poll.isEnded) && !isRevoting;
 
   const formatEndDate = (dateString: string | undefined) => {
     if (!dateString) return null;
@@ -154,15 +181,51 @@ export default function PollCard({
           )}
         </div>
 
-        {!showResults && selectedOptions.length > 0 && (
-          <button
-            onClick={handleVote}
-            className="px-4 py-1.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition"
-            disabled={disabled}
-          >
-            투표하기
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* 다시 투표하기 모드가 아닐 때 */}
+          {!isRevoting && !showResults && selectedOptions.length > 0 && (
+            <button
+              onClick={handleVote}
+              className="px-4 py-1.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition"
+              disabled={disabled}
+            >
+              투표하기
+            </button>
+          )}
+
+          {/* 다시 투표하기 버튼 - 투표를 이미 했고 종료되지 않은 경우에만 표시 */}
+          {!isRevoting && poll.hasVoted && !poll.isEnded && onRevote && (
+            <button
+              onClick={startRevoting}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-blue-600 border border-blue-600 rounded-full font-medium hover:bg-blue-50 transition"
+              disabled={disabled}
+            >
+              <ArrowPathIcon className="w-4 h-4" />
+              다시 투표하기
+            </button>
+          )}
+
+          {/* 다시 투표하기 모드일 때 */}
+          {isRevoting && (
+            <>
+              <button
+                onClick={cancelRevoting}
+                className="px-3 py-1.5 text-gray-600 border border-gray-300 rounded-full font-medium hover:bg-gray-50 transition"
+              >
+                취소
+              </button>
+              {selectedOptions.length > 0 && (
+                <button
+                  onClick={handleRevote}
+                  className="px-4 py-1.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition"
+                  disabled={disabled}
+                >
+                  변경하기
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       {/* 투표 타입 표시 */}

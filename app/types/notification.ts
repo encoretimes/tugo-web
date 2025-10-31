@@ -1,12 +1,21 @@
+export type NotificationType = 'LIKE' | 'COMMENT' | 'MENTION' | 'SUBSCRIPTION';
+
+export type NotificationMethod = 'WEB' | 'EMAIL';
+
 export interface Notification {
   id: number;
-  type: 'follow' | 'like' | 'reply' | 'mention';
-  user: {
-    name: string;
-    handle: string;
-    profileImageUrl: string;
-  };
-  postContent?: string;
-  time: string;
-  read: boolean;
+  type: NotificationType;
+  message: string;
+  actorId: number | null;
+  postId: number | null;
+  commentId: number | null;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface NotificationPreference {
+  id: number;
+  notificationType: NotificationType;
+  enabled: boolean;
+  method: NotificationMethod;
 }

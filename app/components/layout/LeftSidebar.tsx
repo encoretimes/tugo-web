@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NavItem from '@/components/nav/NavItem';
@@ -11,15 +11,16 @@ import {
   UserGroupIcon,
   CurrencyDollarIcon,
   UserIcon as UserIconOutline,
-  EllipsisHorizontalIcon,
   Cog6ToothIcon,
-  ArchiveBoxIcon,
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
-import { Popover, Transition } from '@headlessui/react';
+import { useUnreadCount } from '@/hooks/useNotifications';
+import PostComposerModal from '@/components/modals/PostComposerModal';
 
 const LeftSidebar = () => {
   const { user } = useUserStore();
+  const { data: unreadCount } = useUnreadCount();
+  const [isComposerOpen, setIsComposerOpen] = useState(false);
 
   return (
     <aside className="flex h-full flex-col justify-between border-r border-neutral-200 p-2 md:p-4">
@@ -38,6 +39,7 @@ const LeftSidebar = () => {
               href="/notifications"
               icon={<BellIcon className="h-7 w-7" />}
               label="알림"
+              badge={unreadCount}
             />
             <NavItem
               href="/messages"
@@ -55,60 +57,23 @@ const LeftSidebar = () => {
               label="포인트"
             />
             <NavItem
-              href="/account"
-              icon={<UserIconOutline className="h-7 w-7" />}
-              label="내 계정"
+              href="/settings"
+              icon={<Cog6ToothIcon className="h-7 w-7" />}
+              label="설정"
             />
-            <Popover className="relative">
-              {({ open }) => (
-                <>
-                  <Popover.Button
-                    className={`w-full flex items-center gap-4 p-3 rounded-full transition-colors duration-200 text-lg hover:bg-neutral-100 ${open ? 'bg-neutral-100' : ''}`}
-                  >
-                    <EllipsisHorizontalIcon className="h-7 w-7" />
-                    <span className="hidden xl:inline">더보기</span>
-                  </Popover.Button>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute bottom-full mb-2 w-64 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                      <div className="p-2">
-                        <Link
-                          href="/settings"
-                          className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-neutral-100"
-                        >
-                          <Cog6ToothIcon className="h-6 w-6" />
-                          <span className="font-semibold">설정</span>
-                        </Link>
-                        <Link
-                          href="/bookmarks"
-                          className="w-full flex items-center gap-4 p-3 rounded-lg transition-colors duration-200 hover:bg-neutral-100"
-                        >
-                          <ArchiveBoxIcon className="h-6 w-6" />
-                          <span className="font-semibold">보관함</span>
-                        </Link>
-                      </div>
-                    </Popover.Panel>
-                  </Transition>
-                </>
-              )}
-            </Popover>
           </ul>
         </nav>
-        <button className="mt-4 w-full rounded-full bg-primary-600 py-3 text-lg font-bold text-white hover:bg-primary-700">
+        <button
+          onClick={() => setIsComposerOpen(true)}
+          className="mt-4 w-full rounded-full bg-primary-600 py-3 text-lg font-bold text-white hover:bg-primary-700"
+        >
           투고하기
         </button>
       </div>
       {user && (
         <div className="p-2">
           <Link
-            href={user.username ? `/profile/${user.username}` : '/account'}
+            href={user.username ? `/profile/${user.username}` : '/settings'}
             className="flex items-center space-x-2 p-2 rounded-full hover:bg-neutral-100 transition-colors"
           >
             {user.profileImageUrl ? (
@@ -117,22 +82,26 @@ const LeftSidebar = () => {
                 alt={user.name}
                 width={40}
                 height={40}
-                className="h-10 w-10 rounded-full"
+                className="h-10 w-10 rounded-full flex-shrink-0"
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-neutral-300">
                 <UserIconOutline className="h-6 w-6 text-neutral-500" />
               </div>
             )}
-            <div className="hidden xl:block">
-              <div className="font-bold">{user.name}</div>
-              <div className="text-sm text-neutral-500">
+            <div className="hidden lg:block overflow-hidden min-w-0">
+              <div className="font-bold truncate">{user.name}</div>
+              <div className="text-sm text-neutral-500 truncate">
                 {user.username ? `@${user.username}` : 'username 미설정'}
               </div>
             </div>
           </Link>
         </div>
       )}
+      <PostComposerModal
+        isOpen={isComposerOpen}
+        onClose={() => setIsComposerOpen(false)}
+      />
     </aside>
   );
 };

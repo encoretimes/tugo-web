@@ -14,16 +14,26 @@ import {
 import { useUser } from '@/hooks/useUser';
 import { UserIcon } from '@heroicons/react/24/solid';
 import { useUserStore } from '@/store/userStore';
+import { useToastStore } from '@/store/toastStore';
 import EditProfileModal from '@/components/modals/EditProfileModal';
+import ConfirmModal from '@/components/modals/ConfirmModal';
 import Post from '@/components/feed/Post';
 import { useBookmarks } from '@/hooks/useBookmarks';
 import PostSkeleton from '@/components/feed/PostSkeleton';
+import {
+  useSubscriptionStatus,
+  useSubscriberCount,
+  useSubscribeMutation,
+  useUnsubscribeMutation,
+} from '@/hooks/useSubscription';
+import SubscribersModal from '@/components/modals/SubscribersModal';
 
 const ProfilePage = () => {
   const params = useParams();
   const router = useRouter();
   const username = params.username as string;
   const { user: currentUser } = useUserStore();
+  const { addToast } = useToastStore();
 
   const {
     data: user,
@@ -37,6 +47,8 @@ const ProfilePage = () => {
     user?.isCreator ? 'posts' : 'archives'
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isSubscribersModalOpen, setIsSubscribersModalOpen] = useState(false);
+  const [showUnsubscribeConfirm, setShowUnsubscribeConfirm] = useState(false);
 
   // 보관함 데이터 가져오기 (현재 사용자의 프로필일 때만)
   const {
@@ -44,6 +56,14 @@ const ProfilePage = () => {
     isLoading: isBookmarksLoading,
     refetch: refetchBookmarks,
   } = useBookmarks(0, 20);
+
+  // 구독 관련 데이터 (크리에이터인 경우에만)
+  const { data: subscriptionStatus } = useSubscriptionStatus(
+    user?.creatorId || 0
+  );
+  const { data: subscriberCount } = useSubscriberCount(user?.creatorId || 0);
+  const subscribeMutation = useSubscribeMutation();
+  const unsubscribeMutation = useUnsubscribeMutation();
 
   useEffect(() => {
     if (user) {
@@ -86,13 +106,48 @@ const ProfilePage = () => {
       } else {
         // Fallback: URL 복사
         await navigator.clipboard.writeText(profileUrl);
-        alert('프로필 링크가 복사되었습니다!');
+        addToast('프로필 링크가 복사되었습니다!', 'success');
       }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         return;
       }
       console.error('공유 실패:', error);
+    }
+  };
+
+  // 구독하기
+  const handleSubscribe = async () => {
+    if (!user?.creatorId) return;
+
+    try {
+      await subscribeMutation.mutateAsync({ creatorId: user.creatorId });
+      addToast('구독되었습니다!', 'success');
+    } catch (error) {
+      console.error('구독 실패:', error);
+      addToast('구독에 실패했습니다. 다시 시도해주세요.', 'error');
+    }
+  };
+
+  // 구독 취소 확인
+  const handleUnsubscribeClick = () => {
+    setShowUnsubscribeConfirm(true);
+  };
+
+  // 구독 취소 실행
+  const handleUnsubscribeConfirm = async () => {
+    if (!subscriptionStatus?.subscriptionId || !user?.creatorId) return;
+
+    try {
+      await unsubscribeMutation.mutateAsync({
+        subscriptionId: subscriptionStatus.subscriptionId,
+        creatorId: user.creatorId,
+      });
+      setShowUnsubscribeConfirm(false);
+      addToast('구독이 취소되었습니다.', 'info');
+    } catch (error) {
+      console.error('구독 취소 실패:', error);
+      addToast('구독 취소에 실패했습니다. 다시 시도해주세요.', 'error');
     }
   };
 
@@ -260,14 +315,17 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex gap-6 text-sm">
-              <span>
-                <strong>{user.stats.following.toLocaleString()}</strong>{' '}
-                <span className="text-gray-500">팔로잉</span>
-              </span>
-              <span>
-                <strong>{user.stats.followers.toLocaleString()}</strong>{' '}
-                <span className="text-gray-500">팔로워</span>
-              </span>
+              {user.isCreator && (
+                <button
+                  onClick={() => setIsSubscribersModalOpen(true)}
+                  className="hover:underline"
+                >
+                  <strong>
+                    {(subscriberCount?.count || 0).toLocaleString()}
+                  </strong>{' '}
+                  <span className="text-gray-500">구독자</span>
+                </button>
+              )}
               {isOwnProfile && (
                 <span>
                   <strong>
@@ -280,32 +338,35 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Follow/Subscribe Button - only show if not own profile */}
-        {!isOwnProfile && (
+        {/* Subscribe Button - only show if not own profile and user is creator */}
+        {!isOwnProfile && user.isCreator && (
           <div className="px-4 pb-4">
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-semibold">
-                    이 사용자를 팔로우하시겠습니까?
+                    이 크리에이터를 구독하시겠습니까?
                   </h3>
                   <p className="text-sm text-gray-500">
                     최신 게시물을 받아보세요
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                      user.isFollowing
-                        ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                        : 'bg-primary-600 text-white hover:bg-primary-700'
-                    }`}
-                  >
-                    {user.isFollowing ? '팔로잉' : '팔로우'}
-                  </button>
-                  {!user.isSubscribed && (
-                    <button className="px-4 py-2 rounded-full text-sm font-semibold bg-primary-100 text-primary-700 hover:bg-primary-200">
-                      구독
+                  {subscriptionStatus?.isSubscribed ? (
+                    <button
+                      onClick={handleUnsubscribeClick}
+                      disabled={unsubscribeMutation.isPending}
+                      className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 transition-colors"
+                    >
+                      {unsubscribeMutation.isPending ? '처리 중...' : '구독 중'}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSubscribe}
+                      disabled={subscribeMutation.isPending}
+                      className="px-4 py-2 rounded-full text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                    >
+                      {subscribeMutation.isPending ? '처리 중...' : '구독'}
                     </button>
                   )}
                 </div>
@@ -448,8 +509,7 @@ const ProfilePage = () => {
         <EditProfileModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          creatorId={currentUser?.creatorId || 0}
-          currentPublicName={user.username}
+          currentName={user.name}
           currentIntroduction={user.bio}
           currentProfileUrl={user.profileImageUrl || undefined}
           currentBannerImageUrl={user.backgroundImageUrl || undefined}
@@ -458,6 +518,28 @@ const ProfilePage = () => {
           }}
         />
       )}
+
+      {/* Subscribers Modal */}
+      {user?.isCreator && user.creatorId && (
+        <SubscribersModal
+          isOpen={isSubscribersModalOpen}
+          onClose={() => setIsSubscribersModalOpen(false)}
+          creatorId={user.creatorId}
+          creatorName={user.name}
+        />
+      )}
+
+      {/* Unsubscribe Confirm Modal */}
+      <ConfirmModal
+        isOpen={showUnsubscribeConfirm}
+        onClose={() => setShowUnsubscribeConfirm(false)}
+        onConfirm={handleUnsubscribeConfirm}
+        title="구독 취소"
+        description={`${user?.name}님의 구독을 취소하시겠습니까?\n구독을 취소하면 더 이상 새 콘텐츠 알림을 받지 못합니다.`}
+        confirmText="구독 취소"
+        confirmButtonClass="bg-red-600 hover:bg-red-700 text-white"
+        isLoading={unsubscribeMutation.isPending}
+      />
     </div>
   );
 };

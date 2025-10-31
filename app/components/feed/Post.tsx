@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useRef } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -29,6 +29,8 @@ import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
 import ExpandableText from '@/app/components/ui/ExpandableText';
 import PollCard from './PollCard';
 import EmojiPickerButton from './EmojiPicker';
+import MentionInput from './MentionInput';
+import MentionText from './MentionText';
 import { formatRelativeTime } from '@/lib/date-utils';
 
 interface PostProps {
@@ -54,7 +56,6 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const [commentText, setCommentText] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const commentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   // 댓글 목록 조회 (showComments가 true일 때만 활성화)
   const { data: commentsData, isLoading: isLoadingComments } = useComments(
@@ -64,7 +65,9 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const comments = commentsData || [];
 
   // Poll vote hook (always call hooks at top level)
-  const { vote: voteOnPoll } = useVote(post.poll?.pollId || 0);
+  const { vote: voteOnPoll, updateVote: updateVoteOnPoll } = useVote(
+    post.poll?.pollId || 0
+  );
 
   // 현재 사용자가 게시물 작성자인지 확인
   const isAuthor = user?.username === author.username;
@@ -250,7 +253,11 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
 
           {/* Poll Card */}
           {post.poll && (
-            <PollCard poll={post.poll} onVote={voteOnPoll} />
+            <PollCard
+              poll={post.poll}
+              onVote={voteOnPoll}
+              onRevote={updateVoteOnPoll}
+            />
           )}
 
           {post.mediaUrls && post.mediaUrls.length > 0 && (
@@ -393,31 +400,18 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                     </div>
                   )}
                   <div className="flex-1">
-                    <textarea
-                      ref={commentTextareaRef}
+                    <MentionInput
                       value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
+                      onChange={setCommentText}
                       placeholder="댓글을 입력하세요..."
-                      className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
                       rows={2}
                       disabled={createCommentMutation.isPending}
+                      className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
                     />
                     <div className="mt-2 flex justify-between items-center">
                       <EmojiPickerButton
                         onEmojiSelect={(emoji) => {
-                          const textarea = commentTextareaRef.current;
-                          if (!textarea) {
-                            setCommentText(commentText + emoji);
-                            return;
-                          }
-                          const start = textarea.selectionStart;
-                          const end = textarea.selectionEnd;
-                          const newText = commentText.substring(0, start) + emoji + commentText.substring(end);
-                          setCommentText(newText);
-                          setTimeout(() => {
-                            textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-                            textarea.focus();
-                          }, 0);
+                          setCommentText(commentText + emoji);
                         }}
                         buttonClassName="text-gray-500 hover:text-gray-700"
                       />
@@ -466,7 +460,10 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                               @{comment.author.username}
                             </span>
                           </p>
-                          <p className="text-sm mt-1">{comment.content}</p>
+                          <MentionText
+                            content={comment.content}
+                            className="text-sm mt-1"
+                          />
                         </div>
                         <p className="mt-1 text-xs text-neutral-500">
                           {formatRelativeTime(comment.createdAt)}

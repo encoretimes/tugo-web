@@ -1,4 +1,4 @@
-export type PollType = "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
+export type PollType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE';
 
 export interface PollOption {
   optionId: number;

@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { apiClient } from '@/lib/api-client';
+import { useToastStore } from '@/store/toastStore';
+import ConfirmModal from '@/components/modals/ConfirmModal';
 
 const CreatorSection = () => {
   const { user, setUser } = useUserStore();
+  const { addToast } = useToastStore();
   const [isConverting, setIsConverting] = useState(false);
   const [isReverting, setIsReverting] = useState(false);
   const [showConvertConfirm, setShowConvertConfirm] = useState(false);
@@ -66,7 +69,10 @@ const CreatorSection = () => {
       });
 
       setShowConvertConfirm(false);
-      alert('크리에이터로 전환되었습니다! 이제 게시물을 작성할 수 있습니다.');
+      addToast(
+        '크리에이터로 전환되었습니다! 이제 게시물을 작성할 수 있습니다.',
+        'success'
+      );
     } catch (err) {
       const error = err as { response?: { data?: { message?: string } } };
       setError(
@@ -104,7 +110,7 @@ const CreatorSection = () => {
       }
 
       setShowRevertConfirm(false);
-      alert('일반 회원으로 복귀했습니다');
+      addToast('일반 회원으로 복귀했습니다', 'success');
     } catch (err) {
       const error = err as { response?: { data?: { message?: string } } };
       setError(
@@ -147,39 +153,13 @@ const CreatorSection = () => {
               </div>
             )}
 
-            {!showConvertConfirm ? (
-              <button
-                onClick={() => setShowConvertConfirm(true)}
-                disabled={!user?.username}
-                className="px-6 py-2.5 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
-                크리에이터로 전환
-              </button>
-            ) : (
-              <div className="space-y-3">
-                <div className="p-5 bg-gray-50 border border-gray-300">
-                  <p className="text-sm text-gray-800 mb-4">
-                    크리에이터로 전환하시겠습니까?
-                  </p>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={handleConvertToCreator}
-                      disabled={isConverting}
-                      className="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:bg-gray-300"
-                    >
-                      {isConverting ? '전환 중...' : '확인'}
-                    </button>
-                    <button
-                      onClick={() => setShowConvertConfirm(false)}
-                      disabled={isConverting}
-                      className="px-5 py-2.5 border border-gray-400 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50"
-                    >
-                      취소
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+            <button
+              onClick={() => setShowConvertConfirm(true)}
+              disabled={!user?.username}
+              className="px-6 py-2.5 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              크리에이터로 전환
+            </button>
           </div>
         </div>
       ) : (
@@ -239,46 +219,41 @@ const CreatorSection = () => {
                 </div>
               )}
 
-              {!showRevertConfirm ? (
-                <button
-                  onClick={() => setShowRevertConfirm(true)}
-                  disabled={postCount === null || postCount > 0}
-                  className="px-6 py-2.5 border-2 border-gray-900 bg-white text-gray-900 text-sm font-medium hover:bg-gray-50 disabled:bg-gray-100 disabled:border-gray-400 disabled:text-gray-500 disabled:cursor-not-allowed"
-                >
-                  일반 회원으로 복귀
-                </button>
-              ) : (
-                <div className="space-y-3">
-                  <div className="p-5 bg-gray-50 border border-gray-300">
-                    <p className="text-sm text-gray-800 mb-1">
-                      정말로 일반 회원으로 복귀하시겠습니까?
-                    </p>
-                    <p className="text-sm text-gray-600 mb-4">
-                      게시물이 있는 경우 복귀할 수 없습니다
-                    </p>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={handleRevertFromCreator}
-                        disabled={isReverting}
-                        className="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:bg-gray-300"
-                      >
-                        {isReverting ? '복귀 중...' : '복귀'}
-                      </button>
-                      <button
-                        onClick={() => setShowRevertConfirm(false)}
-                        disabled={isReverting}
-                        className="px-5 py-2.5 border border-gray-400 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50"
-                      >
-                        취소
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <button
+                onClick={() => setShowRevertConfirm(true)}
+                disabled={postCount === null || postCount > 0}
+                className="px-6 py-2.5 border-2 border-gray-900 bg-white text-gray-900 text-sm font-medium hover:bg-gray-50 disabled:bg-gray-100 disabled:border-gray-400 disabled:text-gray-500 disabled:cursor-not-allowed"
+              >
+                일반 회원으로 복귀
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Convert to Creator Confirm Modal */}
+      <ConfirmModal
+        isOpen={showConvertConfirm}
+        onClose={() => setShowConvertConfirm(false)}
+        onConfirm={handleConvertToCreator}
+        title="크리에이터로 전환"
+        description="크리에이터로 전환하시겠습니까?\n전환 후 게시물을 작성하고 구독자를 관리할 수 있습니다."
+        confirmText="전환"
+        confirmButtonClass="bg-gray-900 hover:bg-gray-800 text-white"
+        isLoading={isConverting}
+      />
+
+      {/* Revert to Member Confirm Modal */}
+      <ConfirmModal
+        isOpen={showRevertConfirm}
+        onClose={() => setShowRevertConfirm(false)}
+        onConfirm={handleRevertFromCreator}
+        title="일반 회원으로 복귀"
+        description="정말로 일반 회원으로 복귀하시겠습니까?\n게시물이 있는 경우 복귀할 수 없습니다."
+        confirmText="복귀"
+        confirmButtonClass="bg-gray-900 hover:bg-gray-800 text-white"
+        isLoading={isReverting}
+      />
     </div>
   );
 };

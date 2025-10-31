@@ -1,28 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useRef, useEffect } from 'react';
 import {
   UserPlusIcon,
   HeartIcon,
   ChatBubbleBottomCenterTextIcon,
   AtSymbolIcon,
 } from '@heroicons/react/24/solid';
-import Image from 'next/image';
-import { useNotifications } from '@/hooks/useNotifications';
-import { Notification } from '@/types/notification';
+import Link from 'next/link';
+import {
+  useNotifications,
+  useMarkAsRead,
+  useMarkAllAsRead,
+} from '@/hooks/useNotifications';
+import { Notification, NotificationType } from '@/types/notification';
 import { formatRelativeTime } from '@/lib/date-utils';
 
-const NotificationIcon = ({ type }: { type: string }) => {
+const NotificationIcon = ({ type }: { type: NotificationType }) => {
   switch (type) {
-    case 'follow':
+    case 'SUBSCRIPTION':
       return <UserPlusIcon className="h-8 w-8 text-blue-500" />;
-    case 'like':
+    case 'LIKE':
       return <HeartIcon className="h-8 w-8 text-red-500" />;
-    case 'reply':
+    case 'COMMENT':
       return (
         <ChatBubbleBottomCenterTextIcon className="h-8 w-8 text-green-500" />
       );
-    case 'mention':
+    case 'MENTION':
       return <AtSymbolIcon className="h-8 w-8 text-purple-500" />;
     default:
       return null;
@@ -30,91 +34,84 @@ const NotificationIcon = ({ type }: { type: string }) => {
 };
 
 const NotificationItem = ({ notification }: { notification: Notification }) => {
-  const { type, user, postContent, time, read } = notification;
+  const { type, message, postId, isRead, createdAt, id } = notification;
+  const markAsReadMutation = useMarkAsRead();
 
-  const renderContent = () => {
-    switch (type) {
-      case 'follow':
-        return (
-          <p>
-            <span className="font-bold">{user.name}</span>님이 회원님을
-            팔로우하기 시작했습니다.
-          </p>
-        );
-      case 'like':
-        return (
-          <p>
-            <span className="font-bold">{user.name}</span>님이 회원님의 게시물을
-            좋아합니다:
-            <span className="text-gray-500 ml-2">
-              &ldquo;{postContent}&rdquo;
-            </span>
-          </p>
-        );
-      case 'reply':
-        return (
-          <p>
-            <span className="font-bold">{user.name}</span>님이 회원님의 게시물에
-            답글을 남겼습니다:
-            <span className="text-gray-500 ml-2">
-              &ldquo;{postContent}&rdquo;
-            </span>
-          </p>
-        );
-      case 'mention':
-        return (
-          <p>
-            <span className="font-bold">{user.name}</span>님이 회원님을
-            멘션했습니다:
-            <span className="text-gray-500 ml-2">
-              &ldquo;{postContent}&rdquo;
-            </span>
-          </p>
-        );
-      default:
-        return null;
+  const handleClick = () => {
+    if (!isRead) {
+      markAsReadMutation.mutate(id);
     }
   };
 
+  const getLink = () => {
+    if (postId) return `/post/${postId}`;
+    return '#';
+  };
+
   return (
-    <div
+    <Link
+      href={getLink()}
+      onClick={handleClick}
       className={`flex gap-4 p-4 border-b border-gray-200 transition-colors ${
-        !read ? 'bg-primary-50' : 'hover:bg-gray-50'
+        !isRead ? 'bg-primary-50' : 'hover:bg-gray-50'
       }`}
     >
       <div className="flex-shrink-0 w-10">
         <NotificationIcon type={type} />
       </div>
       <div className="flex-grow">
-        <Image
-          src={user.profileImageUrl}
-          alt={user.name}
-          width={32}
-          height={32}
-          className="rounded-full mb-2"
-        />
-        <div className="text-gray-800">{renderContent()}</div>
+        <div className="text-gray-800">{message}</div>
         <div className="text-sm text-gray-400 mt-1">
-          {formatRelativeTime(time)}
+          {formatRelativeTime(createdAt)}
         </div>
       </div>
-      {!read && (
+      {!isRead && (
         <div className="h-3 w-3 rounded-full bg-primary-500 self-center flex-shrink-0"></div>
       )}
-    </div>
+    </Link>
   );
 };
 
 const NotificationsPage = () => {
-  const [activeTab, setActiveTab] = useState('all');
-  const { data: notifications, isLoading, error } = useNotifications();
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error,
+  } = useNotifications();
+  const markAllAsReadMutation = useMarkAllAsRead();
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  const filteredNotifications = notifications?.filter((notification) => {
-    if (activeTab === 'mentions') {
-      return notification.type === 'mention';
+  // 무한 스크롤
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
     }
-    return true;
-  });
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const allNotifications = data?.pages.flatMap((page) => page.content) ?? [];
+
+  const handleMarkAllAsRead = () => {
+    markAllAsReadMutation.mutate();
+  };
 
   const renderContent = () => {
     if (isLoading) {
@@ -129,7 +126,7 @@ const NotificationsPage = () => {
       );
     }
 
-    if (!filteredNotifications || filteredNotifications.length === 0) {
+    if (allNotifications.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center h-full p-8 text-center">
           <h2 className="text-2xl font-bold">알림이 없습니다</h2>
@@ -140,9 +137,17 @@ const NotificationsPage = () => {
       );
     }
 
-    return filteredNotifications.map((notification) => (
-      <NotificationItem key={notification.id} notification={notification} />
-    ));
+    return (
+      <>
+        {allNotifications.map((notification) => (
+          <NotificationItem key={notification.id} notification={notification} />
+        ))}
+        {isFetchingNextPage && (
+          <div className="p-4 text-center text-gray-500">더 불러오는 중...</div>
+        )}
+        <div ref={observerTarget} className="h-4" />
+      </>
+    );
   };
 
   return (
@@ -150,24 +155,14 @@ const NotificationsPage = () => {
       <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm">
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h1 className="text-xl font-bold">알림</h1>
-          <button className="text-sm text-primary-500 hover:underline">
+          <button
+            onClick={handleMarkAllAsRead}
+            disabled={markAllAsReadMutation.isPending}
+            className="text-sm text-primary-500 hover:underline disabled:opacity-50"
+          >
             모두 읽음으로 표시
           </button>
         </div>
-        <nav className="flex">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`flex-1 p-4 font-bold text-center transition-colors ${activeTab === 'all' ? 'text-primary-500 border-b-2 border-primary-500' : 'text-gray-500 hover:bg-gray-100'}`}
-          >
-            전체
-          </button>
-          <button
-            onClick={() => setActiveTab('mentions')}
-            className={`flex-1 p-4 font-bold text-center transition-colors ${activeTab === 'mentions' ? 'text-primary-500 border-b-2 border-primary-500' : 'text-gray-500 hover:bg-gray-100'}`}
-          >
-            멘션
-          </button>
-        </nav>
       </header>
       <section>{renderContent()}</section>
     </div>

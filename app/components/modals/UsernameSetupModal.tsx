@@ -84,7 +84,7 @@ export default function UsernameSetupModal({
         });
       }
 
-      // 모달 닫기 (설정 완료)
+      // 성공 시 모달 닫기
       if (onClose) {
         onClose();
       }

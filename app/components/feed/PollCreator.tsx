@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { XMarkIcon, PlusIcon, CalendarIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
-import { PollCreateData } from "@/app/types/poll";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { XMarkIcon, PlusIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import { PollCreateData } from '@/app/types/poll';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface PollCreatorProps {
   onPollDataChange: (pollData: PollCreateData | null) => void;
@@ -15,15 +15,15 @@ export default function PollCreator({
   onPollDataChange,
   initialData = null,
 }: PollCreatorProps) {
-  const [question, setQuestion] = useState(initialData?.question || "");
+  const [question, setQuestion] = useState(initialData?.question || '');
   const [isMultipleChoice, setIsMultipleChoice] = useState(
-    initialData?.pollType === "MULTIPLE_CHOICE"
+    initialData?.pollType === 'MULTIPLE_CHOICE'
   );
   const [options, setOptions] = useState<string[]>(
-    initialData?.options || ["", ""]
+    initialData?.options || ['', '']
   );
   const [useCustomDate, setUseCustomDate] = useState(false);
-  const [presetDuration, setPresetDuration] = useState<string>("1day");
+  const [presetDuration, setPresetDuration] = useState<string>('1day');
   const [customEndDate, setCustomEndDate] = useState<Date | null>(null);
 
   const updatePollData = (
@@ -34,7 +34,7 @@ export default function PollCreator({
     updatedPresetDuration: string,
     updatedCustomEndDate: Date | null
   ) => {
-    const validOptions = updatedOptions.filter((opt) => opt.trim() !== "");
+    const validOptions = updatedOptions.filter((opt) => opt.trim() !== '');
 
     if (validOptions.length < 2) {
       onPollDataChange(null);
@@ -45,16 +45,16 @@ export default function PollCreator({
 
     if (updatedUseCustomDate && updatedCustomEndDate) {
       endDate = updatedCustomEndDate.toISOString();
-    } else if (!updatedUseCustomDate && updatedPresetDuration !== "unlimited") {
+    } else if (!updatedUseCustomDate && updatedPresetDuration !== 'unlimited') {
       const now = new Date();
       switch (updatedPresetDuration) {
-        case "1day":
+        case '1day':
           now.setDate(now.getDate() + 1);
           break;
-        case "3days":
+        case '3days':
           now.setDate(now.getDate() + 3);
           break;
-        case "7days":
+        case '7days':
           now.setDate(now.getDate() + 7);
           break;
       }
@@ -63,7 +63,7 @@ export default function PollCreator({
 
     onPollDataChange({
       question: updatedQuestion || undefined,
-      pollType: updatedIsMultipleChoice ? "MULTIPLE_CHOICE" : "SINGLE_CHOICE",
+      pollType: updatedIsMultipleChoice ? 'MULTIPLE_CHOICE' : 'SINGLE_CHOICE',
       endDate,
       options: validOptions,
     });
@@ -71,26 +71,54 @@ export default function PollCreator({
 
   const handleQuestionChange = (value: string) => {
     setQuestion(value);
-    updatePollData(value, isMultipleChoice, options, useCustomDate, presetDuration, customEndDate);
+    updatePollData(
+      value,
+      isMultipleChoice,
+      options,
+      useCustomDate,
+      presetDuration,
+      customEndDate
+    );
   };
 
   const handleMultipleChoiceChange = (checked: boolean) => {
     setIsMultipleChoice(checked);
-    updatePollData(question, checked, options, useCustomDate, presetDuration, customEndDate);
+    updatePollData(
+      question,
+      checked,
+      options,
+      useCustomDate,
+      presetDuration,
+      customEndDate
+    );
   };
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
     newOptions[index] = value;
     setOptions(newOptions);
-    updatePollData(question, isMultipleChoice, newOptions, useCustomDate, presetDuration, customEndDate);
+    updatePollData(
+      question,
+      isMultipleChoice,
+      newOptions,
+      useCustomDate,
+      presetDuration,
+      customEndDate
+    );
   };
 
   const addOption = () => {
     if (options.length < 10) {
-      const newOptions = [...options, ""];
+      const newOptions = [...options, ''];
       setOptions(newOptions);
-      updatePollData(question, isMultipleChoice, newOptions, useCustomDate, presetDuration, customEndDate);
+      updatePollData(
+        question,
+        isMultipleChoice,
+        newOptions,
+        useCustomDate,
+        presetDuration,
+        customEndDate
+      );
     }
   };
 
@@ -98,23 +126,51 @@ export default function PollCreator({
     if (options.length > 2) {
       const newOptions = options.filter((_, i) => i !== index);
       setOptions(newOptions);
-      updatePollData(question, isMultipleChoice, newOptions, useCustomDate, presetDuration, customEndDate);
+      updatePollData(
+        question,
+        isMultipleChoice,
+        newOptions,
+        useCustomDate,
+        presetDuration,
+        customEndDate
+      );
     }
   };
 
   const handleCustomDateChange = (checked: boolean) => {
     setUseCustomDate(checked);
-    updatePollData(question, isMultipleChoice, options, checked, presetDuration, customEndDate);
+    updatePollData(
+      question,
+      isMultipleChoice,
+      options,
+      checked,
+      presetDuration,
+      customEndDate
+    );
   };
 
   const handlePresetDurationChange = (value: string) => {
     setPresetDuration(value);
-    updatePollData(question, isMultipleChoice, options, useCustomDate, value, customEndDate);
+    updatePollData(
+      question,
+      isMultipleChoice,
+      options,
+      useCustomDate,
+      value,
+      customEndDate
+    );
   };
 
   const handleCustomEndDateChange = (date: Date | null) => {
     setCustomEndDate(date);
-    updatePollData(question, isMultipleChoice, options, useCustomDate, presetDuration, date);
+    updatePollData(
+      question,
+      isMultipleChoice,
+      options,
+      useCustomDate,
+      presetDuration,
+      date
+    );
   };
 
   return (

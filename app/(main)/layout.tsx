@@ -7,6 +7,7 @@ import LoginPromptModal from '@/components/modals/LoginPromptModal';
 import { useRouteGuard } from '@/hooks/useRouteGuard';
 import { useInteractionGuard } from '@/hooks/useInteractionGuard';
 import { useUserStore } from '@/store/userStore';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 export default function MainLayout({
@@ -14,6 +15,7 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const { isLoading } = useUserStore();
   const {
     showLoginPrompt,
@@ -26,6 +28,13 @@ export default function MainLayout({
     onInteractionDetected: triggerLoginPrompt,
     isModalOpen: showLoginPrompt,
   });
+
+  // 우측 패널을 숨길 페이지들
+  const hideRightPanel =
+    pathname.startsWith('/settings') ||
+    pathname.startsWith('/messages') ||
+    pathname.startsWith('/notifications') ||
+    pathname.startsWith('/bookmarks');
 
   if (isLoading) {
     return (
@@ -41,15 +50,23 @@ export default function MainLayout({
   return (
     <div className="relative min-h-screen">
       <div className="mx-auto flex max-w-screen-xl">
-        <header className="hidden lg:block lg:w-1/4 sticky top-0 h-screen overflow-y-auto">
-          <LeftSidebar />
+        <header className="hidden lg:block lg:w-1/4">
+          <div className="sticky top-0 h-screen overflow-y-auto">
+            <LeftSidebar />
+          </div>
         </header>
-        <main className="min-h-screen w-full border-x lg:w-1/2">
+        <main
+          className={`min-h-screen w-full border-x ${hideRightPanel ? 'lg:w-3/4' : 'lg:w-1/2'}`}
+        >
           {children}
         </main>
-        <aside className="hidden lg:block lg:w-1/4 sticky top-0 h-screen overflow-y-auto">
-          <RightSidebar />
-        </aside>
+        {!hideRightPanel && (
+          <aside className="hidden lg:block lg:w-1/4">
+            <div className="sticky top-0 h-screen overflow-y-auto">
+              <RightSidebar />
+            </div>
+          </aside>
+        )}
       </div>
       <BottomNavBar />
       <LoginPromptModal
