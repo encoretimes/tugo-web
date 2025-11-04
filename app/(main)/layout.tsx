@@ -62,9 +62,7 @@ export default function MainLayout({
       {/* 3열 레이아웃 컨테이너 - 전체 화면 차지 */}
       <div className="flex w-full">
         {/* 왼쪽 빈 공간 - flex-1로 자동 대칭 */}
-        {!hideRightPanel && (
-          <div className="hidden lg:block lg:flex-1"></div>
-        )}
+        {!hideRightPanel && <div className="hidden lg:block lg:flex-1"></div>}
 
         {/* 게시물 상세 페이지일 때만 헤더 크기만큼 빈 공간 */}
         {hideRightPanel && (
@@ -72,11 +70,13 @@ export default function MainLayout({
         )}
 
         {/* 메인 컨텐츠 - 최대 너비 제한 */}
-        <main className={`min-h-screen w-full ${
-          hideRightPanel
-            ? 'lg:max-w-4xl xl:max-w-5xl mx-auto'
-            : 'lg:max-w-[576px] xl:max-w-[672px]'
-        }`}>
+        <main
+          className={`min-h-screen w-full ${
+            hideRightPanel
+              ? 'lg:max-w-4xl xl:max-w-5xl mx-auto'
+              : 'lg:max-w-[576px] xl:max-w-[672px]'
+          }`}
+        >
           {children}
         </main>
 

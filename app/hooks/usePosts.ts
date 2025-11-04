@@ -117,8 +117,11 @@ export const usePost = (postId: number) => {
       >([...queryKeys.posts, 'infinite', false]);
 
       if (infiniteData) {
-        return queryClient.getQueryState([...queryKeys.posts, 'infinite', false])
-          ?.dataUpdatedAt;
+        return queryClient.getQueryState([
+          ...queryKeys.posts,
+          'infinite',
+          false,
+        ])?.dataUpdatedAt;
       }
 
       const infiniteDataSub = queryClient.getQueryData<
@@ -275,10 +278,7 @@ export const useDeletePost = () => {
  * @param subscriptionOnly - true일 경우 구독한 크리에이터의 게시물만 조회
  * @param pageSize - 페이지당 게시물 수
  */
-export const useInfinitePosts = (
-  subscriptionOnly = false,
-  pageSize = 20
-) => {
+export const useInfinitePosts = (subscriptionOnly = false, pageSize = 20) => {
   return useInfiniteQuery({
     queryKey: [...queryKeys.posts, 'infinite', subscriptionOnly],
     queryFn: ({ pageParam = 0 }) =>

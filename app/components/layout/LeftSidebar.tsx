@@ -27,9 +27,26 @@ const LeftSidebar = () => {
     <aside className="flex h-full flex-col p-2 md:p-4 border-r border-neutral-200 w-16 xl:w-64">
       {/* 상단: TUGO 로고 */}
       <div>
-        <Link href="/" className="text-2xl font-bold p-3 block">
-          <span className="hidden xl:inline">Tugo</span>
-          <span className="xl:hidden">T</span>
+        <Link href="/" className="p-3 block">
+          <div className="hidden xl:flex items-center gap-2">
+            <Image
+              src="/logo.svg"
+              alt="Tugo"
+              width={40}
+              height={40}
+              className="w-10 h-10"
+            />
+            <span className="text-2xl font-bold">Tugo</span>
+          </div>
+          <div className="xl:hidden flex justify-center">
+            <Image
+              src="/logo-compact.svg"
+              alt="T"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+          </div>
         </Link>
       </div>
 

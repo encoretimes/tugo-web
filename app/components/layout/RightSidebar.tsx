@@ -25,35 +25,39 @@ const RightSidebar = () => {
         {/* 내 프로필 요약 */}
         {user && user.username && (
           <div className="mb-4 rounded-lg bg-white border border-gray-200 p-4">
-          <Link
-            href={`/profile/${user.username}`}
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-          >
-            {user.profileImageUrl ? (
-              <Image
-                src={user.profileImageUrl}
-                alt={user.name}
-                width={48}
-                height={48}
-                className="h-12 w-12 rounded-full"
-              />
-            ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-300">
-                <UserIcon className="h-6 w-6 text-neutral-500" />
+            <Link
+              href={`/profile/${user.username}`}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            >
+              {user.profileImageUrl ? (
+                <Image
+                  src={user.profileImageUrl}
+                  alt={user.name}
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 rounded-full"
+                />
+              ) : (
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-300">
+                  <UserIcon className="h-6 w-6 text-neutral-500" />
+                </div>
+              )}
+              <div>
+                <h3 className="font-semibold text-sm text-gray-900">
+                  {user.name}
+                </h3>
+                <p className="text-xs text-gray-500">@{user.username}</p>
               </div>
-            )}
-            <div>
-              <h3 className="font-semibold text-sm text-gray-900">{user.name}</h3>
-              <p className="text-xs text-gray-500">@{user.username}</p>
-            </div>
-          </Link>
-        </div>
-      )}
+            </Link>
+          </div>
+        )}
 
         {/* 추천 크리에이터 */}
         <div className="rounded-lg bg-white border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-gray-900">💜 추천 크리에이터</h3>
+            <h3 className="text-sm font-semibold text-gray-900">
+              💜 추천 크리에이터
+            </h3>
           </div>
           <ul className="space-y-3">
             <li className="flex items-center justify-between gap-2">
@@ -69,8 +73,12 @@ const RightSidebar = () => {
                   className="h-9 w-9 rounded-full shrink-0"
                 />
                 <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-gray-900 truncate">김민준</div>
-                  <div className="text-xs text-gray-500 truncate">@minjun.kim</div>
+                  <div className="font-semibold text-sm text-gray-900 truncate">
+                    김민준
+                  </div>
+                  <div className="text-xs text-gray-500 truncate">
+                    @minjun.kim
+                  </div>
                 </div>
               </Link>
               <button className="rounded-full bg-primary-600 px-3 py-1 text-xs font-semibold text-white hover:bg-primary-700 shrink-0">
@@ -90,8 +98,12 @@ const RightSidebar = () => {
                   className="h-9 w-9 rounded-full shrink-0"
                 />
                 <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-gray-900 truncate">이서연</div>
-                  <div className="text-xs text-gray-500 truncate">@seoyeon.lee</div>
+                  <div className="font-semibold text-sm text-gray-900 truncate">
+                    이서연
+                  </div>
+                  <div className="text-xs text-gray-500 truncate">
+                    @seoyeon.lee
+                  </div>
                 </div>
               </Link>
               <button className="rounded-full bg-primary-600 px-3 py-1 text-xs font-semibold text-white hover:bg-primary-700 shrink-0">
@@ -111,8 +123,12 @@ const RightSidebar = () => {
                   className="h-9 w-9 rounded-full shrink-0"
                 />
                 <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-gray-900 truncate">박진호</div>
-                  <div className="text-xs text-gray-500 truncate">@jinho.park</div>
+                  <div className="font-semibold text-sm text-gray-900 truncate">
+                    박진호
+                  </div>
+                  <div className="text-xs text-gray-500 truncate">
+                    @jinho.park
+                  </div>
                 </div>
               </Link>
               <button className="rounded-full bg-primary-600 px-3 py-1 text-xs font-semibold text-white hover:bg-primary-700 shrink-0">

@@ -12,11 +12,7 @@ interface ShareModalProps {
   url: string;
 }
 
-export default function ShareModal({
-  isOpen,
-  onClose,
-  url,
-}: ShareModalProps) {
+export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
   const { addToast } = useToastStore();
 
   const handleCopyLink = async () => {

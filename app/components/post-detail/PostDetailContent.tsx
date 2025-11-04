@@ -142,71 +142,74 @@ export default function PostDetailContent({
   return (
     <>
       {/* 2열 레이아웃 (PC용) - 왼쪽 3 : 오른쪽 2 비율 */}
-      <div className="hidden md:grid md:grid-cols-[3fr_2fr]" style={{ height: '85vh' }}>
+      <div
+        className="hidden md:grid md:grid-cols-[3fr_2fr]"
+        style={{ height: '85vh' }}
+      >
         {/* 왼쪽 열: 작성자 정보 + 글 + 사진 - 독립 스크롤 */}
         <div className="overflow-y-auto scrollbar-hide p-6 h-full">
           <div className="space-y-4">
-          {/* 작성자 정보 */}
-          <div className="flex items-center gap-3">
-            <Link
-              href={`/profile/${author.username}`}
-              className="flex-shrink-0"
-            >
-              {author.profileImageUrl ? (
-                <Image
-                  src={author.profileImageUrl}
-                  alt={author.name}
-                  width={48}
-                  height={48}
-                  className="h-12 w-12 rounded-full hover:opacity-80 transition-opacity"
-                />
-              ) : (
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-400 transition-colors">
-                  <UserIcon className="h-7 w-7 text-neutral-500" />
-                </div>
-              )}
-            </Link>
-            <div>
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/profile/${author.username}`}
-                  className="font-semibold text-gray-900 hover:underline"
-                >
-                  {author.name}
-                </Link>
-                {author.isCreator && (
-                  <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded">
-                    크리에이터
-                  </span>
+            {/* 작성자 정보 */}
+            <div className="flex items-center gap-3">
+              <Link
+                href={`/profile/${author.username}`}
+                className="flex-shrink-0"
+              >
+                {author.profileImageUrl ? (
+                  <Image
+                    src={author.profileImageUrl}
+                    alt={author.name}
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 rounded-full hover:opacity-80 transition-opacity"
+                  />
+                ) : (
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-400 transition-colors">
+                    <UserIcon className="h-7 w-7 text-neutral-500" />
+                  </div>
                 )}
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Link
-                  href={`/profile/${author.username}`}
-                  className="hover:underline"
-                >
-                  @{author.username}
-                </Link>
-                <span>·</span>
-                <time>{formatRelativeTime(createdAt)}</time>
+              </Link>
+              <div>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/profile/${author.username}`}
+                    className="font-semibold text-gray-900 hover:underline"
+                  >
+                    {author.name}
+                  </Link>
+                  {author.isCreator && (
+                    <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded">
+                      크리에이터
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Link
+                    href={`/profile/${author.username}`}
+                    className="hover:underline"
+                  >
+                    @{author.username}
+                  </Link>
+                  <span>·</span>
+                  <time>{formatRelativeTime(createdAt)}</time>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* 글 내용 */}
-          <div className="text-gray-900 whitespace-pre-wrap break-words">
-            {contentText}
-          </div>
-
-          {/* 사진 */}
-          {post.mediaUrls && post.mediaUrls.length > 0 && (
-            <div className="mt-3 max-w-full overflow-hidden">
-              <ImageCarousel
-                images={post.mediaUrls}
-                onImageClick={handleImageClick}
-              />
+            {/* 글 내용 */}
+            <div className="text-gray-900 whitespace-pre-wrap break-words">
+              {contentText}
             </div>
-          )}
+
+            {/* 사진 */}
+            {post.mediaUrls && post.mediaUrls.length > 0 && (
+              <div className="mt-3 max-w-full overflow-hidden">
+                <ImageCarousel
+                  images={post.mediaUrls}
+                  onImageClick={handleImageClick}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -245,10 +248,15 @@ export default function PostDetailContent({
           )}
 
           {/* 댓글 제목 */}
-          <h3 className="font-semibold text-gray-900 mb-4 flex-shrink-0">댓글</h3>
+          <h3 className="font-semibold text-gray-900 mb-4 flex-shrink-0">
+            댓글
+          </h3>
 
           {/* 댓글 목록 - 스크롤 영역 */}
-          <div className="overflow-y-auto scrollbar-hide pr-4" style={{ flex: '1 1 0', minHeight: 0 }}>
+          <div
+            className="overflow-y-auto scrollbar-hide pr-4"
+            style={{ flex: '1 1 0', minHeight: 0 }}
+          >
             <div className="space-y-3">
               {isLoadingComments ? (
                 <>
@@ -316,50 +324,50 @@ export default function PostDetailContent({
 
           {/* 댓글 작성 영역 - 하단 고정 (스크롤 영향 없음) */}
           <div className="border-t border-gray-200 pt-4 mt-4 flex-shrink-0">
-              <div className="flex space-x-2">
-                {user?.profileImageUrl ? (
-                  <Image
-                    src={user.profileImageUrl}
-                    alt={user.name}
-                    width={32}
-                    height={32}
-                    className="h-8 w-8 rounded-full"
+            <div className="flex space-x-2">
+              {user?.profileImageUrl ? (
+                <Image
+                  src={user.profileImageUrl}
+                  alt={user.name}
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
+                  <UserIcon className="h-5 w-5 text-neutral-500" />
+                </div>
+              )}
+              <div className="flex-1">
+                <MentionInput
+                  value={commentText}
+                  onChange={setCommentText}
+                  placeholder="댓글을 입력하세요..."
+                  rows={2}
+                  disabled={createCommentMutation.isPending}
+                  className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
+                />
+                <div className="mt-2 flex justify-between items-center">
+                  <EmojiPickerButton
+                    onEmojiSelect={(emoji) => {
+                      setCommentText(commentText + emoji);
+                    }}
+                    buttonClassName="text-gray-500 hover:text-gray-700"
                   />
-                ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                    <UserIcon className="h-5 w-5 text-neutral-500" />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <MentionInput
-                    value={commentText}
-                    onChange={setCommentText}
-                    placeholder="댓글을 입력하세요..."
-                    rows={2}
-                    disabled={createCommentMutation.isPending}
-                    className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
-                  />
-                  <div className="mt-2 flex justify-between items-center">
-                    <EmojiPickerButton
-                      onEmojiSelect={(emoji) => {
-                        setCommentText(commentText + emoji);
-                      }}
-                      buttonClassName="text-gray-500 hover:text-gray-700"
-                    />
-                    <button
-                      onClick={handleCommentSubmit}
-                      disabled={
-                        !commentText.trim() || createCommentMutation.isPending
-                      }
-                      className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
-                    >
-                      {createCommentMutation.isPending
-                        ? '작성 중...'
-                        : '댓글 달기'}
-                    </button>
-                  </div>
+                  <button
+                    onClick={handleCommentSubmit}
+                    disabled={
+                      !commentText.trim() || createCommentMutation.isPending
+                    }
+                    className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
+                  >
+                    {createCommentMutation.isPending
+                      ? '작성 중...'
+                      : '댓글 달기'}
+                  </button>
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>

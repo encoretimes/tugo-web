@@ -24,9 +24,12 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon, label, badge }) => {
         }`}
       >
         <div className="relative">
-          {React.cloneElement(icon as React.ReactElement, {
-            strokeWidth: isActive ? 2 : 1.3,
-          })}
+          {React.cloneElement(
+            icon as React.ReactElement<{ strokeWidth?: number }>,
+            {
+              strokeWidth: isActive ? 2 : 1.3,
+            }
+          )}
           {badge !== undefined && badge > 0 && (
             <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
               {badge > 99 ? '99+' : badge}

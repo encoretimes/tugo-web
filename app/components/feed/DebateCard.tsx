@@ -15,7 +15,6 @@ export default function DebateCard({ post }: DebateCardProps) {
   if (!post.poll) return null;
 
   const { poll, author } = post;
-  const totalVotes = poll.totalVoters;
 
   const handleClick = () => {
     router.push(`/@${author.username}/post/${post.postId}`);
@@ -25,13 +24,12 @@ export default function DebateCard({ post }: DebateCardProps) {
   const hasGradientRing = !poll.hasVoted && !poll.isEnded;
 
   return (
-    <div
-      onClick={handleClick}
-      className="shrink-0 cursor-pointer"
-    >
+    <div onClick={handleClick} className="shrink-0 cursor-pointer">
       {/* 프로필 이미지 with 링 효과 */}
       <div className="flex flex-col items-center gap-2">
-        <div className={`rounded-full p-0.5 ${hasGradientRing ? 'bg-gradient-to-tr from-primary-500 to-primary-300' : 'bg-gray-200'}`}>
+        <div
+          className={`rounded-full p-0.5 ${hasGradientRing ? 'bg-gradient-to-tr from-primary-500 to-primary-300' : 'bg-gray-200'}`}
+        >
           <div className="bg-white rounded-full p-1">
             {author.profileImageUrl ? (
               <Image

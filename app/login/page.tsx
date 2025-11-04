@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 function LoginContent() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -156,7 +157,7 @@ function LoginContent() {
               {/* About Link */}
               <div className="text-center mb-8">
                 <p className="text-neutral-600 mb-4">Tugo가 처음이신가요?</p>
-                <a
+                <Link
                   href="/about"
                   className="text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-200 inline-flex items-center gap-2 group"
                 >
@@ -174,7 +175,7 @@ function LoginContent() {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

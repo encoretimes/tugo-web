@@ -23,7 +23,9 @@ export const getPostsPage = async (
     params.append('subscriptionOnly', 'true');
   }
 
-  return apiClient.get<PageResponse<Post>>(`/api/v1/posts?${params.toString()}`);
+  return apiClient.get<PageResponse<Post>>(
+    `/api/v1/posts?${params.toString()}`
+  );
 };
 
 export const getPost = async (postId: number): Promise<Post> => {

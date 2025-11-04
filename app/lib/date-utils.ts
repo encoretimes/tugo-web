@@ -14,7 +14,9 @@
  * - 28 to 364 days ago: "N개월 전"
  * - 365+ days ago: "N년 전"
  */
-export function formatRelativeTime(isoTimestamp: string | undefined | null): string {
+export function formatRelativeTime(
+  isoTimestamp: string | undefined | null
+): string {
   try {
     // Handle null/undefined
     if (!isoTimestamp) {

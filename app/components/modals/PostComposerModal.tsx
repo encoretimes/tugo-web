@@ -283,11 +283,12 @@ export default function PostComposerModal({
                             contentByteLength > maxByteLength
                               ? 'text-red-500 font-semibold'
                               : contentByteLength > maxByteLength * 0.9
-                              ? 'text-orange-500'
-                              : 'text-gray-400'
+                                ? 'text-orange-500'
+                                : 'text-gray-400'
                           }`}
                         >
-                          {contentByteLength.toLocaleString()} / {maxByteLength.toLocaleString()} 바이트
+                          {contentByteLength.toLocaleString()} /{' '}
+                          {maxByteLength.toLocaleString()} 바이트
                           <span className="ml-2 text-gray-400">
                             ({content.length.toLocaleString()}자)
                           </span>
