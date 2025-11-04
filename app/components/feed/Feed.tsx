@@ -55,17 +55,12 @@ const Feed = () => {
       {/* 열띤 토론 섹션 */}
       {!isLoadingDebates && debates && debates.length > 0 && (
         <section className="border-gray-200 bg-white">
-          <div className="px-4 py-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-900">
-              🔥 열띤 토론
-            </h2>
-            <button className="text-xs text-primary-600 hover:text-primary-700 font-medium">
-              전체보기 →
-            </button>
+          <div className="px-4 py-3">
+            <h2 className="text-sm font-semibold text-gray-900">열띤 토론</h2>
           </div>
           {/* 가로 스크롤 영역 */}
-          <div className="overflow-x-auto scrollbar-hide pb-3">
-            <div className="flex gap-3 px-4">
+          <div className="overflow-x-auto scrollbar-hide pb-4">
+            <div className="flex gap-4 px-4">
               {debates.map((post) => (
                 <DebateCard key={post.postId} post={post} />
               ))}
