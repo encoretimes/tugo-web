@@ -5,32 +5,58 @@
  * @returns Korean relative time string
  *
  * Format rules:
- * - Today: "오늘 14:30" (오늘 + HH:mm)
- * - 1 to 6 days ago: "N일 전" (1일 전, 2일 전, etc.)
- * - 7 to 27 days (1-4 weeks): "N주일 전" (1주일 전, 2주일 전, 3주일 전, 4주일 전)
- * - 4 weeks+ and 1+ month: "N개월 전" (1개월 전 ~ 11개월 전)
- * - 1+ year: "N년 전" (1년 전, 2년 전, etc.)
+ * - Less than 1 minute: "방금 전"
+ * - 1 to 59 minutes: "N분 전"
+ * - 1 to 23 hours: "N시간 전"
+ * - Today (but more than 24h): "오늘 HH:mm"
+ * - 1 to 6 days ago: "N일 전"
+ * - 7 to 27 days ago: "N주일 전"
+ * - 28 to 364 days ago: "N개월 전"
+ * - 365+ days ago: "N년 전"
  */
-export function formatRelativeTime(isoTimestamp: string): string {
+export function formatRelativeTime(isoTimestamp: string | undefined | null): string {
   try {
+    // Handle null/undefined
+    if (!isoTimestamp) {
+      return '날짜 없음';
+    }
+
     const now = new Date();
     const target = new Date(isoTimestamp);
 
     // Invalid date check
     if (isNaN(target.getTime())) {
-      return isoTimestamp;
+      console.warn('Invalid date format:', isoTimestamp);
+      return '날짜 오류';
     }
 
-    // Future timestamp check
+    // Future timestamp - show as "방금 전"
     if (target > now) {
-      return isoTimestamp;
+      return '방금 전';
     }
 
     // Calculate differences
     const diffMs = now.getTime() - target.getTime();
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    // Check if today (same date)
+    // Less than 1 minute
+    if (diffMinutes < 1) {
+      return '방금 전';
+    }
+
+    // 1 to 59 minutes
+    if (diffMinutes < 60) {
+      return `${diffMinutes}분 전`;
+    }
+
+    // 1 to 23 hours
+    if (diffHours < 24) {
+      return `${diffHours}시간 전`;
+    }
+
+    // Check if today (same date) but more than 24 hours
     const isToday =
       now.getFullYear() === target.getFullYear() &&
       now.getMonth() === target.getMonth() &&
@@ -47,40 +73,29 @@ export function formatRelativeTime(isoTimestamp: string): string {
       return `${diffDays}일 전`;
     }
 
-    // 7 to 27 days ago (1-4 weeks)
+    // 7 to 27 days ago (1-3 weeks)
     if (diffDays >= 7 && diffDays <= 27) {
       const weeks = Math.floor(diffDays / 7);
       return `${weeks}주일 전`;
     }
 
-    // Calculate month difference properly
-    const yearsDiff = now.getFullYear() - target.getFullYear();
-    const monthsDiff = now.getMonth() - target.getMonth();
-    const totalMonthsDiff = yearsDiff * 12 + monthsDiff;
-
-    // 1 to 11 months ago
-    // Use month difference if >= 1 month, otherwise keep showing weeks
-    if (totalMonthsDiff >= 1 && totalMonthsDiff < 12) {
-      return `${totalMonthsDiff}개월 전`;
+    // 28 to 364 days ago (months)
+    if (diffDays >= 28 && diffDays < 365) {
+      const months = Math.floor(diffDays / 30);
+      return `${months}개월 전`;
     }
 
-    // 1+ years ago
-    if (totalMonthsDiff >= 12) {
-      const years = Math.floor(totalMonthsDiff / 12);
+    // 365+ days ago (years)
+    if (diffDays >= 365) {
+      const years = Math.floor(diffDays / 365);
       return `${years}년 전`;
     }
 
-    // Edge case: 4+ weeks but less than 1 full month
-    // This handles the case between 4주일 전 and 1개월 전
-    if (diffDays >= 28) {
-      return '4주일 전';
-    }
-
     // Fallback (shouldn't reach here)
-    return isoTimestamp;
+    return '날짜 오류';
   } catch (error) {
-    // Error handling: return original timestamp
-    console.error('Error formatting relative time:', error);
-    return isoTimestamp;
+    // Error handling: return user-friendly message
+    console.error('Error formatting relative time:', error, isoTimestamp);
+    return '날짜 오류';
   }
 }

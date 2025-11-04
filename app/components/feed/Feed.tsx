@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import Post from './Post';
 import PostComposer from './PostComposer';
 import { useInfinitePosts } from '@/hooks/usePosts';
+import { useScrollStore } from '@/store/scrollStore';
 import PostSkeleton from './PostSkeleton';
 
 const Feed = () => {
@@ -16,17 +17,33 @@ const Feed = () => {
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfinitePosts();
+  } = useInfinitePosts(activeTab === 'following');
 
   const { ref, inView } = useInView();
+  const feedScrollPosition = useScrollStore((state) => state.feedScrollPosition);
+  const clearFeedScrollPosition = useScrollStore(
+    (state) => state.clearFeedScrollPosition
+  );
 
   const posts = data?.pages.flatMap((page) => page.content) ?? [];
 
+  // 무한 스크롤
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // 스크롤 위치 복원 (게시물 상세 페이지에서 뒤로왔을 때)
+  useEffect(() => {
+    if (feedScrollPosition > 0 && posts.length > 0) {
+      // 약간의 지연을 두고 스크롤 복원 (DOM 렌더링 완료 대기)
+      setTimeout(() => {
+        window.scrollTo(0, feedScrollPosition);
+        clearFeedScrollPosition();
+      }, 100);
+    }
+  }, [feedScrollPosition, posts.length, clearFeedScrollPosition]);
 
   const TabButton = ({
     id,
@@ -64,7 +81,7 @@ const Feed = () => {
           />
           <TabButton
             id="following"
-            label="팔로잉"
+            label="구독"
             activeTab={activeTab}
             onClick={setActiveTab}
           />

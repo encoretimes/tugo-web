@@ -1,4 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 import { getComments, createComment, deleteComment } from '@/api/comments';
 import type { Comment } from '@/types/comment';
 import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
@@ -6,13 +10,19 @@ import { useToastStore } from '@/store/toastStore';
 import { useUserStore } from '@/store/userStore';
 
 /**
- * 댓글 목록 조회 Hook
+ * 댓글 목록 조회 Hook (무한 스크롤)
+ * @param postId - 게시물 ID
+ * @param enabled - 쿼리 활성화 여부 (댓글 버튼을 눌렀을 때만 true)
  */
-export const useComments = (postId: number) => {
-  return useQuery({
+export const useComments = (postId: number, enabled: boolean = true) => {
+  return useInfiniteQuery({
     queryKey: queryKeys.comments(postId),
-    queryFn: () => getComments(postId),
-    enabled: !!postId,
+    queryFn: ({ pageParam = 0 }) => getComments(postId, pageParam, 20),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.last ? undefined : lastPage.pageable.pageNumber + 1;
+    },
+    enabled: !!postId && enabled,
   });
 };
 
@@ -28,7 +38,7 @@ export const useCreateComment = () => {
         queryKey: queryKeys.comments(newCommentData.postId),
       });
 
-      const previousComments = queryClient.getQueryData<Comment[]>(
+      const previousComments = queryClient.getQueryData(
         queryKeys.comments(newCommentData.postId)
       );
 
@@ -44,9 +54,26 @@ export const useCreateComment = () => {
           createdAt: new Date().toISOString(),
         };
 
-        queryClient.setQueryData<Comment[]>(
+        queryClient.setQueryData(
           queryKeys.comments(newCommentData.postId),
-          (old) => [...(old || []), optimisticComment]
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (old: any) => {
+            if (!old) return old;
+            return {
+              ...old,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              pages: old.pages.map((page: any, index: number) => {
+                // 마지막 페이지에 새 댓글 추가
+                if (index === old.pages.length - 1) {
+                  return {
+                    ...page,
+                    content: [...page.content, optimisticComment],
+                  };
+                }
+                return page;
+              }),
+            };
+          }
         );
       }
 

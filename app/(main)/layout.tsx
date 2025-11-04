@@ -12,8 +12,10 @@ import React from 'react';
 
 export default function MainLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   const pathname = usePathname();
   const { isLoading } = useUserStore();
@@ -74,6 +76,7 @@ export default function MainLayout({
         onClose={closeLoginPrompt}
         isProtectedRoute={isProtectedRoute}
       />
+      {modal}
     </div>
   );
 }

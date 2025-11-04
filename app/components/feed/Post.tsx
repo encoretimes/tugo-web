@@ -1,15 +1,14 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   ChatBubbleOvalLeftIcon,
   BookmarkIcon,
   HeartIcon,
-  ArrowUpOnSquareIcon,
   UserIcon,
   EllipsisVerticalIcon,
-  PencilIcon,
-  TrashIcon,
 } from '@heroicons/react/24/outline';
 import {
   HeartIcon as HeartIconSolid,
@@ -23,24 +22,35 @@ import { useToggleLike } from '@/hooks/useLikes';
 import { useComments, useCreateComment } from '@/hooks/useComments';
 import { useDeletePost } from '@/hooks/usePosts';
 import { useVote } from '@/hooks/useVote';
-import { Menu, Transition } from '@headlessui/react';
+import { queryKeys } from '@/lib/query-keys';
 import EditPostModal from '@/app/components/modals/EditPostModal';
 import ConfirmDialog from '@/app/components/ui/ConfirmDialog';
 import ExpandableText from '@/app/components/ui/ExpandableText';
 import ImageGalleryModal from '@/app/components/modals/ImageGalleryModal';
+import PostMenuModal from '@/app/components/modals/PostMenuModal';
+import ShareModal from '@/app/components/modals/ShareModal';
 import PollCard from './PollCard';
 import EmojiPickerButton from './EmojiPicker';
 import MentionInput from './MentionInput';
 import MentionText from './MentionText';
+import ImageCarousel from './ImageCarousel';
 import { formatRelativeTime } from '@/lib/date-utils';
 
 interface PostProps {
   post: PostType;
   onPostDeleted?: () => void;
   onPostUpdated?: () => void;
+  disableNavigation?: boolean; // 상세 페이지에서는 네비게이션 비활성화
 }
 
-const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
+const Post: React.FC<PostProps> = ({
+  post,
+  onPostDeleted,
+  onPostUpdated,
+  disableNavigation = false,
+}) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { user } = useUserStore();
   const addToast = useToastStore((state) => state.addToast);
   const { toggleBookmark } = useToggleBookmark();
@@ -59,13 +69,19 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showPostMenu, setShowPostMenu] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
-  // 댓글 목록 조회 (showComments가 true일 때만 활성화)
-  const { data: commentsData, isLoading: isLoadingComments } = useComments(
-    post.postId
-  );
+  // 댓글 목록 조회 (무한 스크롤) - showComments가 true일 때만 활성화
+  const {
+    data: commentsData,
+    isLoading: isLoadingComments,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useComments(post.postId, showComments);
 
-  const comments = commentsData || [];
+  const comments = commentsData?.pages.flatMap((page) => page.content) || [];
 
   // Poll vote hook (always call hooks at top level)
   const { vote: voteOnPoll, updateVote: updateVoteOnPoll } = useVote(
@@ -170,6 +186,13 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
     setShowImageGallery(true);
   };
 
+  const handlePostClick = () => {
+    // 게시물 데이터를 미리 캐시에 설정 (즉시 표시를 위해)
+    queryClient.setQueryData([...queryKeys.posts, post.postId], post);
+    // Intercepting route를 통해 모달로 표시 (피드 상태 유지)
+    router.push(`/@${author.username}/post/${post.postId}`);
+  };
+
   return (
     <div className="border-b p-4">
       <div className="flex space-x-4">
@@ -207,56 +230,14 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                 · {formatRelativeTime(createdAt)}
               </span>
             </div>
-            {isAuthor && (
-              <Menu as="div" className="relative">
-                <Menu.Button className="rounded-full p-2 hover:bg-primary-50 transition-colors">
-                  <EllipsisVerticalIcon className="h-5 w-5 text-neutral-500" />
-                </Menu.Button>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={() => setShowEditModal(true)}
-                            className={`${
-                              active ? 'bg-neutral-100' : ''
-                            } flex w-full items-center px-4 py-2 text-sm text-neutral-700`}
-                          >
-                            <PencilIcon className="mr-3 h-5 w-5" />
-                            수정
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={() => setShowDeleteConfirm(true)}
-                            className={`${
-                              active ? 'bg-red-50' : ''
-                            } flex w-full items-center px-4 py-2 text-sm text-red-600`}
-                          >
-                            <TrashIcon className="mr-3 h-5 w-5" />
-                            삭제
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            )}
           </div>
           <div>
-            <ExpandableText text={contentText} maxLines={post.poll ? 10 : 20} />
+            <ExpandableText
+              text={contentText}
+              maxLines={post.poll ? 10 : 20}
+              onExpand={disableNavigation ? undefined : handlePostClick}
+              showFullContent={disableNavigation}
+            />
           </div>
 
           {/* Poll Card */}
@@ -270,143 +251,57 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
 
           {post.mediaUrls && post.mediaUrls.length > 0 && (
             <div className="mt-3">
-              {post.mediaUrls.length === 1 ? (
-                <div
-                  className="relative w-full rounded-2xl overflow-hidden border border-neutral-200 cursor-pointer hover:opacity-95 transition-opacity"
-                  onClick={() => handleImageClick(0)}
-                >
-                  <Image
-                    src={post.mediaUrls[0]}
-                    alt="Post image"
-                    width={600}
-                    height={400}
-                    className="w-full object-cover"
-                    style={{ maxHeight: '500px' }}
-                  />
-                </div>
-              ) : post.mediaUrls.length === 2 ? (
-                <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
-                  {post.mediaUrls.map((url, index) => (
-                    <div
-                      key={index}
-                      className="relative aspect-square cursor-pointer hover:opacity-95 transition-opacity"
-                      onClick={() => handleImageClick(index)}
-                    >
-                      <Image
-                        src={url}
-                        alt={`Post image ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : post.mediaUrls.length === 3 ? (
-                <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
-                  <div
-                    className="relative row-span-2 cursor-pointer hover:opacity-95 transition-opacity"
-                    onClick={() => handleImageClick(0)}
-                  >
-                    <Image
-                      src={post.mediaUrls[0]}
-                      alt="Post image 1"
-                      width={300}
-                      height={600}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div
-                    className="relative cursor-pointer hover:opacity-95 transition-opacity"
-                    onClick={() => handleImageClick(1)}
-                  >
-                    <Image
-                      src={post.mediaUrls[1]}
-                      alt="Post image 2"
-                      width={300}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div
-                    className="relative cursor-pointer hover:opacity-95 transition-opacity"
-                    onClick={() => handleImageClick(2)}
-                  >
-                    <Image
-                      src={post.mediaUrls[2]}
-                      alt="Post image 3"
-                      width={300}
-                      height={300}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-1 rounded-2xl overflow-hidden border border-neutral-200">
-                  {post.mediaUrls.slice(0, 4).map((url, index) => (
-                    <div
-                      key={index}
-                      className="relative aspect-square cursor-pointer hover:opacity-95 transition-opacity"
-                      onClick={() => handleImageClick(index)}
-                    >
-                      <Image
-                        src={url}
-                        alt={`Post image ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                      {index === 3 && post.mediaUrls!.length > 4 && (
-                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                          <span className="text-white text-2xl font-bold">
-                            +{post.mediaUrls!.length - 4}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              <ImageCarousel
+                images={post.mediaUrls}
+                onImageClick={handleImageClick}
+              />
             </div>
           )}
 
-          <div className="mt-4 flex justify-between">
+          <div className="mt-4 flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <button
+                onClick={handleLikeToggle}
+                className={`flex items-center gap-1 rounded-full px-3 py-1.5 transition-colors ${
+                  isLiked
+                    ? 'text-red-600 hover:bg-red-50'
+                    : 'text-neutral-500 hover:text-red-600 hover:bg-red-50'
+                }`}
+              >
+                {isLiked ? (
+                  <HeartIconSolid className="h-5 w-5" />
+                ) : (
+                  <HeartIcon className="h-5 w-5" />
+                )}
+                <span className="text-sm">{likeCount}</span>
+              </button>
+              <button
+                onClick={handleCommentToggle}
+                className="flex items-center gap-1 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-3 py-1.5 transition-colors"
+              >
+                <ChatBubbleOvalLeftIcon className="h-5 w-5" />
+                <span className="text-sm">{commentCount}</span>
+              </button>
+              <button
+                onClick={handleBookmarkToggle}
+                className={`flex items-center rounded-full p-1.5 transition-colors ${
+                  isSaved
+                    ? 'text-primary-600 hover:bg-primary-50'
+                    : 'text-neutral-500 hover:text-primary-600 hover:bg-primary-50'
+                }`}
+              >
+                {isSaved ? (
+                  <BookmarkIconSolid className="h-5 w-5" />
+                ) : (
+                  <BookmarkIcon className="h-5 w-5" />
+                )}
+              </button>
+            </div>
             <button
-              onClick={handleCommentToggle}
-              className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors"
+              onClick={() => setShowPostMenu(true)}
+              className="flex items-center text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-full p-1.5 transition-colors"
             >
-              <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-              <span>{commentCount}</span>
-            </button>
-            <button
-              onClick={handleLikeToggle}
-              className={`flex items-center space-x-2 rounded-full px-2 py-1 transition-colors ${
-                isLiked
-                  ? 'text-red-600 hover:bg-red-50'
-                  : 'text-neutral-500 hover:text-red-600 hover:bg-red-50'
-              }`}
-            >
-              {isLiked ? (
-                <HeartIconSolid className="h-5 w-5" />
-              ) : (
-                <HeartIcon className="h-5 w-5" />
-              )}
-              <span>{likeCount}</span>
-            </button>
-            <button
-              onClick={handleBookmarkToggle}
-              className={`flex items-center space-x-2 rounded-full px-2 py-1 transition-colors ${
-                isSaved
-                  ? 'text-primary-600 hover:bg-primary-50'
-                  : 'text-neutral-500 hover:text-primary-600 hover:bg-primary-50'
-              }`}
-            >
-              {isSaved ? (
-                <BookmarkIconSolid className="h-5 w-5" />
-              ) : (
-                <BookmarkIcon className="h-5 w-5" />
-              )}
-            </button>
-            <button className="flex items-center space-x-2 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-2 py-1 transition-colors">
-              <ArrowUpOnSquareIcon className="h-5 w-5" />
+              <EllipsisVerticalIcon className="h-5 w-5" />
             </button>
           </div>
 
@@ -499,6 +394,19 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
                       </div>
                     </div>
                   ))}
+                  {hasNextPage && (
+                    <div className="flex justify-center pt-2">
+                      <button
+                        onClick={() => fetchNextPage()}
+                        disabled={isFetchingNextPage}
+                        className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-200 disabled:opacity-50"
+                      >
+                        {isFetchingNextPage
+                          ? '댓글 불러오는 중...'
+                          : '댓글 더 보기'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="py-4 text-center text-sm text-neutral-500">
@@ -536,6 +444,22 @@ const Post: React.FC<PostProps> = ({ post, onPostDeleted, onPostUpdated }) => {
         onClose={() => setShowImageGallery(false)}
         images={post.mediaUrls || []}
         initialIndex={selectedImageIndex}
+      />
+
+      <PostMenuModal
+        isOpen={showPostMenu}
+        onClose={() => setShowPostMenu(false)}
+        isAuthor={isAuthor}
+        onEdit={() => setShowEditModal(true)}
+        onDelete={() => setShowDeleteConfirm(true)}
+        onShare={() => setShowShareModal(true)}
+      />
+
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        postId={post.postId}
+        url={`${typeof window !== 'undefined' ? window.location.origin : ''}/@${author.username}/post/${post.postId}`}
       />
     </div>
   );

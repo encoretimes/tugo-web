@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import {
   getPosts,
+  getPost,
   getPostsPage,
   createPost,
   updatePost,
@@ -22,6 +23,115 @@ export const usePosts = () => {
   return useQuery({
     queryKey: queryKeys.posts,
     queryFn: getPosts,
+  });
+};
+
+/**
+ * 단일 게시물 조회 Hook
+ * - 캐시 우선 전략: 피드에서 이미 로드된 게시물은 API 호출 없이 즉시 사용
+ * - 캐시에 없는 경우에만 API 호출 (직접 URL 접근 시)
+ */
+export const usePost = (postId: number) => {
+  const queryClient = useQueryClient();
+
+  return useQuery({
+    queryKey: [...queryKeys.posts, postId],
+    queryFn: () => {
+      console.log('[usePost] Fetching post from API:', postId);
+      return getPost(postId);
+    },
+    enabled: !!postId,
+    // 캐시에 데이터가 있으면 staleTime 동안 재요청하지 않음
+    staleTime: 5 * 60 * 1000, // 5분
+    // placeholderData를 사용하여 즉시 렌더링 (loading 상태 없음)
+    placeholderData: () => {
+      // 먼저 infinite query 캐시에서 찾기 (subscriptionOnly=false인 기본 피드)
+      const infiniteData = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', false]);
+
+      if (infiniteData) {
+        for (const page of infiniteData.pages) {
+          const post = page.content.find((p) => p.postId === postId);
+          if (post) {
+            console.log('[usePost] Found in cache (infinite, false):', postId);
+            return post;
+          }
+        }
+      }
+
+      // subscriptionOnly=true 캐시에서도 찾기
+      const infiniteDataSub = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', true]);
+
+      if (infiniteDataSub) {
+        for (const page of infiniteDataSub.pages) {
+          const post = page.content.find((p) => p.postId === postId);
+          if (post) {
+            console.log('[usePost] Found in cache (infinite, true):', postId);
+            return post;
+          }
+        }
+      }
+
+      console.log('[usePost] Not found in cache:', postId);
+      return undefined;
+    },
+    // initialData를 사용하여 캐시가 있으면 즉시 확정 (refetch 없음)
+    initialData: () => {
+      // 먼저 infinite query 캐시에서 찾기 (subscriptionOnly=false인 기본 피드)
+      const infiniteData = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', false]);
+
+      if (infiniteData) {
+        for (const page of infiniteData.pages) {
+          const post = page.content.find((p) => p.postId === postId);
+          if (post) {
+            return post;
+          }
+        }
+      }
+
+      // subscriptionOnly=true 캐시에서도 찾기
+      const infiniteDataSub = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', true]);
+
+      if (infiniteDataSub) {
+        for (const page of infiniteDataSub.pages) {
+          const post = page.content.find((p) => p.postId === postId);
+          if (post) {
+            return post;
+          }
+        }
+      }
+
+      return undefined;
+    },
+    // initialData가 있으면 fresh 상태로 유지
+    initialDataUpdatedAt: () => {
+      const infiniteData = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', false]);
+
+      if (infiniteData) {
+        return queryClient.getQueryState([...queryKeys.posts, 'infinite', false])
+          ?.dataUpdatedAt;
+      }
+
+      const infiniteDataSub = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', true]);
+
+      if (infiniteDataSub) {
+        return queryClient.getQueryState([...queryKeys.posts, 'infinite', true])
+          ?.dataUpdatedAt;
+      }
+
+      return 0;
+    },
   });
 };
 
@@ -160,10 +270,19 @@ export const useDeletePost = () => {
   });
 };
 
-export const useInfinitePosts = (pageSize = 20) => {
+/**
+ * 무한 스크롤 게시물 조회 Hook
+ * @param subscriptionOnly - true일 경우 구독한 크리에이터의 게시물만 조회
+ * @param pageSize - 페이지당 게시물 수
+ */
+export const useInfinitePosts = (
+  subscriptionOnly = false,
+  pageSize = 20
+) => {
   return useInfiniteQuery({
-    queryKey: [...queryKeys.posts, 'infinite'],
-    queryFn: ({ pageParam = 0 }) => getPostsPage(pageParam, pageSize),
+    queryKey: [...queryKeys.posts, 'infinite', subscriptionOnly],
+    queryFn: ({ pageParam = 0 }) =>
+      getPostsPage(pageParam, pageSize, subscriptionOnly),
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
     },

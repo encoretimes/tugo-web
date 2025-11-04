@@ -57,6 +57,14 @@ export default function PostComposerModal({
 
   const createPostMutation = useCreatePost();
 
+  // UTF-8 바이트 크기 계산 (한글은 3바이트, 영문/숫자는 1바이트)
+  const getByteLength = (str: string) => {
+    return new Blob([str]).size;
+  };
+
+  const contentByteLength = getByteLength(content);
+  const maxByteLength = 10000; // 10,000 바이트로 제한
+
   const handleSubmit = async () => {
     if (!content.trim() || createPostMutation.isPending) return;
 
@@ -269,6 +277,22 @@ export default function PostComposerModal({
                         disabled={createPostMutation.isPending}
                         className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
                       />
+                      <div className="flex justify-end px-2">
+                        <span
+                          className={`text-xs ${
+                            contentByteLength > maxByteLength
+                              ? 'text-red-500 font-semibold'
+                              : contentByteLength > maxByteLength * 0.9
+                              ? 'text-orange-500'
+                              : 'text-gray-400'
+                          }`}
+                        >
+                          {contentByteLength.toLocaleString()} / {maxByteLength.toLocaleString()} 바이트
+                          <span className="ml-2 text-gray-400">
+                            ({content.length.toLocaleString()}자)
+                          </span>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -463,7 +487,9 @@ export default function PostComposerModal({
                       <button
                         onClick={handleSubmit}
                         disabled={
-                          !content.trim() || createPostMutation.isPending
+                          !content.trim() ||
+                          contentByteLength > maxByteLength ||
+                          createPostMutation.isPending
                         }
                         className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
                       >

@@ -10,11 +10,20 @@ export const getPosts = async (): Promise<Post[]> => {
 
 export const getPostsPage = async (
   page = 0,
-  size = 20
+  size = 20,
+  subscriptionOnly = false
 ): Promise<PageResponse<Post>> => {
-  return apiClient.get<PageResponse<Post>>(
-    `/api/v1/posts?page=${page}&size=${size}&sort=createdAt,desc`
-  );
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+    sort: 'createdAt,desc',
+  });
+
+  if (subscriptionOnly) {
+    params.append('subscriptionOnly', 'true');
+  }
+
+  return apiClient.get<PageResponse<Post>>(`/api/v1/posts?${params.toString()}`);
 };
 
 export const getPost = async (postId: number): Promise<Post> => {
