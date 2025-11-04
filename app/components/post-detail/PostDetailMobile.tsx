@@ -20,7 +20,7 @@ export default function PostDetailMobile({
   return (
     <div className="fixed inset-0 z-50 bg-white animate-in slide-in-from-bottom duration-200">
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center gap-4 bg-white border-b px-4 py-3">
+      <div className="sticky top-0 z-10 flex items-center gap-4 bg-white px-4 py-3">
         <button
           onClick={onClose}
           className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"

@@ -40,31 +40,29 @@ export default function PostDetailDesktop({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-4"
       onClick={onClose}
     >
+      {/* Close Button - 화면 우측 상단 */}
+      <button
+        onClick={onClose}
+        className="fixed top-6 right-6 z-[60] transition-opacity hover:opacity-80"
+        aria-label="닫기"
+      >
+        <XMarkIcon className="h-8 w-8 text-white" strokeWidth={2.5} />
+      </button>
+
       <div
-        className="relative w-full max-w-2xl my-8 mx-4 bg-white rounded-xl shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-200"
+        className="relative w-full max-w-6xl bg-white rounded-lg shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-200 max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="sticky top-0 left-0 z-10 m-4 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 hover:bg-gray-100 transition-colors shadow-lg"
-          aria-label="닫기"
-        >
-          <XMarkIcon className="h-6 w-6 text-gray-900" />
-        </button>
-
         {/* Content */}
-        <div className="mt-[-56px]">
-          <PostDetailContent
-            post={post}
-            isLoading={isLoading}
-            error={error}
-            onClose={onClose}
-          />
-        </div>
+        <PostDetailContent
+          post={post}
+          isLoading={isLoading}
+          error={error}
+          onClose={onClose}
+        />
       </div>
     </div>
   );

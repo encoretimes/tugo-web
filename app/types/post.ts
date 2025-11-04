@@ -8,6 +8,7 @@ export interface Post {
     name: string;
     username: string;
     profileImageUrl: string | null;
+    isCreator: boolean;
   };
   contentText: string;
   postType: PostType;

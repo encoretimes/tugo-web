@@ -13,6 +13,7 @@ html {
   scroll-behavior: smooth;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE, Edge */
+  overscroll-behavior: none; /* 오버스크롤 바운스 효과 제거 */
 }
 
 html::-webkit-scrollbar {
@@ -27,6 +28,7 @@ body {
   -ms-overflow-style: none; /* IE, Edge */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none; /* 오버스크롤 바운스 효과 제거 */
 }
 
 body::-webkit-scrollbar {

@@ -36,7 +36,8 @@ export default function MainLayout({
     pathname.startsWith('/settings') ||
     pathname.startsWith('/messages') ||
     pathname.startsWith('/notifications') ||
-    pathname.startsWith('/bookmarks');
+    pathname.startsWith('/bookmarks') ||
+    /\/post\/\d+/.test(pathname); // 게시물 상세 페이지 (/@username/post/123)
 
   if (isLoading) {
     return (
@@ -51,20 +52,38 @@ export default function MainLayout({
 
   return (
     <div className="relative min-h-screen">
-      <div className="mx-auto flex max-w-screen-xl">
-        <header className="hidden lg:block lg:w-1/4">
-          <div className="sticky top-0 h-screen overflow-y-auto">
-            <LeftSidebar />
-          </div>
-        </header>
-        <main
-          className={`min-h-screen w-full border-x ${hideRightPanel ? 'lg:w-3/4' : 'lg:w-1/2'}`}
-        >
+      {/* 좌측 사이드바 - 독립적으로 화면 왼쪽에 고정, z-index 높음 */}
+      <header className="hidden lg:block fixed left-0 top-0 z-20">
+        <div className="h-screen overflow-y-auto">
+          <LeftSidebar />
+        </div>
+      </header>
+
+      {/* 3열 레이아웃 컨테이너 - 전체 화면 차지 */}
+      <div className="flex w-full">
+        {/* 왼쪽 빈 공간 - flex-1로 자동 대칭 */}
+        {!hideRightPanel && (
+          <div className="hidden lg:block lg:flex-1"></div>
+        )}
+
+        {/* 게시물 상세 페이지일 때만 헤더 크기만큼 빈 공간 */}
+        {hideRightPanel && (
+          <div className="hidden lg:block w-16 xl:w-64 shrink-0"></div>
+        )}
+
+        {/* 메인 컨텐츠 - 최대 너비 제한 */}
+        <main className={`min-h-screen w-full ${
+          hideRightPanel
+            ? 'lg:max-w-4xl xl:max-w-5xl mx-auto'
+            : 'lg:max-w-[576px] xl:max-w-[672px]'
+        }`}>
           {children}
         </main>
+
+        {/* 우측 사이드바 - flex-1로 왼쪽과 대칭 */}
         {!hideRightPanel && (
-          <aside className="hidden lg:block lg:w-1/4">
-            <div className="sticky top-0 h-screen overflow-y-auto">
+          <aside className="hidden lg:flex lg:flex-1">
+            <div className="sticky top-0 h-screen overflow-y-auto w-full">
               <RightSidebar />
             </div>
           </aside>

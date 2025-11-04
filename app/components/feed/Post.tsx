@@ -194,228 +194,234 @@ const Post: React.FC<PostProps> = ({
   };
 
   return (
-    <div className="border-b p-4">
-      <div className="flex space-x-4">
-        <Link href={`/profile/${author.username}`} className="flex-shrink-0">
-          {author.profileImageUrl ? (
-            <Image
-              src={author.profileImageUrl}
-              alt={author.name}
-              width={48}
-              height={48}
-              className="h-12 w-12 rounded-full hover:opacity-80 transition-opacity"
-            />
-          ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-400 transition-colors">
-              <UserIcon className="h-8 w-8 text-neutral-500" />
-            </div>
-          )}
-        </Link>
-        <div className="flex-grow">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Link
-                href={`/profile/${author.username}`}
-                className="font-bold hover:underline"
-              >
-                {author.name}
-              </Link>
-              <Link
-                href={`/profile/${author.username}`}
-                className="text-neutral-500 hover:underline"
-              >
-                @{author.username}
-              </Link>
-              <span className="text-neutral-500">
-                · {formatRelativeTime(createdAt)}
-              </span>
-            </div>
-          </div>
-          <div>
-            <ExpandableText
-              text={contentText}
-              maxLines={post.poll ? 10 : 20}
-              onExpand={disableNavigation ? undefined : handlePostClick}
-              showFullContent={disableNavigation}
-            />
-          </div>
-
-          {/* Poll Card */}
-          {post.poll && (
-            <PollCard
-              poll={post.poll}
-              onVote={voteOnPoll}
-              onRevote={updateVoteOnPoll}
-            />
-          )}
-
-          {post.mediaUrls && post.mediaUrls.length > 0 && (
-            <div className="mt-3">
-              <ImageCarousel
-                images={post.mediaUrls}
-                onImageClick={handleImageClick}
+    <div className="border border-gray-200 rounded-lg px-6 py-5 mb-3 hover:bg-gray-50/50 transition-colors">
+      {/* 헤더: 프로필 + 이름/아이디 + 시간 */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <Link href={`/profile/${author.username}`} className="flex-shrink-0">
+            {author.profileImageUrl ? (
+              <Image
+                src={author.profileImageUrl}
+                alt={author.name}
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-full hover:opacity-80 transition-opacity"
               />
-            </div>
-          )}
-
-          <div className="mt-4 flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <button
-                onClick={handleLikeToggle}
-                className={`flex items-center gap-1 rounded-full px-3 py-1.5 transition-colors ${
-                  isLiked
-                    ? 'text-red-600 hover:bg-red-50'
-                    : 'text-neutral-500 hover:text-red-600 hover:bg-red-50'
-                }`}
-              >
-                {isLiked ? (
-                  <HeartIconSolid className="h-5 w-5" />
-                ) : (
-                  <HeartIcon className="h-5 w-5" />
-                )}
-                <span className="text-sm">{likeCount}</span>
-              </button>
-              <button
-                onClick={handleCommentToggle}
-                className="flex items-center gap-1 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-3 py-1.5 transition-colors"
-              >
-                <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-                <span className="text-sm">{commentCount}</span>
-              </button>
-              <button
-                onClick={handleBookmarkToggle}
-                className={`flex items-center rounded-full p-1.5 transition-colors ${
-                  isSaved
-                    ? 'text-primary-600 hover:bg-primary-50'
-                    : 'text-neutral-500 hover:text-primary-600 hover:bg-primary-50'
-                }`}
-              >
-                {isSaved ? (
-                  <BookmarkIconSolid className="h-5 w-5" />
-                ) : (
-                  <BookmarkIcon className="h-5 w-5" />
-                )}
-              </button>
-            </div>
-            <button
-              onClick={() => setShowPostMenu(true)}
-              className="flex items-center text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-full p-1.5 transition-colors"
+            ) : (
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-400 transition-colors">
+                <UserIcon className="h-6 w-6 text-neutral-500" />
+              </div>
+            )}
+          </Link>
+          <div className="flex items-center gap-1.5">
+            <Link
+              href={`/profile/${author.username}`}
+              className="font-semibold text-gray-900 text-[15px] hover:underline"
             >
-              <EllipsisVerticalIcon className="h-5 w-5" />
+              {author.name}
+            </Link>
+            <Link
+              href={`/profile/${author.username}`}
+              className="text-sm text-gray-500 hover:underline"
+            >
+              @{author.username}
+            </Link>
+            {author.isCreator && (
+              <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded ml-1">
+                크리에이터
+              </span>
+            )}
+          </div>
+        </div>
+        <time className="text-xs text-gray-400">
+          {formatRelativeTime(createdAt)}
+        </time>
+      </div>
+
+      {/* 콘텐츠 */}
+      <div className="ml-0">
+        <ExpandableText
+          text={contentText}
+          maxLines={post.poll ? 10 : 20}
+          onExpand={disableNavigation ? undefined : handlePostClick}
+          showFullContent={disableNavigation}
+        />
+
+        {/* Poll Card */}
+        {post.poll && (
+          <PollCard
+            poll={post.poll}
+            onVote={voteOnPoll}
+            onRevote={updateVoteOnPoll}
+          />
+        )}
+
+        {post.mediaUrls && post.mediaUrls.length > 0 && (
+          <div className="mt-3">
+            <ImageCarousel
+              images={post.mediaUrls}
+              onImageClick={handleImageClick}
+            />
+          </div>
+        )}
+
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleLikeToggle}
+              className={`flex items-center gap-1 rounded-full px-3 py-1.5 transition-colors ${
+                isLiked
+                  ? 'text-red-600 hover:bg-red-50'
+                  : 'text-neutral-500 hover:text-red-600 hover:bg-red-50'
+              }`}
+            >
+              {isLiked ? (
+                <HeartIconSolid className="h-5 w-5" />
+              ) : (
+                <HeartIcon className="h-5 w-5" />
+              )}
+              <span className="text-sm">{likeCount}</span>
+            </button>
+            <button
+              onClick={handleCommentToggle}
+              className="flex items-center gap-1 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-3 py-1.5 transition-colors"
+            >
+              <ChatBubbleOvalLeftIcon className="h-5 w-5" />
+              <span className="text-sm">{commentCount}</span>
+            </button>
+            <button
+              onClick={handleBookmarkToggle}
+              className={`flex items-center rounded-full p-1.5 transition-colors ${
+                isSaved
+                  ? 'text-primary-600 hover:bg-primary-50'
+                  : 'text-neutral-500 hover:text-primary-600 hover:bg-primary-50'
+              }`}
+            >
+              {isSaved ? (
+                <BookmarkIconSolid className="h-5 w-5" />
+              ) : (
+                <BookmarkIcon className="h-5 w-5" />
+              )}
             </button>
           </div>
+          <button
+            onClick={() => setShowPostMenu(true)}
+            className="flex items-center text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-full p-1.5 transition-colors"
+          >
+            <EllipsisVerticalIcon className="h-5 w-5" />
+          </button>
+        </div>
 
-          {showComments && (
-            <div className="mt-4 border-t pt-4">
-              <div className="mb-4">
-                <div className="flex space-x-2">
-                  {user?.profileImageUrl ? (
-                    <Image
-                      src={user.profileImageUrl}
-                      alt={user.name}
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 rounded-full"
+        {showComments && (
+          <div className="mt-4 border-t pt-4">
+            <div className="mb-4">
+              <div className="flex space-x-2">
+                {user?.profileImageUrl ? (
+                  <Image
+                    src={user.profileImageUrl}
+                    alt={user.name}
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 rounded-full"
+                  />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
+                    <UserIcon className="h-5 w-5 text-neutral-500" />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <MentionInput
+                    value={commentText}
+                    onChange={setCommentText}
+                    placeholder="댓글을 입력하세요..."
+                    rows={2}
+                    disabled={createCommentMutation.isPending}
+                    className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
+                  />
+                  <div className="mt-2 flex justify-between items-center">
+                    <EmojiPickerButton
+                      onEmojiSelect={(emoji) => {
+                        setCommentText(commentText + emoji);
+                      }}
+                      buttonClassName="text-gray-500 hover:text-gray-700"
                     />
-                  ) : (
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                      <UserIcon className="h-5 w-5 text-neutral-500" />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <MentionInput
-                      value={commentText}
-                      onChange={setCommentText}
-                      placeholder="댓글을 입력하세요..."
-                      rows={2}
-                      disabled={createCommentMutation.isPending}
-                      className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
-                    />
-                    <div className="mt-2 flex justify-between items-center">
-                      <EmojiPickerButton
-                        onEmojiSelect={(emoji) => {
-                          setCommentText(commentText + emoji);
-                        }}
-                        buttonClassName="text-gray-500 hover:text-gray-700"
-                      />
-                      <button
-                        onClick={handleCommentSubmit}
-                        disabled={
-                          !commentText.trim() || createCommentMutation.isPending
-                        }
-                        className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
-                      >
-                        {createCommentMutation.isPending
-                          ? '작성 중...'
-                          : '댓글 달기'}
-                      </button>
-                    </div>
+                    <button
+                      onClick={handleCommentSubmit}
+                      disabled={
+                        !commentText.trim() || createCommentMutation.isPending
+                      }
+                      className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
+                    >
+                      {createCommentMutation.isPending
+                        ? '작성 중...'
+                        : '댓글 달기'}
+                    </button>
                   </div>
                 </div>
               </div>
-
-              {isLoadingComments ? (
-                <div className="py-4 text-center text-sm text-neutral-500">
-                  댓글을 불러오는 중...
-                </div>
-              ) : comments.length > 0 ? (
-                <div className="space-y-3">
-                  {comments.map((comment) => (
-                    <div key={comment.id} className="flex space-x-2">
-                      {comment.author.profileImageUrl ? (
-                        <Image
-                          src={comment.author.profileImageUrl}
-                          alt={comment.author.name}
-                          width={32}
-                          height={32}
-                          className="h-8 w-8 rounded-full"
-                        />
-                      ) : (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                          <UserIcon className="h-5 w-5 text-neutral-500" />
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <div className="rounded-lg bg-neutral-100 p-2">
-                          <p className="text-xs font-semibold text-neutral-900">
-                            {comment.author.name}{' '}
-                            <span className="font-normal text-neutral-500">
-                              @{comment.author.username}
-                            </span>
-                          </p>
-                          <MentionText
-                            content={comment.content}
-                            className="text-sm mt-1"
-                          />
-                        </div>
-                        <p className="mt-1 text-xs text-neutral-500">
-                          {formatRelativeTime(comment.createdAt)}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                  {hasNextPage && (
-                    <div className="flex justify-center pt-2">
-                      <button
-                        onClick={() => fetchNextPage()}
-                        disabled={isFetchingNextPage}
-                        className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-200 disabled:opacity-50"
-                      >
-                        {isFetchingNextPage
-                          ? '댓글 불러오는 중...'
-                          : '댓글 더 보기'}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="py-4 text-center text-sm text-neutral-500">
-                  댓글이 없습니다. 첫 댓글을 작성해보세요!
-                </div>
-              )}
             </div>
-          )}
-        </div>
+
+            {isLoadingComments ? (
+              <div className="py-4 text-center text-sm text-neutral-500">
+                댓글을 불러오는 중...
+              </div>
+            ) : comments.length > 0 ? (
+              <div className="space-y-3">
+                {comments.map((comment) => (
+                  <div key={comment.id} className="flex space-x-2">
+                    {comment.author.profileImageUrl ? (
+                      <Image
+                        src={comment.author.profileImageUrl}
+                        alt={comment.author.name}
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded-full"
+                      />
+                    ) : (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
+                        <UserIcon className="h-5 w-5 text-neutral-500" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <div className="rounded-lg bg-neutral-100 p-2">
+                        <p className="text-xs font-semibold text-neutral-900">
+                          {comment.author.name}{' '}
+                          <span className="font-normal text-neutral-500">
+                            @{comment.author.username}
+                          </span>
+                        </p>
+                        <MentionText
+                          content={comment.content}
+                          className="text-sm mt-1"
+                        />
+                      </div>
+                      <p className="mt-1 text-xs text-neutral-500">
+                        {formatRelativeTime(comment.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {hasNextPage && (
+                  <div className="flex justify-center pt-2">
+                    <button
+                      onClick={() => fetchNextPage()}
+                      disabled={isFetchingNextPage}
+                      className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-200 disabled:opacity-50"
+                    >
+                      {isFetchingNextPage
+                        ? '댓글 불러오는 중...'
+                        : '댓글 더 보기'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="py-4 text-center text-sm text-neutral-500">
+                댓글이 없습니다. 첫 댓글을 작성해보세요!
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <EditPostModal

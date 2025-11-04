@@ -1,8 +1,7 @@
 'use client';
 
 import { Poll, PollOption } from '@/app/types/poll';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 interface PollCardProps {
@@ -22,14 +21,11 @@ export default function PollCard({
   const [isRevoting, setIsRevoting] = useState(false);
 
   const handleOptionClick = (optionId: number) => {
-    // 다시 투표하기 모드가 아니고, 이미 투표했거나 종료되었으면 클릭 불가
     if (!isRevoting && (poll.hasVoted || poll.isEnded || disabled)) return;
-    // 다시 투표하기 모드일 때는 투표 가능
 
     if (poll.pollType === 'SINGLE_CHOICE') {
       setSelectedOptions([optionId]);
     } else {
-      // MULTIPLE_CHOICE
       if (selectedOptions.includes(optionId)) {
         setSelectedOptions(selectedOptions.filter((id) => id !== optionId));
       } else {
@@ -51,7 +47,6 @@ export default function PollCard({
   };
 
   const startRevoting = () => {
-    // 현재 선택된 옵션으로 초기화
     const currentlySelected = poll.options
       .filter((opt) => opt.isSelectedByMe)
       .map((opt) => opt.optionId);
@@ -66,8 +61,6 @@ export default function PollCard({
 
   const getPercentage = (option: PollOption) => {
     if (poll.totalVoters === 0) return 0;
-    // 단일 선택: voteCount가 투표자 수
-    // 다중 선택: voteCount가 옵션 선택 수 (총합이 totalVoters보다 클 수 있음)
     return Math.round((option.voteCount / poll.totalVoters) * 100);
   };
 
@@ -88,10 +81,12 @@ export default function PollCard({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 mt-3">
+    <div className="border border-gray-200 rounded-lg p-4">
       {/* 투표 질문 */}
       {poll.question && (
-        <h4 className="font-semibold text-gray-900 mb-3">{poll.question}</h4>
+        <h4 className="text-base font-medium text-gray-900 mb-3">
+          {poll.question}
+        </h4>
       )}
 
       {/* 투표 옵션 */}
@@ -104,56 +99,55 @@ export default function PollCard({
           return (
             <div key={option.optionId}>
               {showResults ? (
-                // 결과 표시 모드
-                <div className="relative">
+                // 결과 표시 모드 - 심플한 바 차트
+                <div className="relative overflow-hidden rounded">
                   <div
-                    className="absolute top-0 left-0 h-full bg-blue-100 rounded-lg transition-all duration-300"
+                    className="absolute inset-0 bg-gray-100 transition-all duration-300"
                     style={{ width: `${percentage}%` }}
                   />
-                  <div className="relative flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200">
-                    <div className="flex items-center gap-2 flex-1">
-                      <span className="font-medium text-gray-900">
+                  <div className="relative px-3 py-2.5 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-900">
                         {option.optionText}
                       </span>
                       {wasSelectedByMe && (
-                        <CheckCircleIcon className="w-5 h-5 text-blue-500" />
+                        <CheckIcon
+                          className="w-4 h-4 text-gray-900"
+                          strokeWidth={2.5}
+                        />
                       )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">
-                        {option.voteCount.toLocaleString()}표
-                      </span>
-                      <span className="text-sm font-semibold text-gray-900">
-                        {percentage}%
-                      </span>
-                    </div>
+                    <span className="text-sm font-medium text-gray-900">
+                      {percentage}%
+                    </span>
                   </div>
                 </div>
               ) : (
-                // 투표 선택 모드
+                // 투표 선택 모드 - 심플한 체크박스 스타일
                 <button
                   onClick={() => handleOptionClick(option.optionId)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition ${
-                    isSelected
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  className={`w-full px-3 py-2.5 rounded text-left transition ${
+                    isSelected ? 'bg-gray-100' : 'hover:bg-gray-50'
                   }`}
                   disabled={disabled}
                 >
-                  <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      isSelected
-                        ? 'border-blue-500 bg-blue-500'
-                        : 'border-gray-300'
-                    }`}
-                  >
-                    {isSelected && (
-                      <div className="w-2 h-2 bg-white rounded-full" />
-                    )}
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${
+                        isSelected ? 'bg-gray-900' : 'bg-gray-200'
+                      }`}
+                    >
+                      {isSelected && (
+                        <CheckIcon
+                          className="w-3 h-3 text-white"
+                          strokeWidth={3}
+                        />
+                      )}
+                    </div>
+                    <span className="text-sm text-gray-900">
+                      {option.optionText}
+                    </span>
                   </div>
-                  <span className="font-medium text-gray-900">
-                    {option.optionText}
-                  </span>
                 </button>
               )}
             </div>
@@ -161,81 +155,64 @@ export default function PollCard({
         })}
       </div>
 
-      {/* 투표 정보 및 버튼 */}
-      <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-        <div className="flex items-center gap-3">
-          <span>{poll.totalVoters.toLocaleString()}명 참여</span>
+      {/* 하단 정보 및 버튼 */}
+      <div className="mt-3 flex items-center justify-between">
+        {/* 왼쪽: 투표 정보 */}
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>{poll.totalVoters.toLocaleString()}명</span>
           {poll.endDate && (
             <>
-              <span>•</span>
+              <span>·</span>
               <span className={poll.isEnded ? 'text-red-600' : ''}>
                 {formatEndDate(poll.endDate)}
               </span>
             </>
           )}
-          {!poll.endDate && (
-            <>
-              <span>•</span>
-              <span>기한 없음</span>
-            </>
-          )}
         </div>
 
+        {/* 오른쪽: 버튼 */}
         <div className="flex items-center gap-2">
-          {/* 다시 투표하기 모드가 아닐 때 */}
           {!isRevoting && !showResults && selectedOptions.length > 0 && (
             <button
               onClick={handleVote}
-              className="px-4 py-1.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition"
+              className="px-3 py-1.5 bg-gray-900 text-white text-xs font-medium rounded hover:bg-gray-800 transition"
               disabled={disabled}
             >
-              투표하기
+              투표
             </button>
           )}
 
-          {/* 다시 투표하기 버튼 - 투표를 이미 했고 종료되지 않은 경우에만 표시 */}
           {!isRevoting && poll.hasVoted && !poll.isEnded && onRevote && (
             <button
               onClick={startRevoting}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-blue-600 border border-blue-600 rounded-full font-medium hover:bg-blue-50 transition"
+              className="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded hover:bg-gray-200 transition"
               disabled={disabled}
             >
-              <ArrowPathIcon className="w-4 h-4" />
               다시 투표하기
             </button>
           )}
 
-          {/* 다시 투표하기 모드일 때 */}
           {isRevoting && (
             <>
               <button
                 onClick={cancelRevoting}
-                className="px-3 py-1.5 text-gray-600 border border-gray-300 rounded-full font-medium hover:bg-gray-50 transition"
+                className="px-3 py-1.5 text-gray-600 text-xs font-medium hover:text-gray-900 transition"
               >
                 취소
               </button>
               {selectedOptions.length > 0 && (
                 <button
                   onClick={handleRevote}
-                  className="px-4 py-1.5 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition"
+                  className="px-3 py-1.5 bg-gray-900 text-white text-xs font-medium rounded hover:bg-gray-800 transition"
                   disabled={disabled}
                 >
-                  변경하기
+                  저장
                 </button>
               )}
             </>
           )}
         </div>
       </div>
-
-      {/* 투표 타입 표시 */}
-      {!showResults && (
-        <p className="mt-2 text-xs text-gray-500">
-          {poll.pollType === 'SINGLE_CHOICE'
-            ? '하나의 옵션을 선택하세요'
-            : '여러 옵션을 선택할 수 있습니다'}
-        </p>
-      )}
     </div>
   );
 }

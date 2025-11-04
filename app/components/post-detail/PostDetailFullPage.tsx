@@ -20,7 +20,7 @@ export default function PostDetailFullPage({
   return (
     <div className="min-h-screen bg-white animate-in fade-in duration-150">
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center gap-4 bg-white border-b px-4 py-3">
+      <div className="sticky top-0 z-10 flex items-center gap-4 bg-white px-4 py-3">
         <button
           onClick={onBack}
           className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors"

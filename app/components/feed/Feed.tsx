@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Post from './Post';
-import PostComposer from './PostComposer';
+import DebateCard from './DebateCard';
 import { useInfinitePosts } from '@/hooks/usePosts';
+import { useDebates } from '@/hooks/useDebates';
 import { useScrollStore } from '@/store/scrollStore';
 import PostSkeleton from './PostSkeleton';
 
 const Feed = () => {
-  const [activeTab, setActiveTab] = useState('for-you');
   const {
     data,
     fetchNextPage,
@@ -17,10 +17,15 @@ const Feed = () => {
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfinitePosts(activeTab === 'following');
+  } = useInfinitePosts(false); // 항상 전체 게시물 표시
+
+  // 활발한 토론 데이터
+  const { data: debates, isLoading: isLoadingDebates } = useDebates(5);
 
   const { ref, inView } = useInView();
-  const feedScrollPosition = useScrollStore((state) => state.feedScrollPosition);
+  const feedScrollPosition = useScrollStore(
+    (state) => state.feedScrollPosition
+  );
   const clearFeedScrollPosition = useScrollStore(
     (state) => state.clearFeedScrollPosition
   );
@@ -45,48 +50,29 @@ const Feed = () => {
     }
   }, [feedScrollPosition, posts.length, clearFeedScrollPosition]);
 
-  const TabButton = ({
-    id,
-    label,
-    activeTab,
-    onClick,
-  }: {
-    id: string;
-    label: string;
-    activeTab: string;
-    onClick: (id: string) => void;
-  }) => (
-    <button
-      className={`w-1/2 py-4 text-center font-bold transition-colors duration-200 hover:bg-neutral-100 ${
-        activeTab === id
-          ? 'border-b-2 border-primary-600 text-neutral-800 bg-white'
-          : 'text-neutral-600 hover:text-neutral-800'
-      }`}
-      onClick={() => onClick(id)}
-    >
-      {label}
-    </button>
-  );
-
   return (
-    <div className="border-r border-neutral-200">
-      <PostComposer />
-      <div className="border-b border-neutral-200 bg-white sticky top-0 z-10">
-        <div className="flex">
-          <TabButton
-            id="for-you"
-            label="추천"
-            activeTab={activeTab}
-            onClick={setActiveTab}
-          />
-          <TabButton
-            id="following"
-            label="구독"
-            activeTab={activeTab}
-            onClick={setActiveTab}
-          />
-        </div>
-      </div>
+    <div>
+      {/* 열띤 토론 섹션 */}
+      {!isLoadingDebates && debates && debates.length > 0 && (
+        <section className="border-gray-200 bg-white">
+          <div className="px-4 py-3 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-gray-900">
+              🔥 열띤 토론
+            </h2>
+            <button className="text-xs text-primary-600 hover:text-primary-700 font-medium">
+              전체보기 →
+            </button>
+          </div>
+          {/* 가로 스크롤 영역 */}
+          <div className="overflow-x-auto scrollbar-hide pb-3">
+            <div className="flex gap-3 px-4">
+              {debates.map((post) => (
+                <DebateCard key={post.postId} post={post} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       <div>
         {isLoading ? (
           <div>

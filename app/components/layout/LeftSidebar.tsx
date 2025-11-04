@@ -8,8 +8,9 @@ import {
   HomeIcon,
   BellIcon,
   EnvelopeIcon,
-  UserGroupIcon,
+  PlusCircleIcon,
   CurrencyDollarIcon,
+  BookmarkIcon,
   UserIcon as UserIconOutline,
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
@@ -23,53 +24,64 @@ const LeftSidebar = () => {
   const [isComposerOpen, setIsComposerOpen] = useState(false);
 
   return (
-    <aside className="flex h-full flex-col justify-between border-r border-neutral-200 p-2 md:p-4">
+    <aside className="flex h-full flex-col p-2 md:p-4 border-r border-neutral-200 w-16 xl:w-64">
+      {/* 상단: TUGO 로고 */}
       <div>
         <Link href="/" className="text-2xl font-bold p-3 block">
-          Tugo
+          <span className="hidden xl:inline">Tugo</span>
+          <span className="xl:hidden">T</span>
         </Link>
-        <nav className="mt-4">
-          <ul>
-            <NavItem
-              href="/"
-              icon={<HomeIcon className="h-7 w-7" />}
-              label="홈"
-            />
-            <NavItem
-              href="/notifications"
-              icon={<BellIcon className="h-7 w-7" />}
-              label="알림"
-              badge={unreadCount}
-            />
-            <NavItem
-              href="/messages"
-              icon={<EnvelopeIcon className="h-7 w-7" />}
-              label="쪽지"
-            />
-            <NavItem
-              href="/parties"
-              icon={<UserGroupIcon className="h-7 w-7" />}
-              label="파티"
-            />
-            <NavItem
-              href="/points"
-              icon={<CurrencyDollarIcon className="h-7 w-7" />}
-              label="포인트"
-            />
-            <NavItem
-              href="/settings"
-              icon={<Cog6ToothIcon className="h-7 w-7" />}
-              label="설정"
-            />
-          </ul>
-        </nav>
-        <button
-          onClick={() => setIsComposerOpen(true)}
-          className="mt-4 w-full rounded-full bg-primary-600 py-3 text-lg font-bold text-white hover:bg-primary-700"
-        >
-          투고하기
-        </button>
       </div>
+
+      {/* 중간: 메뉴 (세로 중앙 정렬) */}
+      <nav className="flex-1 flex items-center justify-center">
+        <ul className="space-y-3 w-full">
+          <NavItem
+            href="/"
+            icon={<HomeIcon className="h-7 w-7 stroke-[1.3]" />}
+            label="홈"
+          />
+          <NavItem
+            href="/notifications"
+            icon={<BellIcon className="h-7 w-7 stroke-[1.3]" />}
+            label="알림"
+            badge={unreadCount}
+          />
+          <NavItem
+            href="/messages"
+            icon={<EnvelopeIcon className="h-7 w-7 stroke-[1.3]" />}
+            label="쪽지"
+          />
+          <li>
+            <button
+              onClick={() => setIsComposerOpen(true)}
+              className="flex w-full items-center justify-center xl:justify-start space-x-2 rounded-full p-2 hover:bg-primary-50 hover:text-primary-700 transition-colors"
+            >
+              <div className="relative">
+                <PlusCircleIcon className="h-7 w-7" strokeWidth={1.3} />
+              </div>
+              <span className="hidden xl:inline">투고하기</span>
+            </button>
+          </li>
+          <NavItem
+            href="/points"
+            icon={<CurrencyDollarIcon className="h-7 w-7 stroke-[1.3]" />}
+            label="포인트"
+          />
+          <NavItem
+            href="/bookmarks"
+            icon={<BookmarkIcon className="h-7 w-7 stroke-[1.3]" />}
+            label="보관함"
+          />
+          <NavItem
+            href="/settings"
+            icon={<Cog6ToothIcon className="h-7 w-7 stroke-[1.3]" />}
+            label="설정"
+          />
+        </ul>
+      </nav>
+
+      {/* 하단: 프로필 */}
       {user && (
         <div className="p-2">
           <Link
@@ -89,7 +101,7 @@ const LeftSidebar = () => {
                 <UserIconOutline className="h-6 w-6 text-neutral-500" />
               </div>
             )}
-            <div className="hidden lg:block overflow-hidden min-w-0">
+            <div className="hidden xl:block overflow-hidden min-w-0">
               <div className="font-bold truncate">{user.name}</div>
               <div className="text-sm text-neutral-500 truncate">
                 {user.username ? `@${user.username}` : 'username 미설정'}
