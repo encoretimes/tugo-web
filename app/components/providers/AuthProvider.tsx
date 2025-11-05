@@ -10,7 +10,7 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, setUser, setLoading } = useUserStore();
+  const { setUser, setLoading } = useUserStore();
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const { data: currentUserData, isLoading, error } = useCurrentUser();
 
@@ -49,10 +49,14 @@ export default function AuthProvider({
     }
   }, [currentUserData, isLoading, error, setUser, setLoading]);
 
-  // username 모달 닫기 - username이 설정된 경우에만 닫을 수 있음
-  const handleUsernameModalClose = () => {
-    // Zustand store의 user.username을 확인 (UsernameSetupModal에서 업데이트됨)
-    if (user?.username) {
+  // username 모달 닫기 - username이 파라미터로 전달되면 바로 닫기
+  const handleUsernameModalClose = (username: string) => {
+    // username이 설정되었으면 모달 닫기 (파라미터로 전달받음)
+    if (username) {
+      console.log(
+        '[AuthProvider] Username modal closing with username:',
+        username
+      );
       setShowUsernameModal(false);
     }
   };

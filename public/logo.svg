@@ -1,35 +1,51 @@
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- 배경 원형 -->
-  <circle cx="24" cy="24" r="22" fill="white" stroke="url(#gradient)" stroke-width="2"/>
+  <!-- 배경 원형 (그라디언트) -->
+  <circle cx="24" cy="24" r="22" fill="url(#bgGradient)"/>
 
-  <!-- T 글자의 가로 바 (태극 문양 적용) -->
-  <path d="M 12 16 Q 18 14 24 16 Q 30 18 36 16"
-        stroke="url(#gradient)"
-        stroke-width="4"
+  <!-- 확성기 본체 -->
+  <path d="M 14 24 L 20 20 L 20 28 L 14 24 Z" fill="white"/>
+
+  <!-- 확성기 스피커 -->
+  <path d="M 20 18 L 28 14 L 28 34 L 20 30 Z" fill="white" opacity="0.95"/>
+
+  <!-- 확성기 손잡이 -->
+  <path d="M 14 24 L 14 26 L 12 26 L 12 22 L 14 22 Z" fill="white" opacity="0.9"/>
+
+  <!-- 소리 파동 (작은 것) -->
+  <path d="M 30 20 Q 32 22 32 24 Q 32 26 30 28"
+        stroke="white"
+        stroke-width="2"
         stroke-linecap="round"
-        fill="none"/>
+        fill="none"
+        opacity="0.7"/>
 
-  <!-- T 글자의 세로 바 (태극 곡선 적용) -->
-  <path d="M 24 16 Q 22 24 24 32 Q 26 36 24 38"
-        stroke="url(#gradient2)"
-        stroke-width="4"
+  <!-- 소리 파동 (중간) -->
+  <path d="M 33 18 Q 36 21 36 24 Q 36 27 33 30"
+        stroke="white"
+        stroke-width="2"
         stroke-linecap="round"
-        fill="none"/>
+        fill="none"
+        opacity="0.5"/>
 
-  <!-- 태극 문양 장식 (작은 원들) -->
-  <circle cx="24" cy="16" r="2" fill="#DC2626"/>
-  <circle cx="24" cy="38" r="2" fill="#2563EB"/>
+  <!-- 소리 파동 (큰 것) -->
+  <path d="M 36 16 Q 40 19.5 40 24 Q 40 28.5 36 32"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        fill="none"
+        opacity="0.3"/>
+
+  <!-- 말풍선 포인트 -->
+  <circle cx="30" cy="14" r="1.5" fill="white" opacity="0.8"/>
+  <circle cx="34" cy="12" r="1.2" fill="white" opacity="0.6"/>
+  <circle cx="38" cy="11" r="1" fill="white" opacity="0.4"/>
 
   <!-- 그라디언트 정의 -->
   <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#9333EA;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC2626;stop-opacity:1" />
     </linearGradient>
   </defs>
 </svg>

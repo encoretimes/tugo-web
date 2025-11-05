@@ -1,12 +1,7 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import Providers from './providers';
-
-const notoSansKr = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['100', '400', '700', '900'],
-});
+import { notoSansKr } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Tugo',

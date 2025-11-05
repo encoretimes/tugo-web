@@ -45,7 +45,10 @@ export default function PostDetailDesktop({
     >
       {/* Close Button - 화면 우측 상단 */}
       <button
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
         className="fixed top-6 right-6 z-[60] transition-opacity hover:opacity-80"
         aria-label="닫기"
       >

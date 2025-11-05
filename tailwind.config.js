@@ -43,6 +43,10 @@ export default {
           '0%': { objectPosition: 'center top' },
           '100%': { objectPosition: 'center bottom' },
         },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
         'fade-in-up': {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
@@ -58,6 +62,7 @@ export default {
       },
       animation: {
         'pan-image-down': 'pan-image-down 8s ease-out forwards',
+        'fade-in': 'fade-in 0.2s ease-in-out forwards',
         'fade-in-up': 'fade-in-up 1.2s ease-in-out forwards',
         'fade-in-up-delayed': 'fade-in-up 1.2s ease-in-out 0.5s forwards',
         'dropdown-in': 'dropdown-in 0.2s ease-out forwards',

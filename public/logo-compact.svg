@@ -1,29 +1,38 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- 심플한 T with 태극 곡선 -->
-  <path d="M 8 10 Q 12 8 16 10 Q 20 12 24 10"
-        stroke="url(#gradient)"
-        stroke-width="3"
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 원형 (그라디언트) -->
+  <circle cx="20" cy="20" r="18" fill="url(#bgGradient)"/>
+
+  <!-- 확성기 본체 -->
+  <path d="M 11 20 L 16 17 L 16 23 L 11 20 Z" fill="white"/>
+
+  <!-- 확성기 스피커 -->
+  <path d="M 16 15 L 23 12 L 23 28 L 16 25 Z" fill="white" opacity="0.95"/>
+
+  <!-- 확성기 손잡이 -->
+  <rect x="9" y="19" width="2" height="2" fill="white" opacity="0.9"/>
+
+  <!-- 소리 파동 (작은 것) -->
+  <path d="M 25 17 Q 27 18.5 27 20 Q 27 21.5 25 23"
+        stroke="white"
+        stroke-width="2"
         stroke-linecap="round"
-        fill="none"/>
+        fill="none"
+        opacity="0.7"/>
 
-  <path d="M 16 10 Q 14 16 16 22 Q 18 24 16 26"
-        stroke="url(#gradient2)"
-        stroke-width="3"
+  <!-- 소리 파동 (중간) -->
+  <path d="M 28 15 Q 31 17.5 31 20 Q 31 22.5 28 25"
+        stroke="white"
+        stroke-width="2"
         stroke-linecap="round"
-        fill="none"/>
+        fill="none"
+        opacity="0.5"/>
 
-  <circle cx="16" cy="10" r="1.5" fill="#DC2626"/>
-  <circle cx="16" cy="26" r="1.5" fill="#2563EB"/>
-
+  <!-- 그라디언트 정의 -->
   <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#9333EA;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#DC2626;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DC2626;stop-opacity:1" />
     </linearGradient>
   </defs>
 </svg>

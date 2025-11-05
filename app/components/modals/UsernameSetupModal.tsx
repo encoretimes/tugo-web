@@ -3,18 +3,20 @@
 import { Fragment, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import { useUserStore } from '@/store/userStore';
 
 interface UsernameSetupModalProps {
   isOpen: boolean;
-  onClose?: () => void; // username 설정 전에는 닫을 수 없음
+  onClose?: (username: string) => void;
 }
 
 export default function UsernameSetupModal({
   isOpen,
   onClose,
 }: UsernameSetupModalProps) {
+  const queryClient = useQueryClient();
   const { user, setUser } = useUserStore();
   const [username, setUsername] = useState('');
   const [isChecking, setIsChecking] = useState(false);
@@ -76,7 +78,7 @@ export default function UsernameSetupModal({
     try {
       await apiClient.put(`/api/v1/members/me/username?username=${username}`);
 
-      // User 정보 업데이트
+      // User 정보 업데이트 (Zustand store)
       if (user) {
         setUser({
           ...user,
@@ -84,9 +86,12 @@ export default function UsernameSetupModal({
         });
       }
 
-      // 성공 시 모달 닫기
+      // React Query 캐시 무효화하여 최신 사용자 정보 다시 가져오기
+      await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+
+      // 성공 시 모달 닫기 - username을 파라미터로 전달
       if (onClose) {
-        onClose();
+        onClose(username);
       }
     } catch (err) {
       console.error('Username update error:', err);
@@ -161,7 +166,13 @@ export default function UsernameSetupModal({
                         onChange={(e) =>
                           setUsername(e.target.value.toLowerCase())
                         }
-                        className="w-full pl-8 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        className={`w-full pl-8 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 ${
+                          isAvailable === true
+                            ? 'border-green-300'
+                            : isAvailable === false
+                              ? 'border-red-300'
+                              : 'border-gray-300'
+                        }`}
                         placeholder="username"
                         required
                         minLength={3}
@@ -169,22 +180,24 @@ export default function UsernameSetupModal({
                         pattern="[a-zA-Z0-9_]{3,20}"
                       />
                       {isChecking && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 ease-in-out">
                           <div className="animate-spin h-5 w-5 border-2 border-primary-500 border-t-transparent rounded-full" />
                         </div>
                       )}
                       {!isChecking && isAvailable === true && (
-                        <CheckCircleIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500" />
+                        <CheckCircleIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500 transition-all duration-200 ease-in-out animate-fade-in" />
                       )}
                       {!isChecking && isAvailable === false && (
-                        <XMarkIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+                        <XMarkIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500 transition-all duration-200 ease-in-out animate-fade-in" />
                       )}
                     </div>
                     {error && (
-                      <p className="mt-2 text-sm text-red-600">{error}</p>
+                      <p className="mt-2 text-sm text-red-600 transition-opacity duration-200 ease-in-out animate-fade-in">
+                        {error}
+                      </p>
                     )}
                     {!error && isAvailable === true && (
-                      <p className="mt-2 text-sm text-green-600">
+                      <p className="mt-2 text-sm text-green-600 transition-opacity duration-200 ease-in-out animate-fade-in">
                         사용 가능한 사용자명입니다
                       </p>
                     )}

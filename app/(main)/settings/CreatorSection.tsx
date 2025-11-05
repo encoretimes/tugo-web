@@ -237,7 +237,7 @@ const CreatorSection = () => {
         onClose={() => setShowConvertConfirm(false)}
         onConfirm={handleConvertToCreator}
         title="크리에이터로 전환"
-        description="크리에이터로 전환하시겠습니까?\n전환 후 게시물을 작성하고 구독자를 관리할 수 있습니다."
+        description={`크리에이터로 전환하시겠습니까?\n전환 후 게시물을 작성하고 구독자를 관리할 수 있습니다.`}
         confirmText="전환"
         confirmButtonClass="bg-gray-900 hover:bg-gray-800 text-white"
         isLoading={isConverting}
@@ -249,7 +249,7 @@ const CreatorSection = () => {
         onClose={() => setShowRevertConfirm(false)}
         onConfirm={handleRevertFromCreator}
         title="일반 회원으로 복귀"
-        description="정말로 일반 회원으로 복귀하시겠습니까?\n게시물이 있는 경우 복귀할 수 없습니다."
+        description={`정말로 일반 회원으로 복귀하시겠습니까?\n게시물이 있는 경우 복귀할 수 없습니다.`}
         confirmText="복귀"
         confirmButtonClass="bg-gray-900 hover:bg-gray-800 text-white"
         isLoading={isReverting}
