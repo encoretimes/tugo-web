@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
         port: '30000',
         pathname: '/images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.tugo.kro.kr',
+        port: '',
+        pathname: '/images/**',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
   },
