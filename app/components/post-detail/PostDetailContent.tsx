@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Post as PostType } from '@/types/post';
 import { UserIcon } from '@heroicons/react/24/outline';
 import { useComments, useCreateComment } from '@/hooks/useComments';
@@ -44,12 +44,20 @@ export default function PostDetailContent({
   error,
   onClose,
 }: PostDetailContentProps) {
+  const router = useRouter();
   const { user } = useUserStore();
   const addToast = useToastStore((state) => state.addToast);
   const [commentText, setCommentText] = useState('');
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isPollExpanded, setIsPollExpanded] = useState(true);
+
+  const handleProfileNavigation = (username: string) => {
+    onClose();
+    setTimeout(() => {
+      router.push(`/profile/${username}`);
+    }, 10);
+  };
 
   // 댓글 목록 조회 (무한 스크롤)
   const {
@@ -151,9 +159,9 @@ export default function PostDetailContent({
           <div className="space-y-4">
             {/* 작성자 정보 */}
             <div className="flex items-center gap-3">
-              <Link
-                href={`/profile/${author.username}`}
+              <button
                 className="flex-shrink-0"
+                onClick={() => handleProfileNavigation(author.username)}
               >
                 {author.profileImageUrl ? (
                   <Image
@@ -168,15 +176,15 @@ export default function PostDetailContent({
                     <UserIcon className="h-7 w-7 text-neutral-500" />
                   </div>
                 )}
-              </Link>
+              </button>
               <div>
                 <div className="flex items-center gap-2">
-                  <Link
-                    href={`/profile/${author.username}`}
-                    className="font-semibold text-gray-900 hover:underline"
+                  <button
+                    className="font-semibold text-gray-900 hover:underline text-left"
+                    onClick={() => handleProfileNavigation(author.username)}
                   >
                     {author.name}
-                  </Link>
+                  </button>
                   {author.isCreator && (
                     <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded">
                       크리에이터
@@ -184,12 +192,12 @@ export default function PostDetailContent({
                   )}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <Link
-                    href={`/profile/${author.username}`}
-                    className="hover:underline"
+                  <button
+                    className="hover:underline text-left"
+                    onClick={() => handleProfileNavigation(author.username)}
                   >
                     @{author.username}
-                  </Link>
+                  </button>
                   <span>·</span>
                   <time>{formatRelativeTime(createdAt)}</time>
                 </div>

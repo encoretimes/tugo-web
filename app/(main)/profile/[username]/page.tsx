@@ -159,18 +159,6 @@ const ProfilePage = () => {
     setShowImageView(true);
   };
 
-  // ESC 키로 닫기
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleBack();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleBack]);
-
   if (isUserLoading) {
     return (
       <div className="min-h-screen bg-white animate-in slide-in-from-right duration-300">

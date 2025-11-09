@@ -71,7 +71,7 @@ export default function MainLayout({
 
         {/* 메인 컨텐츠 - 최대 너비 제한 */}
         <main
-          className={`min-h-screen w-full ${
+          className={`min-h-screen w-full pb-16 lg:pb-0 ${
             hideRightPanel
               ? 'lg:max-w-4xl xl:max-w-5xl mx-auto'
               : 'lg:max-w-[576px] xl:max-w-[672px]'

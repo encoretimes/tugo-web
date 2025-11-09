@@ -30,7 +30,7 @@ const BottomNavBar = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 w-full border-t bg-white lg:hidden">
+    <nav className="fixed bottom-0 w-full border-t bg-white lg:hidden z-50">
       <ul className="flex justify-around">
         {navItems.map(({ href, icon: Icon, label }) => {
           const isNotifications = href === '/notifications';
@@ -39,7 +39,10 @@ const BottomNavBar = () => {
 
           return (
             <li key={href}>
-              <Link href={href} className="flex flex-col items-center p-2">
+              <Link
+                href={href}
+                className="flex flex-col items-center p-3 min-h-[44px]"
+              >
                 <div className="relative">
                   <Icon
                     className={`h-7 w-7 ${

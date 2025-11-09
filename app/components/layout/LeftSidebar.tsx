@@ -16,19 +16,18 @@ import {
 import { useUnreadCount } from '@/hooks/useNotifications';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 import { blackHanSans } from '@/app/fonts';
+import { useUserStore } from '@/store/userStore';
 
 const LeftSidebar = () => {
   const { data: unreadCount } = useUnreadCount();
   const [isComposerOpen, setIsComposerOpen] = useState(false);
+  const user = useUserStore((state) => state.user);
 
   return (
-    <aside className="relative h-full p-2 md:p-4 border-r border-neutral-200 w-16 xl:w-64">
+    <aside className="relative h-full border-r border-neutral-200 w-16 xl:w-64 flex flex-col">
       {/* 상단: TUGO 로고 */}
-      <div className="mb-2">
-        <Link
-          href="/"
-          className="flex items-center rounded-full py-2 xl:p-3 hover:bg-primary-50 transition-colors"
-        >
+      <div className="mb-4 px-2 md:px-4 pt-2 md:pt-4">
+        <Link href="/" className="flex items-center rounded-full py-2 xl:p-3">
           <div className="hidden xl:flex items-center gap-3 w-full">
             <Image
               src="/logo.svg"
@@ -56,8 +55,8 @@ const LeftSidebar = () => {
         </Link>
       </div>
 
-      {/* 중간: 메뉴 (화면 전체 기준 세로 중앙 정렬) */}
-      <nav className="absolute top-1/2 left-0 right-0 -translate-y-1/2 px-2 md:px-4">
+      {/* 상단: 메뉴 */}
+      <nav className="px-2 md:px-4">
         <ul className="space-y-3 w-full">
           <NavItem
             href="/"
@@ -75,22 +74,30 @@ const LeftSidebar = () => {
             icon={<EnvelopeIcon className="h-7 w-7 stroke-[1.3]" />}
             label="쪽지"
           />
-          <li>
-            <button
-              onClick={() => setIsComposerOpen(true)}
-              className="flex w-full items-center justify-center xl:justify-start space-x-2 rounded-full p-2 hover:bg-primary-50 hover:text-primary-700 transition-colors"
-            >
-              <div className="relative">
-                <PlusCircleIcon className="h-7 w-7" strokeWidth={1.3} />
-              </div>
-              <span className="hidden xl:inline">투고하기</span>
-            </button>
-          </li>
           <NavItem
             href="/points"
             icon={<CurrencyDollarIcon className="h-7 w-7 stroke-[1.3]" />}
             label="포인트"
           />
+          {user?.hasCreator && (
+            <li>
+              <button
+                onClick={() => setIsComposerOpen(true)}
+                className="flex w-full items-center justify-center xl:justify-start space-x-2 rounded-full p-2 hover:bg-primary-50 hover:text-primary-700 transition-colors"
+              >
+                <div className="relative">
+                  <PlusCircleIcon className="h-7 w-7" strokeWidth={1.3} />
+                </div>
+                <span className="hidden xl:inline">투고하기</span>
+              </button>
+            </li>
+          )}
+        </ul>
+      </nav>
+
+      {/* 하단: 보관함 + 설정 */}
+      <nav className="mt-auto px-2 md:px-4 pb-2 md:pb-4">
+        <ul className="space-y-3 w-full">
           <NavItem
             href="/bookmarks"
             icon={<BookmarkIcon className="h-7 w-7 stroke-[1.3]" />}

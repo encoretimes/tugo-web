@@ -7,6 +7,8 @@ interface User {
   email?: string;
   role: string;
   profileImageUrl?: string | null;
+  bannerImageUrl?: string | null;
+  introduction?: string | null;
   hasCreator?: boolean;
   creatorId?: number | null;
   username?: string | null; // publicName → username으로 변경
@@ -18,6 +20,7 @@ interface UserState {
   isLoading: boolean;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
+  updateProfile: (profile: Partial<User>) => void;
   logout: () => void;
 }
 
@@ -34,6 +37,10 @@ export const useUserStore = create<UserState>()(
           isLoading: false,
         }),
       setLoading: (loading) => set({ isLoading: loading }),
+      updateProfile: (profile) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...profile } : null,
+        })),
       logout: () =>
         set({
           user: null,

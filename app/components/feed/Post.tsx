@@ -198,7 +198,16 @@ const Post: React.FC<PostProps> = ({
       {/* 헤더: 프로필 + 이름/아이디 + 시간 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <Link href={`/profile/${author.username}`} className="flex-shrink-0">
+          <Link
+            href={`/profile/${author.username}`}
+            className="flex-shrink-0"
+            onClick={(e) => {
+              if (disableNavigation) {
+                e.preventDefault();
+                router.push(`/profile/${author.username}`);
+              }
+            }}
+          >
             {author.profileImageUrl ? (
               <Image
                 src={author.profileImageUrl}
@@ -217,12 +226,24 @@ const Post: React.FC<PostProps> = ({
             <Link
               href={`/profile/${author.username}`}
               className="font-semibold text-gray-900 text-[15px] hover:underline"
+              onClick={(e) => {
+                if (disableNavigation) {
+                  e.preventDefault();
+                  router.push(`/profile/${author.username}`);
+                }
+              }}
             >
               {author.name}
             </Link>
             <Link
               href={`/profile/${author.username}`}
               className="text-sm text-gray-500 hover:underline"
+              onClick={(e) => {
+                if (disableNavigation) {
+                  e.preventDefault();
+                  router.push(`/profile/${author.username}`);
+                }
+              }}
             >
               @{author.username}
             </Link>
@@ -249,11 +270,13 @@ const Post: React.FC<PostProps> = ({
 
         {/* Poll Card */}
         {post.poll && (
-          <PollCard
-            poll={post.poll}
-            onVote={voteOnPoll}
-            onRevote={updateVoteOnPoll}
-          />
+          <div className="mt-3">
+            <PollCard
+              poll={post.poll}
+              onVote={voteOnPoll}
+              onRevote={updateVoteOnPoll}
+            />
+          </div>
         )}
 
         {post.mediaUrls && post.mediaUrls.length > 0 && (

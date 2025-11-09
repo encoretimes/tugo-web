@@ -16,11 +16,82 @@ import {
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface ImageEditData {
   file: File;
   url: string;
   editedFile?: File;
+  aspectRatio?: number;
+  id: string;
+}
+
+interface SortableImageProps {
+  image: ImageEditData;
+  index: number;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function SortableImage({
+  image,
+  index,
+  isActive,
+  onClick,
+}: SortableImageProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: image.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <button
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      onClick={onClick}
+      className={`relative h-16 w-16 flex-shrink-0 rounded-lg overflow-hidden border-2 cursor-move ${
+        isActive ? 'border-primary-500' : 'border-gray-200'
+      }`}
+    >
+      <Image
+        src={image.url}
+        alt={`Image ${index + 1}`}
+        fill
+        className="object-cover"
+      />
+      {image.editedFile && (
+        <div className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full"></div>
+      )}
+    </button>
+  );
 }
 
 interface MultiImageEditorProps {
@@ -46,11 +117,19 @@ export default function MultiImageEditor({
   const [saturation, setSaturation] = useState<number>(100);
   const [activeTab, setActiveTab] = useState<'crop' | 'adjust'>('crop');
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   useEffect(() => {
     if (imageFiles.length > 0) {
-      const imageData = imageFiles.map((file) => ({
+      const imageData = imageFiles.map((file, index) => ({
         file,
         url: URL.createObjectURL(file),
+        id: `image-${Date.now()}-${index}`,
       }));
       setImages(imageData);
       setCurrentIndex(0);
@@ -75,15 +154,62 @@ export default function MultiImageEditor({
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
+      // 현재 이미지의 비율 저장
+      saveCurrentAspectRatio();
       setCurrentIndex(currentIndex - 1);
       resetControls();
+      // 이전 이미지의 비율 로드
+      loadImageAspectRatio(currentIndex - 1);
     }
   };
 
   const handleNext = () => {
     if (currentIndex < images.length - 1) {
+      // 현재 이미지의 비율 저장
+      saveCurrentAspectRatio();
       setCurrentIndex(currentIndex + 1);
       resetControls();
+      // 다음 이미지의 비율 로드
+      loadImageAspectRatio(currentIndex + 1);
+    }
+  };
+
+  const saveCurrentAspectRatio = () => {
+    setImages((prev) =>
+      prev.map((img, index) =>
+        index === currentIndex ? { ...img, aspectRatio } : img
+      )
+    );
+  };
+
+  const loadImageAspectRatio = (index: number) => {
+    const image = images[index];
+    if (image && image.aspectRatio !== undefined) {
+      setAspectRatio(image.aspectRatio);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setImages((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+
+        // 현재 보고 있는 이미지의 인덱스 업데이트
+        if (currentIndex === oldIndex) {
+          setCurrentIndex(newIndex);
+        } else if (currentIndex === newIndex) {
+          setCurrentIndex(oldIndex < newIndex ? newIndex - 1 : newIndex + 1);
+        } else if (oldIndex < currentIndex && newIndex >= currentIndex) {
+          setCurrentIndex(currentIndex - 1);
+        } else if (oldIndex > currentIndex && newIndex <= currentIndex) {
+          setCurrentIndex(currentIndex + 1);
+        }
+
+        return arrayMove(items, oldIndex, newIndex);
+      });
     }
   };
 
@@ -146,9 +272,41 @@ export default function MultiImageEditor({
     const currentImage = getCurrentImage();
     if (!currentImage) return;
 
+    // 비율에 따라 크롭 크기 결정
+    let cropWidth = 1080;
+    let cropHeight = 1080;
+
+    if (aspectRatio !== undefined) {
+      if (aspectRatio === 1) {
+        // 1:1
+        cropWidth = 1080;
+        cropHeight = 1080;
+      } else if (aspectRatio === 4 / 3) {
+        // 4:3
+        cropWidth = 1080;
+        cropHeight = 810;
+      } else if (aspectRatio === 16 / 9) {
+        // 16:9
+        cropWidth = 1920;
+        cropHeight = 1080;
+      } else {
+        // 자유 비율 - 원본 비율 유지
+        const cropData = cropper.getData();
+        cropWidth = Math.round(cropData.width);
+        cropHeight = Math.round(cropData.height);
+        // 최대 크기 제한
+        const maxDimension = 1920;
+        if (cropWidth > maxDimension || cropHeight > maxDimension) {
+          const scale = maxDimension / Math.max(cropWidth, cropHeight);
+          cropWidth = Math.round(cropWidth * scale);
+          cropHeight = Math.round(cropHeight * scale);
+        }
+      }
+    }
+
     const canvas = cropper.getCroppedCanvas({
-      width: 1080,
-      height: 1080,
+      width: cropWidth,
+      height: cropHeight,
       imageSmoothingQuality: 'high',
     });
 
@@ -209,6 +367,9 @@ export default function MultiImageEditor({
   };
 
   const handleSave = () => {
+    // 현재 이미지의 비율 저장
+    saveCurrentAspectRatio();
+    // 현재 편집 내용 저장
     saveCurrentEdit();
 
     setTimeout(() => {
@@ -252,7 +413,7 @@ export default function MultiImageEditor({
             >
               <Dialog.Panel className="w-full max-w-7xl h-screen flex flex-col bg-white">
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 bg-white">
+                <div className="flex items-center justify-between border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 bg-white">
                   <div className="flex items-center space-x-4">
                     <Dialog.Title
                       as="h3"
@@ -275,9 +436,9 @@ export default function MultiImageEditor({
                 </div>
 
                 {/* Main Content */}
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                   {/* Image Editor Area */}
-                  <div className="flex-1 flex flex-col bg-gray-50">
+                  <div className="flex-1 flex flex-col bg-gray-50 min-h-0">
                     {/* Image Counter */}
                     {images.length > 1 && (
                       <div className="p-4 bg-white border-b text-center">
@@ -288,7 +449,7 @@ export default function MultiImageEditor({
                     )}
 
                     {/* Cropper with Navigation */}
-                    <div className="flex-1 p-6 flex items-center justify-center relative">
+                    <div className="flex-1 p-3 md:p-6 flex items-center justify-center relative">
                       {/* Previous Button */}
                       {images.length > 1 && currentIndex > 0 && (
                         <button
@@ -311,7 +472,7 @@ export default function MultiImageEditor({
                         )}
 
                       {currentImage && (
-                        <div className="w-full h-full max-w-4xl max-h-[60vh] bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div className="w-full h-full max-w-4xl max-h-[50vh] md:max-h-[60vh] bg-white rounded-lg shadow-lg overflow-hidden">
                           <Cropper
                             ref={cropperRef}
                             src={currentImage.url}
@@ -344,80 +505,83 @@ export default function MultiImageEditor({
 
                     {/* Image Thumbnails */}
                     {images.length > 1 && (
-                      <div className="p-4 bg-white border-t">
-                        <div className="flex space-x-2 overflow-x-auto justify-center">
-                          {images.map((img, index) => (
-                            <button
-                              key={index}
-                              onClick={() => {
-                                setCurrentIndex(index);
-                                resetControls();
-                              }}
-                              className={`relative h-16 w-16 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
-                                index === currentIndex
-                                  ? 'border-primary-500'
-                                  : 'border-gray-200'
-                              }`}
-                            >
-                              <Image
-                                src={img.url}
-                                alt={`Image ${index + 1}`}
-                                fill
-                                className="object-cover"
-                              />
-                              {img.editedFile && (
-                                <div className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full"></div>
-                              )}
-                            </button>
-                          ))}
-                        </div>
+                      <div className="p-2 md:p-4 bg-white border-t">
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={handleDragEnd}
+                        >
+                          <SortableContext
+                            items={images.map((img) => img.id)}
+                            strategy={horizontalListSortingStrategy}
+                          >
+                            <div className="flex space-x-2 overflow-x-auto justify-center">
+                              {images.map((img, index) => (
+                                <SortableImage
+                                  key={img.id}
+                                  image={img}
+                                  index={index}
+                                  isActive={index === currentIndex}
+                                  onClick={() => {
+                                    if (index !== currentIndex) {
+                                      saveCurrentAspectRatio();
+                                      setCurrentIndex(index);
+                                      resetControls();
+                                      loadImageAspectRatio(index);
+                                    }
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          </SortableContext>
+                        </DndContext>
                       </div>
                     )}
                   </div>
 
                   {/* Control Panel */}
-                  <div className="w-80 bg-white border-l border-gray-200 flex flex-col">
+                  <div className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-gray-200 flex flex-col max-h-64 md:max-h-none">
                     {/* Tabs */}
-                    <div className="flex border-b">
+                    <div className="flex border-b overflow-x-auto">
                       <button
                         onClick={() => setActiveTab('crop')}
-                        className={`flex-1 px-4 py-3 text-sm font-medium border-b-2 ${
+                        className={`flex-1 px-3 md:px-4 py-2 md:py-3 text-sm font-medium border-b-2 min-h-[44px] ${
                           activeTab === 'crop'
                             ? 'border-primary-500 text-primary-600'
                             : 'border-transparent text-gray-500 hover:text-gray-700'
                         }`}
                       >
-                        <Squares2X2Icon className="h-4 w-4 mx-auto mb-1" />
+                        <Squares2X2Icon className="h-5 w-5 mx-auto mb-1" />
                         자르기
                       </button>
                       <button
                         onClick={() => setActiveTab('adjust')}
-                        className={`flex-1 px-4 py-3 text-sm font-medium border-b-2 ${
+                        className={`flex-1 px-3 md:px-4 py-2 md:py-3 text-sm font-medium border-b-2 min-h-[44px] ${
                           activeTab === 'adjust'
                             ? 'border-primary-500 text-primary-600'
                             : 'border-transparent text-gray-500 hover:text-gray-700'
                         }`}
                       >
-                        <AdjustmentsHorizontalIcon className="h-4 w-4 mx-auto mb-1" />
+                        <AdjustmentsHorizontalIcon className="h-5 w-5 mx-auto mb-1" />
                         보정
                       </button>
                     </div>
 
                     {/* Control Content */}
-                    <div className="flex-1 p-4 space-y-6 overflow-y-auto">
+                    <div className="flex-1 p-3 md:p-4 space-y-4 md:space-y-6 overflow-y-auto">
                       {activeTab === 'crop' && (
                         <>
                           {/* Aspect Ratio */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
+                            <h3 className="text-sm font-medium text-gray-900 mb-2">
                               비율
                             </h3>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-4 md:grid-cols-2 gap-2">
                               <button
                                 onClick={() =>
                                   handleAspectRatioChange(undefined)
                                 }
-                                className={`px-3 py-2 text-xs rounded-lg border ${
+                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
                                   aspectRatio === undefined
                                     ? 'border-primary-500 bg-primary-50 text-primary-700'
                                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -427,7 +591,7 @@ export default function MultiImageEditor({
                               </button>
                               <button
                                 onClick={() => handleAspectRatioChange(1)}
-                                className={`px-3 py-2 text-xs rounded-lg border ${
+                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
                                   aspectRatio === 1
                                     ? 'border-primary-500 bg-primary-50 text-primary-700'
                                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -437,7 +601,7 @@ export default function MultiImageEditor({
                               </button>
                               <button
                                 onClick={() => handleAspectRatioChange(4 / 3)}
-                                className={`px-3 py-2 text-xs rounded-lg border ${
+                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
                                   aspectRatio === 4 / 3
                                     ? 'border-primary-500 bg-primary-50 text-primary-700'
                                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -447,7 +611,7 @@ export default function MultiImageEditor({
                               </button>
                               <button
                                 onClick={() => handleAspectRatioChange(16 / 9)}
-                                className={`px-3 py-2 text-xs rounded-lg border ${
+                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
                                   aspectRatio === 16 / 9
                                     ? 'border-primary-500 bg-primary-50 text-primary-700'
                                     : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -460,23 +624,27 @@ export default function MultiImageEditor({
 
                           {/* Rotation */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
+                            <h3 className="text-sm font-medium text-gray-900 mb-2">
                               회전
                             </h3>
                             <div className="flex space-x-2">
                               <button
                                 onClick={handleRotateLeft}
-                                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 min-h-[44px]"
                               >
-                                <ArrowUturnLeftIcon className="h-4 w-4" />
-                                <span className="text-xs">좌회전</span>
+                                <ArrowUturnLeftIcon className="h-5 w-5" />
+                                <span className="text-xs md:text-sm">
+                                  좌회전
+                                </span>
                               </button>
                               <button
                                 onClick={handleRotateRight}
-                                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 min-h-[44px]"
                               >
-                                <ArrowPathIcon className="h-4 w-4" />
-                                <span className="text-xs">우회전</span>
+                                <ArrowPathIcon className="h-5 w-5" />
+                                <span className="text-xs md:text-sm">
+                                  우회전
+                                </span>
                               </button>
                             </div>
                           </div>
@@ -582,17 +750,17 @@ export default function MultiImageEditor({
                     </div>
 
                     {/* Actions */}
-                    <div className="p-4 border-t border-gray-200">
+                    <div className="p-3 md:p-4 border-t border-gray-200">
                       <div className="flex space-x-2">
                         <button
                           onClick={handleCancel}
-                          className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors min-h-[44px]"
                         >
                           취소
                         </button>
                         <button
                           onClick={handleSave}
-                          className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                          className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium min-h-[44px]"
                         >
                           완료
                         </button>
