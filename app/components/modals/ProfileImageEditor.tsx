@@ -98,13 +98,33 @@ export default function ProfileImageEditor({
     const width = imageType === 'profile' ? 800 : 1920;
     const height = imageType === 'profile' ? 800 : 1080;
 
-    const canvas = cropper.getCroppedCanvas({
+    const croppedCanvas = cropper.getCroppedCanvas({
       width,
       height,
       imageSmoothingQuality: 'high',
     });
 
-    canvas.toBlob(
+    // 프로필 사진인 경우 원형 마스크 적용
+    let finalCanvas = croppedCanvas;
+    if (imageType === 'profile') {
+      finalCanvas = document.createElement('canvas');
+      finalCanvas.width = width;
+      finalCanvas.height = height;
+      const ctx = finalCanvas.getContext('2d');
+
+      if (ctx) {
+        // 원형 클리핑 패스 생성
+        ctx.beginPath();
+        ctx.arc(width / 2, height / 2, width / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+
+        // 클리핑된 영역에 이미지 그리기
+        ctx.drawImage(croppedCanvas, 0, 0, width, height);
+      }
+    }
+
+    finalCanvas.toBlob(
       (blob) => {
         if (blob) {
           const editedFile = new File([blob], imageFile.name, {
@@ -177,24 +197,24 @@ export default function ProfileImageEditor({
                       {imageType === 'profile' && (
                         <svg
                           className="absolute inset-0 w-full h-full pointer-events-none z-10"
-                          style={{ mixBlendMode: 'multiply' }}
+                          preserveAspectRatio="xMidYMid meet"
                         >
                           <defs>
                             <mask id="circleMask">
                               <rect width="100%" height="100%" fill="white" />
-                              <circle cx="50%" cy="50%" r="40%" fill="black" />
+                              <circle cx="50%" cy="50%" r="35%" fill="black" />
                             </mask>
                           </defs>
                           <rect
                             width="100%"
                             height="100%"
-                            fill="rgba(0, 0, 0, 0.5)"
+                            fill="rgba(0, 0, 0, 0.6)"
                             mask="url(#circleMask)"
                           />
                           <circle
                             cx="50%"
                             cy="50%"
-                            r="40%"
+                            r="35%"
                             fill="none"
                             stroke="white"
                             strokeWidth="2"
@@ -212,14 +232,14 @@ export default function ProfileImageEditor({
                         }}
                         aspectRatio={aspectRatio}
                         viewMode={1}
-                        guides={true}
+                        guides={false}
                         background={false}
                         responsive={true}
-                        autoCropArea={0.9}
+                        autoCropArea={0.7}
                         checkOrientation={false}
                         dragMode="move"
-                        cropBoxMovable={true}
-                        cropBoxResizable={true}
+                        cropBoxMovable={false}
+                        cropBoxResizable={false}
                         toggleDragModeOnDblclick={false}
                         ready={() => {
                           const cropper = cropperRef.current?.cropper;
@@ -289,11 +309,29 @@ export default function ProfileImageEditor({
                       </div>
                     </div>
 
-                    {imageType === 'profile' && (
-                      <div className="text-xs text-gray-500 bg-gray-50 border border-gray-200 p-3">
-                        점선 원 안의 영역이 프로필 사진으로 표시됩니다
-                      </div>
-                    )}
+                    <div className="text-xs text-gray-500 bg-gray-50 border border-gray-200 p-3 rounded">
+                      {imageType === 'profile' ? (
+                        <>
+                          <p className="font-medium mb-1">
+                            원형 영역 안이 실제 프로필 사진으로 표시됩니다
+                          </p>
+                          <p className="text-gray-400">
+                            이미지를 드래그하거나 확대/축소하여 위치를
+                            조정하세요
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="font-medium mb-1">
+                            중앙 직사각형 영역이 배경 이미지로 표시됩니다
+                          </p>
+                          <p className="text-gray-400">
+                            이미지를 드래그하거나 확대/축소하여 위치를
+                            조정하세요
+                          </p>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
 
