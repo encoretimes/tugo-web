@@ -70,7 +70,7 @@ const LeftSidebar = () => {
             badge={unreadCount}
           />
           <NavItem
-            href="/messages"
+            href="/notes"
             icon={<EnvelopeIcon className="h-7 w-7 stroke-[1.3]" />}
             label="쪽지"
           />

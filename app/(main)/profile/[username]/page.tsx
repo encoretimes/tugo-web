@@ -10,6 +10,7 @@ import {
   CalendarDaysIcon,
   CheckBadgeIcon,
   ShareIcon,
+  EnvelopeIcon,
 } from '@heroicons/react/24/outline';
 import { useUser } from '@/hooks/useUser';
 import { UserIcon } from '@heroicons/react/24/solid';
@@ -117,6 +118,12 @@ const ProfilePage = () => {
       }
       console.error('공유 실패:', error);
     }
+  };
+
+  // 쪽지 보내기
+  const handleSendNote = () => {
+    if (!user) return;
+    router.push(`/notes?userId=${user.id}`);
   };
 
   // 구독하기
@@ -273,6 +280,15 @@ const ProfilePage = () => {
                 >
                   <ShareIcon className="h-4 w-4" />
                 </button>
+                {!isOwnProfile && (
+                  <button
+                    onClick={handleSendNote}
+                    className="p-2 bg-transparent border border-primary-600 text-gray-900 rounded-md hover:bg-primary-50 transition-colors"
+                    title="쪽지 보내기"
+                  >
+                    <EnvelopeIcon className="h-4 w-4" />
+                  </button>
+                )}
                 {isOwnProfile && (
                   <button
                     onClick={() => setIsEditModalOpen(true)}
