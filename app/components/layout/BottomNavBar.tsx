@@ -11,9 +11,7 @@ const BottomNavBar = () => {
   const { user } = useUserStore();
   const notesUnreadCount = useNotesStore((state) => state.totalUnreadCount);
 
-  const profileHref = user?.username
-    ? `/profile/${user.username}`
-    : '/login';
+  const profileHref = user?.username ? `/profile/${user.username}` : '/login';
 
   const navItems = [
     {

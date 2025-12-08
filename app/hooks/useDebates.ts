@@ -10,7 +10,10 @@ import { queryKeys } from '@/lib/query-keys';
  * @param limit 가져올 개수
  * @param sort 정렬 옵션 (popular: 참여자수, latest: 최신, ending: 마감임박)
  */
-export function useDebates(limit: number = 5, sort: DebateSortOption = 'popular') {
+export function useDebates(
+  limit: number = 5,
+  sort: DebateSortOption = 'popular'
+) {
   return useQuery({
     queryKey: [...queryKeys.debates, limit, sort],
     queryFn: async () => {
@@ -27,7 +30,10 @@ export function useDebates(limit: number = 5, sort: DebateSortOption = 'popular'
  * @param sort 정렬 옵션 (popular: 참여자수, latest: 최신, ending: 마감임박)
  * @param pageSize 페이지당 게시물 수
  */
-export function useInfiniteDebates(sort: DebateSortOption = 'popular', pageSize = 20) {
+export function useInfiniteDebates(
+  sort: DebateSortOption = 'popular',
+  pageSize = 20
+) {
   return useInfiniteQuery({
     queryKey: [...queryKeys.debates, 'infinite', sort],
     queryFn: ({ pageParam = 0 }) => getDebatesPage(pageParam, pageSize, sort),

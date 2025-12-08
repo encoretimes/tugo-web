@@ -41,7 +41,6 @@ export default function MainLayout({
     pathname.startsWith('/notes') ||
     /\/post\/\d+/.test(pathname);
 
-
   if (!hasHydrated) {
     return <div className="min-h-screen bg-white" />;
   }
@@ -63,9 +62,7 @@ export default function MainLayout({
           </div>
 
           {/* 메인 콘텐츠 */}
-          <main
-            className={`w-full flex-1 min-h-screen pb-20 lg:pb-0`}
-          >
+          <main className={`w-full flex-1 min-h-screen pb-20 lg:pb-0`}>
             <div className="px-0 lg:px-6 pt-4">{children}</div>
           </main>
 

@@ -41,13 +41,17 @@ const ExploreFeed = () => {
     return (
       <div className="p-8 text-center text-red-500">
         <h3 className="text-lg font-bold">오류 발생</h3>
-        <p>게시물을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</p>
+        <p>
+          게시물을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.
+        </p>
       </div>
     );
   }
 
   if (posts.length === 0) {
-    return <div className="p-8 text-center text-gray-500">게시물이 없습니다</div>;
+    return (
+      <div className="p-8 text-center text-gray-500">게시물이 없습니다</div>
+    );
   }
 
   return (
@@ -63,7 +67,9 @@ const ExploreFeed = () => {
               <PostSkeleton />
             </div>
           ) : (
-            <div className="text-center text-neutral-500">스크롤하여 더 보기</div>
+            <div className="text-center text-neutral-500">
+              스크롤하여 더 보기
+            </div>
           )}
         </div>
       )}

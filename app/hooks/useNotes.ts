@@ -2,7 +2,12 @@
 
 import { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getRooms, getMessagesWithUser, markAsRead, sendMessageRest } from '@/app/api/notes';
+import {
+  getRooms,
+  getMessagesWithUser,
+  markAsRead,
+  sendMessageRest,
+} from '@/app/api/notes';
 import { useNotesStore } from '@/app/store/notesStore';
 
 /**
@@ -65,7 +70,9 @@ export function useSendMessage() {
  */
 export function useTotalUnreadCount() {
   const { data: rooms } = useRooms();
-  const setTotalUnreadCount = useNotesStore((state) => state.setTotalUnreadCount);
+  const setTotalUnreadCount = useNotesStore(
+    (state) => state.setTotalUnreadCount
+  );
   const totalUnreadCount = useNotesStore((state) => state.totalUnreadCount);
 
   useEffect(() => {

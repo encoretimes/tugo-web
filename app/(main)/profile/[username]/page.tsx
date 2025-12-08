@@ -345,9 +345,7 @@ const ProfilePage = () => {
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold">
-                    이 회원을 구독하시겠습니까?
-                  </h3>
+                  <h3 className="font-semibold">이 회원을 구독하시겠습니까?</h3>
                   <p className="text-sm text-gray-500">
                     최신 게시물을 받아보세요
                   </p>

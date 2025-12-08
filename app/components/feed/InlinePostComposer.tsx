@@ -142,7 +142,11 @@ const InlinePostComposer = () => {
     }
   };
 
-  const isExpanded = isFocused || content.length > 0 || selectedImages.length > 0 || pollData !== null;
+  const isExpanded =
+    isFocused ||
+    content.length > 0 ||
+    selectedImages.length > 0 ||
+    pollData !== null;
 
   return (
     <div className="bg-[#FAF8FF] rounded-[20px] mx-4 mt-4">
@@ -268,7 +272,9 @@ const InlinePostComposer = () => {
             {/* 하단 툴바 - 확장 시 또는 항상 표시 */}
             <div
               className={`flex items-center justify-between mt-3 pt-3 border-t border-gray-100 ${
-                isExpanded ? 'opacity-100' : 'opacity-100 md:opacity-70 md:hover:opacity-100'
+                isExpanded
+                  ? 'opacity-100'
+                  : 'opacity-100 md:opacity-70 md:hover:opacity-100'
               } transition-opacity`}
             >
               <div className="flex items-center gap-1">
@@ -321,7 +327,8 @@ const InlinePostComposer = () => {
                         : 'text-gray-400'
                     }`}
                   >
-                    {contentByteLength.toLocaleString()} / {maxByteLength.toLocaleString()}
+                    {contentByteLength.toLocaleString()} /{' '}
+                    {maxByteLength.toLocaleString()}
                   </span>
                 )}
                 <button

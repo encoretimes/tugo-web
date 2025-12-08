@@ -63,7 +63,9 @@ const HomeBanner = () => {
             모든 우리의 정치는
           </span>
           <span className="block leading-tight">
-            <span className="text-[40px] font-extrabold text-black">이제 여기 </span>
+            <span className="text-[40px] font-extrabold text-black">
+              이제 여기{' '}
+            </span>
             <span className="text-[48px] font-bold text-[#6956E3]">TUGO</span>
             <span className="text-[40px] font-extrabold text-black">에서!</span>
           </span>
@@ -71,7 +73,8 @@ const HomeBanner = () => {
 
         {/* 설명 텍스트 */}
         <p className="text-[18px] font-medium text-black leading-relaxed whitespace-nowrap">
-          당신이 어떤 시각을 가지고 있는지, 무엇을 선택하는지 세상은 알고 싶어 합니다.
+          당신이 어떤 시각을 가지고 있는지, 무엇을 선택하는지 세상은 알고 싶어
+          합니다.
           <br />
           지금 당장 사람들의 시선과 흐름을 바꾸고, 새로운 이야기를 시작하세요.
         </p>

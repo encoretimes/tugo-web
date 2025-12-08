@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { UserCircleIcon, BellIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import {
+  UserCircleIcon,
+  BellIcon,
+  ShieldCheckIcon,
+} from '@heroicons/react/24/outline';
 
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';

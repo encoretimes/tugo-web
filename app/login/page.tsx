@@ -30,9 +30,7 @@ function LoginContent() {
         <div className="hidden lg:flex lg:w-1/2 bg-[#6956E3] items-center justify-center relative overflow-hidden">
           <div className="text-white px-12 xl:px-16 relative z-10">
             {/* TUGO 투고 */}
-            <p className="text-lg font-bold text-white/70 mb-4">
-              TUGO 투고
-            </p>
+            <p className="text-lg font-bold text-white/70 mb-4">TUGO 투고</p>
 
             {/* 메인 타이틀 */}
             <h1 className="mb-8">
@@ -40,8 +38,12 @@ function LoginContent() {
                 모든 우리의 정치는
               </span>
               <span className="block leading-tight">
-                <span className="text-3xl xl:text-4xl font-bold">이제 여기 </span>
-                <span className="text-4xl xl:text-5xl font-bold text-white">TUGO</span>
+                <span className="text-3xl xl:text-4xl font-bold">
+                  이제 여기{' '}
+                </span>
+                <span className="text-4xl xl:text-5xl font-bold text-white">
+                  TUGO
+                </span>
                 <span className="text-3xl xl:text-4xl font-bold">에서!</span>
               </span>
             </h1>
@@ -69,14 +71,14 @@ function LoginContent() {
             {/* Mobile Logo */}
             <div className="lg:hidden text-center mb-12">
               <h1 className="text-3xl font-bold text-[#6956E3] mb-2">Tugo</h1>
-              <p className="text-gray-500 text-sm">차세대 정치 커뮤니티 플랫폼</p>
+              <p className="text-gray-500 text-sm">
+                차세대 정치 커뮤니티 플랫폼
+              </p>
             </div>
 
             {/* Login Title */}
             <div className="text-center mb-10">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                로그인
-              </h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">로그인</h2>
               <p className="text-gray-500 text-sm">
                 소셜 계정으로 간편하게 시작하세요
               </p>
@@ -88,7 +90,11 @@ function LoginContent() {
                 onClick={() => handleSocialLogin('kakao')}
                 className="w-full flex items-center justify-center gap-3 bg-[#FEE500] text-[#191919] font-medium py-3.5 px-6 rounded-xl hover:brightness-95 transition-all"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 01-1.727-.11L7.5 21l.11-2.717C4.62 16.93 1.5 14.582 1.5 11.185 1.5 6.665 6.201 3 12 3z" />
                 </svg>
                 <span>카카오로 로그인</span>
@@ -98,7 +104,11 @@ function LoginContent() {
                 onClick={() => handleSocialLogin('naver')}
                 className="w-full flex items-center justify-center gap-3 bg-[#03C75A] text-white font-medium py-3.5 px-6 rounded-xl hover:brightness-95 transition-all"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
                 </svg>
                 <span>네이버로 로그인</span>
@@ -130,9 +140,15 @@ function LoginContent() {
       <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-100 px-4 py-3">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400">
-            <a href="#" className="hover:text-gray-600">이용약관</a>
-            <a href="#" className="hover:text-gray-600 font-medium">개인정보처리방침</a>
-            <a href="#" className="hover:text-gray-600">고객센터</a>
+            <a href="#" className="hover:text-gray-600">
+              이용약관
+            </a>
+            <a href="#" className="hover:text-gray-600 font-medium">
+              개인정보처리방침
+            </a>
+            <a href="#" className="hover:text-gray-600">
+              고객센터
+            </a>
             <span>&copy; 2025 Tugo</span>
           </div>
         </div>

@@ -24,15 +24,16 @@ const RightSidebar = () => {
               </h3>
               <ChevronRightIcon className="h-4 w-4 text-gray-900" />
             </Link>
-            <span className="text-xs text-gray-400">
-              오늘 23시 30분 기준
-            </span>
+            <span className="text-xs text-gray-400">오늘 23시 30분 기준</span>
           </div>
           <div className="py-2">
             {isLoadingDebates ? (
               <div className="space-y-3">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="h-8 bg-gray-50 rounded animate-pulse" />
+                  <div
+                    key={i}
+                    className="h-8 bg-gray-50 rounded animate-pulse"
+                  />
                 ))}
               </div>
             ) : (
@@ -48,12 +49,16 @@ const RightSidebar = () => {
                         >
                           <span
                             className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-                            style={{ background: 'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)' }}
+                            style={{
+                              background:
+                                'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)',
+                            }}
                           >
                             {index + 1}
                           </span>
                           <span className="flex-1 text-sm text-gray-800 truncate">
-                            {post.poll?.question || post.contentText.slice(0, 30)}
+                            {post.poll?.question ||
+                              post.contentText.slice(0, 30)}
                           </span>
                           <span className="text-xs text-gray-400 shrink-0">
                             {post.poll?.totalVoters.toLocaleString()}명
@@ -63,7 +68,10 @@ const RightSidebar = () => {
                         <div className="flex items-center gap-3 py-2">
                           <span
                             className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-                            style={{ background: 'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)' }}
+                            style={{
+                              background:
+                                'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)',
+                            }}
                           >
                             {index + 1}
                           </span>
