@@ -28,8 +28,6 @@ export interface SendMessageRequest {
 }
 
 export interface NotesUser {
-  id: number;
-  name: string;
+  userId: number;
   username: string;
-  profileImageUrl?: string | null;
 }

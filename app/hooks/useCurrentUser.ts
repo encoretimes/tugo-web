@@ -8,42 +8,18 @@ interface MemberResponse {
   role: string;
   createdAt: string;
   updatedAt: string;
-  hasCreator: boolean;
-  creatorId: number | null;
   username: string | null;
-}
-
-interface CreatorResponse {
-  id: number;
-  introduction: string;
-  bannerImageUrl: string;
-  profileUrl: string;
-  username: string;
-  currentBalance: number;
-  isActive: boolean;
 }
 
 interface CurrentUserData {
   member: MemberResponse;
-  creator: CreatorResponse | null;
 }
 
 const fetchCurrentUser = async (): Promise<CurrentUserData> => {
   const memberData = await apiClient.get<MemberResponse>('/api/v1/members/me');
 
-  let creatorData: CreatorResponse | null = null;
-
-  if (memberData.hasCreator && memberData.creatorId) {
-    try {
-      creatorData = await apiClient.get<CreatorResponse>('/api/v1/creators/me');
-    } catch (error) {
-      console.error('Failed to fetch creator data:', error);
-    }
-  }
-
   return {
     member: memberData,
-    creator: creatorData,
   };
 };
 

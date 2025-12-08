@@ -21,25 +21,24 @@ export const subscriptionsApi = {
 
   // 구독 상태 확인
   checkSubscriptionStatus: async (
-    creatorId: number
+    targetMemberId: number
   ): Promise<SubscriptionStatusResponse> => {
     return apiClient.get<SubscriptionStatusResponse>(
-      `/api/v1/subscriptions/check?creatorId=${creatorId}`
+      `/api/v1/subscriptions/check?targetMemberId=${targetMemberId}`
     );
   },
 
   // 구독자 수 조회
   getSubscriberCount: async (
-    creatorId: number
+    memberId: number
   ): Promise<SubscriberCountResponse> => {
     return apiClient.get<SubscriberCountResponse>(
-      `/api/v1/subscriptions/count?creatorId=${creatorId}`
+      `/api/v1/subscriptions/count?memberId=${memberId}`
     );
   },
 
   // 내 구독 목록 조회
   getMySubscriptions: async (page: number = 0, size: number = 20) => {
-    // fanId는 서버에서 인증된 사용자로부터 자동 추출
     return apiClient.get<{
       content: Subscription[];
       totalElements: number;
@@ -49,9 +48,9 @@ export const subscriptionsApi = {
     }>(`/api/v1/subscriptions?page=${page}&size=${size}`);
   },
 
-  // 크리에이터의 구독자 목록 조회
-  getCreatorSubscribers: async (
-    creatorId: number,
+  // 회원의 구독자 목록 조회
+  getMemberSubscribers: async (
+    targetMemberId: number,
     page: number = 0,
     size: number = 20
   ) => {
@@ -62,7 +61,7 @@ export const subscriptionsApi = {
       size: number;
       number: number;
     }>(
-      `/api/v1/subscriptions?creatorId=${creatorId}&page=${page}&size=${size}`
+      `/api/v1/subscriptions?targetMemberId=${targetMemberId}&page=${page}&size=${size}`
     );
   },
 };

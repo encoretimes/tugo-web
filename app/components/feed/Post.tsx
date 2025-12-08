@@ -194,7 +194,7 @@ const Post: React.FC<PostProps> = ({
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg px-6 py-5 mb-3 hover:bg-gray-50/50 transition-colors">
+    <div className="px-0 lg:px-6 py-5 hover:bg-gray-50/50 transition-colors">
       {/* 헤더: 프로필 + 이름/아이디 + 시간 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
@@ -222,7 +222,7 @@ const Post: React.FC<PostProps> = ({
               </div>
             )}
           </Link>
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-col">
             <Link
               href={`/profile/${author.username}`}
               className="font-semibold text-gray-900 text-[15px] hover:underline"
@@ -237,7 +237,7 @@ const Post: React.FC<PostProps> = ({
             </Link>
             <Link
               href={`/profile/${author.username}`}
-              className="text-sm text-gray-500 hover:underline"
+              className="text-xs text-gray-500 hover:underline"
               onClick={(e) => {
                 if (disableNavigation) {
                   e.preventDefault();
@@ -247,11 +247,6 @@ const Post: React.FC<PostProps> = ({
             >
               @{author.username}
             </Link>
-            {author.isCreator && (
-              <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded ml-1">
-                크리에이터
-              </span>
-            )}
           </div>
         </div>
         <time className="text-xs text-gray-400">

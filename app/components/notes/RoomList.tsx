@@ -38,7 +38,6 @@ export default function RoomList({
     const query = searchQuery.toLowerCase();
     return (
       room.lastMessage.toLowerCase().includes(query) ||
-      room.otherUser.name.toLowerCase().includes(query) ||
       room.otherUser.username.toLowerCase().includes(query)
     );
   });
@@ -75,7 +74,7 @@ export default function RoomList({
               <div className="flex justify-between items-start">
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-gray-900 mb-1">
-                    {room.otherUser.name}
+                    {room.otherUser.username}
                   </p>
                   <p className="text-sm text-gray-600 truncate">
                     {room.isMyLastMessage && '나: '}

@@ -1,5 +1,5 @@
 import { apiClient } from '@/app/lib/api-client';
-import type { RoomResponse, RoomWithMessageResponse } from '@/app/types/notes';
+import type { MessageResponse, RoomResponse, RoomWithMessageResponse } from '@/app/types/notes';
 
 /**
  * 쪽지방 목록 조회
@@ -31,6 +31,20 @@ export async function getMessagesWithUser(
 
   return apiClient.get<RoomWithMessageResponse>(
     `/api/v1/notes/user/${otherUserId}/messages?${params.toString()}`
+  );
+}
+
+/**
+ * 메시지 전송 (REST API)
+ * POST /api/v1/notes/rooms/{roomId}/messages
+ */
+export async function sendMessageRest(
+  roomId: number,
+  content: string
+): Promise<MessageResponse> {
+  return apiClient.post<MessageResponse>(
+    `/api/v1/notes/rooms/${roomId}/messages`,
+    { content }
   );
 }
 

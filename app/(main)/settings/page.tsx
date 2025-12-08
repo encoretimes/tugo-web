@@ -1,15 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  UserCircleIcon,
-  BellIcon,
-  ShieldCheckIcon,
-  Cog6ToothIcon,
-} from '@heroicons/react/24/outline';
+import { UserCircleIcon, BellIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 
 import ProfileSection from './ProfileSection';
-import CreatorSection from './CreatorSection';
 import NotificationSection from './NotificationSection';
 import SecuritySection from './SecuritySection';
 import { useRouter } from 'next/navigation';
@@ -20,7 +14,6 @@ const SettingsPage = () => {
 
   const tabs = [
     { id: 'account', name: '계정 설정', icon: UserCircleIcon },
-    { id: 'creator', name: '크리에이터', icon: Cog6ToothIcon },
     { id: 'notifications', name: '알림 설정', icon: BellIcon },
     { id: 'advanced', name: '고급 설정', icon: ShieldCheckIcon },
   ];
@@ -36,8 +29,6 @@ const SettingsPage = () => {
             </div>
           </div>
         );
-      case 'creator':
-        return <CreatorSection />;
       case 'notifications':
         return <NotificationSection />;
       case 'advanced':

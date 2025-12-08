@@ -25,8 +25,8 @@ export default function NotesPage() {
 
   const handleSelectRoom = (room: RoomResponse) => {
     setSelectedRoomId(room.roomId);
-    setSelectedUserId(room.otherUser.id);
-    setSelectedUserName(room.otherUser.name);
+    setSelectedUserId(room.otherUser.userId);
+    setSelectedUserName(room.otherUser.username);
   };
 
   return (

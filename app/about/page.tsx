@@ -1,186 +1,174 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-600">
-                <span className="text-xl font-bold text-white">T</span>
-              </div>
-              <h1 className="text-2xl font-bold text-neutral-900">Tugo</h1>
-            </div>
-            <Link
-              href="/login"
-              className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-            >
-              로그인
-            </Link>
-          </div>
+      <header className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm z-50 border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="text-2xl font-bold text-[#6956E3]">
+            TUGO
+          </Link>
+          <Link
+            href="/login"
+            className="bg-[#6956E3] text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-[#5a48c9] transition-colors"
+          >
+            시작하기
+          </Link>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="mb-6 text-5xl font-bold text-neutral-900">
-            차세대 정치 커뮤니티
-            <br />
-            <span className="text-primary-600">Tugo</span>
-          </h2>
-          <p className="mx-auto mb-8 max-w-2xl text-xl text-neutral-600">
-            투명하고 건전한 정치 토론의 장을 만들어갑니다.
-            <br />
-            다양한 의견을 나누고, 함께 성장하는 커뮤니티입니다.
+      <section className="pt-32 pb-20 px-6 bg-[#EDEBF0] relative overflow-hidden">
+        <div className="max-w-5xl mx-auto relative z-10">
+          <p className="text-[#6956E3] font-bold text-lg mb-4">TUGO 투고</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            모든 우리의 정치는<br />
+            이제 여기 <span className="text-[#6956E3]">TUGO</span>에서
+          </h1>
+          <p className="text-gray-600 text-lg max-w-xl leading-relaxed">
+            당신이 어떤 시각을 가지고 있는지, 무엇을 선택하는지 세상은 알고 싶어 합니다.
+            지금 당장 새로운 이야기를 시작하세요.
           </p>
-          <div className="flex justify-center gap-4">
-            <Link
-              href="/login"
-              className="rounded-xl bg-primary-600 px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-primary-700"
-            >
-              시작하기
-            </Link>
-            <a
-              href="#features"
-              className="rounded-xl border-2 border-primary-600 bg-white px-8 py-4 text-lg font-semibold text-primary-600 transition-colors hover:bg-primary-50"
-            >
-              더 알아보기
-            </a>
+        </div>
+
+        {/* Background decorative images */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-4 opacity-80">
+          <Image src="/home_banne_image/1.svg" alt="" width={160} height={160} className="w-40" />
+          <Image src="/home_banne_image/2.svg" alt="" width={140} height={140} className="w-36" />
+          <Image src="/home_banne_image/3.svg" alt="" width={160} height={160} className="w-40" />
+        </div>
+      </section>
+
+      {/* What is TUGO */}
+      <section className="py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">TUGO는</h2>
+          <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
+            <p>
+              정치적 콘텐츠를 생산하고 구독하는 새로운 방식의 플랫폼입니다.
+            </p>
+            <p>
+              특정 정치색에 치우치지 않고, 다양한 시각의 크리에이터들이
+              자신의 목소리를 낼 수 있는 공간을 만들어갑니다.
+            </p>
+            <p>
+              TUGO에서는 누구나 크리에이터가 될 수 있고,
+              관심 있는 크리에이터의 콘텐츠를 구독할 수 있습니다.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h3 className="mb-12 text-center text-3xl font-bold text-neutral-900">
-            주요 기능
-          </h3>
-          <div className="grid gap-8 md:grid-cols-3">
-            <div className="rounded-2xl border border-neutral-200 p-8 transition-shadow hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
-                <svg
-                  className="h-6 w-6 text-primary-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
+      {/* Features */}
+      <section className="py-24 px-6 bg-[#FAF8FF]">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-900 mb-16 text-center">
+            이런 점이 다릅니다
+          </h2>
+
+          <div className="space-y-16">
+            {/* Feature 1 */}
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="w-16 h-16 bg-[#6956E3] rounded-2xl flex items-center justify-center shrink-0">
+                <span className="text-white text-2xl font-bold">1</span>
               </div>
-              <h4 className="mb-3 text-xl font-bold text-neutral-900">
-                크리에이터 지원
-              </h4>
-              <p className="text-neutral-600">
-                정치 크리에이터를 위한 구독 및 후원 시스템으로 지속 가능한
-                콘텐츠 제작을 지원합니다.
-              </p>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  구독 기반 콘텐츠
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  크리에이터가 만든 정치 콘텐츠를 구독하고,
+                  양질의 분석과 시각을 접할 수 있습니다.
+                  크리에이터는 구독료를 통해 지속 가능한 활동을 이어갑니다.
+                </p>
+              </div>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 p-8 transition-shadow hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
-                <svg
-                  className="h-6 w-6 text-primary-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
+            {/* Feature 2 */}
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="w-16 h-16 bg-[#6956E3] rounded-2xl flex items-center justify-center shrink-0">
+                <span className="text-white text-2xl font-bold">2</span>
               </div>
-              <h4 className="mb-3 text-xl font-bold text-neutral-900">
-                건전한 토론
-              </h4>
-              <p className="text-neutral-600">
-                다양한 정치적 견해를 존중하며, 건설적인 대화와 토론이 이루어지는
-                공간을 제공합니다.
-              </p>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  투명한 댓글 시스템
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  댓글은 후원 금액에 따라 상위 노출됩니다.
+                  더 많이 기여한 사람의 의견이 더 잘 보이는
+                  명확하고 투명한 구조입니다.
+                </p>
+              </div>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 p-8 transition-shadow hover:shadow-lg">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary-100">
-                <svg
-                  className="h-6 w-6 text-primary-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
+            {/* Feature 3 */}
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="w-16 h-16 bg-[#6956E3] rounded-2xl flex items-center justify-center shrink-0">
+                <span className="text-white text-2xl font-bold">3</span>
               </div>
-              <h4 className="mb-3 text-xl font-bold text-neutral-900">
-                투명한 운영
-              </h4>
-              <p className="text-neutral-600">
-                명확한 커뮤니티 가이드라인과 투명한 운영 정책으로 신뢰할 수 있는
-                플랫폼을 지향합니다.
-              </p>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  실시간 투표와 여론조사
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  다양한 이슈에 대한 투표에 참여하고,
+                  실시간으로 여론의 흐름을 확인할 수 있습니다.
+                  TUGO만의 데이터로 사회의 목소리를 읽어보세요.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="w-16 h-16 bg-[#6956E3] rounded-2xl flex items-center justify-center shrink-0">
+                <span className="text-white text-2xl font-bold">4</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  균형 잡힌 토론의 장
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  좌도 우도 아닌, 다양한 시각이 공존하는 공간.
+                  서로 다른 의견을 존중하며 토론하고,
+                  함께 더 나은 방향을 모색합니다.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-primary-600 py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h3 className="mb-6 text-4xl font-bold text-white">
-            지금 바로 시작하세요
-          </h3>
-          <p className="mb-8 text-xl text-primary-100">
-            Tugo와 함께 의미있는 정치 토론에 참여하세요
+      {/* CTA */}
+      <section className="py-24 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            지금 시작하세요
+          </h2>
+          <p className="text-gray-600 text-lg mb-10">
+            당신의 목소리가 세상을 바꿉니다
           </p>
           <Link
             href="/login"
-            className="inline-block rounded-xl bg-white px-8 py-4 text-lg font-semibold text-primary-600 transition-colors hover:bg-primary-50"
+            className="inline-block bg-[#6956E3] text-white px-10 py-4 rounded-xl text-lg font-medium hover:bg-[#5a48c9] transition-colors"
           >
-            무료로 시작하기
+            TUGO 시작하기
           </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-200 bg-white py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-neutral-500">
-            <a href="#" className="transition-colors hover:text-neutral-700">
-              이용약관
-            </a>
-            <a
-              href="#"
-              className="font-semibold transition-colors hover:text-neutral-700"
-            >
-              개인정보처리방침
-            </a>
-            <a href="#" className="transition-colors hover:text-neutral-700">
-              고객센터
-            </a>
-            <a href="#" className="transition-colors hover:text-neutral-700">
-              회사소개
-            </a>
+      <footer className="border-t border-gray-100 py-8 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
+            <a href="#" className="hover:text-gray-600">이용약관</a>
+            <a href="#" className="hover:text-gray-600 font-medium">개인정보처리방침</a>
+            <a href="#" className="hover:text-gray-600">고객센터</a>
+            <span>&copy; 2025 TUGO</span>
           </div>
-          <p className="mt-4 text-center text-sm text-neutral-500">
-            &copy; 2025 Tugo. All rights reserved.
-          </p>
         </div>
       </footer>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getRooms, getMessagesWithUser, markAsRead } from '@/app/api/notes';
+import { getRooms, getMessagesWithUser, markAsRead, sendMessageRest } from '@/app/api/notes';
 
 /**
  * 쪽지방 목록 조회 훅
@@ -38,6 +38,22 @@ export function useMarkAsRead() {
     mutationFn: (roomId: number) => markAsRead(roomId),
     onSuccess: () => {
       // 쪽지방 목록 다시 불러오기 (안읽은 메시지 수 업데이트)
+      queryClient.invalidateQueries({ queryKey: ['notes', 'rooms'] });
+    },
+  });
+}
+
+/**
+ * REST API로 메시지 전송하는 mutation 훅
+ */
+export function useSendMessage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ roomId, content }: { roomId: number; content: string }) =>
+      sendMessageRest(roomId, content),
+    onSuccess: () => {
+      // 쪽지방 목록 갱신
       queryClient.invalidateQueries({ queryKey: ['notes', 'rooms'] });
     },
   });

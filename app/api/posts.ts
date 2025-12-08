@@ -72,3 +72,27 @@ export const updatePost = async (
 export const deletePost = async (postId: number): Promise<void> => {
   return apiClient.delete<void>(`/api/v1/posts/${postId}`);
 };
+
+export type DebateSortOption = 'popular' | 'latest' | 'ending';
+
+/**
+ * 투표 게시물 목록 조회 (투표 전용 API)
+ * @param page 페이지 번호
+ * @param size 페이지 크기
+ * @param sort 정렬 옵션 (popular: 참여자수, latest: 최신, ending: 마감임박)
+ */
+export const getDebatesPage = async (
+  page = 0,
+  size = 20,
+  sort: DebateSortOption = 'popular'
+): Promise<PageResponse<Post>> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+    sort: sort,
+  });
+
+  return apiClient.get<PageResponse<Post>>(
+    `/api/v1/posts/debates?${params.toString()}`
+  );
+};

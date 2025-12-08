@@ -17,6 +17,9 @@ export const queryKeys = {
   posts: ['posts'] as const,
   post: (postId: number) => ['post', postId] as const,
 
+  // 투표(토론) 관련
+  debates: ['debates'] as const,
+
   // 북마크 관련
   bookmarks: (page?: number, size?: number) =>
     ['bookmarks', page, size] as const,
@@ -41,6 +44,14 @@ export const queryKeys = {
   conversations: ['conversations'] as const,
   conversation: (conversationId: number) =>
     ['conversation', conversationId] as const,
+
+  // 구독 관련
+  subscriptionStatus: (targetMemberId: number) =>
+    ['subscriptionStatus', targetMemberId] as const,
+  subscriberCount: (memberId: number) => ['subscriberCount', memberId] as const,
+  mySubscriptions: ['mySubscriptions'] as const,
+  memberSubscribers: (targetMemberId: number) =>
+    ['memberSubscribers', targetMemberId] as const,
 } as const;
 
 /**
