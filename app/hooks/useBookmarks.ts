@@ -17,15 +17,9 @@ export const useToggleBookmark = () => {
   const addMutation = useMutation({
     mutationFn: addBookmark,
     onSuccess: (_data, postId) => {
-      // 모든 관련 쿼리 키 무효화하여 전역 동기화
+      // 북마크 목록과 해당 게시물만 무효화
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.posts });
-      queryClient.invalidateQueries({
-        queryKey: [...queryKeys.posts, 'infinite'],
-      });
       queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
-      // 프로필 페이지의 user.posts 동기화
-      queryClient.invalidateQueries({ queryKey: ['user'] });
       addToast('보관함에 저장되었습니다', 'success');
     },
     onError: () => {
@@ -36,15 +30,9 @@ export const useToggleBookmark = () => {
   const removeMutation = useMutation({
     mutationFn: removeBookmark,
     onSuccess: (_data, postId) => {
-      // 모든 관련 쿼리 키 무효화하여 전역 동기화
+      // 북마크 목록과 해당 게시물만 무효화
       queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.posts });
-      queryClient.invalidateQueries({
-        queryKey: [...queryKeys.posts, 'infinite'],
-      });
       queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
-      // 프로필 페이지의 user.posts 동기화
-      queryClient.invalidateQueries({ queryKey: ['user'] });
       addToast('보관함에서 제거되었습니다', 'info');
     },
     onError: () => {

@@ -30,4 +30,5 @@ export interface SendMessageRequest {
 export interface NotesUser {
   userId: number;
   username: string;
+  profileImageUrl?: string;
 }

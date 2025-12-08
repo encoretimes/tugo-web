@@ -6,11 +6,13 @@ import Link from 'next/link';
 import { BookmarkIcon } from '@heroicons/react/24/outline';
 import NavItem from '@/components/nav/NavItem';
 import { useUnreadCount } from '@/hooks/useNotifications';
+import { useTotalUnreadCount } from '@/hooks/useNotes';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 import { useUserStore } from '@/store/userStore';
 
 const LeftSidebar = () => {
   const { data: unreadCount } = useUnreadCount();
+  const notesUnreadCount = useTotalUnreadCount();
   const [isComposerOpen, setIsComposerOpen] = useState(false);
   const user = useUserStore((state) => state.user);
 
@@ -90,13 +92,14 @@ const LeftSidebar = () => {
             icon={
               <Image
                 src="/system_ico/notes_pc.svg"
-                alt="메시지"
+                alt="쪽지"
                 width={28}
                 height={28}
                 className="w-7 h-7"
               />
             }
-            label="메시지"
+            label="쪽지"
+            badge={notesUnreadCount}
             isCustomIcon
           />
           <NavItem

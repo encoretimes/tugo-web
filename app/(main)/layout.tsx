@@ -5,6 +5,7 @@ import LeftSidebar from '@/components/layout/LeftSidebar';
 import MainHeader from '@/components/layout/MainHeader';
 import RightSidebar from '@/components/layout/RightSidebar';
 import LoginPromptModal from '@/components/modals/LoginPromptModal';
+import NotesWebSocketInitializer from '@/components/NotesWebSocketInitializer';
 import { useRouteGuard } from '@/hooks/useRouteGuard';
 import { useInteractionGuard } from '@/hooks/useInteractionGuard';
 import { useUserStore } from '@/store/userStore';
@@ -37,7 +38,9 @@ export default function MainLayout({
     pathname.startsWith('/messages') ||
     pathname.startsWith('/notifications') ||
     pathname.startsWith('/bookmarks') ||
+    pathname.startsWith('/notes') ||
     /\/post\/\d+/.test(pathname);
+
 
   if (!hasHydrated) {
     return <div className="min-h-screen bg-white" />;
@@ -45,6 +48,7 @@ export default function MainLayout({
 
   return (
     <div className="relative min-h-screen">
+      <NotesWebSocketInitializer />
       {/* 상단 헤더 */}
       <MainHeader />
 
@@ -60,9 +64,7 @@ export default function MainLayout({
 
           {/* 메인 콘텐츠 */}
           <main
-            className={`min-h-screen w-full pb-20 lg:pb-0 flex-1 ${
-              hideRightPanel ? '' : ''
-            }`}
+            className={`w-full flex-1 min-h-screen pb-20 lg:pb-0`}
           >
             <div className="px-0 lg:px-6 pt-4">{children}</div>
           </main>

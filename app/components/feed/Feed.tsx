@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Post from './Post';
 import { useInfinitePosts } from '@/hooks/usePosts';
@@ -16,7 +16,7 @@ const Feed = () => {
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfinitePosts(false); // 항상 전체 게시물 표시
+  } = useInfinitePosts(false);
 
   const { ref, inView } = useInView();
   const feedScrollPosition = useScrollStore(
@@ -26,7 +26,10 @@ const Feed = () => {
     (state) => state.clearFeedScrollPosition
   );
 
-  const posts = data?.pages.flatMap((page) => page.content) ?? [];
+  const posts = useMemo(
+    () => data?.pages.flatMap((page) => page.content) ?? [],
+    [data?.pages]
+  );
 
   // 무한 스크롤
   useEffect(() => {
@@ -38,20 +41,17 @@ const Feed = () => {
   // 스크롤 위치 복원 (게시물 상세 페이지에서 뒤로왔을 때)
   useEffect(() => {
     if (feedScrollPosition > 0 && posts.length > 0) {
-      // 약간의 지연을 두고 스크롤 복원 (DOM 렌더링 완료 대기)
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         window.scrollTo(0, feedScrollPosition);
         clearFeedScrollPosition();
-      }, 100);
+      });
     }
   }, [feedScrollPosition, posts.length, clearFeedScrollPosition]);
 
   return (
     <div>
-      {/* 인라인 게시물 작성 영역 */}
       <InlinePostComposer />
 
-      {/* 작성 영역과 게시물 사이 여백 + 구분선 */}
       <div className="h-4" />
       <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
 
