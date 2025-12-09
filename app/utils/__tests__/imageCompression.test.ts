@@ -161,6 +161,7 @@ describe('Image Compression Utilities', () => {
 
       // Mock Image constructor
       const OriginalImage = global.Image
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(global as any).Image = class {
         naturalWidth = 1920
         naturalHeight = 1080
@@ -190,6 +191,7 @@ describe('Image Compression Utilities', () => {
     it('handles image load errors', async () => {
       // Mock Image to fail loading
       const OriginalImage = global.Image
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(global as any).Image = class {
         onload: (() => void) | null = null
         onerror: (() => void) | null = null
