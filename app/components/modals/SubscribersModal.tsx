@@ -3,24 +3,24 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useCreatorSubscribers } from '@/hooks/useSubscription';
+import { useMemberSubscribers } from '@/hooks/useSubscription';
 import Image from 'next/image';
 import Link from 'next/link';
 
 interface SubscribersModalProps {
   isOpen: boolean;
   onClose: () => void;
-  creatorId: number;
-  creatorName: string;
+  memberId: number;
+  memberName: string;
 }
 
 export default function SubscribersModal({
   isOpen,
   onClose,
-  creatorId,
-  creatorName,
+  memberId,
+  memberName,
 }: SubscribersModalProps) {
-  const { data, isLoading } = useCreatorSubscribers(creatorId, 0);
+  const { data, isLoading } = useMemberSubscribers(memberId, 0);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -52,7 +52,7 @@ export default function SubscribersModal({
                 {/* Header */}
                 <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                   <Dialog.Title className="text-lg font-semibold">
-                    {creatorName}의 구독자
+                    {memberName}의 구독자
                   </Dialog.Title>
                   <button
                     onClick={onClose}
@@ -73,32 +73,32 @@ export default function SubscribersModal({
                       {data.content.map((subscription) => (
                         <Link
                           key={subscription.id}
-                          href={`/profile/${subscription.fanUsername || subscription.fanId}`}
+                          href={`/profile/${subscription.memberUsername || subscription.memberId}`}
                           className="flex items-center gap-3 px-6 py-3 hover:bg-gray-50 transition-colors"
                           onClick={onClose}
                         >
                           <div className="relative h-12 w-12 rounded-full bg-gray-200 overflow-hidden">
-                            {subscription.fanProfileImageUrl ? (
+                            {subscription.memberProfileImageUrl ? (
                               <Image
-                                src={subscription.fanProfileImageUrl}
-                                alt={subscription.fanName || '프로필'}
+                                src={subscription.memberProfileImageUrl}
+                                alt={subscription.memberName || '프로필'}
                                 fill
                                 className="object-cover"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500 text-white font-bold text-lg">
-                                {subscription.fanName?.[0] || '?'}
+                                {subscription.memberName?.[0] || '?'}
                               </div>
                             )}
                           </div>
                           <div className="flex-1">
                             <div className="font-semibold">
-                              {subscription.fanName ||
-                                `구독자 #${subscription.fanId}`}
+                              {subscription.memberName ||
+                                `구독자 #${subscription.memberId}`}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {subscription.fanUsername &&
-                                `@${subscription.fanUsername} · `}
+                              {subscription.memberUsername &&
+                                `@${subscription.memberUsername} · `}
                               {new Date(
                                 subscription.createdAt
                               ).toLocaleDateString('ko-KR')}

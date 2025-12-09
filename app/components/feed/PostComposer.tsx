@@ -16,19 +16,16 @@ const PostComposer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
-    // 크리에이터가 아니면 경고
-    if (!user?.hasCreator) {
-      alert(
-        '게시물을 작성하려면 크리에이터로 전환해야 합니다.\n내 계정 > 크리에이터 탭에서 전환할 수 있습니다.'
-      );
+    if (!user) {
+      alert('로그인이 필요합니다.');
       return;
     }
     setIsModalOpen(true);
   };
   const closeModal = () => setIsModalOpen(false);
 
-  // 크리에이터가 아니면 PostComposer를 표시하지 않음
-  if (!user?.hasCreator) {
+  // 로그인하지 않았으면 PostComposer를 표시하지 않음
+  if (!user) {
     return null;
   }
 

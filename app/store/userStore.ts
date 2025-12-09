@@ -9,17 +9,17 @@ interface User {
   profileImageUrl?: string | null;
   bannerImageUrl?: string | null;
   introduction?: string | null;
-  hasCreator?: boolean;
-  creatorId?: number | null;
-  username?: string | null; // publicName → username으로 변경
+  username?: string | null;
 }
 
 interface UserState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasHydrated: boolean;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
+  setHasHydrated: (hydrated: boolean) => void;
   updateProfile: (profile: Partial<User>) => void;
   logout: () => void;
 }
@@ -29,7 +29,8 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      isLoading: true,
+      isLoading: false,
+      hasHydrated: false,
       setUser: (user) =>
         set({
           user,
@@ -37,6 +38,7 @@ export const useUserStore = create<UserState>()(
           isLoading: false,
         }),
       setLoading: (loading) => set({ isLoading: loading }),
+      setHasHydrated: (hydrated) => set({ hasHydrated: hydrated }),
       updateProfile: (profile) =>
         set((state) => ({
           user: state.user ? { ...state.user, ...profile } : null,
@@ -50,6 +52,9 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'user-storage',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

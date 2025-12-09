@@ -3,12 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Post } from '@/types/post';
-import {
-  UserIcon,
-  ChatBubbleLeftIcon,
-  CheckBadgeIcon,
-} from '@heroicons/react/24/outline';
-import { FireIcon } from '@heroicons/react/24/solid';
+import { UserIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
 
 interface DebateCardProps {
   post: Post;
@@ -19,7 +14,7 @@ export default function DebateCard({ post }: DebateCardProps) {
 
   if (!post.poll) return null;
 
-  const { poll, author, stats } = post;
+  const { poll, author } = post;
 
   const handleClick = () => {
     router.push(`/@${author.username}/post/${post.postId}`);
@@ -46,14 +41,13 @@ export default function DebateCard({ post }: DebateCardProps) {
       {/* 투표 가능 배지 */}
       {canVote && (
         <div className="absolute -top-2 -right-2 z-30">
-          <div className="flex items-center gap-1 bg-primary-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
-            <FireIcon className="w-3.5 h-3.5" />
-            투표하기
+          <div className="bg-primary-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
+            {totalVotes}명이 참여했어요!
           </div>
         </div>
       )}
 
-      <div className="p-4 space-y-3">
+      <div className="p-3 space-y-2">
         {/* 작성자 정보 */}
         <div className="flex items-center gap-2">
           {author.profileImageUrl ? (
@@ -74,43 +68,34 @@ export default function DebateCard({ post }: DebateCardProps) {
               <p className="text-sm font-semibold text-gray-900 truncate">
                 {author.name}
               </p>
-              {author.isCreator && (
-                <CheckBadgeIcon className="w-4 h-4 text-primary-500 shrink-0" />
-              )}
             </div>
             <p className="text-xs text-gray-500">@{author.username}</p>
           </div>
         </div>
 
         {/* 투표 주제 */}
-        <div className="min-h-[60px]">
-          <h3 className="text-sm font-bold text-gray-900 line-clamp-3 leading-snug">
+        <div className="min-h-[48px]">
+          <h3 className="text-sm font-bold text-gray-900 line-clamp-2 leading-snug">
             {poll.question}
           </h3>
         </div>
 
-        {/* 통계 정보 */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-          <div className="flex items-center gap-3 text-xs text-gray-600">
-            <div className="flex items-center gap-1">
-              <ChatBubbleLeftIcon className="w-4 h-4" />
-              <span className="font-medium">{stats.comments}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FireIcon className="w-4 h-4" />
-              <span className="font-medium">{totalVotes}표</span>
-            </div>
+        {/* 상태 정보 */}
+        {(poll.hasVoted || poll.isEnded) && (
+          <div className="flex items-center justify-end pt-2">
+            {poll.hasVoted && (
+              <div className="text-xs font-semibold text-primary-600 flex items-center gap-1">
+                <CheckBadgeIcon className="w-4 h-4" />
+                참여완료
+              </div>
+            )}
+            {poll.isEnded && (
+              <div className="text-xs font-semibold text-gray-500">
+                투표종료
+              </div>
+            )}
           </div>
-          {poll.hasVoted && (
-            <div className="text-xs font-semibold text-primary-600 flex items-center gap-1">
-              <CheckBadgeIcon className="w-4 h-4" />
-              참여완료
-            </div>
-          )}
-          {poll.isEnded && (
-            <div className="text-xs font-semibold text-gray-500">투표종료</div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

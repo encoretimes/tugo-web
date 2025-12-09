@@ -2,6 +2,7 @@
 
 import { useRooms } from '@/app/hooks/useNotes';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import { useState } from 'react';
 import type { RoomResponse } from '@/app/types/notes';
 
@@ -38,7 +39,6 @@ export default function RoomList({
     const query = searchQuery.toLowerCase();
     return (
       room.lastMessage.toLowerCase().includes(query) ||
-      room.otherUser.name.toLowerCase().includes(query) ||
       room.otherUser.username.toLowerCase().includes(query)
     );
   });
@@ -67,36 +67,52 @@ export default function RoomList({
               key={room.roomId}
               onClick={() => onSelectRoom(room)}
               className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition ${
-                selectedRoomId === room.roomId
-                  ? 'bg-blue-50'
-                  : ''
+                selectedRoomId === room.roomId ? 'bg-blue-50' : ''
               }`}
             >
-              <div className="flex justify-between items-start">
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 mb-1">
-                    {room.otherUser.name}
-                  </p>
-                  <p className="text-sm text-gray-600 truncate">
-                    {room.isMyLastMessage && '나: '}
-                    {room.lastMessage}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end ml-2 flex-shrink-0">
-                  <span className="text-xs text-gray-500 mb-1">
-                    {new Date(room.lastMessageTimestamp).toLocaleTimeString(
-                      'ko-KR',
-                      {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      }
-                    )}
-                  </span>
-                  {room.unreadCount > 0 && (
-                    <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center">
-                      {room.unreadCount}
+              <div className="flex items-center gap-3">
+                {/* 프로필 이미지 */}
+                {room.otherUser.profileImageUrl ? (
+                  <Image
+                    src={room.otherUser.profileImageUrl}
+                    alt={room.otherUser.username}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <span className="text-gray-500 text-lg font-medium">
+                      {room.otherUser.username[0]}
                     </span>
-                  )}
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center mb-1">
+                    <p className="font-medium text-gray-900">
+                      {room.otherUser.username}
+                    </p>
+                    <span className="text-xs text-gray-500">
+                      {new Date(room.lastMessageTimestamp).toLocaleTimeString(
+                        'ko-KR',
+                        {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        }
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-gray-600 truncate">
+                      {room.isMyLastMessage && '나: '}
+                      {room.lastMessage}
+                    </p>
+                    {room.unreadCount > 0 && (
+                      <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center ml-2 flex-shrink-0">
+                        {room.unreadCount}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

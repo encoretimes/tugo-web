@@ -9,6 +9,8 @@ import { UserIcon } from '@heroicons/react/24/solid';
 interface MentionInputProps {
   value: string;
   onChange: (value: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   placeholder?: string;
   rows?: number;
   disabled?: boolean;
@@ -18,6 +20,8 @@ interface MentionInputProps {
 export default function MentionInput({
   value,
   onChange,
+  onFocus,
+  onBlur,
   placeholder = '내용을 입력하세요',
   rows = 4,
   disabled = false,
@@ -192,6 +196,8 @@ export default function MentionInput({
         value={value}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
+        onFocus={onFocus}
+        onBlur={onBlur}
         disabled={disabled}
       />
 

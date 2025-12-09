@@ -1,39 +1,45 @@
-import { useQuery } from '@tanstack/react-query';
-import { getPostsPage } from '@/api/posts';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { getDebatesPage, DebateSortOption } from '@/api/posts';
 import { Post } from '@/types/post';
+import { PageResponse } from '@/types/pagination';
+import { queryKeys } from '@/lib/query-keys';
 
 /**
- * 활발한 토론(설문조사가 있는 게시물) 조회 훅
- * - Poll이 있는 게시물만 필터링
- * - 참여자 수가 많은 순으로 정렬
- * - 종료되지 않은 토론 우선
+ * 활발한 토론(투표가 있는 게시물) 조회 훅
+ * - 백엔드에서 투표가 있는 게시물만 반환
+ * @param limit 가져올 개수
+ * @param sort 정렬 옵션 (popular: 참여자수, latest: 최신, ending: 마감임박)
  */
-export function useDebates(limit: number = 5) {
+export function useDebates(
+  limit: number = 5,
+  sort: DebateSortOption = 'popular'
+) {
   return useQuery({
-    queryKey: ['debates', limit],
+    queryKey: [...queryKeys.debates, limit, sort],
     queryFn: async () => {
-      // 전체 게시물 조회 (최대 50개)
-      const response = await getPostsPage(0, 50);
-
-      // Poll이 있는 게시물만 필터링
-      const debatePosts = response.content.filter(
-        (post: Post) => post.poll !== undefined && post.poll !== null
-      );
-
-      // 정렬: 종료되지 않은 것 우선, 그 다음 참여자 수 순
-      const sortedDebates = debatePosts.sort((a: Post, b: Post) => {
-        // 종료 여부 우선
-        if (a.poll!.isEnded !== b.poll!.isEnded) {
-          return a.poll!.isEnded ? 1 : -1;
-        }
-        // 참여자 수로 정렬
-        return b.poll!.totalVoters - a.poll!.totalVoters;
-      });
-
-      // 상위 limit개만 반환
-      return sortedDebates.slice(0, limit);
+      const response = await getDebatesPage(0, limit, sort);
+      return response.content;
     },
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 10, // 10분
+  });
+}
+
+/**
+ * 무한 스크롤 투표 게시물 조회 Hook
+ * @param sort 정렬 옵션 (popular: 참여자수, latest: 최신, ending: 마감임박)
+ * @param pageSize 페이지당 게시물 수
+ */
+export function useInfiniteDebates(
+  sort: DebateSortOption = 'popular',
+  pageSize = 20
+) {
+  return useInfiniteQuery({
+    queryKey: [...queryKeys.debates, 'infinite', sort],
+    queryFn: ({ pageParam = 0 }) => getDebatesPage(pageParam, pageSize, sort),
+    getNextPageParam: (lastPage: PageResponse<Post>) => {
+      return lastPage.last ? undefined : lastPage.number + 1;
+    },
+    initialPageParam: 0,
   });
 }

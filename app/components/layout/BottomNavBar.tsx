@@ -1,65 +1,82 @@
 'use client';
 
-import {
-  HomeIcon,
-  MagnifyingGlassIcon,
-  PlusCircleIcon,
-  BellIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/solid';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
-import { useUnreadCount } from '@/hooks/useNotifications';
+import { useNotesStore } from '@/store/notesStore';
 
 const BottomNavBar = () => {
   const pathname = usePathname();
   const { user } = useUserStore();
-  const { data: unreadCount } = useUnreadCount();
+  const notesUnreadCount = useNotesStore((state) => state.totalUnreadCount);
 
-  const profileHref = user?.username
-    ? `/profile/${user.username}`
-    : '/settings';
+  const profileHref = user?.username ? `/profile/${user.username}` : '/login';
 
   const navItems = [
-    { href: '/', icon: HomeIcon, label: '홈' },
-    { href: '/search', icon: MagnifyingGlassIcon, label: '검색' },
-    { href: '/compose/post', icon: PlusCircleIcon, label: '투고하기' },
-    { href: '/notifications', icon: BellIcon, label: '알림' },
-    { href: profileHref, icon: UserCircleIcon, label: '프로필' },
+    {
+      href: '/',
+      icon: '/system_ico/home.svg',
+      activeIcon: '/system_ico/home_active.svg',
+      label: '홈',
+    },
+    {
+      href: '/explore',
+      icon: '/system_ico/explore.svg',
+      activeIcon: '/system_ico/explore_active.svg',
+      label: '탐색',
+    },
+    {
+      href: '/shortform',
+      icon: '/system_ico/shortform.svg',
+      activeIcon: '/system_ico/shortform_active.svg',
+      label: '숏폼',
+    },
+    {
+      href: '/notes',
+      icon: '/system_ico/notes.svg',
+      activeIcon: '/system_ico/note_active.svg',
+      label: '쪽지',
+      badge: notesUnreadCount,
+    },
+    {
+      href: profileHref,
+      icon: '/system_ico/profile.svg',
+      activeIcon: '/system_ico/profile_active.svg',
+      label: '프로필',
+    },
   ];
 
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    if (href.startsWith('/profile/')) return pathname.startsWith('/profile/');
+    return pathname.startsWith(href);
+  };
+
   return (
-    <nav className="fixed bottom-0 w-full border-t bg-white lg:hidden z-50">
-      <ul className="flex justify-around">
-        {navItems.map(({ href, icon: Icon, label }) => {
-          const isNotifications = href === '/notifications';
-          const showBadge =
-            isNotifications && unreadCount !== undefined && unreadCount > 0;
+    <nav className="fixed bottom-0 w-full bg-white lg:hidden z-50 py-3 border-t border-gray-100 rounded-t-2xl">
+      <ul className="flex justify-center gap-8">
+        {navItems.map(({ href, icon, activeIcon, label, badge }) => {
+          const active = isActive(href);
 
           return (
-            <li key={href}>
+            <li key={label}>
               <Link
                 href={href}
-                className="flex flex-col items-center p-3 min-h-[44px]"
+                className="flex items-center justify-center p-2 relative"
               >
-                <div className="relative">
-                  <Icon
-                    className={`h-7 w-7 ${
-                      pathname === href ? 'text-primary-600' : 'text-gray-500'
-                    }`}
-                  />
-                  {showBadge && (
-                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                      {unreadCount > 99 ? '99+' : unreadCount}
-                    </span>
-                  )}
-                </div>
-                <span
-                  className={`text-xs ${pathname === href ? 'font-bold text-primary-600' : ''}`}
-                >
-                  {label}
-                </span>
+                <Image
+                  src={active ? activeIcon : icon}
+                  alt={label}
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 transition-all duration-200"
+                />
+                {badge !== undefined && badge > 0 && (
+                  <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                    {badge > 99 ? '99+' : badge}
+                  </span>
+                )}
               </Link>
             </li>
           );

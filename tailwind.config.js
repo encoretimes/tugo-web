@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        content: '1360px', // 1920px - 280px * 2 (PC 표준 레이아웃)
+      },
       colors: {
         primary: {
           50: '#faf5ff',
@@ -16,7 +19,7 @@ export default {
           300: '#d8b4fe',
           400: '#c084fc',
           500: '#a855f7',
-          600: '#9333ea', // Main brand color
+          600: '#6956E3',
           700: '#7c3aed',
           800: '#6b21a8',
           900: '#581c87',

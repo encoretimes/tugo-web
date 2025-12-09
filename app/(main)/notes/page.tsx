@@ -15,8 +15,10 @@ export default function NotesPage() {
   );
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   const [selectedUserName, setSelectedUserName] = useState<string | null>(null);
+  const [selectedUserProfileImage, setSelectedUserProfileImage] = useState<
+    string | null
+  >(null);
 
-  // URL 파라미터로 userId가 전달된 경우 자동으로 채팅창 열기
   useEffect(() => {
     if (userIdParam) {
       setSelectedUserId(parseInt(userIdParam));
@@ -25,14 +27,26 @@ export default function NotesPage() {
 
   const handleSelectRoom = (room: RoomResponse) => {
     setSelectedRoomId(room.roomId);
-    setSelectedUserId(room.otherUser.id);
-    setSelectedUserName(room.otherUser.name);
+    setSelectedUserId(room.otherUser.userId);
+    setSelectedUserName(room.otherUser.username);
+    setSelectedUserProfileImage(room.otherUser.profileImageUrl || null);
   };
 
+  const handleBack = () => {
+    setSelectedUserId(null);
+    setSelectedRoomId(null);
+    setSelectedUserName(null);
+    setSelectedUserProfileImage(null);
+  };
+
+  const isChatOpen = selectedUserId !== null;
+
   return (
-    <div className="flex h-[calc(100vh-60px)] lg:h-screen text-black">
+    <div className="fixed inset-0 top-[50px] bottom-[70px] lg:top-0 lg:bottom-0 lg:left-16 xl:left-64 lg:right-0 flex text-black bg-white z-40">
       {/* 쪽지방 목록 */}
-      <aside className="w-1/3 h-full border-r border-gray-200 flex flex-col bg-white">
+      <aside
+        className={`${isChatOpen ? 'hidden' : 'w-full'} lg:block lg:w-1/3 border-r border-gray-200 flex flex-col bg-white`}
+      >
         <div className="p-4 border-b border-gray-200">
           <h1 className="text-2xl font-bold">쪽지</h1>
         </div>
@@ -43,11 +57,15 @@ export default function NotesPage() {
       </aside>
 
       {/* 채팅창 */}
-      <main className="w-2/3 h-full flex flex-col bg-white">
+      <main
+        className={`${isChatOpen ? 'w-full' : 'hidden'} lg:block lg:flex-1 flex flex-col bg-white`}
+      >
         {selectedUserId ? (
           <ChatRoom
             otherUserId={selectedUserId}
             otherUserName={selectedUserName || undefined}
+            otherUserProfileImage={selectedUserProfileImage || undefined}
+            onBack={handleBack}
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">

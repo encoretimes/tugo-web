@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -44,9 +44,8 @@ const ProfilePage = () => {
     refetch,
   } = useUser(username);
 
-  // Creator 여부에 따라 기본 탭 설정
   const [activeTab, setActiveTab] = useState<'posts' | 'media' | 'archives'>(
-    user?.isCreator ? 'posts' : 'archives'
+    'posts'
   );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSubscribersModalOpen, setIsSubscribersModalOpen] = useState(false);
@@ -61,20 +60,12 @@ const ProfilePage = () => {
     refetch: refetchBookmarks,
   } = useBookmarks(0, 20);
 
-  // 구독 관련 데이터 (크리에이터인 경우에만)
-  const { data: subscriptionStatus } = useSubscriptionStatus(
-    user?.creatorId || 0
-  );
-  const { data: subscriberCount } = useSubscriberCount(user?.creatorId || 0);
+  // 구독 관련 데이터
+  const memberId = user?.id ? Number(user.id) : 0;
+  const { data: subscriptionStatus } = useSubscriptionStatus(memberId);
+  const { data: subscriberCount } = useSubscriberCount(memberId);
   const subscribeMutation = useSubscribeMutation();
   const unsubscribeMutation = useUnsubscribeMutation();
-
-  useEffect(() => {
-    if (user) {
-      setActiveTab(user.isCreator ? 'posts' : 'archives');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.isCreator]);
 
   const isOwnProfile = currentUser && currentUser.username === username;
 
@@ -128,10 +119,10 @@ const ProfilePage = () => {
 
   // 구독하기
   const handleSubscribe = async () => {
-    if (!user?.creatorId) return;
+    if (!memberId) return;
 
     try {
-      await subscribeMutation.mutateAsync({ creatorId: user.creatorId });
+      await subscribeMutation.mutateAsync({ targetMemberId: memberId });
       addToast('구독되었습니다!', 'success');
     } catch (error) {
       console.error('구독 실패:', error);
@@ -146,12 +137,12 @@ const ProfilePage = () => {
 
   // 구독 취소 실행
   const handleUnsubscribeConfirm = async () => {
-    if (!subscriptionStatus?.subscriptionId || !user?.creatorId) return;
+    if (!subscriptionStatus?.subscriptionId || !memberId) return;
 
     try {
       await unsubscribeMutation.mutateAsync({
         subscriptionId: subscriptionStatus.subscriptionId,
-        creatorId: user.creatorId,
+        targetMemberId: memberId,
       });
       setShowUnsubscribeConfirm(false);
       addToast('구독이 취소되었습니다.', 'info');
@@ -327,17 +318,15 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex gap-6 text-sm">
-              {user.isCreator && (
-                <button
-                  onClick={() => setIsSubscribersModalOpen(true)}
-                  className="hover:underline"
-                >
-                  <strong>
-                    {(subscriberCount?.count || 0).toLocaleString()}
-                  </strong>{' '}
-                  <span className="text-gray-500">구독자</span>
-                </button>
-              )}
+              <button
+                onClick={() => setIsSubscribersModalOpen(true)}
+                className="hover:underline"
+              >
+                <strong>
+                  {(subscriberCount?.count || 0).toLocaleString()}
+                </strong>{' '}
+                <span className="text-gray-500">구독자</span>
+              </button>
               {isOwnProfile && (
                 <span>
                   <strong>
@@ -350,15 +339,13 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Subscribe Button - only show if not own profile and user is creator */}
-        {!isOwnProfile && user.isCreator && (
+        {/* Subscribe Button - only show if not own profile */}
+        {!isOwnProfile && (
           <div className="px-4 pb-4">
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold">
-                    이 크리에이터를 구독하시겠습니까?
-                  </h3>
+                  <h3 className="font-semibold">이 회원을 구독하시겠습니까?</h3>
                   <p className="text-sm text-gray-500">
                     최신 게시물을 받아보세요
                   </p>
@@ -391,30 +378,26 @@ const ProfilePage = () => {
       {/* Tabs */}
       <div className="border-b border-gray-200 sticky top-[73px] bg-white/90 backdrop-blur-sm z-10">
         <div className="flex">
-          {user.isCreator && (
-            <>
-              <button
-                onClick={() => setActiveTab('posts')}
-                className={`flex-1 p-4 font-semibold text-center transition-colors ${
-                  activeTab === 'posts'
-                    ? 'text-primary-600 border-b-2 border-primary-600'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                게시물 {user.stats.posts}
-              </button>
-              <button
-                onClick={() => setActiveTab('media')}
-                className={`flex-1 p-4 font-semibold text-center transition-colors ${
-                  activeTab === 'media'
-                    ? 'text-primary-600 border-b-2 border-primary-600'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                미디어 {user.stats.media}
-              </button>
-            </>
-          )}
+          <button
+            onClick={() => setActiveTab('posts')}
+            className={`flex-1 p-4 font-semibold text-center transition-colors ${
+              activeTab === 'posts'
+                ? 'text-primary-600 border-b-2 border-primary-600'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            게시물 {user.stats.posts}
+          </button>
+          <button
+            onClick={() => setActiveTab('media')}
+            className={`flex-1 p-4 font-semibold text-center transition-colors ${
+              activeTab === 'media'
+                ? 'text-primary-600 border-b-2 border-primary-600'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            미디어 {user.stats.media}
+          </button>
           {isOwnProfile && (
             <button
               onClick={() => setActiveTab('archives')}
@@ -533,12 +516,12 @@ const ProfilePage = () => {
       )}
 
       {/* Subscribers Modal */}
-      {user?.isCreator && user.creatorId && (
+      {memberId > 0 && (
         <SubscribersModal
           isOpen={isSubscribersModalOpen}
           onClose={() => setIsSubscribersModalOpen(false)}
-          creatorId={user.creatorId}
-          creatorName={user.name}
+          memberId={memberId}
+          memberName={user.name}
         />
       )}
 

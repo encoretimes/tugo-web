@@ -12,19 +12,7 @@ interface MemberResponse {
   role: string;
   createdAt: string;
   updatedAt: string;
-  hasCreator: boolean;
-  creatorId: number | null;
   username: string | null;
-}
-
-interface CreatorResponse {
-  id: number;
-  introduction: string;
-  bannerImageUrl: string;
-  profileUrl: string;
-  username: string;
-  currentBalance: number;
-  isActive: boolean;
 }
 
 export default function LoginSuccessPage() {
@@ -47,42 +35,12 @@ export default function LoginSuccessPage() {
 
         console.log('User data received:', userData);
 
-        console.log(
-          'hasCreator:',
-          userData.hasCreator,
-          'creatorId:',
-          userData.creatorId
-        );
-
-        let creatorData: CreatorResponse | null = null;
-
-        if (userData.hasCreator && userData.creatorId) {
-          try {
-            console.log('Fetching creator details from /api/v1/creators/me');
-            creatorData = await apiClient.get<CreatorResponse>(
-              '/api/v1/creators/me'
-            );
-            console.log('Creator data received:', creatorData);
-          } catch (error) {
-            console.error('Failed to fetch creator data:', error);
-          }
-        } else {
-          console.log(
-            'Skipping creator fetch - hasCreator:',
-            userData.hasCreator,
-            'creatorId:',
-            userData.creatorId
-          );
-        }
-
         setUser({
           id: userData.id,
           name: userData.name,
           email: userData.email,
           role: userData.role,
-          profileImageUrl: creatorData?.profileUrl || null,
-          hasCreator: userData.hasCreator,
-          creatorId: userData.creatorId,
+          profileImageUrl: null,
           username: userData.username,
         });
 

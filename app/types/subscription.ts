@@ -2,18 +2,18 @@ export type SubscriptionStatus = 'ACTIVE' | 'CANCELED' | 'EXPIRED';
 
 export interface Subscription {
   id: number;
-  creatorId: number;
-  fanId: number;
-  fanName?: string;
-  fanUsername?: string;
-  fanProfileImageUrl?: string;
+  targetMemberId: number;
+  memberId: number;
+  memberName?: string;
+  memberUsername?: string;
+  memberProfileImageUrl?: string;
   subscriptionStatus: SubscriptionStatus;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface SubscriptionCreateRequest {
-  creatorId: number;
+  targetMemberId: number;
 }
 
 export interface SubscriptionStatusResponse {
@@ -22,6 +22,6 @@ export interface SubscriptionStatusResponse {
 }
 
 export interface SubscriberCountResponse {
-  creatorId: number;
+  memberId: number;
   count: number;
 }

@@ -3,20 +3,20 @@ import { subscriptionsApi } from '@/api/subscriptions';
 import type { SubscriptionCreateRequest } from '@/types/subscription';
 
 // 구독 상태 조회
-export const useSubscriptionStatus = (creatorId: number) => {
+export const useSubscriptionStatus = (targetMemberId: number) => {
   return useQuery({
-    queryKey: ['subscriptionStatus', creatorId],
-    queryFn: () => subscriptionsApi.checkSubscriptionStatus(creatorId),
-    enabled: !!creatorId,
+    queryKey: ['subscriptionStatus', targetMemberId],
+    queryFn: () => subscriptionsApi.checkSubscriptionStatus(targetMemberId),
+    enabled: !!targetMemberId,
   });
 };
 
 // 구독자 수 조회
-export const useSubscriberCount = (creatorId: number) => {
+export const useSubscriberCount = (memberId: number) => {
   return useQuery({
-    queryKey: ['subscriberCount', creatorId],
-    queryFn: () => subscriptionsApi.getSubscriberCount(creatorId),
-    enabled: !!creatorId,
+    queryKey: ['subscriberCount', memberId],
+    queryFn: () => subscriptionsApi.getSubscriberCount(memberId),
+    enabled: !!memberId,
   });
 };
 
@@ -28,12 +28,16 @@ export const useMySubscriptions = (page: number = 0) => {
   });
 };
 
-// 크리에이터의 구독자 목록 조회
-export const useCreatorSubscribers = (creatorId: number, page: number = 0) => {
+// 회원의 구독자 목록 조회
+export const useMemberSubscribers = (
+  targetMemberId: number,
+  page: number = 0
+) => {
   return useQuery({
-    queryKey: ['creatorSubscribers', creatorId, page],
-    queryFn: () => subscriptionsApi.getCreatorSubscribers(creatorId, page, 20),
-    enabled: !!creatorId,
+    queryKey: ['memberSubscribers', targetMemberId, page],
+    queryFn: () =>
+      subscriptionsApi.getMemberSubscribers(targetMemberId, page, 20),
+    enabled: !!targetMemberId,
   });
 };
 
@@ -47,11 +51,11 @@ export const useSubscribeMutation = () => {
     onSuccess: (_, variables) => {
       // 구독 상태 쿼리 무효화
       queryClient.invalidateQueries({
-        queryKey: ['subscriptionStatus', variables.creatorId],
+        queryKey: ['subscriptionStatus', variables.targetMemberId],
       });
       // 구독자 수 쿼리 무효화
       queryClient.invalidateQueries({
-        queryKey: ['subscriberCount', variables.creatorId],
+        queryKey: ['subscriberCount', variables.targetMemberId],
       });
       // 내 구독 목록 무효화
       queryClient.invalidateQueries({ queryKey: ['mySubscriptions'] });
@@ -68,16 +72,16 @@ export const useUnsubscribeMutation = () => {
       subscriptionId,
     }: {
       subscriptionId: number;
-      creatorId: number;
+      targetMemberId: number;
     }) => subscriptionsApi.cancelSubscription(subscriptionId),
     onSuccess: (_, variables) => {
       // 구독 상태 쿼리 무효화
       queryClient.invalidateQueries({
-        queryKey: ['subscriptionStatus', variables.creatorId],
+        queryKey: ['subscriptionStatus', variables.targetMemberId],
       });
       // 구독자 수 쿼리 무효화
       queryClient.invalidateQueries({
-        queryKey: ['subscriberCount', variables.creatorId],
+        queryKey: ['subscriberCount', variables.targetMemberId],
       });
       // 내 구독 목록 무효화
       queryClient.invalidateQueries({ queryKey: ['mySubscriptions'] });

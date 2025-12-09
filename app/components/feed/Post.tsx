@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -83,15 +83,12 @@ const Post: React.FC<PostProps> = ({
 
   const comments = commentsData?.pages.flatMap((page) => page.content) || [];
 
-  // Poll vote hook (always call hooks at top level)
   const { vote: voteOnPoll, updateVote: updateVoteOnPoll } = useVote(
     post.poll?.pollId || 0
   );
 
-  // 현재 사용자가 게시물 작성자인지 확인
   const isAuthor = user?.username === author.username;
 
-  // Sync local state with prop when post data changes (e.g., after refresh)
   useEffect(() => {
     setIsLiked(post.isLiked);
     setIsSaved(post.isSaved);
@@ -99,13 +96,12 @@ const Post: React.FC<PostProps> = ({
     setCommentCount(stats.comments);
   }, [post.isLiked, post.isSaved, stats.likes, stats.comments]);
 
-  const handleLikeToggle = () => {
+  const handleLikeToggle = useCallback(() => {
     if (!user) {
       addToast('로그인이 필요합니다', 'warning');
       return;
     }
 
-    // 낙관적 업데이트
     const previousIsLiked = isLiked;
     const previousLikeCount = likeCount;
 
@@ -114,7 +110,6 @@ const Post: React.FC<PostProps> = ({
       setLikeCount((prev) => prev - 1);
       unlikeMutation.mutate(post.postId, {
         onError: () => {
-          // 실패 시 롤백
           setIsLiked(previousIsLiked);
           setLikeCount(previousLikeCount);
         },
@@ -126,16 +121,23 @@ const Post: React.FC<PostProps> = ({
         { postId: post.postId },
         {
           onError: () => {
-            // 실패 시 롤백
             setIsLiked(previousIsLiked);
             setLikeCount(previousLikeCount);
           },
         }
       );
     }
-  };
+  }, [
+    user,
+    addToast,
+    isLiked,
+    likeCount,
+    unlikeMutation,
+    likeMutation,
+    post.postId,
+  ]);
 
-  const handleBookmarkToggle = () => {
+  const handleBookmarkToggle = useCallback(() => {
     if (!user) {
       addToast('로그인이 필요합니다', 'warning');
       return;
@@ -143,13 +145,13 @@ const Post: React.FC<PostProps> = ({
 
     toggleBookmark(post.postId, isSaved);
     setIsSaved(!isSaved);
-  };
+  }, [user, addToast, toggleBookmark, post.postId, isSaved]);
 
-  const handleCommentToggle = () => {
-    setShowComments(!showComments);
-  };
+  const handleCommentToggle = useCallback(() => {
+    setShowComments((prev) => !prev);
+  }, []);
 
-  const handleCommentSubmit = () => {
+  const handleCommentSubmit = useCallback(() => {
     if (!user) {
       addToast('로그인이 필요합니다', 'warning');
       return;
@@ -169,9 +171,9 @@ const Post: React.FC<PostProps> = ({
         },
       }
     );
-  };
+  }, [user, addToast, commentText, createCommentMutation, post.postId]);
 
-  const handleDeletePost = () => {
+  const handleDeletePost = useCallback(() => {
     deletePostMutation.mutate(post.postId, {
       onSuccess: () => {
         if (onPostDeleted) {
@@ -179,23 +181,22 @@ const Post: React.FC<PostProps> = ({
         }
       },
     });
-  };
+  }, [deletePostMutation, post.postId, onPostDeleted]);
 
-  const handleImageClick = (index: number) => {
+  const handleImageClick = useCallback((index: number) => {
     setSelectedImageIndex(index);
     setShowImageGallery(true);
-  };
+  }, []);
 
-  const handlePostClick = () => {
-    // 게시물 데이터를 미리 캐시에 설정 (즉시 표시를 위해)
+  const handlePostClick = useCallback(() => {
     queryClient.setQueryData([...queryKeys.posts, post.postId], post);
-    // Intercepting route를 통해 모달로 표시 (피드 상태 유지)
+
     router.push(`/@${author.username}/post/${post.postId}`);
-  };
+  }, [queryClient, post, author.username, router]);
 
   return (
-    <div className="border border-gray-200 rounded-lg px-6 py-5 mb-3 hover:bg-gray-50/50 transition-colors">
-      {/* 헤더: 프로필 + 이름/아이디 + 시간 */}
+    <div className="px-0 lg:px-6 py-5 hover:bg-gray-50/50 transition-colors">
+      {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <Link
@@ -222,7 +223,7 @@ const Post: React.FC<PostProps> = ({
               </div>
             )}
           </Link>
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-col">
             <Link
               href={`/profile/${author.username}`}
               className="font-semibold text-gray-900 text-[15px] hover:underline"
@@ -237,7 +238,7 @@ const Post: React.FC<PostProps> = ({
             </Link>
             <Link
               href={`/profile/${author.username}`}
-              className="text-sm text-gray-500 hover:underline"
+              className="text-xs text-gray-500 hover:underline"
               onClick={(e) => {
                 if (disableNavigation) {
                   e.preventDefault();
@@ -247,11 +248,6 @@ const Post: React.FC<PostProps> = ({
             >
               @{author.username}
             </Link>
-            {author.isCreator && (
-              <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded ml-1">
-                크리에이터
-              </span>
-            )}
           </div>
         </div>
         <time className="text-xs text-gray-400">
@@ -494,4 +490,4 @@ const Post: React.FC<PostProps> = ({
   );
 };
 
-export default Post;
+export default memo(Post);

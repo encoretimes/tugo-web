@@ -29,10 +29,10 @@ interface PostDetailContentProps {
 function CommentSkeleton() {
   return (
     <div className="flex space-x-2 animate-pulse">
-      <div className="h-8 w-8 rounded-full bg-gray-200"></div>
+      <div className="h-8 w-8 rounded-full bg-gray-50"></div>
       <div className="flex-1 space-y-2">
-        <div className="h-4 bg-gray-200 rounded w-24"></div>
-        <div className="h-12 bg-gray-200 rounded"></div>
+        <div className="h-4 bg-gray-50 rounded w-24"></div>
+        <div className="h-12 bg-gray-50 rounded"></div>
       </div>
     </div>
   );
@@ -185,11 +185,6 @@ export default function PostDetailContent({
                   >
                     {author.name}
                   </button>
-                  {author.isCreator && (
-                    <span className="px-2 py-0.5 text-xs font-medium text-primary-600 bg-primary-50 rounded">
-                      크리에이터
-                    </span>
-                  )}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <button
