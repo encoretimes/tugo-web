@@ -195,7 +195,7 @@ const Post: React.FC<PostProps> = ({
   }, [queryClient, post, author.username, router]);
 
   return (
-    <div className="px-0 lg:px-6 py-5 hover:bg-gray-50/50 transition-colors">
+    <div className="px-6 lg:px-6 py-5 hover:bg-gray-50/50 transition-colors">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
