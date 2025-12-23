@@ -3,8 +3,26 @@ name: Build Docker
 on:
   push:
     branches: [main, develop]
+    paths:
+      - 'Dockerfile'
+      - 'package*.json'
+      - 'app/**'
+      - 'public/**'
+      - 'next.config.*'
+      - 'tsconfig.json'
   pull_request:
     branches: [main, develop]
+    paths:
+      - 'Dockerfile'
+      - 'package*.json'
+      - 'app/**'
+      - 'public/**'
+      - 'next.config.*'
+      - 'tsconfig.json'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:

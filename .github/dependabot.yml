@@ -15,6 +15,12 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    # Ignore major version updates that require manual migration
+    ignore:
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
     # Group updates to reduce PR noise
     groups:
       # Group all minor and patch updates together
