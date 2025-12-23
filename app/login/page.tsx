@@ -1,11 +1,15 @@
 'use client';
 
 import { useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useUserStore } from '@/store/userStore';
 
 function LoginContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { setUser } = useUserStore();
+  const isDev = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     const returnUrl = searchParams.get('returnUrl');
@@ -20,6 +24,47 @@ function LoginContent() {
       window.location.href = `${apiUrl}/oauth/kakao/login`;
     } else if (provider === 'naver') {
       window.location.href = `${apiUrl}/oauth/naver/login`;
+    }
+  };
+
+  const handleDevLogin = async () => {
+    try {
+      // Call backend dev login endpoint to create a real session
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+      const response = await fetch(`${apiUrl}/api/v1/dev/login`, {
+        method: 'POST',
+        credentials: 'include', // Important: include cookies for session
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Dev login failed:', response.status, errorText);
+        throw new Error(`Dev login failed: ${response.status} - ${errorText}`);
+      }
+
+      // Set user in frontend store
+      setUser({
+        id: 1,
+        name: '개발자',
+        email: 'dev@tugo.local',
+        role: 'USER',
+        profileImageUrl: null,
+        username: 'developer',
+      });
+
+      const returnUrl = sessionStorage.getItem('returnUrl');
+      if (returnUrl) {
+        sessionStorage.removeItem('returnUrl');
+        router.push(returnUrl);
+      } else {
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Dev login error:', error);
+      alert(
+        '개발자 로그인에 실패했습니다. 서버가 실행 중인지 확인하세요.\n' +
+          'Docker Compose를 재시작했는지 확인하세요.'
+      );
     }
   };
 
@@ -83,6 +128,40 @@ function LoginContent() {
                 소셜 계정으로 간편하게 시작하세요
               </p>
             </div>
+
+            {/* Dev Mode Login - Only shown in development */}
+            {isDev && (
+              <>
+                <div className="mb-6">
+                  <button
+                    onClick={handleDevLogin}
+                    className="w-full flex items-center justify-center gap-3 bg-purple-600 text-white font-medium py-3.5 px-6 rounded-xl hover:bg-purple-700 transition-all border-2 border-purple-400"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                      />
+                    </svg>
+                    <span>개발자 모드로 로그인 (Dev Only)</span>
+                  </button>
+                </div>
+
+                {/* Divider */}
+                <div className="flex items-center mb-6">
+                  <div className="flex-1 h-px bg-gray-200"></div>
+                  <span className="px-4 text-xs text-gray-400">또는</span>
+                  <div className="flex-1 h-px bg-gray-200"></div>
+                </div>
+              </>
+            )}
 
             {/* Social Login Buttons */}
             <div className="space-y-3 mb-8">
