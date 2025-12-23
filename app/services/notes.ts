@@ -1,9 +1,9 @@
-import { apiClient } from '@/app/lib/api-client';
+import { apiClient } from '@/lib/api-client';
 import type {
   MessageResponse,
   RoomResponse,
   RoomWithMessageResponse,
-} from '@/app/types/notes';
+} from '@/types/notes';
 
 /**
  * 쪽지방 목록 조회

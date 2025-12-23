@@ -2,7 +2,7 @@
 
 import { XMarkIcon, PlusIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { PollCreateData } from '@/app/types/poll';
+import { PollCreateData } from '@/types/post';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 

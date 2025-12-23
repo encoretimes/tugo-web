@@ -3,7 +3,7 @@ import {
   getNotificationPreferences,
   updateNotificationPreference,
   initializeNotificationPreferences,
-} from '@/api/notificationPreferences';
+} from '@/services/notificationPreferences';
 import { NotificationType } from '@/types/notification';
 
 /**

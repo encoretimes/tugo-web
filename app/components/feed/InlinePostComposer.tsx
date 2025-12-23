@@ -11,14 +11,14 @@ import {
 import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { useCreatePost } from '@/hooks/usePosts';
-import { uploadImages } from '@/api/media';
+import { uploadImages } from '@/services/media';
 import { useToastStore } from '@/store/toastStore';
 import EmojiPickerButton from './EmojiPicker';
 import MentionInput from './MentionInput';
 import PollCreatorModal from '@/components/modals/PollCreatorModal';
 import MultiImageEditor from '@/components/modals/MultiImageEditor';
 import ImageEditor from '@/components/modals/ImageEditor';
-import { PollCreateData } from '@/app/types/poll';
+import { PollCreateData } from '@/types/post';
 
 const InlinePostComposer = () => {
   const { user } = useUserStore();

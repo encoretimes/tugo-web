@@ -5,7 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, PhotoIcon, UserIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { apiClient } from '@/lib/api-client';
-import { uploadImage } from '@/api/media';
+import { uploadImage } from '@/services/media';
 import { useToastStore } from '@/store/toastStore';
 import { useUserStore } from '@/store/userStore';
 import ProfileImageEditor from './ProfileImageEditor';

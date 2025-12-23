@@ -1,4 +1,4 @@
-import { Point } from '@/types/point';
+import { Point } from '@/types/notification';
 
 export const getPoints = async (): Promise<Point[]> => {
   const res = await fetch('/api/points');

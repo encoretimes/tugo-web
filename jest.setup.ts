@@ -1,5 +1,5 @@
 // Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
@@ -12,31 +12,31 @@ jest.mock('next/navigation', () => ({
       pathname: '/',
       query: {},
       asPath: '/',
-    }
+    };
   },
   usePathname() {
-    return '/'
+    return '/';
   },
   useSearchParams() {
-    return new URLSearchParams()
+    return new URLSearchParams();
   },
   useParams() {
-    return {}
+    return {};
   },
-}))
+}));
 
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    const { src, alt, ...rest } = props
+    const { src, alt, ...rest } = props;
     // eslint-disable-next-line jsx-a11y/alt-text, @next/next/no-img-element
-    return React.createElement('img', { src, alt, ...rest })
+    return React.createElement('img', { src, alt, ...rest });
   },
-}))
+}));
 
 // Import React for createElement
-import React from 'react'
+import React from 'react';
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -44,10 +44,10 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   takeRecords() {
-    return []
+    return [];
   }
   unobserve() {}
-} as any
+} as any;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -55,7 +55,7 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-} as any
+} as any;
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -70,25 +70,25 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-})
+});
 
 // Mock window.scrollTo
-global.scrollTo = jest.fn()
+global.scrollTo = jest.fn();
 
 // Suppress console errors in tests (optional - remove if you want to see them)
-const originalError = console.error
+const originalError = console.error;
 beforeAll(() => {
   console.error = (...args: any) => {
     if (
       typeof args[0] === 'string' &&
       args[0].includes('Warning: ReactDOM.render')
     ) {
-      return
+      return;
     }
-    originalError.call(console, ...args)
-  }
-})
+    originalError.call(console, ...args);
+  };
+});
 
 afterAll(() => {
-  console.error = originalError
-})
+  console.error = originalError;
+});

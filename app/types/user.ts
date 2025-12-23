@@ -1,5 +1,6 @@
-import { Post } from '@/types/post';
+import { Post } from './post';
 
+// User Types
 export interface User {
   id: string;
   name: string;
@@ -33,4 +34,33 @@ export interface UserPost {
     reposts: number;
     likes: number;
   };
+}
+
+// Subscription Types
+export type SubscriptionStatus = 'ACTIVE' | 'CANCELED' | 'EXPIRED';
+
+export interface Subscription {
+  id: number;
+  targetMemberId: number;
+  memberId: number;
+  memberName?: string;
+  memberUsername?: string;
+  memberProfileImageUrl?: string;
+  subscriptionStatus: SubscriptionStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubscriptionCreateRequest {
+  targetMemberId: number;
+}
+
+export interface SubscriptionStatusResponse {
+  isSubscribed: boolean;
+  subscriptionId: number | null;
+}
+
+export interface SubscriberCountResponse {
+  memberId: number;
+  count: number;
 }

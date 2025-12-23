@@ -12,10 +12,10 @@ import {
   createPost,
   updatePost,
   deletePost,
-} from '@/api/posts';
-import type { UpdatePostRequest } from '@/api/posts';
+} from '@/services/posts';
+import type { UpdatePostRequest } from '@/services/posts';
 import { Post } from '@/types/post';
-import { PageResponse } from '@/types/pagination';
+import { PageResponse } from '@/types/common';
 import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
 import { useToastStore } from '@/store/toastStore';
 

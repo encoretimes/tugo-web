@@ -30,7 +30,8 @@ function LoginContent() {
   const handleDevLogin = async () => {
     try {
       // Call backend dev login endpoint to create a real session
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
       const response = await fetch(`${apiUrl}/api/v1/dev/login`, {
         method: 'POST',
         credentials: 'include', // Important: include cookies for session

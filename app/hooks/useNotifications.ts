@@ -10,7 +10,7 @@ import {
   markAsRead,
   markAllAsRead,
   deleteNotification,
-} from '@/api/notifications';
+} from '@/services/notifications';
 
 /**
  * 알림 목록 조회 (무한 스크롤)

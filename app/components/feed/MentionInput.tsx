@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { searchMembers } from '@/api/members';
-import { MemberSearchResult } from '@/types/mention';
+import { searchMembers } from '@/services/members';
+import { MemberSearchResult } from '@/types/post';
 import Image from 'next/image';
 import { UserIcon } from '@heroicons/react/24/solid';
 

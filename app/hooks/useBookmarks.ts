@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addBookmark, getBookmarks, removeBookmark } from '@/api/bookmarks';
+import {
+  addBookmark,
+  getBookmarks,
+  removeBookmark,
+} from '@/services/bookmarks';
 import { useToastStore } from '@/store/toastStore';
 import { queryKeys } from '@/lib/query-keys';
 

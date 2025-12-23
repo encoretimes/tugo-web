@@ -1,5 +1,5 @@
 import { apiClient } from '@/lib/api-client';
-import { MemberSearchResult } from '@/types/mention';
+import { MemberSearchResult } from '@/types/post';
 
 /**
  * 사용자명으로 회원 검색

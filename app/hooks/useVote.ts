@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { vote, updateVote, deleteVote } from '../api/poll';
+import { vote, updateVote, deleteVote } from '@/services/poll';
 import { useToastStore } from '@/store/toastStore';
 
 export function useVote(pollId: number) {

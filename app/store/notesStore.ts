@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import SockJS from 'sockjs-client';
 import { Client, StompSubscription } from '@stomp/stompjs';
-import type { MessageResponse } from '@/app/types/notes';
+import type { MessageResponse } from '@/types/notes';
 
 const WS_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
 

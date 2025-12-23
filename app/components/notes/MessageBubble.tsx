@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import type { MessageResponse } from '@/app/types/notes';
+import type { MessageResponse } from '@/types/notes';
 
 interface MessageBubbleProps {
   message: MessageResponse;

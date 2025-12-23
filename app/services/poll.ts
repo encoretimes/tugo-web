@@ -1,5 +1,5 @@
 import { apiClient } from '@/lib/api-client';
-import { VoteRequest } from '../types/poll';
+import { VoteRequest } from '@/types/post';
 
 export async function vote(pollId: number, optionIds: number[]): Promise<void> {
   const request: VoteRequest = { optionIds };

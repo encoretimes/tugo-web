@@ -1,7 +1,7 @@
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
-import { getDebatesPage, DebateSortOption } from '@/api/posts';
+import { getDebatesPage, DebateSortOption } from '@/services/posts';
 import { Post } from '@/types/post';
-import { PageResponse } from '@/types/pagination';
+import { PageResponse } from '@/types/common';
 import { queryKeys } from '@/lib/query-keys';
 
 /**

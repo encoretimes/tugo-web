@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { likePost, unlikePost } from '@/api/likes';
+import { likePost, unlikePost } from '@/services/likes';
 import { queryKeys } from '@/lib/query-keys';
 import { useToastStore } from '@/store/toastStore';
 

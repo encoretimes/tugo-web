@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import Post from '@/components/feed/Post';
 import PostSkeleton from '@/components/feed/PostSkeleton';
 import { useInfiniteDebates } from '@/hooks/useDebates';
-import { DebateSortOption } from '@/api/posts';
+import { DebateSortOption } from '@/services/posts';
 
 type SortOption = {
   id: DebateSortOption;

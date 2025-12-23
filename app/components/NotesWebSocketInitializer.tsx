@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useUserStore } from '@/app/store/userStore';
-import { useNotesStore } from '@/app/store/notesStore';
+import { useUserStore } from '@/store/userStore';
+import { useNotesStore } from '@/store/notesStore';
 
 export default function NotesWebSocketInitializer() {
   const user = useUserStore((state) => state.user);

@@ -1,10 +1,10 @@
 'use client';
 
-import { useRooms } from '@/app/hooks/useNotes';
+import { useRooms } from '@/hooks/useNotes';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useState } from 'react';
-import type { RoomResponse } from '@/app/types/notes';
+import type { RoomResponse } from '@/types/notes';
 
 interface RoomListProps {
   selectedRoomId: number | null;

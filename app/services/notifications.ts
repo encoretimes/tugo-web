@@ -1,5 +1,5 @@
 import { Notification } from '@/types/notification';
-import { PageResponse } from '@/types/pagination';
+import { PageResponse } from '@/types/common';
 import { apiClient } from '@/lib/api-client';
 
 /**

@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { UserIcon } from '@heroicons/react/24/outline';
 import RoomList from '@/app/components/notes/RoomList';
 import ChatRoom from '@/app/components/notes/ChatRoom';
-import type { RoomResponse } from '@/app/types/notes';
+import type { RoomResponse } from '@/types/notes';
 
 export default function NotesPage() {
   const searchParams = useSearchParams();

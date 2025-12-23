@@ -1,3 +1,4 @@
+// Pagination Types
 export interface PageResponse<T> {
   content: T[];
   totalElements: number;
@@ -17,4 +18,14 @@ export interface PageParams {
   page?: number;
   size?: number;
   sort?: string;
+}
+
+// Party Types
+export interface Party {
+  id: number;
+  name: string;
+  description: string;
+  memberCount: number;
+  bannerImageUrl: string;
+  isJoined?: boolean;
 }

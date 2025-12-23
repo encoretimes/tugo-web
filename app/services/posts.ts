@@ -1,6 +1,5 @@
-import { Post, PostType } from '@/types/post';
-import { PageResponse } from '@/types/pagination';
-import { PollCreateData } from '@/types/poll';
+import { Post, PostType, PollCreateData } from '@/types/post';
+import { PageResponse } from '@/types/common';
 import { apiClient } from '@/lib/api-client';
 
 export const getPosts = async (): Promise<Post[]> => {

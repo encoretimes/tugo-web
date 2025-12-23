@@ -4,7 +4,7 @@ import type {
   SubscriptionCreateRequest,
   SubscriptionStatusResponse,
   SubscriberCountResponse,
-} from '@/types/subscription';
+} from '@/types/user';
 
 export const subscriptionsApi = {
   // 구독 생성

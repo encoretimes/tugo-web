@@ -4,7 +4,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import PollCreator from '../feed/PollCreator';
-import { PollCreateData } from '@/app/types/poll';
+import { PollCreateData } from '@/types/post';
 
 interface PollCreatorModalProps {
   isOpen: boolean;

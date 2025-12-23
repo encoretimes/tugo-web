@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useNotesStore } from '@/app/store/notesStore';
-import type { MessageResponse } from '@/app/types/notes';
+import { useNotesStore } from '@/store/notesStore';
+import type { MessageResponse } from '@/types/notes';
 
 export const useNotesWebSocket = () => {
   const connected = useNotesStore((state) => state.connected);

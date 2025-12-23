@@ -1,4 +1,4 @@
-import { Comment, CreateCommentRequest } from '@/types/comment';
+import { Comment, CreateCommentRequest } from '@/types/post';
 import { apiClient } from '@/lib/api-client';
 
 export interface CommentsPageResponse {

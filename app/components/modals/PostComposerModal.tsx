@@ -17,14 +17,14 @@ import {
 } from '@heroicons/react/24/outline';
 import { useUserStore } from '@/store/userStore';
 import { useCreatePost } from '@/hooks/usePosts';
-import { uploadImages } from '@/api/media';
+import { uploadImages } from '@/services/media';
 import { useToastStore } from '@/store/toastStore';
 import ImageEditor from './ImageEditor';
 import MultiImageEditor from './MultiImageEditor';
 import EmojiPickerButton from '../feed/EmojiPicker';
 import PollCreatorModal from './PollCreatorModal';
 import MentionInput from '../feed/MentionInput';
-import { PollCreateData } from '@/app/types/poll';
+import { PollCreateData } from '@/types/post';
 
 interface PostComposerModalProps {
   isOpen: boolean;

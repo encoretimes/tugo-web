@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { subscriptionsApi } from '@/api/subscriptions';
-import type { SubscriptionCreateRequest } from '@/types/subscription';
+import { subscriptionsApi } from '@/services/subscriptions';
+import type { SubscriptionCreateRequest } from '@/types/user';
 
 // 구독 상태 조회
 export const useSubscriptionStatus = (targetMemberId: number) => {

@@ -7,8 +7,8 @@ import {
   getMessagesWithUser,
   markAsRead,
   sendMessageRest,
-} from '@/app/api/notes';
-import { useNotesStore } from '@/app/store/notesStore';
+} from '@/services/notes';
+import { useNotesStore } from '@/store/notesStore';
 
 /**
  * 쪽지방 목록 조회 훅

@@ -3,8 +3,8 @@ import {
   useQueryClient,
   useInfiniteQuery,
 } from '@tanstack/react-query';
-import { getComments, createComment, deleteComment } from '@/api/comments';
-import type { Comment } from '@/types/comment';
+import { getComments, createComment, deleteComment } from '@/services/comments';
+import type { Comment } from '@/types/post';
 import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
 import { useToastStore } from '@/store/toastStore';
 import { useUserStore } from '@/store/userStore';

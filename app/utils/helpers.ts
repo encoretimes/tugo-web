@@ -9,7 +9,7 @@ export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-  }).format(amount)
+  }).format(amount);
 }
 
 /**
@@ -17,25 +17,25 @@ export function formatCurrency(amount: number): string {
  */
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) {
-    return text
+    return text;
   }
-  return text.slice(0, maxLength) + '...'
+  return text.slice(0, maxLength) + '...';
 }
 
 /**
  * Check if a string is a valid email
  */
 export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 /**
  * Calculate percentage
  */
 export function calculatePercentage(value: number, total: number): number {
-  if (total === 0) return 0
-  return Math.round((value / total) * 100)
+  if (total === 0) return 0;
+  return Math.round((value / total) * 100);
 }
 
 /**
@@ -44,19 +44,19 @@ export function calculatePercentage(value: number, total: number): number {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number,
+  wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null
+  let timeout: NodeJS.Timeout | null = null;
 
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
-      timeout = null
-      func(...args)
-    }
+      timeout = null;
+      func(...args);
+    };
 
     if (timeout) {
-      clearTimeout(timeout)
+      clearTimeout(timeout);
     }
-    timeout = setTimeout(later, wait)
-  }
+    timeout = setTimeout(later, wait);
+  };
 }

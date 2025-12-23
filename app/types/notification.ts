@@ -1,3 +1,4 @@
+// Notification Types
 export type NotificationType = 'LIKE' | 'COMMENT' | 'MENTION' | 'SUBSCRIPTION';
 
 export type NotificationMethod = 'WEB' | 'EMAIL';
@@ -18,4 +19,13 @@ export interface NotificationPreference {
   notificationType: NotificationType;
   enabled: boolean;
   method: NotificationMethod;
+}
+
+// Point Types
+export interface Point {
+  id: number;
+  type: 'earn' | 'spend';
+  description: string;
+  amount: number;
+  date: string;
 }

@@ -1,18 +1,14 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import {
-  useMessages,
-  useMarkAsRead,
-  useSendMessage,
-} from '@/app/hooks/useNotes';
-import { useNotesWebSocket } from '@/app/hooks/useNotesWebSocket';
-import { useUserStore } from '@/app/store/userStore';
+import { useMessages, useMarkAsRead, useSendMessage } from '@/hooks/useNotes';
+import { useNotesWebSocket } from '@/hooks/useNotesWebSocket';
+import { useUserStore } from '@/store/userStore';
 import { useQueryClient } from '@tanstack/react-query';
 import MessageBubble from './MessageBubble';
 import { PaperAirplaneIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
-import type { MessageResponse } from '@/app/types/notes';
+import type { MessageResponse } from '@/types/notes';
 
 interface ChatRoomProps {
   otherUserId: number;

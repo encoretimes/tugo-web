@@ -6,8 +6,8 @@ import { useToastStore } from '@/store/toastStore';
 import { UserIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import ProfileImageEditor from '@/components/modals/ProfileImageEditor';
-import { uploadImage } from '@/api/media';
-import { updateMyProfile } from '@/api/profiles';
+import { uploadImage } from '@/services/media';
+import { updateMyProfile } from '@/services/profiles';
 
 const ProfileSection = () => {
   const { user, updateProfile } = useUserStore();
