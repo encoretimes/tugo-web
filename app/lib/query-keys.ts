@@ -23,6 +23,12 @@ export const queryKeys = {
   // 크리에이터 관련
   creators: ['creators'] as const,
 
+  // 뉴스 관련
+  news: ['news'] as const,
+
+  // 실시간 검색어 관련
+  trending: ['trending'] as const,
+
   // 북마크 관련
   bookmarks: (page?: number, size?: number) =>
     ['bookmarks', page, size] as const,

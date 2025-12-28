@@ -4,12 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { FireIcon } from '@heroicons/react/24/outline';
 import { useDebates } from '@/hooks/useDebates';
 import { usePopularCreators } from '@/hooks/useCreators';
+import { useTrendingKeywords } from '@/hooks/useSearch';
 
 const RightSidebar = () => {
   const { data: debates, isLoading: isLoadingDebates } = useDebates(5);
   const { data: creatorsData, isLoading: isLoadingCreators } = usePopularCreators(3);
+  const { data: trendingKeywords, isLoading: isLoadingTrending } = useTrendingKeywords(5);
 
   return (
     <aside className="h-full p-4 text-black flex flex-col justify-center">
@@ -151,6 +154,62 @@ const RightSidebar = () => {
             ) : (
               <li className="text-sm text-gray-400 text-center py-4">
                 아직 크리에이터가 없습니다
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* 구분선 */}
+        <div className="h-px bg-gray-200 my-6" />
+
+        {/* 실시간 검색어 */}
+        <div>
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-1">
+              <FireIcon className="h-4 w-4 text-orange-500" />
+              <h3 className="text-base font-bold text-gray-900">
+                실시간 검색어
+              </h3>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400 mb-4">
+            지금 가장 많이 검색되는 키워드
+          </p>
+          <ul className="space-y-1">
+            {isLoadingTrending ? (
+              [1, 2, 3, 4, 5].map((i) => (
+                <li key={i} className="flex items-center gap-3 py-2">
+                  <div className="w-6 h-6 bg-gray-100 rounded-lg animate-pulse" />
+                  <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+                </li>
+              ))
+            ) : trendingKeywords && trendingKeywords.length > 0 ? (
+              trendingKeywords.map((item, index) => (
+                <li key={item.keyword}>
+                  <Link
+                    href={`/explore/search?q=${encodeURIComponent(item.keyword)}`}
+                    className="flex items-center gap-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <span
+                      className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
+                      style={{
+                        background:
+                          index < 3
+                            ? 'linear-gradient(135deg, #F97316 0%, #FB923C 100%)'
+                            : 'linear-gradient(135deg, #9CA3AF 0%, #D1D5DB 100%)',
+                      }}
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="flex-1 text-sm text-gray-800 truncate">
+                      {item.keyword}
+                    </span>
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li className="text-sm text-gray-400 text-center py-4">
+                검색어 데이터를 수집 중입니다
               </li>
             )}
           </ul>
