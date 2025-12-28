@@ -5,9 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
 import { useDebates } from '@/hooks/useDebates';
+import { usePopularCreators } from '@/hooks/useCreators';
 
 const RightSidebar = () => {
   const { data: debates, isLoading: isLoadingDebates } = useDebates(5);
+  const { data: creatorsData, isLoading: isLoadingCreators } = usePopularCreators(3);
 
   return (
     <aside className="h-full p-4 text-black flex flex-col justify-center">
@@ -16,7 +18,7 @@ const RightSidebar = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-1">
             <Link
-              href="/explore?tab=debates"
+              href="/explore/votes"
               className="flex items-center gap-1 hover:opacity-70 transition-opacity"
             >
               <h3 className="text-base font-bold text-gray-900">
@@ -91,98 +93,66 @@ const RightSidebar = () => {
         {/* 구분선 */}
         <div className="h-px bg-gray-200 mb-6" />
 
-        {/* 추천 크리에이터 */}
+        {/* 인기 크리에이터 */}
         <div>
           <div className="flex items-center justify-between mb-1">
             <Link
-              href="/explore"
+              href="/explore/creators"
               className="flex items-center gap-1 hover:opacity-70 transition-opacity"
             >
               <h3 className="text-base font-bold text-gray-900">
-                추천 크리에이터
+                인기 크리에이터
               </h3>
               <ChevronRightIcon className="h-4 w-4 text-gray-900" />
             </Link>
           </div>
           <p className="text-xs text-gray-400 mb-4">
-            회원님과 비슷한 성향의 크리에이터를 추천해드릴게요!
+            지금 가장 주목받는 크리에이터들이에요!
           </p>
           <ul className="space-y-3">
-            <li className="flex items-center justify-between gap-2">
-              <Link
-                href="/profile/minjun.kim"
-                className="flex items-center gap-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2 min-w-0"
-              >
-                <Image
-                  src="https://i.pravatar.cc/150?u=minjun.kim"
-                  alt="김민준"
-                  width={36}
-                  height={36}
-                  className="h-9 w-9 rounded-full shrink-0"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-gray-900 truncate">
-                    김민준
+            {isLoadingCreators ? (
+              [1, 2, 3].map((i) => (
+                <li key={i} className="flex items-center gap-2">
+                  <div className="h-9 w-9 rounded-full bg-gray-100 animate-pulse shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="h-4 w-20 bg-gray-100 rounded animate-pulse mb-1" />
+                    <div className="h-3 w-16 bg-gray-100 rounded animate-pulse" />
                   </div>
-                  <div className="text-xs text-gray-500 truncate">
-                    @minjun.kim
-                  </div>
-                </div>
-              </Link>
-              <button className="rounded-full bg-[#6956E3] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#5a48c9] shrink-0">
-                구독
-              </button>
-            </li>
-            <li className="flex items-center justify-between gap-2">
-              <Link
-                href="/profile/seoyeon.lee"
-                className="flex items-center gap-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2 min-w-0"
-              >
-                <Image
-                  src="https://i.pravatar.cc/150?u=seoyeon.lee"
-                  alt="이서연"
-                  width={36}
-                  height={36}
-                  className="h-9 w-9 rounded-full shrink-0"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-gray-900 truncate">
-                    이서연
-                  </div>
-                  <div className="text-xs text-gray-500 truncate">
-                    @seoyeon.lee
-                  </div>
-                </div>
-              </Link>
-              <button className="rounded-full bg-[#6956E3] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#5a48c9] shrink-0">
-                구독
-              </button>
-            </li>
-            <li className="flex items-center justify-between gap-2">
-              <Link
-                href="/profile/jinho.park"
-                className="flex items-center gap-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2 min-w-0"
-              >
-                <Image
-                  src="https://i.pravatar.cc/150?u=jinho.park"
-                  alt="박진호"
-                  width={36}
-                  height={36}
-                  className="h-9 w-9 rounded-full shrink-0"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-gray-900 truncate">
-                    박진호
-                  </div>
-                  <div className="text-xs text-gray-500 truncate">
-                    @jinho.park
-                  </div>
-                </div>
-              </Link>
-              <button className="rounded-full bg-[#6956E3] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#5a48c9] shrink-0">
-                구독
-              </button>
-            </li>
+                </li>
+              ))
+            ) : creatorsData && creatorsData.content.length > 0 ? (
+              creatorsData.content.map((creator) => (
+                <li key={creator.memberId} className="flex items-center justify-between gap-2">
+                  <Link
+                    href={`/@${creator.username}`}
+                    className="flex items-center gap-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2 min-w-0"
+                  >
+                    <Image
+                      src={creator.profileImageUrl || `https://i.pravatar.cc/150?u=${creator.username}`}
+                      alt={creator.name}
+                      width={36}
+                      height={36}
+                      className="h-9 w-9 rounded-full object-cover shrink-0"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-sm text-gray-900 truncate">
+                        {creator.name}
+                      </div>
+                      <div className="text-xs text-gray-500 truncate">
+                        @{creator.username}
+                      </div>
+                    </div>
+                  </Link>
+                  <button className="rounded-full bg-[#6956E3] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#5a48c9] shrink-0">
+                    구독
+                  </button>
+                </li>
+              ))
+            ) : (
+              <li className="text-sm text-gray-400 text-center py-4">
+                아직 크리에이터가 없습니다
+              </li>
+            )}
           </ul>
         </div>
       </div>
