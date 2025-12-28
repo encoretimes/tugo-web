@@ -12,6 +12,8 @@ import {
   createPost,
   updatePost,
   deletePost,
+  getRecommendedPostsPage,
+  getFollowingPostsPage,
 } from '@/services/posts';
 import type { UpdatePostRequest } from '@/services/posts';
 import { Post } from '@/types/post';
@@ -283,6 +285,38 @@ export const useInfinitePosts = (subscriptionOnly = false, pageSize = 20) => {
     queryKey: [...queryKeys.posts, 'infinite', subscriptionOnly],
     queryFn: ({ pageParam = 0 }) =>
       getPostsPage(pageParam, pageSize, subscriptionOnly),
+    getNextPageParam: (lastPage) => {
+      return lastPage.last ? undefined : lastPage.number + 1;
+    },
+    initialPageParam: 0,
+  });
+};
+
+/**
+ * 추천 피드 무한 스크롤 Hook
+ * 인기도 기반으로 추천된 게시물을 조회합니다.
+ * @param pageSize - 페이지당 게시물 수
+ */
+export const useInfiniteRecommendedPosts = (pageSize = 20) => {
+  return useInfiniteQuery({
+    queryKey: [...queryKeys.posts, 'recommended'],
+    queryFn: ({ pageParam = 0 }) => getRecommendedPostsPage(pageParam, pageSize),
+    getNextPageParam: (lastPage) => {
+      return lastPage.last ? undefined : lastPage.number + 1;
+    },
+    initialPageParam: 0,
+  });
+};
+
+/**
+ * 팔로잉 피드 무한 스크롤 Hook
+ * 구독한 크리에이터들의 게시물을 최신순으로 조회합니다.
+ * @param pageSize - 페이지당 게시물 수
+ */
+export const useInfiniteFollowingPosts = (pageSize = 20) => {
+  return useInfiniteQuery({
+    queryKey: [...queryKeys.posts, 'following'],
+    queryFn: ({ pageParam = 0 }) => getFollowingPostsPage(pageParam, pageSize),
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
     },

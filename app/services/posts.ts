@@ -95,3 +95,41 @@ export const getDebatesPage = async (
     `/api/v1/posts/debates?${params.toString()}`
   );
 };
+
+/**
+ * 추천 피드 조회 (인기도 기반)
+ * @param page 페이지 번호
+ * @param size 페이지 크기
+ */
+export const getRecommendedPostsPage = async (
+  page = 0,
+  size = 20
+): Promise<PageResponse<Post>> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+  });
+
+  return apiClient.get<PageResponse<Post>>(
+    `/api/v1/posts/recommended?${params.toString()}`
+  );
+};
+
+/**
+ * 팔로잉 피드 조회 (구독한 크리에이터 게시물)
+ * @param page 페이지 번호
+ * @param size 페이지 크기
+ */
+export const getFollowingPostsPage = async (
+  page = 0,
+  size = 20
+): Promise<PageResponse<Post>> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+  });
+
+  return apiClient.get<PageResponse<Post>>(
+    `/api/v1/posts/following?${params.toString()}`
+  );
+};
