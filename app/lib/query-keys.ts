@@ -20,6 +20,9 @@ export const queryKeys = {
   // 투표(토론) 관련
   debates: ['debates'] as const,
 
+  // 크리에이터 관련
+  creators: ['creators'] as const,
+
   // 북마크 관련
   bookmarks: (page?: number, size?: number) =>
     ['bookmarks', page, size] as const,
