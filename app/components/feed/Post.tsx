@@ -200,12 +200,12 @@ const Post: React.FC<PostProps> = ({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <Link
-            href={`/profile/${author.username}`}
+            href={`/@${author.username}`}
             className="flex-shrink-0"
             onClick={(e) => {
               if (disableNavigation) {
                 e.preventDefault();
-                router.push(`/profile/${author.username}`);
+                router.push(`/@${author.username}`);
               }
             }}
           >
@@ -225,24 +225,24 @@ const Post: React.FC<PostProps> = ({
           </Link>
           <div className="flex flex-col">
             <Link
-              href={`/profile/${author.username}`}
+              href={`/@${author.username}`}
               className="font-semibold text-gray-900 text-[15px] hover:underline"
               onClick={(e) => {
                 if (disableNavigation) {
                   e.preventDefault();
-                  router.push(`/profile/${author.username}`);
+                  router.push(`/@${author.username}`);
                 }
               }}
             >
               {author.name}
             </Link>
             <Link
-              href={`/profile/${author.username}`}
+              href={`/@${author.username}`}
               className="text-xs text-gray-500 hover:underline"
               onClick={(e) => {
                 if (disableNavigation) {
                   e.preventDefault();
-                  router.push(`/profile/${author.username}`);
+                  router.push(`/@${author.username}`);
                 }
               }}
             >

@@ -39,7 +39,9 @@ export default function MainLayout({
     pathname.startsWith('/notifications') ||
     pathname.startsWith('/bookmarks') ||
     pathname.startsWith('/notes') ||
-    /\/post\/\d+/.test(pathname);
+    pathname.startsWith('/profile/') ||
+    /\/@[^/]+\/post\/\d+/.test(pathname) ||
+    /^\/post\/\d+$/.test(pathname);
 
   if (!hasHydrated) {
     return <div className="min-h-screen bg-white" />;

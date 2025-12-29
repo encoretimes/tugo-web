@@ -64,7 +64,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             className="w-full flex-shrink-0 snap-center cursor-pointer hover:opacity-95 transition-opacity"
             onClick={() => onImageClick(index)}
           >
-            <div className="relative aspect-[4/5] w-full">
+            <div className="relative aspect-square w-full">
               <Image
                 src={url}
                 alt={`Post image ${index + 1}`}

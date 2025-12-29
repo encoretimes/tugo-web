@@ -9,6 +9,7 @@ interface PollCardProps {
   onVote?: (optionIds: number[]) => void;
   onRevote?: (optionIds: number[]) => void;
   disabled?: boolean;
+  hideQuestion?: boolean;
 }
 
 export default function PollCard({
@@ -16,6 +17,7 @@ export default function PollCard({
   onVote,
   onRevote,
   disabled = false,
+  hideQuestion = false,
 }: PollCardProps) {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [isRevoting, setIsRevoting] = useState(false);
@@ -83,7 +85,7 @@ export default function PollCard({
   return (
     <div className="border border-gray-200 rounded-lg p-4">
       {/* 투표 질문 */}
-      {poll.question && (
+      {!hideQuestion && poll.question && (
         <h4 className="text-base font-medium text-gray-900 mb-3">
           {poll.question}
         </h4>

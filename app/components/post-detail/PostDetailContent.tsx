@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Post as PostType } from '@/types/post';
-import { UserIcon } from '@heroicons/react/24/outline';
+import { UserIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { useComments, useCreateComment } from '@/hooks/useComments';
 import { useUserStore } from '@/store/userStore';
 import { useToastStore } from '@/store/toastStore';
@@ -55,7 +55,7 @@ export default function PostDetailContent({
   const handleProfileNavigation = (username: string) => {
     onClose();
     setTimeout(() => {
-      router.push(`/profile/${username}`);
+      router.push(`/@${username}`);
     }, 10);
   };
 
@@ -216,40 +216,8 @@ export default function PostDetailContent({
           </div>
         </div>
 
-        {/* 오른쪽 열: 설문조사 + 댓글 목록 + 댓글 작성 */}
+        {/* 오른쪽 열: 댓글 목록 + 댓글 작성 */}
         <div className="flex flex-col bg-gray-50 rounded-r-lg p-6 h-full">
-          {/* 설문조사 (있는 경우만) - 접기/펼치기 가능 */}
-          {post.poll && (
-            <div className="mb-4 border-b pb-4 flex-shrink-0 overflow-hidden">
-              <button
-                onClick={() => setIsPollExpanded(!isPollExpanded)}
-                className="w-full flex items-center justify-between mb-3 text-left font-semibold text-gray-900 hover:text-primary-600 transition-colors"
-              >
-                <span>설문조사</span>
-                <svg
-                  className={`w-5 h-5 transition-transform ${isPollExpanded ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-              {isPollExpanded && (
-                <PollCard
-                  poll={post.poll}
-                  onVote={voteOnPoll}
-                  onRevote={updateVoteOnPoll}
-                />
-              )}
-            </div>
-          )}
-
           {/* 댓글 제목 */}
           <h3 className="font-semibold text-gray-900 mb-4 flex-shrink-0">
             댓글
@@ -257,9 +225,55 @@ export default function PostDetailContent({
 
           {/* 댓글 목록 - 스크롤 영역 */}
           <div
-            className="overflow-y-auto scrollbar-hide pr-4"
+            className="overflow-y-auto scrollbar-hide pr-4 relative"
             style={{ flex: '1 1 0', minHeight: 0 }}
           >
+            {/* 설문조사 (댓글처럼 표시, 함께 스크롤) */}
+            {post.poll && (
+              <div className="pb-3">
+                <div className="flex space-x-2">
+                  {/* 투표 아이콘 */}
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 flex-shrink-0">
+                    <ChartBarIcon className="h-5 w-5 text-primary-600" />
+                  </div>
+                  {/* 투표 카드 */}
+                  <div className="flex-1">
+                    <div className="rounded-lg bg-primary-50 p-3">
+                      <button
+                        onClick={() => setIsPollExpanded(!isPollExpanded)}
+                        className="w-full flex items-center justify-between mb-2 text-left"
+                      >
+                        <span className="text-sm font-medium text-gray-900">
+                          {post.poll.question || '투표에 참여해주세요'}
+                        </span>
+                        <svg
+                          className={`w-4 h-4 text-primary-600 transition-transform flex-shrink-0 ml-2 ${isPollExpanded ? 'rotate-180' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </button>
+                      {isPollExpanded && (
+                        <PollCard
+                          poll={post.poll}
+                          onVote={voteOnPoll}
+                          onRevote={updateVoteOnPoll}
+                          hideQuestion={true}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="space-y-3">
               {isLoadingComments ? (
                 <>

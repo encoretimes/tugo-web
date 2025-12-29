@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BookmarkIcon } from '@heroicons/react/24/outline';
 import NavItem from '@/components/nav/NavItem';
 import { useUnreadCount } from '@/hooks/useNotifications';
 import { useTotalUnreadCount } from '@/hooks/useNotes';
@@ -73,7 +72,8 @@ const LeftSidebar = () => {
             label="탐색"
             isCustomIcon
           />
-          <NavItem
+          {/* 숏폼 메뉴 - 아직 미구현으로 숨김 처리 */}
+          {/* <NavItem
             href="/shortform"
             icon={
               <Image
@@ -86,7 +86,7 @@ const LeftSidebar = () => {
             }
             label="숏폼"
             isCustomIcon
-          />
+          /> */}
           <NavItem
             href="/notes"
             icon={
@@ -142,11 +142,20 @@ const LeftSidebar = () => {
         <ul className="space-y-3 w-full">
           <NavItem
             href="/bookmarks"
-            icon={<BookmarkIcon className="w-7 h-7" />}
+            icon={
+              <Image
+                src="/system_ico/bookmark_pc.svg"
+                alt="보관함"
+                width={28}
+                height={28}
+                className="w-7 h-7"
+              />
+            }
             label="보관함"
+            isCustomIcon
           />
           <NavItem
-            href={user ? `/profile/${user.username}` : '/login'}
+            href={user ? `/@${user.username}` : '/login'}
             icon={
               <Image
                 src="/system_ico/profile_pc.svg"

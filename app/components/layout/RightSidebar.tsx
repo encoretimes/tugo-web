@@ -47,7 +47,7 @@ const RightSidebar = () => {
                     <li key={index}>
                       {post ? (
                         <Link
-                          href={`/@${post.author.username}/post/${post.postId}`}
+                          href={`/${post.author.username}/post/${post.postId}`}
                           className="flex items-center gap-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
                         >
                           <span

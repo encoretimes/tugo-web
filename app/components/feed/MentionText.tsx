@@ -37,7 +37,7 @@ export default function MentionText({
     parts.push(
       <Link
         key={`mention-${matchStart}-${username}`}
-        href={`/profile/${username}`}
+        href={`/@${username}`}
         className="text-primary-600 hover:text-primary-700 hover:underline font-medium"
         onClick={(e) => e.stopPropagation()}
       >

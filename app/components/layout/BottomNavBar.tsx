@@ -11,7 +11,7 @@ const BottomNavBar = () => {
   const { user } = useUserStore();
   const notesUnreadCount = useNotesStore((state) => state.totalUnreadCount);
 
-  const profileHref = user?.username ? `/profile/${user.username}` : '/login';
+  const profileHref = user?.username ? `/@${user.username}` : '/login';
 
   const navItems = [
     {
@@ -49,7 +49,7 @@ const BottomNavBar = () => {
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
-    if (href.startsWith('/profile/')) return pathname.startsWith('/profile/');
+    if (href.startsWith('/@')) return pathname.startsWith('/@');
     return pathname.startsWith(href);
   };
 

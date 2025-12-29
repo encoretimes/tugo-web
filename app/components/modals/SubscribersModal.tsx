@@ -73,7 +73,7 @@ export default function SubscribersModal({
                       {data.content.map((subscription) => (
                         <Link
                           key={subscription.id}
-                          href={`/profile/${subscription.memberUsername || subscription.memberId}`}
+                          href={`/@${subscription.memberUsername || subscription.memberId}`}
                           className="flex items-center gap-3 px-6 py-3 hover:bg-gray-50 transition-colors"
                           onClick={onClose}
                         >

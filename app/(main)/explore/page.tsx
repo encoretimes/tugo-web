@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   MagnifyingGlassIcon,
   XMarkIcon,
@@ -60,9 +61,14 @@ const clearSearchHistory = () => {
 };
 
 export default function ExplorePage() {
+  const searchParams = useSearchParams();
+  const tabFromUrl = searchParams.get('tab') as TabType | null;
+
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSearch, setActiveSearch] = useState(''); // 실제 적용된 검색어
-  const [activeTab, setActiveTab] = useState<TabType>('news');
+  const [activeTab, setActiveTab] = useState<TabType>(
+    tabFromUrl && ['news', 'creators', 'votes'].includes(tabFromUrl) ? tabFromUrl : 'news'
+  );
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +79,13 @@ export default function ExplorePage() {
     usePopularCreators(20);
   const { data: newsData, isLoading: isLoadingNews } = useInfiniteNews(20);
   const { data: trendingKeywords } = useTrendingKeywords(10);
+
+  // URL의 tab 파라미터가 변경되면 탭 업데이트
+  useEffect(() => {
+    if (tabFromUrl && ['news', 'creators', 'votes'].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [tabFromUrl]);
 
   // 검색 기록 로드
   useEffect(() => {
