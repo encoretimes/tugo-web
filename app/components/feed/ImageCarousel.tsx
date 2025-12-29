@@ -35,7 +35,6 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     }
   };
 
-  // 스크롤 이벤트로 현재 인덱스 업데이트
   const handleScrollEvent = () => {
     if (!scrollContainerRef.current) return;
 
@@ -50,11 +49,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
 
   return (
     <div className="relative group">
-      {/* 이미지 컨테이너 */}
       <div
         ref={scrollContainerRef}
         onScroll={handleScrollEvent}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide rounded-2xl border border-neutral-200"
+        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide rounded-2xl border border-neutral-200 bg-gray-100"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -66,19 +64,19 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             className="w-full flex-shrink-0 snap-center cursor-pointer hover:opacity-95 transition-opacity"
             onClick={() => onImageClick(index)}
           >
-            <Image
-              src={url}
-              alt={`Post image ${index + 1}`}
-              width={600}
-              height={400}
-              className="w-full object-cover"
-              style={{ maxHeight: '500px' }}
-            />
+            <div className="relative aspect-[4/5] w-full">
+              <Image
+                src={url}
+                alt={`Post image ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 600px"
+              />
+            </div>
           </div>
         ))}
       </div>
 
-      {/* 왼쪽 화살표 */}
       {currentIndex > 0 && (
         <button
           onClick={(e) => {
@@ -92,7 +90,6 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         </button>
       )}
 
-      {/* 오른쪽 화살표 */}
       {currentIndex < images.length - 1 && (
         <button
           onClick={(e) => {
@@ -106,23 +103,21 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         </button>
       )}
 
-      {/* 인디케이터 (점) */}
       {images.length > 1 && (
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
           {images.map((_, index) => (
             <div
               key={index}
-              className={`h-1.5 w-1.5 rounded-full transition-all ${
+              className={`h-1.5 rounded-full transition-all ${
                 index === currentIndex
                   ? 'bg-white w-6'
-                  : 'bg-white/60 hover:bg-white/80'
+                  : 'bg-white/60 hover:bg-white/80 w-1.5'
               }`}
             />
           ))}
         </div>
       )}
 
-      {/* 이미지 카운터 */}
       <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
         {currentIndex + 1} / {images.length}
       </div>
