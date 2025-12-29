@@ -78,32 +78,43 @@ function SortableImage({
 
   const hasEdits = image.editedFile || image.filterId || image.adjustments;
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDragging) {
+      onClick();
+    }
+  };
+
   return (
-    <button
+    <div
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
-      onClick={onClick}
-      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 cursor-move transition-all ${
+      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
+        isDragging ? 'cursor-grabbing' : 'cursor-pointer'
+      } ${
         isActive
           ? 'border-primary-500 ring-2 ring-primary-500/30'
           : 'border-gray-200 hover:border-gray-300'
       }`}
+      onClick={handleClick}
     >
       <Image
         src={image.url}
         alt={`Image ${index + 1}`}
         fill
-        className="object-cover"
+        className="object-cover pointer-events-none"
+        draggable={false}
       />
       {hasEdits && (
-        <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full" />
+        <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full pointer-events-none" />
       )}
-      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center">
+      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center pointer-events-none">
         <span className="text-[10px] text-white">{index + 1}</span>
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -139,7 +150,11 @@ export default function MultiImageEditor({
     useImageFilters();
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
