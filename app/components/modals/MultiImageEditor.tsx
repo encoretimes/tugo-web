@@ -32,10 +32,11 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  horizontalListSortingStrategy,
+  verticalListSortingStrategy,
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import {
   ImageEditData,
   ImageAdjustments,
@@ -66,14 +67,14 @@ function SortableImage({
     listeners,
     setNodeRef,
     transform,
-    transition,
     isDragging,
   } = useSortable({ id: image.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
+    transition: isDragging ? 'none' : 'transform 150ms ease',
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 10 : 0,
   };
 
   const hasEdits = image.editedFile || image.filterId || image.adjustments;
@@ -92,8 +93,10 @@ function SortableImage({
       style={style}
       {...attributes}
       {...listeners}
-      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
-        isDragging ? 'cursor-grabbing' : 'cursor-pointer'
+      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
+        isDragging
+          ? 'cursor-grabbing scale-105 shadow-lg border-primary-400'
+          : 'cursor-pointer'
       } ${
         isActive
           ? 'border-primary-500 ring-2 ring-primary-500/30'
@@ -516,10 +519,11 @@ export default function MultiImageEditor({
                         sensors={sensors}
                         collisionDetection={closestCenter}
                         onDragEnd={handleDragEnd}
+                        modifiers={[restrictToVerticalAxis]}
                       >
                         <SortableContext
                           items={images.map((img) => img.id)}
-                          strategy={horizontalListSortingStrategy}
+                          strategy={verticalListSortingStrategy}
                         >
                           <div className="flex flex-col items-center gap-2">
                             {images.map((img, index) => (
@@ -609,35 +613,36 @@ export default function MultiImageEditor({
                     {/* Mobile Thumbnail Strip */}
                     {images.length > 1 && (
                       <div className="md:hidden px-4 py-2 bg-white border-t border-gray-200">
-                        <DndContext
-                          sensors={sensors}
-                          collisionDetection={closestCenter}
-                          onDragEnd={handleDragEnd}
-                        >
-                          <SortableContext
-                            items={images.map((img) => img.id)}
-                            strategy={horizontalListSortingStrategy}
-                          >
-                            <div className="flex gap-2 overflow-x-auto justify-center">
-                              {images.map((img, index) => (
-                                <SortableImage
-                                  key={img.id}
-                                  image={img}
-                                  index={index}
-                                  isActive={index === currentIndex}
-                                  onClick={() => {
-                                    if (index !== currentIndex) {
-                                      saveCurrentImageState();
-                                      setCurrentIndex(index);
-                                      loadImageState(index);
-                                      setZoomLevel(0);
-                                    }
-                                  }}
-                                />
-                              ))}
-                            </div>
-                          </SortableContext>
-                        </DndContext>
+                        <div className="flex gap-2 overflow-x-auto justify-center">
+                          {images.map((img, index) => (
+                            <button
+                              key={img.id}
+                              onClick={() => {
+                                if (index !== currentIndex) {
+                                  saveCurrentImageState();
+                                  setCurrentIndex(index);
+                                  loadImageState(index);
+                                  setZoomLevel(0);
+                                }
+                              }}
+                              className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
+                                index === currentIndex
+                                  ? 'border-primary-500 ring-2 ring-primary-500/30'
+                                  : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                            >
+                              <Image
+                                src={img.url}
+                                alt={`Image ${index + 1}`}
+                                fill
+                                className="object-cover"
+                              />
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center">
+                                <span className="text-[10px] text-white">{index + 1}</span>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
