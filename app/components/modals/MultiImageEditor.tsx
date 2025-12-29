@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useRef, useState, useEffect } from 'react';
+import { Fragment, useRef, useState, useEffect, useCallback } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 import {
@@ -14,6 +14,9 @@ import {
   ChevronRightIcon,
   AdjustmentsHorizontalIcon,
   Squares2X2Icon,
+  SparklesIcon,
+  EyeIcon,
+  ArrowsRightLeftIcon,
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import {
@@ -33,14 +36,17 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-
-interface ImageEditData {
-  file: File;
-  url: string;
-  editedFile?: File;
-  aspectRatio?: number;
-  id: string;
-}
+import {
+  ImageEditData,
+  ImageAdjustments,
+  DEFAULT_ADJUSTMENTS,
+  ASPECT_RATIOS,
+  DEFAULT_ASPECT_RATIO,
+} from '../image-editor/constants';
+import { useImageFilters } from '../image-editor/hooks/useImageFilters';
+import FilterPanel from '../image-editor/FilterPanel';
+import AdjustmentPanel from '../image-editor/AdjustmentPanel';
+import BeforeAfterSlider from '../image-editor/BeforeAfterSlider';
 
 interface SortableImageProps {
   image: ImageEditData;
@@ -70,6 +76,8 @@ function SortableImage({
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const hasEdits = image.editedFile || image.filterId || image.adjustments;
+
   return (
     <button
       ref={setNodeRef}
@@ -77,8 +85,10 @@ function SortableImage({
       {...attributes}
       {...listeners}
       onClick={onClick}
-      className={`relative h-16 w-16 flex-shrink-0 rounded-lg overflow-hidden border-2 cursor-move ${
-        isActive ? 'border-primary-500' : 'border-gray-200'
+      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 cursor-move transition-all ${
+        isActive
+          ? 'border-primary-500 ring-2 ring-primary-500/30'
+          : 'border-gray-600 hover:border-gray-500'
       }`}
     >
       <Image
@@ -87,9 +97,12 @@ function SortableImage({
         fill
         className="object-cover"
       />
-      {image.editedFile && (
-        <div className="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full"></div>
+      {hasEdits && (
+        <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full" />
       )}
+      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center">
+        <span className="text-[10px] text-white">{index + 1}</span>
+      </div>
     </button>
   );
 }
@@ -101,6 +114,8 @@ interface MultiImageEditorProps {
   onSave: (editedFiles: File[]) => void;
 }
 
+type TabType = 'crop' | 'filter' | 'adjust';
+
 export default function MultiImageEditor({
   isOpen,
   onClose,
@@ -111,11 +126,17 @@ export default function MultiImageEditor({
   const [images, setImages] = useState<ImageEditData[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState<number>(0);
-  const [aspectRatio, setAspectRatio] = useState<number | undefined>(undefined);
-  const [brightness, setBrightness] = useState<number>(100);
-  const [contrast, setContrast] = useState<number>(100);
-  const [saturation, setSaturation] = useState<number>(100);
-  const [activeTab, setActiveTab] = useState<'crop' | 'adjust'>('crop');
+  const [aspectRatio, setAspectRatio] = useState<number | undefined>(
+    DEFAULT_ASPECT_RATIO
+  );
+  const [activeTab, setActiveTab] = useState<TabType>('crop');
+  const [selectedFilterId, setSelectedFilterId] = useState<string>('original');
+  const [adjustments, setAdjustments] =
+    useState<ImageAdjustments>(DEFAULT_ADJUSTMENTS);
+  const [showBeforeAfter, setShowBeforeAfter] = useState(false);
+
+  const { generateFilterString, getFilterById, applyFilterToCanvas } =
+    useImageFilters();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -130,6 +151,9 @@ export default function MultiImageEditor({
         file,
         url: URL.createObjectURL(file),
         id: `image-${Date.now()}-${index}`,
+        aspectRatio: DEFAULT_ASPECT_RATIO,
+        filterId: 'original',
+        adjustments: { ...DEFAULT_ADJUSTMENTS },
       }));
       setImages(imageData);
       setCurrentIndex(0);
@@ -139,53 +163,61 @@ export default function MultiImageEditor({
         imageData.forEach(({ url }) => URL.revokeObjectURL(url));
       };
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFiles]);
 
-  const resetControls = () => {
+  const resetControls = useCallback(() => {
     setZoomLevel(0);
-    setAspectRatio(undefined);
-    setBrightness(100);
-    setContrast(100);
-    setSaturation(100);
+    setAspectRatio(DEFAULT_ASPECT_RATIO);
+    setSelectedFilterId('original');
+    setAdjustments({ ...DEFAULT_ADJUSTMENTS });
     setActiveTab('crop');
-  };
+    setShowBeforeAfter(false);
+  }, []);
 
   const getCurrentImage = () => images[currentIndex];
 
+  const saveCurrentImageState = useCallback(() => {
+    setImages((prev) =>
+      prev.map((img, index) =>
+        index === currentIndex
+          ? {
+              ...img,
+              aspectRatio,
+              filterId: selectedFilterId,
+              adjustments: { ...adjustments },
+            }
+          : img
+      )
+    );
+  }, [currentIndex, aspectRatio, selectedFilterId, adjustments]);
+
+  const loadImageState = useCallback((index: number) => {
+    const image = images[index];
+    if (image) {
+      setAspectRatio(image.aspectRatio ?? DEFAULT_ASPECT_RATIO);
+      setSelectedFilterId(image.filterId ?? 'original');
+      setAdjustments(image.adjustments ?? { ...DEFAULT_ADJUSTMENTS });
+    }
+  }, [images]);
+
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      // 현재 이미지의 비율 저장
-      saveCurrentAspectRatio();
-      setCurrentIndex(currentIndex - 1);
-      resetControls();
-      // 이전 이미지의 비율 로드
-      loadImageAspectRatio(currentIndex - 1);
+      saveCurrentImageState();
+      const newIndex = currentIndex - 1;
+      setCurrentIndex(newIndex);
+      loadImageState(newIndex);
+      setZoomLevel(0);
     }
   };
 
   const handleNext = () => {
     if (currentIndex < images.length - 1) {
-      // 현재 이미지의 비율 저장
-      saveCurrentAspectRatio();
-      setCurrentIndex(currentIndex + 1);
-      resetControls();
-      // 다음 이미지의 비율 로드
-      loadImageAspectRatio(currentIndex + 1);
-    }
-  };
-
-  const saveCurrentAspectRatio = () => {
-    setImages((prev) =>
-      prev.map((img, index) =>
-        index === currentIndex ? { ...img, aspectRatio } : img
-      )
-    );
-  };
-
-  const loadImageAspectRatio = (index: number) => {
-    const image = images[index];
-    if (image && image.aspectRatio !== undefined) {
-      setAspectRatio(image.aspectRatio);
+      saveCurrentImageState();
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      loadImageState(newIndex);
+      setZoomLevel(0);
     }
   };
 
@@ -197,7 +229,6 @@ export default function MultiImageEditor({
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
 
-        // 현재 보고 있는 이미지의 인덱스 업데이트
         if (currentIndex === oldIndex) {
           setCurrentIndex(newIndex);
         } else if (currentIndex === newIndex) {
@@ -224,6 +255,14 @@ export default function MultiImageEditor({
     const cropper = cropperRef.current?.cropper;
     if (cropper) {
       cropper.rotate(90);
+    }
+  };
+
+  const handleFlipHorizontal = () => {
+    const cropper = cropperRef.current?.cropper;
+    if (cropper) {
+      const data = cropper.getData();
+      cropper.scaleX(data.scaleX === -1 ? 1 : -1);
     }
   };
 
@@ -265,36 +304,35 @@ export default function MultiImageEditor({
     }
   };
 
-  const saveCurrentEdit = () => {
+  const getCurrentFilterString = useCallback((): string => {
+    const filter = getFilterById(selectedFilterId);
+    return generateFilterString(filter.filters, adjustments);
+  }, [selectedFilterId, adjustments, getFilterById, generateFilterString]);
+
+  const saveCurrentEdit = useCallback(async () => {
     const cropper = cropperRef.current?.cropper;
-    if (!cropper) return;
+    if (!cropper) return null;
 
     const currentImage = getCurrentImage();
-    if (!currentImage) return;
+    if (!currentImage) return null;
 
-    // 비율에 따라 크롭 크기 결정
     let cropWidth = 1080;
-    let cropHeight = 1080;
+    let cropHeight = 1350;
 
     if (aspectRatio !== undefined) {
-      if (aspectRatio === 1) {
-        // 1:1
+      if (aspectRatio === 4 / 5) {
+        cropWidth = 1080;
+        cropHeight = 1350;
+      } else if (aspectRatio === 1) {
         cropWidth = 1080;
         cropHeight = 1080;
-      } else if (aspectRatio === 4 / 3) {
-        // 4:3
-        cropWidth = 1080;
-        cropHeight = 810;
       } else if (aspectRatio === 16 / 9) {
-        // 16:9
         cropWidth = 1920;
         cropHeight = 1080;
       } else {
-        // 자유 비율 - 원본 비율 유지
         const cropData = cropper.getData();
         cropWidth = Math.round(cropData.width);
         cropHeight = Math.round(cropData.height);
-        // 최대 크기 제한
         const maxDimension = 1920;
         if (cropWidth > maxDimension || cropHeight > maxDimension) {
           const scale = maxDimension / Math.max(cropWidth, cropHeight);
@@ -310,70 +348,58 @@ export default function MultiImageEditor({
       imageSmoothingQuality: 'high',
     });
 
-    if (brightness !== 100 || contrast !== 100 || saturation !== 100) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const filteredCanvas = document.createElement('canvas');
-        filteredCanvas.width = canvas.width;
-        filteredCanvas.height = canvas.height;
-        const filteredCtx = filteredCanvas.getContext('2d');
+    const filter = getFilterById(selectedFilterId);
+    const filteredCanvas = applyFilterToCanvas(canvas, filter.filters, adjustments);
 
-        if (filteredCtx) {
-          filteredCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
-          filteredCtx.drawImage(canvas, 0, 0);
+    return new Promise<File | null>((resolve) => {
+      filteredCanvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const editedFile = new File([blob], currentImage.file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(editedFile);
+          } else {
+            resolve(null);
+          }
+        },
+        'image/jpeg',
+        0.92
+      );
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aspectRatio, selectedFilterId, adjustments, getFilterById, applyFilterToCanvas, images, currentIndex]);
 
-          // Convert filtered canvas to blob
-          filteredCanvas.toBlob(
-            (blob) => {
-              if (blob) {
-                const editedFile = new File([blob], currentImage.file.name, {
-                  type: currentImage.file.type,
-                  lastModified: Date.now(),
-                });
+  const handleSave = async () => {
+    saveCurrentImageState();
 
-                setImages((prev) =>
-                  prev.map((img, index) =>
-                    index === currentIndex ? { ...img, editedFile } : img
-                  )
-                );
-              }
-            },
-            currentImage.file.type,
-            0.9
-          );
-          return;
-        }
-      }
+    const editedFile = await saveCurrentEdit();
+    if (editedFile) {
+      setImages((prev) =>
+        prev.map((img, index) =>
+          index === currentIndex ? { ...img, editedFile } : img
+        )
+      );
     }
 
-    canvas.toBlob(
-      (blob) => {
-        if (blob) {
-          const editedFile = new File([blob], currentImage.file.name, {
-            type: currentImage.file.type,
-            lastModified: Date.now(),
-          });
+    setTimeout(async () => {
+      const finalImages = [...images];
+      if (editedFile) {
+        finalImages[currentIndex] = { ...finalImages[currentIndex], editedFile };
+      }
 
-          setImages((prev) =>
-            prev.map((img, index) =>
-              index === currentIndex ? { ...img, editedFile } : img
-            )
-          );
+      const editPromises = finalImages.map(async (img, index) => {
+        if (index === currentIndex) {
+          return editedFile || img.file;
         }
-      },
-      currentImage.file.type,
-      0.9
-    );
-  };
+        if (img.editedFile) {
+          return img.editedFile;
+        }
+        return img.file;
+      });
 
-  const handleSave = () => {
-    // 현재 이미지의 비율 저장
-    saveCurrentAspectRatio();
-    // 현재 편집 내용 저장
-    saveCurrentEdit();
-
-    setTimeout(() => {
-      const finalFiles = images.map((img) => img.editedFile || img.file);
+      const finalFiles = await Promise.all(editPromises);
       onSave(finalFiles);
       onClose();
     }, 100);
@@ -384,6 +410,24 @@ export default function MultiImageEditor({
   };
 
   const currentImage = getCurrentImage();
+
+  const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
+    {
+      id: 'crop',
+      label: '자르기',
+      icon: <Squares2X2Icon className="h-5 w-5" />,
+    },
+    {
+      id: 'filter',
+      label: '필터',
+      icon: <SparklesIcon className="h-5 w-5" />,
+    },
+    {
+      id: 'adjust',
+      label: '보정',
+      icon: <AdjustmentsHorizontalIcon className="h-5 w-5" />,
+    },
+  ];
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -397,115 +441,159 @@ export default function MultiImageEditor({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-90" />
+          <div className="fixed inset-0 bg-black" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center">
+        <div className="fixed inset-0 overflow-hidden">
+          <div className="flex min-h-full">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
             >
-              <Dialog.Panel className="w-full max-w-7xl h-screen flex flex-col bg-white">
+              <Dialog.Panel className="w-full h-screen flex flex-col bg-gray-900">
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 px-4 md:px-6 py-3 md:py-4 bg-white">
-                  <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-between px-4 md:px-6 py-3 bg-gray-900 border-b border-gray-800">
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={handleCancel}
+                      className="text-gray-400 hover:text-white p-1 transition-colors"
+                    >
+                      <XMarkIcon className="h-6 w-6" />
+                    </button>
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-semibold text-gray-900"
+                      className="text-lg font-semibold text-white"
                     >
                       이미지 편집
                     </Dialog.Title>
+                  </div>
+                  <div className="flex items-center gap-3">
                     {images.length > 1 && (
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-400">
                         {currentIndex + 1} / {images.length}
                       </span>
                     )}
+                    <button
+                      onClick={() => setShowBeforeAfter(!showBeforeAfter)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                        showBeforeAfter
+                          ? 'bg-primary-600 text-white'
+                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      }`}
+                    >
+                      <EyeIcon className="h-4 w-4" />
+                      <span className="hidden md:inline">비교</span>
+                    </button>
                   </div>
-                  <button
-                    onClick={handleCancel}
-                    className="text-gray-500 hover:text-gray-700 p-1"
-                  >
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
                 </div>
 
                 {/* Main Content */}
                 <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-                  {/* Image Editor Area */}
-                  <div className="flex-1 flex flex-col bg-gray-50 min-h-0">
-                    {/* Image Counter */}
-                    {images.length > 1 && (
-                      <div className="p-4 bg-white border-b text-center">
-                        <span className="text-sm text-gray-600">
-                          {currentIndex + 1} / {images.length}
-                        </span>
-                      </div>
+                  {/* Left: Thumbnail Strip (Desktop) */}
+                  {images.length > 1 && (
+                    <div className="hidden md:flex flex-col w-20 bg-gray-900 border-r border-gray-800 p-2 overflow-y-auto">
+                      <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                      >
+                        <SortableContext
+                          items={images.map((img) => img.id)}
+                          strategy={horizontalListSortingStrategy}
+                        >
+                          <div className="flex flex-col gap-2">
+                            {images.map((img, index) => (
+                              <SortableImage
+                                key={img.id}
+                                image={img}
+                                index={index}
+                                isActive={index === currentIndex}
+                                onClick={() => {
+                                  if (index !== currentIndex) {
+                                    saveCurrentImageState();
+                                    setCurrentIndex(index);
+                                    loadImageState(index);
+                                    setZoomLevel(0);
+                                  }
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </SortableContext>
+                      </DndContext>
+                    </div>
+                  )}
+
+                  {/* Center: Preview Area */}
+                  <div className="flex-1 flex flex-col bg-gray-950 min-h-0 relative">
+                    {/* Navigation Arrows */}
+                    {images.length > 1 && currentIndex > 0 && (
+                      <button
+                        onClick={handlePrevious}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all"
+                      >
+                        <ChevronLeftIcon className="h-5 w-5" />
+                      </button>
+                    )}
+                    {images.length > 1 && currentIndex < images.length - 1 && (
+                      <button
+                        onClick={handleNext}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all"
+                      >
+                        <ChevronRightIcon className="h-5 w-5" />
+                      </button>
                     )}
 
-                    {/* Cropper with Navigation */}
-                    <div className="flex-1 p-3 md:p-6 flex items-center justify-center relative">
-                      {/* Previous Button */}
-                      {images.length > 1 && currentIndex > 0 && (
-                        <button
-                          onClick={handlePrevious}
-                          className="absolute left-8 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full transition-all"
-                        >
-                          <ChevronLeftIcon className="h-4 w-4" />
-                        </button>
-                      )}
-
-                      {/* Next Button */}
-                      {images.length > 1 &&
-                        currentIndex < images.length - 1 && (
-                          <button
-                            onClick={handleNext}
-                            className="absolute right-8 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full transition-all"
-                          >
-                            <ChevronRightIcon className="h-4 w-4" />
-                          </button>
-                        )}
-
+                    {/* Image Preview */}
+                    <div className="flex-1 flex items-center justify-center p-4 md:p-6">
                       {currentImage && (
-                        <div className="w-full h-full max-w-4xl max-h-[50vh] md:max-h-[60vh] bg-white rounded-lg shadow-lg overflow-hidden">
-                          <Cropper
-                            ref={cropperRef}
-                            src={currentImage.url}
-                            style={{
-                              height: '100%',
-                              width: '100%',
-                              filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`,
-                            }}
-                            aspectRatio={aspectRatio}
-                            viewMode={1}
-                            guides={true}
-                            background={false}
-                            responsive={true}
-                            autoCropArea={0.8}
-                            checkOrientation={false}
-                            dragMode="move"
-                            cropBoxMovable={true}
-                            cropBoxResizable={true}
-                            toggleDragModeOnDblclick={false}
-                            ready={() => {
-                              const cropper = cropperRef.current?.cropper;
-                              if (cropper) {
-                                cropper.zoomTo(zoomLevel);
-                              }
-                            }}
-                          />
+                        <div className="w-full h-full max-w-3xl max-h-[60vh] md:max-h-[70vh] bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                          {showBeforeAfter ? (
+                            <BeforeAfterSlider
+                              beforeImage={currentImage.url}
+                              afterImage={currentImage.url}
+                              afterFilter={getCurrentFilterString()}
+                            />
+                          ) : (
+                            <Cropper
+                              ref={cropperRef}
+                              src={currentImage.url}
+                              style={{
+                                height: '100%',
+                                width: '100%',
+                                filter: getCurrentFilterString(),
+                              }}
+                              aspectRatio={aspectRatio}
+                              viewMode={1}
+                              guides={true}
+                              background={false}
+                              responsive={true}
+                              autoCropArea={0.9}
+                              checkOrientation={false}
+                              dragMode="move"
+                              cropBoxMovable={true}
+                              cropBoxResizable={true}
+                              toggleDragModeOnDblclick={false}
+                              ready={() => {
+                                const cropper = cropperRef.current?.cropper;
+                                if (cropper) {
+                                  cropper.zoomTo(zoomLevel);
+                                }
+                              }}
+                            />
+                          )}
                         </div>
                       )}
                     </div>
 
-                    {/* Image Thumbnails */}
+                    {/* Mobile Thumbnail Strip */}
                     {images.length > 1 && (
-                      <div className="p-2 md:p-4 bg-white border-t">
+                      <div className="md:hidden px-4 py-2 bg-gray-900 border-t border-gray-800">
                         <DndContext
                           sensors={sensors}
                           collisionDetection={closestCenter}
@@ -515,7 +603,7 @@ export default function MultiImageEditor({
                             items={images.map((img) => img.id)}
                             strategy={horizontalListSortingStrategy}
                           >
-                            <div className="flex space-x-2 overflow-x-auto justify-center">
+                            <div className="flex gap-2 overflow-x-auto justify-center">
                               {images.map((img, index) => (
                                 <SortableImage
                                   key={img.id}
@@ -524,10 +612,10 @@ export default function MultiImageEditor({
                                   isActive={index === currentIndex}
                                   onClick={() => {
                                     if (index !== currentIndex) {
-                                      saveCurrentAspectRatio();
+                                      saveCurrentImageState();
                                       setCurrentIndex(index);
-                                      resetControls();
-                                      loadImageAspectRatio(index);
+                                      loadImageState(index);
+                                      setZoomLevel(0);
                                     }
                                   }}
                                 />
@@ -539,228 +627,160 @@ export default function MultiImageEditor({
                     )}
                   </div>
 
-                  {/* Control Panel */}
-                  <div className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-gray-200 flex flex-col max-h-64 md:max-h-none">
+                  {/* Right: Control Panel */}
+                  <div className="w-full md:w-80 bg-gray-900 border-t md:border-t-0 md:border-l border-gray-800 flex flex-col max-h-[40vh] md:max-h-none">
                     {/* Tabs */}
-                    <div className="flex border-b overflow-x-auto">
-                      <button
-                        onClick={() => setActiveTab('crop')}
-                        className={`flex-1 px-3 md:px-4 py-2 md:py-3 text-sm font-medium border-b-2 min-h-[44px] ${
-                          activeTab === 'crop'
-                            ? 'border-primary-500 text-primary-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
-                        }`}
-                      >
-                        <Squares2X2Icon className="h-5 w-5 mx-auto mb-1" />
-                        자르기
-                      </button>
-                      <button
-                        onClick={() => setActiveTab('adjust')}
-                        className={`flex-1 px-3 md:px-4 py-2 md:py-3 text-sm font-medium border-b-2 min-h-[44px] ${
-                          activeTab === 'adjust'
-                            ? 'border-primary-500 text-primary-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
-                        }`}
-                      >
-                        <AdjustmentsHorizontalIcon className="h-5 w-5 mx-auto mb-1" />
-                        보정
-                      </button>
+                    <div className="flex border-b border-gray-800">
+                      {tabs.map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`flex-1 flex flex-col items-center gap-1 px-3 py-3 text-sm font-medium border-b-2 transition-colors ${
+                            activeTab === tab.id
+                              ? 'border-primary-500 text-primary-400'
+                              : 'border-transparent text-gray-400 hover:text-gray-300'
+                          }`}
+                        >
+                          {tab.icon}
+                          <span className="text-xs">{tab.label}</span>
+                        </button>
+                      ))}
                     </div>
 
-                    {/* Control Content */}
-                    <div className="flex-1 p-3 md:p-4 space-y-4 md:space-y-6 overflow-y-auto">
+                    {/* Tab Content */}
+                    <div className="flex-1 p-4 overflow-y-auto">
                       {activeTab === 'crop' && (
-                        <>
+                        <div className="space-y-6">
                           {/* Aspect Ratio */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-2">
+                            <h3 className="text-sm font-medium text-gray-300 mb-3">
                               비율
                             </h3>
-                            <div className="grid grid-cols-4 md:grid-cols-2 gap-2">
-                              <button
-                                onClick={() =>
-                                  handleAspectRatioChange(undefined)
-                                }
-                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
-                                  aspectRatio === undefined
-                                    ? 'border-primary-500 bg-primary-50 text-primary-700'
-                                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                }`}
-                              >
-                                자유
-                              </button>
-                              <button
-                                onClick={() => handleAspectRatioChange(1)}
-                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
-                                  aspectRatio === 1
-                                    ? 'border-primary-500 bg-primary-50 text-primary-700'
-                                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                }`}
-                              >
-                                1:1
-                              </button>
-                              <button
-                                onClick={() => handleAspectRatioChange(4 / 3)}
-                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
-                                  aspectRatio === 4 / 3
-                                    ? 'border-primary-500 bg-primary-50 text-primary-700'
-                                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                }`}
-                              >
-                                4:3
-                              </button>
-                              <button
-                                onClick={() => handleAspectRatioChange(16 / 9)}
-                                className={`px-2 md:px-3 py-2 text-xs rounded-lg border min-h-[44px] ${
-                                  aspectRatio === 16 / 9
-                                    ? 'border-primary-500 bg-primary-50 text-primary-700'
-                                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                }`}
-                              >
-                                16:9
-                              </button>
+                            <div className="grid grid-cols-4 gap-2">
+                              {ASPECT_RATIOS.map((ratio) => (
+                                <button
+                                  key={ratio.id}
+                                  onClick={() =>
+                                    handleAspectRatioChange(ratio.value)
+                                  }
+                                  className={`px-3 py-2.5 text-xs rounded-lg border transition-all ${
+                                    aspectRatio === ratio.value
+                                      ? 'border-primary-500 bg-primary-500/20 text-primary-400'
+                                      : 'border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-300'
+                                  }`}
+                                >
+                                  {ratio.label}
+                                </button>
+                              ))}
                             </div>
                           </div>
 
-                          {/* Rotation */}
+                          {/* Rotation & Flip */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-2">
-                              회전
+                            <h3 className="text-sm font-medium text-gray-300 mb-3">
+                              회전 및 반전
                             </h3>
-                            <div className="flex space-x-2">
+                            <div className="flex gap-2">
                               <button
                                 onClick={handleRotateLeft}
-                                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 min-h-[44px]"
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors"
                               >
-                                <ArrowUturnLeftIcon className="h-5 w-5" />
-                                <span className="text-xs md:text-sm">
-                                  좌회전
-                                </span>
+                                <ArrowUturnLeftIcon className="h-4 w-4" />
+                                <span className="text-xs">좌회전</span>
                               </button>
                               <button
                                 onClick={handleRotateRight}
-                                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 min-h-[44px]"
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors"
                               >
-                                <ArrowPathIcon className="h-5 w-5" />
-                                <span className="text-xs md:text-sm">
-                                  우회전
-                                </span>
+                                <ArrowPathIcon className="h-4 w-4" />
+                                <span className="text-xs">우회전</span>
+                              </button>
+                              <button
+                                onClick={handleFlipHorizontal}
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors"
+                              >
+                                <ArrowsRightLeftIcon className="h-4 w-4" />
+                                <span className="text-xs">반전</span>
                               </button>
                             </div>
                           </div>
 
                           {/* Zoom */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
+                            <h3 className="text-sm font-medium text-gray-300 mb-3">
                               확대/축소
                             </h3>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center gap-3">
                               <button
                                 onClick={handleZoomOut}
-                                className="p-1 text-gray-600 hover:text-gray-800"
+                                className="p-2 text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
                               >
                                 <MagnifyingGlassMinusIcon className="h-4 w-4" />
                               </button>
-                              <input
-                                type="range"
-                                min="0"
-                                max="3"
-                                step="0.1"
-                                value={zoomLevel}
-                                onChange={handleZoomChange}
-                                className="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                              />
+                              <div className="flex-1 relative">
+                                <div className="h-2 bg-gray-700 rounded-full">
+                                  <div
+                                    className="h-full bg-primary-500 rounded-full"
+                                    style={{ width: `${(zoomLevel / 3) * 100}%` }}
+                                  />
+                                </div>
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="3"
+                                  step="0.1"
+                                  value={zoomLevel}
+                                  onChange={handleZoomChange}
+                                  className="absolute inset-0 w-full opacity-0 cursor-pointer"
+                                />
+                              </div>
                               <button
                                 onClick={handleZoomIn}
-                                className="p-1 text-gray-600 hover:text-gray-800"
+                                className="p-2 text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
                               >
                                 <MagnifyingGlassPlusIcon className="h-4 w-4" />
                               </button>
                             </div>
-                            <div className="text-center text-xs text-gray-500 mt-1">
+                            <div className="text-center text-xs text-gray-500 mt-2">
                               {Math.round(zoomLevel * 100)}%
                             </div>
                           </div>
-                        </>
+                        </div>
+                      )}
+
+                      {activeTab === 'filter' && currentImage && (
+                        <div className="space-y-4">
+                          <h3 className="text-sm font-medium text-gray-300">
+                            필터 선택
+                          </h3>
+                          <FilterPanel
+                            imageUrl={currentImage.url}
+                            selectedFilterId={selectedFilterId}
+                            onFilterSelect={setSelectedFilterId}
+                          />
+                        </div>
                       )}
 
                       {activeTab === 'adjust' && (
-                        <>
-                          {/* Brightness */}
-                          <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
-                              밝기
-                            </h3>
-                            <input
-                              type="range"
-                              min="50"
-                              max="150"
-                              value={brightness}
-                              onChange={(e) =>
-                                setBrightness(Number(e.target.value))
-                              }
-                              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                            />
-                            <div className="text-center text-xs text-gray-500 mt-1">
-                              {brightness}%
-                            </div>
-                          </div>
-
-                          {/* Contrast */}
-                          <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
-                              대비
-                            </h3>
-                            <input
-                              type="range"
-                              min="50"
-                              max="150"
-                              value={contrast}
-                              onChange={(e) =>
-                                setContrast(Number(e.target.value))
-                              }
-                              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                            />
-                            <div className="text-center text-xs text-gray-500 mt-1">
-                              {contrast}%
-                            </div>
-                          </div>
-
-                          {/* Saturation */}
-                          <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
-                              채도
-                            </h3>
-                            <input
-                              type="range"
-                              min="0"
-                              max="200"
-                              value={saturation}
-                              onChange={(e) =>
-                                setSaturation(Number(e.target.value))
-                              }
-                              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                            />
-                            <div className="text-center text-xs text-gray-500 mt-1">
-                              {saturation}%
-                            </div>
-                          </div>
-                        </>
+                        <AdjustmentPanel
+                          adjustments={adjustments}
+                          onAdjustmentChange={setAdjustments}
+                        />
                       )}
                     </div>
 
                     {/* Actions */}
-                    <div className="p-3 md:p-4 border-t border-gray-200">
-                      <div className="flex space-x-2">
+                    <div className="p-4 border-t border-gray-800">
+                      <div className="flex gap-3">
                         <button
                           onClick={handleCancel}
-                          className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors min-h-[44px]"
+                          className="flex-1 px-4 py-3 border border-gray-700 text-gray-300 rounded-xl hover:bg-gray-800 transition-colors font-medium"
                         >
                           취소
                         </button>
                         <button
                           onClick={handleSave}
-                          className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium min-h-[44px]"
+                          className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-medium"
                         >
                           완료
                         </button>
