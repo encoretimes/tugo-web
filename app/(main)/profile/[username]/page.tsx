@@ -28,7 +28,6 @@ import {
   useUnsubscribeMutation,
 } from '@/hooks/useSubscription';
 import SubscribersModal from '@/components/modals/SubscribersModal';
-import ImageViewModal from '@/components/modals/ImageViewModal';
 
 const ProfilePage = () => {
   const params = useParams();
@@ -50,8 +49,6 @@ const ProfilePage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSubscribersModalOpen, setIsSubscribersModalOpen] = useState(false);
   const [showUnsubscribeConfirm, setShowUnsubscribeConfirm] = useState(false);
-  const [showImageView, setShowImageView] = useState(false);
-  const [selectedImageUrl, setSelectedImageUrl] = useState('');
 
   // 보관함 데이터 가져오기 (현재 사용자의 프로필일 때만)
   const {
@@ -150,11 +147,6 @@ const ProfilePage = () => {
       console.error('구독 취소 실패:', error);
       addToast('구독 취소에 실패했습니다. 다시 시도해주세요.', 'error');
     }
-  };
-
-  const handleMediaClick = (imageUrl: string) => {
-    setSelectedImageUrl(imageUrl);
-    setShowImageView(true);
   };
 
   if (isUserLoading) {
@@ -443,22 +435,26 @@ const ProfilePage = () => {
           <div className="p-4">
             {mediaItems.length > 0 ? (
               <div className="grid grid-cols-3 gap-1">
-                {mediaItems.map((post) =>
-                  post.mediaUrls?.map((url, index) => (
-                    <div
-                      key={`${post.postId}-${index}`}
-                      className="aspect-square relative cursor-pointer hover:opacity-95 transition-opacity"
-                      onClick={() => handleMediaClick(url)}
-                    >
-                      <Image
-                        src={url}
-                        alt="Media"
-                        fill
-                        className="object-cover rounded-sm"
-                      />
-                    </div>
-                  ))
-                )}
+                {mediaItems.map((post) => (
+                  <div
+                    key={post.postId}
+                    className="aspect-square relative cursor-pointer hover:opacity-90 transition-opacity group"
+                    onClick={() => router.push(`/post/${post.postId}`)}
+                  >
+                    <Image
+                      src={post.mediaUrls![0]}
+                      alt="Media"
+                      fill
+                      className="object-cover rounded-sm"
+                    />
+                    {/* 다중 이미지 표시 */}
+                    {post.mediaUrls && post.mediaUrls.length > 1 && (
+                      <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded">
+                        +{post.mediaUrls.length - 1}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="p-8 text-center text-gray-500">
@@ -535,13 +531,6 @@ const ProfilePage = () => {
         confirmText="구독 취소"
         confirmButtonClass="bg-red-600 hover:bg-red-700 text-white"
         isLoading={unsubscribeMutation.isPending}
-      />
-
-      <ImageViewModal
-        isOpen={showImageView}
-        onClose={() => setShowImageView(false)}
-        imageUrl={selectedImageUrl}
-        alt="미디어 이미지"
       />
     </div>
   );
