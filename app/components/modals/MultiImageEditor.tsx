@@ -88,7 +88,7 @@ function SortableImage({
       className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 cursor-move transition-all ${
         isActive
           ? 'border-primary-500 ring-2 ring-primary-500/30'
-          : 'border-gray-600 hover:border-gray-500'
+          : 'border-gray-200 hover:border-gray-300'
       }`}
     >
       <Image
@@ -441,40 +441,40 @@ export default function MultiImageEditor({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black" />
+          <div className="fixed inset-0 bg-black bg-opacity-90" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
-          <div className="flex min-h-full">
+          <div className="flex min-h-full items-center justify-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full h-screen flex flex-col bg-gray-900">
+              <Dialog.Panel className="w-full max-w-7xl h-screen flex flex-col bg-white">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 md:px-6 py-3 bg-gray-900 border-b border-gray-800">
+                <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-white border-b border-gray-200">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={handleCancel}
-                      className="text-gray-400 hover:text-white p-1 transition-colors"
+                      className="text-gray-500 hover:text-gray-700 p-1 transition-colors"
                     >
                       <XMarkIcon className="h-6 w-6" />
                     </button>
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-semibold text-white"
+                      className="text-lg font-semibold text-gray-900"
                     >
                       이미지 편집
                     </Dialog.Title>
                   </div>
                   <div className="flex items-center gap-3">
                     {images.length > 1 && (
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-gray-500">
                         {currentIndex + 1} / {images.length}
                       </span>
                     )}
@@ -483,7 +483,7 @@ export default function MultiImageEditor({
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                         showBeforeAfter
                           ? 'bg-primary-600 text-white'
-                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
                       <EyeIcon className="h-4 w-4" />
@@ -496,7 +496,7 @@ export default function MultiImageEditor({
                 <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                   {/* Left: Thumbnail Strip (Desktop) */}
                   {images.length > 1 && (
-                    <div className="hidden md:flex flex-col w-20 bg-gray-900 border-r border-gray-800 p-2 overflow-y-auto">
+                    <div className="hidden md:flex flex-col items-center w-20 bg-gray-50 border-r border-gray-200 py-3 overflow-y-auto overflow-x-hidden">
                       <DndContext
                         sensors={sensors}
                         collisionDetection={closestCenter}
@@ -506,7 +506,7 @@ export default function MultiImageEditor({
                           items={images.map((img) => img.id)}
                           strategy={horizontalListSortingStrategy}
                         >
-                          <div className="flex flex-col gap-2">
+                          <div className="flex flex-col items-center gap-2">
                             {images.map((img, index) => (
                               <SortableImage
                                 key={img.id}
@@ -530,7 +530,7 @@ export default function MultiImageEditor({
                   )}
 
                   {/* Center: Preview Area */}
-                  <div className="flex-1 flex flex-col bg-gray-950 min-h-0 relative">
+                  <div className="flex-1 flex flex-col bg-gray-100 min-h-0 relative">
                     {/* Navigation Arrows */}
                     {images.length > 1 && currentIndex > 0 && (
                       <button
@@ -552,7 +552,7 @@ export default function MultiImageEditor({
                     {/* Image Preview */}
                     <div className="flex-1 flex items-center justify-center p-4 md:p-6">
                       {currentImage && (
-                        <div className="w-full h-full max-w-3xl max-h-[60vh] md:max-h-[70vh] bg-gray-900 rounded-xl overflow-hidden shadow-2xl">
+                        <div className="w-full h-full max-w-3xl max-h-[60vh] md:max-h-[70vh] bg-white rounded-xl overflow-hidden shadow-lg">
                           {showBeforeAfter ? (
                             <BeforeAfterSlider
                               beforeImage={currentImage.url}
@@ -593,7 +593,7 @@ export default function MultiImageEditor({
 
                     {/* Mobile Thumbnail Strip */}
                     {images.length > 1 && (
-                      <div className="md:hidden px-4 py-2 bg-gray-900 border-t border-gray-800">
+                      <div className="md:hidden px-4 py-2 bg-white border-t border-gray-200">
                         <DndContext
                           sensors={sensors}
                           collisionDetection={closestCenter}
@@ -628,17 +628,17 @@ export default function MultiImageEditor({
                   </div>
 
                   {/* Right: Control Panel */}
-                  <div className="w-full md:w-80 bg-gray-900 border-t md:border-t-0 md:border-l border-gray-800 flex flex-col max-h-[40vh] md:max-h-none">
+                  <div className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-gray-200 flex flex-col max-h-[40vh] md:max-h-none">
                     {/* Tabs */}
-                    <div className="flex border-b border-gray-800">
+                    <div className="flex border-b border-gray-200">
                       {tabs.map((tab) => (
                         <button
                           key={tab.id}
                           onClick={() => setActiveTab(tab.id)}
                           className={`flex-1 flex flex-col items-center gap-1 px-3 py-3 text-sm font-medium border-b-2 transition-colors ${
                             activeTab === tab.id
-                              ? 'border-primary-500 text-primary-400'
-                              : 'border-transparent text-gray-400 hover:text-gray-300'
+                              ? 'border-primary-500 text-primary-600'
+                              : 'border-transparent text-gray-500 hover:text-gray-700'
                           }`}
                         >
                           {tab.icon}
@@ -653,7 +653,7 @@ export default function MultiImageEditor({
                         <div className="space-y-6">
                           {/* Aspect Ratio */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-300 mb-3">
+                            <h3 className="text-sm font-medium text-gray-900 mb-3">
                               비율
                             </h3>
                             <div className="grid grid-cols-4 gap-2">
@@ -665,8 +665,8 @@ export default function MultiImageEditor({
                                   }
                                   className={`px-3 py-2.5 text-xs rounded-lg border transition-all ${
                                     aspectRatio === ratio.value
-                                      ? 'border-primary-500 bg-primary-500/20 text-primary-400'
-                                      : 'border-gray-700 text-gray-400 hover:border-gray-600 hover:text-gray-300'
+                                      ? 'border-primary-500 bg-primary-50 text-primary-700'
+                                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                                   }`}
                                 >
                                   {ratio.label}
@@ -677,27 +677,27 @@ export default function MultiImageEditor({
 
                           {/* Rotation & Flip */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-300 mb-3">
+                            <h3 className="text-sm font-medium text-gray-900 mb-3">
                               회전 및 반전
                             </h3>
                             <div className="flex gap-2">
                               <button
                                 onClick={handleRotateLeft}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
                               >
                                 <ArrowUturnLeftIcon className="h-4 w-4" />
                                 <span className="text-xs">좌회전</span>
                               </button>
                               <button
                                 onClick={handleRotateRight}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
                               >
                                 <ArrowPathIcon className="h-4 w-4" />
                                 <span className="text-xs">우회전</span>
                               </button>
                               <button
                                 onClick={handleFlipHorizontal}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors"
+                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
                               >
                                 <ArrowsRightLeftIcon className="h-4 w-4" />
                                 <span className="text-xs">반전</span>
@@ -707,18 +707,18 @@ export default function MultiImageEditor({
 
                           {/* Zoom */}
                           <div>
-                            <h3 className="text-sm font-medium text-gray-300 mb-3">
+                            <h3 className="text-sm font-medium text-gray-900 mb-3">
                               확대/축소
                             </h3>
                             <div className="flex items-center gap-3">
                               <button
                                 onClick={handleZoomOut}
-                                className="p-2 text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                                className="p-2 text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                               >
                                 <MagnifyingGlassMinusIcon className="h-4 w-4" />
                               </button>
                               <div className="flex-1 relative">
-                                <div className="h-2 bg-gray-700 rounded-full">
+                                <div className="h-2 bg-gray-200 rounded-full">
                                   <div
                                     className="h-full bg-primary-500 rounded-full"
                                     style={{ width: `${(zoomLevel / 3) * 100}%` }}
@@ -736,7 +736,7 @@ export default function MultiImageEditor({
                               </div>
                               <button
                                 onClick={handleZoomIn}
-                                className="p-2 text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+                                className="p-2 text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
                               >
                                 <MagnifyingGlassPlusIcon className="h-4 w-4" />
                               </button>
@@ -750,7 +750,7 @@ export default function MultiImageEditor({
 
                       {activeTab === 'filter' && currentImage && (
                         <div className="space-y-4">
-                          <h3 className="text-sm font-medium text-gray-300">
+                          <h3 className="text-sm font-medium text-gray-900">
                             필터 선택
                           </h3>
                           <FilterPanel
@@ -770,11 +770,11 @@ export default function MultiImageEditor({
                     </div>
 
                     {/* Actions */}
-                    <div className="p-4 border-t border-gray-800">
+                    <div className="p-4 border-t border-gray-200">
                       <div className="flex gap-3">
                         <button
                           onClick={handleCancel}
-                          className="flex-1 px-4 py-3 border border-gray-700 text-gray-300 rounded-xl hover:bg-gray-800 transition-colors font-medium"
+                          className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                         >
                           취소
                         </button>

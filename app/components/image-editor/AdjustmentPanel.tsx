@@ -103,11 +103,11 @@ export default function AdjustmentPanel({
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-300">세부 조정</h3>
+        <h3 className="text-sm font-medium text-gray-900">세부 조정</h3>
         {hasAnyModification() && (
           <button
             onClick={handleResetAll}
-            className="flex items-center gap-1 text-xs text-gray-400 hover:text-white transition-colors"
+            className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 transition-colors"
           >
             <ArrowPathIcon className="h-3.5 w-3.5" />
             전체 초기화
@@ -129,11 +129,11 @@ export default function AdjustmentPanel({
           return (
             <div key={config.key} className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-sm text-gray-400">{config.label}</label>
+                <label className="text-sm text-gray-700">{config.label}</label>
                 <div className="flex items-center gap-2">
                   <span
                     className={`text-sm tabular-nums ${
-                      modified ? 'text-primary-400' : 'text-gray-500'
+                      modified ? 'text-primary-600' : 'text-gray-500'
                     }`}
                   >
                     {displayValue}
@@ -141,7 +141,7 @@ export default function AdjustmentPanel({
                   {modified && (
                     <button
                       onClick={() => handleReset(config.key)}
-                      className="p-1 text-gray-500 hover:text-white transition-colors"
+                      className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
                       title="초기화"
                     >
                       <ArrowPathIcon className="h-3.5 w-3.5" />
@@ -151,9 +151,9 @@ export default function AdjustmentPanel({
               </div>
 
               <div className="relative">
-                <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-primary-600 to-primary-400 rounded-full transition-all duration-150"
+                    className="h-full bg-gradient-to-r from-primary-500 to-primary-400 rounded-full transition-all duration-150"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
@@ -168,7 +168,7 @@ export default function AdjustmentPanel({
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <div
-                  className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg border-2 border-primary-500 pointer-events-none transition-all duration-150"
+                  className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md border-2 border-primary-500 pointer-events-none transition-all duration-150"
                   style={{ left: `calc(${percentage}% - 8px)` }}
                 />
               </div>
