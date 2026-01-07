@@ -54,7 +54,7 @@ export default function ExpandableText({
       <div
         ref={textRef}
         onClick={handleTextClick}
-        className={`whitespace-pre-wrap ${
+        className={`whitespace-pre-wrap break-words ${
           !showFullContent && !isExpanded && needsExpansion
             ? `line-clamp-${maxLines}`
             : ''
