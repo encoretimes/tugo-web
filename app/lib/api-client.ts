@@ -1,18 +1,15 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+import { getApiUrl } from '@/config/env';
 
 class ApiClient {
-  private baseURL: string;
-
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
+  private getBaseURL(): string {
+    return getApiUrl();
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
+    const url = `${this.getBaseURL()}${endpoint}`;
 
     // FormData인 경우 Content-Type 헤더를 설정하지 않음 (브라우저가 자동 설정)
     const isFormData = options.body instanceof FormData;
@@ -116,4 +113,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(API_BASE_URL);
+export const apiClient = new ApiClient();

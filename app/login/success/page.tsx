@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
 import { apiClient } from '@/lib/api-client';
+import { getApiUrl } from '@/config/env';
 
 interface MemberResponse {
   id: number;
@@ -26,7 +27,7 @@ export default function LoginSuccessPage() {
 
         console.log(
           'Fetching user info from:',
-          process.env.NEXT_PUBLIC_API_URL
+          getApiUrl()
         );
         console.log('Cookies:', document.cookie);
 

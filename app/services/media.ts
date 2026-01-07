@@ -1,5 +1,6 @@
 import { apiClient } from '@/lib/api-client';
 import { compressImage, isImageFile } from '@/utils/imageCompression';
+import { getApiUrl } from '@/config/env';
 
 export interface UploadedFile {
   path: string;
@@ -40,8 +41,7 @@ export const uploadImage = async (file: File): Promise<string> => {
   );
 
   // Convert relative path to full URL for Next.js Image component
-  const backendUrl =
-    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+  const backendUrl = getApiUrl();
   return `${backendUrl}${result.path}`;
 };
 

@@ -4,6 +4,7 @@ import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
+import { getApiUrl } from '@/config/env';
 
 function LoginContent() {
   const searchParams = useSearchParams();
@@ -19,7 +20,7 @@ function LoginContent() {
   }, [searchParams]);
 
   const handleSocialLogin = (provider: 'kakao' | 'naver') => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+    const apiUrl = getApiUrl();
     if (provider === 'kakao') {
       window.location.href = `${apiUrl}/oauth/kakao/login`;
     } else if (provider === 'naver') {
@@ -30,8 +31,7 @@ function LoginContent() {
   const handleDevLogin = async () => {
     try {
       // Call backend dev login endpoint to create a real session
-      const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+      const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/api/v1/dev/login`, {
         method: 'POST',
         credentials: 'include', // Important: include cookies for session
