@@ -19,7 +19,10 @@ const LeftSidebar = () => {
     <aside className="relative h-full w-16 xl:w-64 flex flex-col pt-4 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
       {/* 로고 */}
       <div className="px-1 xl:px-4 mb-6">
-        <Link href="/" className="flex items-center justify-center xl:justify-start p-2">
+        <Link
+          href="/"
+          className="flex items-center justify-center xl:justify-start p-2"
+        >
           {/* 축소 시 T 로고 */}
           <Image
             src="/logo_one.svg"

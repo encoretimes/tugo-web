@@ -34,7 +34,9 @@ const ProfilePage = () => {
   const router = useRouter();
   // URL에서 @ 기호 제거 (/@sangminn200 -> sangminn200)
   const rawUsername = params.username as string;
-  const username = rawUsername.startsWith('@') ? rawUsername.slice(1) : rawUsername;
+  const username = rawUsername.startsWith('@')
+    ? rawUsername.slice(1)
+    : rawUsername;
   const { user: currentUser } = useUserStore();
   const { addToast } = useToastStore();
 
@@ -200,8 +202,12 @@ const ProfilePage = () => {
             <ArrowLeftIcon className="h-6 w-6 dark:text-neutral-100" />
           </button>
           <div className="ml-4 flex-1">
-            <h1 className="text-xl font-bold dark:text-neutral-100">{user.name}</h1>
-            <p className="text-sm text-gray-500 dark:text-neutral-400">{user.stats.posts}개 게시물</p>
+            <h1 className="text-xl font-bold dark:text-neutral-100">
+              {user.name}
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-neutral-400">
+              {user.stats.posts}개 게시물
+            </p>
           </div>
         </div>
       </header>
@@ -248,12 +254,16 @@ const ProfilePage = () => {
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-2xl font-bold dark:text-neutral-100">{user.name}</h2>
+                  <h2 className="text-2xl font-bold dark:text-neutral-100">
+                    {user.name}
+                  </h2>
                   {user.isVerified && (
                     <CheckBadgeIcon className="h-6 w-6 text-primary-600" />
                   )}
                 </div>
-                <p className="text-gray-500 dark:text-neutral-400">@{user.username}</p>
+                <p className="text-gray-500 dark:text-neutral-400">
+                  @{user.username}
+                </p>
               </div>
 
               {/* Action Buttons */}
@@ -319,14 +329,18 @@ const ProfilePage = () => {
                 <strong>
                   {(subscriberCount?.count || 0).toLocaleString()}
                 </strong>{' '}
-                <span className="text-gray-500 dark:text-neutral-400">구독자</span>
+                <span className="text-gray-500 dark:text-neutral-400">
+                  구독자
+                </span>
               </button>
               {isOwnProfile && (
                 <span>
                   <strong>
                     {(bookmarksData?.totalElements || 0).toLocaleString()}
                   </strong>{' '}
-                  <span className="text-gray-500 dark:text-neutral-400">보관함</span>
+                  <span className="text-gray-500 dark:text-neutral-400">
+                    보관함
+                  </span>
                 </span>
               )}
             </div>
@@ -339,7 +353,9 @@ const ProfilePage = () => {
             <div className="bg-gray-50 dark:bg-neutral-900 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold dark:text-neutral-100">이 회원을 구독하시겠습니까?</h3>
+                  <h3 className="font-semibold dark:text-neutral-100">
+                    이 회원을 구독하시겠습니까?
+                  </h3>
                   <p className="text-sm text-gray-500 dark:text-neutral-400">
                     최신 게시물을 받아보세요
                   </p>
@@ -441,7 +457,9 @@ const ProfilePage = () => {
                   <div
                     key={post.postId}
                     className="aspect-square relative cursor-pointer hover:opacity-90 transition-opacity group"
-                    onClick={() => router.push(`/@${username}/post/${post.postId}`)}
+                    onClick={() =>
+                      router.push(`/@${username}/post/${post.postId}`)
+                    }
                   >
                     <Image
                       src={post.mediaUrls![0]}

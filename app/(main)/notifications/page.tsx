@@ -49,7 +49,9 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
       }`}
     >
       {/* 읽지 않음 표시 - 왼쪽 라인 */}
-      <div className={`w-0.5 h-full min-h-[40px] rounded-full flex-shrink-0 ${!isRead ? 'bg-primary-600' : 'bg-transparent'}`} />
+      <div
+        className={`w-0.5 h-full min-h-[40px] rounded-full flex-shrink-0 ${!isRead ? 'bg-primary-600' : 'bg-transparent'}`}
+      />
 
       <div className="flex-grow min-w-0">
         {/* 알림 타입 라벨 */}
@@ -62,7 +64,9 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
           </span>
         </div>
         {/* 알림 내용 */}
-        <p className={`text-sm leading-relaxed ${!isRead ? 'text-gray-900 dark:text-neutral-100 font-medium' : 'text-gray-600 dark:text-neutral-400'}`}>
+        <p
+          className={`text-sm leading-relaxed ${!isRead ? 'text-gray-900 dark:text-neutral-100 font-medium' : 'text-gray-600 dark:text-neutral-400'}`}
+        >
           {message}
         </p>
       </div>
@@ -113,7 +117,11 @@ const NotificationsPage = () => {
 
   const renderContent = () => {
     if (isLoading) {
-      return <div className="p-8 text-center dark:text-neutral-400">알림을 불러오는 중...</div>;
+      return (
+        <div className="p-8 text-center dark:text-neutral-400">
+          알림을 불러오는 중...
+        </div>
+      );
     }
 
     if (error) {
@@ -127,7 +135,9 @@ const NotificationsPage = () => {
     if (allNotifications.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
-          <p className="text-gray-500 dark:text-neutral-400 text-sm">알림이 없습니다</p>
+          <p className="text-gray-500 dark:text-neutral-400 text-sm">
+            알림이 없습니다
+          </p>
         </div>
       );
     }
@@ -138,7 +148,9 @@ const NotificationsPage = () => {
           <NotificationItem key={notification.id} notification={notification} />
         ))}
         {isFetchingNextPage && (
-          <div className="p-4 text-center text-gray-500 dark:text-neutral-400">더 불러오는 중...</div>
+          <div className="p-4 text-center text-gray-500 dark:text-neutral-400">
+            더 불러오는 중...
+          </div>
         )}
         <div ref={observerTarget} className="h-4" />
       </>

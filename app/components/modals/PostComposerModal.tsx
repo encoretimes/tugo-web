@@ -230,7 +230,9 @@ export default function PostComposerModal({
                                   <button
                                     onClick={() => composer.setPostType('FREE')}
                                     className={`${
-                                      active ? 'bg-gray-100 dark:bg-neutral-700' : ''
+                                      active
+                                        ? 'bg-gray-100 dark:bg-neutral-700'
+                                        : ''
                                     } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900 dark:text-neutral-100`}
                                   >
                                     <div className="flex items-center gap-2">
@@ -250,14 +252,17 @@ export default function PostComposerModal({
                                       composer.setPostType('SUBSCRIBER_ONLY')
                                     }
                                     className={`${
-                                      active ? 'bg-gray-100 dark:bg-neutral-700' : ''
+                                      active
+                                        ? 'bg-gray-100 dark:bg-neutral-700'
+                                        : ''
                                     } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900 dark:text-neutral-100`}
                                   >
                                     <div className="flex items-center gap-2">
                                       <LockClosedIcon className="h-5 w-5 text-gray-500" />
                                       <span>구독자 전용</span>
                                     </div>
-                                    {composer.postType === 'SUBSCRIBER_ONLY' && (
+                                    {composer.postType ===
+                                      'SUBSCRIBER_ONLY' && (
                                       <CheckIcon className="h-5 w-5 text-primary-600" />
                                     )}
                                   </button>

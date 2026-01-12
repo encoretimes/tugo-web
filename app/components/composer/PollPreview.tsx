@@ -53,7 +53,9 @@ export default function PollPreview({
     <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h3 className="font-medium text-gray-900 mb-3">{pollData.question}</h3>
+          <h3 className="font-medium text-gray-900 mb-3">
+            {pollData.question}
+          </h3>
           <div className="space-y-2">
             {pollData.options.map((option, index) => (
               <div

@@ -19,7 +19,9 @@ const SecuritySection = () => {
             </h4>
             <p className="text-xs text-gray-500 dark:text-neutral-400 mt-0.5">
               {isTwoFactorEnabled ? (
-                <span className="text-green-600 dark:text-green-400">활성화됨</span>
+                <span className="text-green-600 dark:text-green-400">
+                  활성화됨
+                </span>
               ) : (
                 '계정 보안을 강화하세요'
               )}

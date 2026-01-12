@@ -67,7 +67,9 @@ export default function RoomList({
               key={room.roomId}
               onClick={() => onSelectRoom(room)}
               className={`p-4 border-b border-gray-200 dark:border-neutral-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition ${
-                selectedRoomId === room.roomId ? 'bg-gray-100 dark:bg-neutral-800' : ''
+                selectedRoomId === room.roomId
+                  ? 'bg-gray-100 dark:bg-neutral-800'
+                  : ''
               }`}
             >
               <div className="flex items-center gap-3">
@@ -119,7 +121,9 @@ export default function RoomList({
           ))
         ) : (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500 dark:text-neutral-400">쪽지방이 없습니다</p>
+            <p className="text-gray-500 dark:text-neutral-400">
+              쪽지방이 없습니다
+            </p>
           </div>
         )}
       </div>

@@ -42,9 +42,11 @@ export const useSubscribeMutation = () => {
   const queryClient = useQueryClient();
 
   const invalidateSubscriptionQueries = (targetMemberId: number) => {
-    invalidationHelpers.onSubscriptionMutation(targetMemberId).forEach((key) => {
-      queryClient.invalidateQueries({ queryKey: key });
-    });
+    invalidationHelpers
+      .onSubscriptionMutation(targetMemberId)
+      .forEach((key) => {
+        queryClient.invalidateQueries({ queryKey: key });
+      });
   };
 
   return useMutation({
@@ -60,9 +62,11 @@ export const useUnsubscribeMutation = () => {
   const queryClient = useQueryClient();
 
   const invalidateSubscriptionQueries = (targetMemberId: number) => {
-    invalidationHelpers.onSubscriptionMutation(targetMemberId).forEach((key) => {
-      queryClient.invalidateQueries({ queryKey: key });
-    });
+    invalidationHelpers
+      .onSubscriptionMutation(targetMemberId)
+      .forEach((key) => {
+        queryClient.invalidateQueries({ queryKey: key });
+      });
   };
 
   return useMutation({

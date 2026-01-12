@@ -26,7 +26,9 @@ function truncateUrl(url: string, maxLength: number = 40): string {
   const path = domainMatch[2] || '';
 
   if (path.length === 0) {
-    return domain.length > maxLength ? domain.slice(0, maxLength) + '...' : domain;
+    return domain.length > maxLength
+      ? domain.slice(0, maxLength) + '...'
+      : domain;
   }
 
   // 도메인 + 일부 경로 표시
@@ -46,7 +48,8 @@ export default function MentionText({
   className = '',
 }: MentionTextProps) {
   // URL 패턴 (http, https, www로 시작하는 것 감지)
-  const urlPattern = /(?:https?:\/\/|www\.)[^\s<>"\u3000-\u303F\uFF00-\uFFEF]+/gi;
+  const urlPattern =
+    /(?:https?:\/\/|www\.)[^\s<>"\u3000-\u303F\uFF00-\uFFEF]+/gi;
 
   // @username 패턴 매칭 (백엔드와 동일한 패턴 사용)
   const mentionPattern = /@([a-zA-Z0-9_-]+)/g;

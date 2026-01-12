@@ -26,7 +26,11 @@ export default function ImagePreviewGrid({
   };
 
   return (
-    <div className={size === 'small' ? 'flex flex-wrap gap-2' : 'grid grid-cols-5 gap-2'}>
+    <div
+      className={
+        size === 'small' ? 'flex flex-wrap gap-2' : 'grid grid-cols-5 gap-2'
+      }
+    >
       {images.map((file, index) => {
         const imageUrl = URL.createObjectURL(file);
         return (

@@ -70,7 +70,9 @@ export default function NotesPage() {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-neutral-400">
             <UserIcon className="h-20 w-20" />
-            <h2 className="mt-4 text-xl font-bold dark:text-neutral-100">대화를 선택하세요</h2>
+            <h2 className="mt-4 text-xl font-bold dark:text-neutral-100">
+              대화를 선택하세요
+            </h2>
             <p className="mt-2 text-sm">
               왼쪽 목록에서 대화를 선택하여 메시지를 확인하세요.
             </p>

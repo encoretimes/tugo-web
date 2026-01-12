@@ -127,7 +127,9 @@ export default function PostDetailContent({
   if (!post) {
     return (
       <div className="flex flex-col items-center justify-center py-20 px-4">
-        <p className="text-gray-500 dark:text-neutral-400 mb-4">게시물을 찾을 수 없습니다</p>
+        <p className="text-gray-500 dark:text-neutral-400 mb-4">
+          게시물을 찾을 수 없습니다
+        </p>
         <button
           onClick={onClose}
           className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"

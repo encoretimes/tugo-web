@@ -50,13 +50,17 @@ export default function MessageBubble({
       )}
       <div
         className={`max-w-[70%] rounded-md px-4 py-2 ${
-          isMyMessage ? 'bg-primary-600 text-white' : 'bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-neutral-100'
+          isMyMessage
+            ? 'bg-primary-600 text-white'
+            : 'bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-neutral-100'
         }`}
       >
         <p className="whitespace-pre-wrap break-words">{message.content}</p>
         <span
           className={`text-xs mt-1 block ${
-            isMyMessage ? 'text-primary-200' : 'text-gray-500 dark:text-neutral-400'
+            isMyMessage
+              ? 'text-primary-200'
+              : 'text-gray-500 dark:text-neutral-400'
           }`}
         >
           {formatTime(message.timestamp)}

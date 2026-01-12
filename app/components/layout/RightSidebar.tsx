@@ -27,7 +27,9 @@ const RightSidebar = () => {
               </h3>
               <ChevronRightIcon className="h-4 w-4 text-gray-900 dark:text-gray-100" />
             </Link>
-            <span className="text-xs text-gray-400 dark:text-gray-500">오늘 23시 30분 기준</span>
+            <span className="text-xs text-gray-400 dark:text-gray-500">
+              오늘 23시 30분 기준
+            </span>
           </div>
           <div className="py-2">
             {isLoadingDebates ? (
@@ -63,9 +65,7 @@ const RightSidebar = () => {
                         </Link>
                       ) : (
                         <div className="flex items-center gap-3 py-2">
-                          <span
-                            className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600"
-                          >
+                          <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
                             {index + 1}
                           </span>
                           <span className="flex-1 text-sm text-gray-400 font-medium">

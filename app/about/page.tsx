@@ -394,7 +394,8 @@ export default function AboutPage() {
               성장하는 커뮤니티
             </h2>
             <p className="text-blue-200/70 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto">
-              매일 더 많은 사람들이 TUGO에서 건강한 정치 토론에 참여하고 있습니다
+              매일 더 많은 사람들이 TUGO에서 건강한 정치 토론에 참여하고
+              있습니다
             </p>
           </RevealSection>
 

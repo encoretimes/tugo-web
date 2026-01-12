@@ -231,7 +231,9 @@ export default function PollCreator({
             onChange={(e) => handleMultipleChoiceChange(e.target.checked)}
             className="w-4 h-4 text-primary-600 bg-gray-100 dark:bg-neutral-700 border-gray-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
           />
-          <span className="text-sm text-gray-700 dark:text-neutral-300">다중 선택 허용</span>
+          <span className="text-sm text-gray-700 dark:text-neutral-300">
+            다중 선택 허용
+          </span>
         </label>
 
         {/* 커스텀 날짜 체크박스 */}
@@ -242,7 +244,9 @@ export default function PollCreator({
             onChange={(e) => handleCustomDateChange(e.target.checked)}
             className="w-4 h-4 text-primary-600 bg-gray-100 dark:bg-neutral-700 border-gray-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
           />
-          <span className="text-sm text-gray-700 dark:text-neutral-300">종료일 직접 설정</span>
+          <span className="text-sm text-gray-700 dark:text-neutral-300">
+            종료일 직접 설정
+          </span>
         </label>
       </div>
 

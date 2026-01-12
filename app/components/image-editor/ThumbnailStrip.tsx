@@ -34,13 +34,8 @@ function SortableImage({
   isActive,
   onClick,
 }: SortableImageProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging,
-  } = useSortable({ id: image.id });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useSortable({ id: image.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),

@@ -9,7 +9,10 @@ export const createErrorHandler = (defaultMessage: string) => {
   };
 };
 
-export const createSuccessHandler = (message: string, type: ToastType = 'success') => {
+export const createSuccessHandler = (
+  message: string,
+  type: ToastType = 'success'
+) => {
   return () => {
     const addToast = useToastStore.getState().addToast;
     addToast(message, type);

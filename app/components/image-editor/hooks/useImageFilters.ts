@@ -16,9 +16,7 @@ export function useImageFilters() {
         ((adjustments?.brightness ?? 100) / 100) *
         100;
       const contrast =
-        (filters.contrast / 100) *
-        ((adjustments?.contrast ?? 100) / 100) *
-        100;
+        (filters.contrast / 100) * ((adjustments?.contrast ?? 100) / 100) * 100;
       const saturate =
         (filters.saturate / 100) *
         ((adjustments?.saturation ?? 100) / 100) *
@@ -90,7 +88,10 @@ export function useImageFilters() {
           radius
         );
         gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        gradient.addColorStop(1, `rgba(0, 0, 0, ${adjustments.vignette / 100})`);
+        gradient.addColorStop(
+          1,
+          `rgba(0, 0, 0, ${adjustments.vignette / 100})`
+        );
 
         filteredCtx.filter = 'none';
         filteredCtx.fillStyle = gradient;

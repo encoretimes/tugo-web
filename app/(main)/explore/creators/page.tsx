@@ -48,7 +48,9 @@ export default function ExploreCreatorsPage() {
         >
           <ArrowLeftIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
         </Link>
-        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">인기 크리에이터</h1>
+        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          인기 크리에이터
+        </h1>
       </div>
 
       {/* 정렬 버튼 */}

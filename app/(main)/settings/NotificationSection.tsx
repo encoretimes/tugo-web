@@ -71,7 +71,9 @@ const NotificationSection = () => {
             <div
               key={pref.id}
               className={`flex items-center justify-between p-5 ${
-                index !== 0 ? 'border-t border-gray-100 dark:border-neutral-800' : ''
+                index !== 0
+                  ? 'border-t border-gray-100 dark:border-neutral-800'
+                  : ''
               }`}
             >
               <div className="flex items-center gap-4">
@@ -89,10 +91,14 @@ const NotificationSection = () => {
               </div>
               <Switch
                 checked={pref.enabled}
-                onChange={() => handleToggle(pref.notificationType, pref.enabled)}
+                onChange={() =>
+                  handleToggle(pref.notificationType, pref.enabled)
+                }
                 disabled={updatePreference.isPending}
                 className={`${
-                  pref.enabled ? 'bg-neutral-900 dark:bg-neutral-100' : 'bg-gray-200 dark:bg-neutral-700'
+                  pref.enabled
+                    ? 'bg-neutral-900 dark:bg-neutral-100'
+                    : 'bg-gray-200 dark:bg-neutral-700'
                 } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 disabled:opacity-50`}
               >
                 <span

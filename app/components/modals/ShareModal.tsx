@@ -116,7 +116,9 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
                         <p className="text-xs text-gray-500 dark:text-neutral-400 mb-1">
                           게시물 링크
                         </p>
-                        <p className="text-sm text-gray-900 dark:text-neutral-100 truncate">{url}</p>
+                        <p className="text-sm text-gray-900 dark:text-neutral-100 truncate">
+                          {url}
+                        </p>
                       </div>
                       <button
                         onClick={handleCopyLink}

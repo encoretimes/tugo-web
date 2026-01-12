@@ -7,7 +7,11 @@ import {
   ComputerDesktopIcon,
 } from '@heroicons/react/24/outline';
 
-const themeOptions: { value: ThemeMode; label: string; icon: typeof SunIcon }[] = [
+const themeOptions: {
+  value: ThemeMode;
+  label: string;
+  icon: typeof SunIcon;
+}[] = [
   { value: 'light', label: '라이트', icon: SunIcon },
   { value: 'dark', label: '다크', icon: MoonIcon },
   { value: 'system', label: '시스템', icon: ComputerDesktopIcon },

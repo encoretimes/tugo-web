@@ -1,7 +1,11 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { PhotoIcon, ListBulletIcon, UserIcon } from '@heroicons/react/24/outline';
+import {
+  PhotoIcon,
+  ListBulletIcon,
+  UserIcon,
+} from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useUserStore } from '@/store/userStore';
 import { usePostComposer } from '@/hooks/usePostComposer';

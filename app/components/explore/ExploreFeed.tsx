@@ -50,7 +50,9 @@ const ExploreFeed = () => {
 
   if (posts.length === 0) {
     return (
-      <div className="p-8 text-center text-gray-500 dark:text-neutral-400">게시물이 없습니다</div>
+      <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
+        게시물이 없습니다
+      </div>
     );
   }
 

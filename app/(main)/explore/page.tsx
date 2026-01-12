@@ -67,7 +67,9 @@ export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSearch, setActiveSearch] = useState(''); // 실제 적용된 검색어
   const [activeTab, setActiveTab] = useState<TabType>(
-    tabFromUrl && ['news', 'creators', 'votes'].includes(tabFromUrl) ? tabFromUrl : 'news'
+    tabFromUrl && ['news', 'creators', 'votes'].includes(tabFromUrl)
+      ? tabFromUrl
+      : 'news'
   );
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
@@ -156,8 +158,12 @@ export default function ExplorePage() {
   const filteredDebates = activeSearch
     ? debates?.filter(
         (post) =>
-          post.contentText?.toLowerCase().includes(activeSearch.toLowerCase()) ||
-          post.poll?.question?.toLowerCase().includes(activeSearch.toLowerCase())
+          post.contentText
+            ?.toLowerCase()
+            .includes(activeSearch.toLowerCase()) ||
+          post.poll?.question
+            ?.toLowerCase()
+            .includes(activeSearch.toLowerCase())
       )
     : debates;
 
@@ -173,7 +179,9 @@ export default function ExplorePage() {
     ? allNews.filter(
         (article) =>
           article.title.toLowerCase().includes(activeSearch.toLowerCase()) ||
-          article.description?.toLowerCase().includes(activeSearch.toLowerCase())
+          article.description
+            ?.toLowerCase()
+            .includes(activeSearch.toLowerCase())
       )
     : allNews;
 
@@ -240,7 +248,9 @@ export default function ExplorePage() {
                     >
                       <div className="flex items-center gap-2">
                         <ClockIcon className="h-4 w-4 text-neutral-400" />
-                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{query}</span>
+                        <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                          {query}
+                        </span>
                       </div>
                       <button
                         onClick={(e) => handleRemoveHistory(e, query)}
@@ -351,7 +361,10 @@ export default function ExplorePage() {
             ) : filteredNews.length > 0 ? (
               <div className="divide-y divide-neutral-100">
                 {filteredNews.map((article, index) => (
-                  <NewsCard key={`${article.link}-${index}`} article={article} />
+                  <NewsCard
+                    key={`${article.link}-${index}`}
+                    article={article}
+                  />
                 ))}
               </div>
             ) : (

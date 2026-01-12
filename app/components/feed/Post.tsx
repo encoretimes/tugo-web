@@ -115,7 +115,14 @@ const Post: React.FC<PostProps> = ({
         }
       );
     }
-  }, [checkAuth, isLiked, likeCount, unlikeMutation, likeMutation, post.postId]);
+  }, [
+    checkAuth,
+    isLiked,
+    likeCount,
+    unlikeMutation,
+    likeMutation,
+    post.postId,
+  ]);
 
   const handleBookmarkToggle = useCallback(() => {
     if (!checkAuth()) return;

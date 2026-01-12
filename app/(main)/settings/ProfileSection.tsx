@@ -19,10 +19,18 @@ const ProfileSection = () => {
 
   const [showProfileEditor, setShowProfileEditor] = useState(false);
   const [showBannerEditor, setShowBannerEditor] = useState(false);
-  const [pendingProfileImage, setPendingProfileImage] = useState<File | null>(null);
-  const [pendingBannerImage, setPendingBannerImage] = useState<File | null>(null);
-  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
-  const [bannerImagePreview, setBannerImagePreview] = useState<string | null>(null);
+  const [pendingProfileImage, setPendingProfileImage] = useState<File | null>(
+    null
+  );
+  const [pendingBannerImage, setPendingBannerImage] = useState<File | null>(
+    null
+  );
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
+    null
+  );
+  const [bannerImagePreview, setBannerImagePreview] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     if (user) {
@@ -175,8 +183,18 @@ const ProfileSection = () => {
             onClick={handleRemoveBannerImage}
             className="absolute bottom-3 right-12 p-2 bg-black/50 hover:bg-red-600/80 rounded-full transition-colors"
           >
-            <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="h-4 w-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         )}

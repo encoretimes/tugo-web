@@ -17,9 +17,9 @@
   --text-inverse: #ffffff;
 
   /* Brand */
-  --brand-primary: #1E3A5F;
-  --brand-hover: #162D4D;
-  --brand-light: #EFF6FF;
+  --brand-primary: #1e3a5f;
+  --brand-hover: #162d4d;
+  --brand-light: #eff6ff;
 
   /* Border */
   --border-primary: #e5e7eb;
@@ -38,37 +38,37 @@
   /* Legacy (for backwards compatibility) */
   --background: #ffffff;
   --foreground: #1f2937;
-  --primary: #1E3A5F;
-  --primary-hover: #162D4D;
-  --surface: #F8FAFC;
-  --border: #E5E7EB;
+  --primary: #1e3a5f;
+  --primary-hover: #162d4d;
+  --surface: #f8fafc;
+  --border: #e5e7eb;
 }
 
 /* ===== Dark Theme ===== */
 .dark {
   /* Background - 거의 검정에 가까운 색 */
-  --bg-primary: #09090b;      /* neutral-950 - 메인 배경 */
-  --bg-secondary: #18181b;    /* neutral-900 - 카드/섹션 */
-  --bg-tertiary: #27272a;     /* neutral-800 - 호버/강조 */
+  --bg-primary: #09090b; /* neutral-950 - 메인 배경 */
+  --bg-secondary: #18181b; /* neutral-900 - 카드/섹션 */
+  --bg-tertiary: #27272a; /* neutral-800 - 호버/강조 */
   --bg-hover: #27272a;
 
   /* Foreground / Text - 높은 가시성 */
-  --text-primary: #fafafa;    /* neutral-50 - 메인 텍스트 */
-  --text-secondary: #a1a1aa;  /* neutral-400 - 보조 텍스트 */
-  --text-tertiary: #71717a;   /* neutral-500 - 약한 텍스트 */
+  --text-primary: #fafafa; /* neutral-50 - 메인 텍스트 */
+  --text-secondary: #a1a1aa; /* neutral-400 - 보조 텍스트 */
+  --text-tertiary: #71717a; /* neutral-500 - 약한 텍스트 */
   --text-inverse: #09090b;
 
   /* Brand - 다크모드용 밝은 blue */
-  --brand-primary: #3b82f6;   /* blue-500 */
-  --brand-hover: #60a5fa;     /* blue-400 */
-  --brand-light: #1e3a8a;     /* blue-900 */
+  --brand-primary: #3b82f6; /* blue-500 */
+  --brand-hover: #60a5fa; /* blue-400 */
+  --brand-light: #1e3a8a; /* blue-900 */
 
   /* Border */
-  --border-primary: #27272a;  /* neutral-800 */
+  --border-primary: #27272a; /* neutral-800 */
   --border-secondary: #3f3f46; /* neutral-700 */
 
   /* Surface (Cards, Modals) */
-  --surface-primary: #18181b;  /* neutral-900 */
+  --surface-primary: #18181b; /* neutral-900 */
   --surface-secondary: #09090b; /* neutral-950 */
   --surface-elevated: #27272a; /* neutral-800 */
 
@@ -106,7 +106,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none; /* 오버스크롤 바운스 효과 제거 */
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 body::-webkit-scrollbar {
@@ -156,7 +158,8 @@ a {
 .reveal-element {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -169,7 +172,8 @@ a {
 .reveal-element-left {
   opacity: 0;
   transform: translateX(-30px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -182,7 +186,8 @@ a {
 .reveal-element-right {
   opacity: 0;
   transform: translateX(30px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -195,7 +200,8 @@ a {
 .reveal-scale {
   opacity: 0;
   transform: scale(0.97);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
@@ -227,21 +233,15 @@ a {
 
 /* Geometric grid pattern */
 .geo-pattern {
-  background-image: linear-gradient(
-      to right,
-      var(--border-primary) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(to right, var(--border-primary) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border-primary) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 .geo-pattern-subtle {
-  background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.05) 1px,
-      transparent 1px
-    ),
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   background-size: 80px 80px;
 }
@@ -311,7 +311,8 @@ a {
 
 /* Hover card effect */
 .hover-lift {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -400,7 +401,9 @@ a {
     transparent,
     var(--border-secondary)
   );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   border-radius: inherit;
@@ -409,12 +412,7 @@ a {
 
 /* Hero gradient background - consistent dark gradient for both modes (white text) */
 .hero-gradient {
-  background: linear-gradient(
-    135deg,
-    #0f172a 0%,
-    #1e3a5f 40%,
-    #1e40af 100%
-  );
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #1e40af 100%);
 }
 
 /* Hover lift performance */

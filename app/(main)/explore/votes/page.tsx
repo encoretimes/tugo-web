@@ -49,7 +49,9 @@ export default function ExploreVotesPage() {
         >
           <ArrowLeftIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
         </Link>
-        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Hot한 투표</h1>
+        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          Hot한 투표
+        </h1>
       </div>
 
       {/* 정렬 버튼 */}
@@ -75,7 +77,10 @@ export default function ExploreVotesPage() {
           <div className="p-8">
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
+                <div
+                  key={i}
+                  className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse"
+                />
               ))}
             </div>
           </div>
@@ -100,7 +105,10 @@ export default function ExploreVotesPage() {
                 {isFetchingNextPage ? (
                   <div className="space-y-4 px-4">
                     {[1, 2].map((i) => (
-                      <div key={i} className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
+                      <div
+                        key={i}
+                        className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse"
+                      />
                     ))}
                   </div>
                 ) : (

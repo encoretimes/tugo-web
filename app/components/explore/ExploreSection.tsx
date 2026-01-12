@@ -24,7 +24,9 @@ const ExploreSection: React.FC<ExploreSectionProps> = ({
           href={href}
           className="flex items-center justify-between hover:opacity-70 transition-opacity"
         >
-          <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">{title}</h2>
+          <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+            {title}
+          </h2>
           <div className="flex items-center gap-1 text-primary-600">
             <span className="text-sm font-medium">{showMoreText}</span>
             <ChevronRightIcon className="h-4 w-4" />

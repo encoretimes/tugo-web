@@ -60,7 +60,9 @@ const VoteCard: React.FC<VoteCardProps> = ({ post, rank }) => {
               {post.author.name}
             </span>
             <span className="text-sm text-neutral-400">·</span>
-            <span className="text-sm text-neutral-400">{getTimeRemaining()}</span>
+            <span className="text-sm text-neutral-400">
+              {getTimeRemaining()}
+            </span>
           </div>
           <p className="text-sm text-neutral-800 dark:text-neutral-200 line-clamp-2 mb-2">
             {poll.question || post.contentText}

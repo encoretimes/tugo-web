@@ -34,7 +34,10 @@ export default function CommentItem({ comment }: CommentItemProps) {
               @{comment.author.username}
             </span>
           </p>
-          <MentionText content={comment.content} className="text-sm mt-1 text-neutral-900 dark:text-neutral-100" />
+          <MentionText
+            content={comment.content}
+            className="text-sm mt-1 text-neutral-900 dark:text-neutral-100"
+          />
         </div>
         <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
           {formatRelativeTime(comment.createdAt)}

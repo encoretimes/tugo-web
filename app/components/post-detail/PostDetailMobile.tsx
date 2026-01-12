@@ -28,7 +28,9 @@ export default function PostDetailMobile({
         >
           <ArrowLeftIcon className="h-5 w-5 text-gray-900 dark:text-neutral-100" />
         </button>
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-neutral-100">게시물</h1>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-neutral-100">
+          게시물
+        </h1>
       </div>
 
       {/* Content */}
