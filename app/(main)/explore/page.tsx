@@ -197,13 +197,13 @@ export default function ExplorePage() {
                   searchInputRef.current?.blur();
                 }
               }}
-              className="w-full pl-12 pr-10 py-3 bg-neutral-100 dark:bg-neutral-800 rounded-[20px] text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-12 pr-10 py-3 bg-neutral-100 dark:bg-neutral-800 rounded-[20px] text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600"
             />
             {(searchQuery || activeSearch) && (
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-neutral-200 dark:bg-neutral-700 rounded-full transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-full transition-colors"
               >
                 <XMarkIcon className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
               </button>
@@ -236,7 +236,7 @@ export default function ExplorePage() {
                     <div
                       key={query}
                       onClick={() => handleSelectKeyword(query)}
-                      className="flex items-center justify-between py-2 px-2 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-800 rounded-lg cursor-pointer group"
+                      className="flex items-center justify-between py-2 px-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg cursor-pointer group"
                     >
                       <div className="flex items-center gap-2">
                         <ClockIcon className="h-4 w-4 text-neutral-400" />
@@ -244,7 +244,7 @@ export default function ExplorePage() {
                       </div>
                       <button
                         onClick={(e) => handleRemoveHistory(e, query)}
-                        className="p-1 opacity-0 group-hover:opacity-100 hover:bg-neutral-200 dark:bg-neutral-700 rounded-full transition-all"
+                        className="p-1 opacity-0 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-full transition-all"
                       >
                         <XMarkIcon className="h-3 w-3 text-neutral-400" />
                       </button>
@@ -268,7 +268,7 @@ export default function ExplorePage() {
                     <div
                       key={item.keyword}
                       onClick={() => handleSelectKeyword(item.keyword)}
-                      className="flex items-center gap-3 py-2 px-2 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-800 rounded-lg cursor-pointer"
+                      className="flex items-center gap-3 py-2 px-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg cursor-pointer"
                     >
                       <span
                         className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold text-white shrink-0"
@@ -319,12 +319,12 @@ export default function ExplorePage() {
               className={`flex-1 py-3 text-sm font-semibold transition-colors relative ${
                 activeTab === tab.id
                   ? 'text-neutral-900 dark:text-neutral-100'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:bg-neutral-800 dark:hover:bg-neutral-800'
+                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
               }`}
             >
               {tab.label}
               {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-primary-500 rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-neutral-900 dark:bg-neutral-100 rounded-full" />
               )}
             </button>
           ))}

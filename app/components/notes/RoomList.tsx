@@ -67,7 +67,7 @@ export default function RoomList({
               key={room.roomId}
               onClick={() => onSelectRoom(room)}
               className={`p-4 border-b border-gray-200 dark:border-neutral-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition ${
-                selectedRoomId === room.roomId ? 'bg-primary-50 dark:bg-primary-900/30' : ''
+                selectedRoomId === room.roomId ? 'bg-gray-100 dark:bg-neutral-800' : ''
               }`}
             >
               <div className="flex items-center gap-3">

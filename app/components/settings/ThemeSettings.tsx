@@ -17,7 +17,7 @@ export default function ThemeSettings() {
   const { mode, setMode } = useThemeStore();
 
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg p-6">
+    <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-6">
       <div className="mb-4">
         <h4 className="text-base font-medium text-gray-900 dark:text-neutral-100">
           테마

@@ -41,7 +41,7 @@ const SettingsPage = () => {
             <ThemeSettings />
 
             {/* Logout Section */}
-            <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+            <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-base font-medium text-gray-900 dark:text-neutral-100">
@@ -64,7 +64,7 @@ const SettingsPage = () => {
             </div>
 
             {/* Account Deletion Section */}
-            <div className="bg-white dark:bg-neutral-900 border border-red-200 dark:border-red-900/50 rounded-lg p-5">
+            <div className="bg-white dark:bg-neutral-950 border border-red-200 dark:border-red-900/50 rounded-lg p-5">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-base font-medium text-red-600 dark:text-red-400">
@@ -97,7 +97,7 @@ const SettingsPage = () => {
         </header>
 
         {/* Tab Navigation */}
-        <nav className="flex gap-1 p-1 bg-gray-100 dark:bg-neutral-900 rounded-lg mb-8">
+        <nav className="flex gap-1 p-1 bg-gray-100 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg mb-8">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -107,7 +107,7 @@ const SettingsPage = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
                   isActive
-                    ? 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 shadow-sm'
+                    ? 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 border border-transparent dark:border-neutral-700'
                     : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
                 }`}
               >

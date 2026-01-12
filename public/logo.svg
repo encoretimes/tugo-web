@@ -1,6 +1,6 @@
 <svg width="130" height="40" viewBox="0 0 130 40" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&amp;display=swap');
   </style>
-  <text x="0" y="32" font-family="'Playfair Display', Georgia, serif" font-size="36" font-weight="700" fill="currentColor" letter-spacing="2">Tugo</text>
+  <text x="0" y="32" font-family="'Playfair Display', Georgia, serif" font-size="36" font-weight="900" fill="currentColor" letter-spacing="2">TUGO</text>
 </svg>

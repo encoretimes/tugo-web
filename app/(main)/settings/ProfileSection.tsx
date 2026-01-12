@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useToastStore } from '@/store/toastStore';
-import { UserIcon, PhotoIcon, CameraIcon } from '@heroicons/react/24/solid';
+import { UserIcon, CameraIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import ProfileImageEditor from '@/components/modals/ProfileImageEditor';
 import { uploadImage } from '@/services/media';
@@ -145,7 +145,7 @@ const ProfileSection = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+    <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
       {/* Banner Image */}
       <div className="relative w-full h-32 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-neutral-800 dark:to-neutral-900">
         {(bannerImagePreview || user?.bannerImageUrl) && (
@@ -241,7 +241,7 @@ const ProfileSection = () => {
               id="username"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-primary-500 dark:focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none transition-colors"
+              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors"
               required
             />
           </div>
@@ -259,7 +259,7 @@ const ProfileSection = () => {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="자신을 소개해주세요"
-              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-primary-500 dark:focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none transition-colors resize-none placeholder:text-gray-400 dark:placeholder:text-neutral-500"
+              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors resize-none placeholder:text-gray-400 dark:placeholder:text-neutral-500"
             />
           </div>
 
@@ -267,7 +267,7 @@ const ProfileSection = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+              className="px-6 py-2.5 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
             >
               {isSubmitting ? '저장 중...' : '저장'}
             </button>

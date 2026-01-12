@@ -117,6 +117,20 @@ const LeftSidebar = () => {
             badge={unreadCount}
             isCustomIcon
           />
+          <NavItem
+            href="/bookmarks"
+            icon={
+              <Image
+                src="/system_ico/bookmark_pc.svg"
+                alt="보관함"
+                width={28}
+                height={28}
+                className="w-7 h-7 dark:invert dark:brightness-200"
+              />
+            }
+            label="보관함"
+            isCustomIcon
+          />
           {user && (
             <NavItem
               href="#"
@@ -137,23 +151,9 @@ const LeftSidebar = () => {
         </ul>
       </nav>
 
-      {/* 하단: 보관함 + 프로필 */}
+      {/* 하단: 프로필 + 설정 */}
       <nav className="mt-auto px-1 xl:px-4 pb-2 md:pb-4">
         <ul className="space-y-3 w-full">
-          <NavItem
-            href="/bookmarks"
-            icon={
-              <Image
-                src="/system_ico/bookmark_pc.svg"
-                alt="보관함"
-                width={28}
-                height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
-              />
-            }
-            label="보관함"
-            isCustomIcon
-          />
           <NavItem
             href={user ? `/@${user.username}` : '/login'}
             icon={

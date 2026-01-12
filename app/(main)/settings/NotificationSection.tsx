@@ -53,9 +53,9 @@ const NotificationSection = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg p-8">
+      <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-8">
         <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-600 border-t-transparent"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-neutral-600 dark:border-neutral-400 border-t-transparent"></div>
         </div>
       </div>
     );
@@ -63,7 +63,7 @@ const NotificationSection = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+      <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
         {preferences?.map((pref, index) => {
           const config = notificationConfig[pref.notificationType];
           const Icon = config.icon;
@@ -92,13 +92,13 @@ const NotificationSection = () => {
                 onChange={() => handleToggle(pref.notificationType, pref.enabled)}
                 disabled={updatePreference.isPending}
                 className={`${
-                  pref.enabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-neutral-700'
-                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 disabled:opacity-50`}
+                  pref.enabled ? 'bg-neutral-900 dark:bg-neutral-100' : 'bg-gray-200 dark:bg-neutral-700'
+                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 disabled:opacity-50`}
               >
                 <span
                   className={`${
                     pref.enabled ? 'translate-x-6' : 'translate-x-1'
-                  } inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm`}
+                  } inline-block h-4 w-4 transform rounded-full bg-white dark:bg-neutral-950 transition-transform shadow-sm`}
                 />
               </Switch>
             </div>
@@ -106,7 +106,7 @@ const NotificationSection = () => {
         })}
       </div>
 
-      <div className="bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+      <div className="bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
         <p className="text-sm text-gray-500 dark:text-neutral-400">
           이메일 알림 기능은 추후 업데이트될 예정입니다
         </p>
