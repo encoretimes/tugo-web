@@ -3,7 +3,14 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Creator } from '@/types/creator';
+import { useUserStore } from '@/store/userStore';
+import {
+  useSubscribeMutation,
+  useUnsubscribeMutation,
+  useSubscriptionStatus,
+} from '@/hooks/useSubscription';
 
 interface CreatorCardProps {
   creator: Creator;
@@ -16,7 +23,41 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
   rank,
   showStats = true,
 }) => {
+  const router = useRouter();
+  const { isAuthenticated, user } = useUserStore();
   const defaultProfileImage = `https://i.pravatar.cc/150?u=${creator.username}`;
+
+  const { data: subscriptionStatus, isLoading: isStatusLoading } =
+    useSubscriptionStatus(creator.memberId);
+  const subscribeMutation = useSubscribeMutation();
+  const unsubscribeMutation = useUnsubscribeMutation();
+
+  const isSubscribed = subscriptionStatus?.isSubscribed ?? false;
+  const subscriptionId = subscriptionStatus?.subscriptionId ?? null;
+  const isOwnProfile = user?.id === creator.memberId;
+  const isMutating =
+    subscribeMutation.isPending || unsubscribeMutation.isPending;
+
+  const handleSubscribeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (isOwnProfile) return;
+
+    if (isSubscribed && subscriptionId) {
+      unsubscribeMutation.mutate({
+        subscriptionId,
+        targetMemberId: creator.memberId,
+      });
+    } else {
+      subscribeMutation.mutate({ targetMemberId: creator.memberId });
+    }
+  };
 
   return (
     <Link
@@ -55,16 +96,19 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           </div>
         )}
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          // TODO: 구독 처리
-        }}
-        className="shrink-0 px-4 py-1.5 rounded-md bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
-      >
-        구독
-      </button>
+      {!isOwnProfile && (
+        <button
+          onClick={handleSubscribeClick}
+          disabled={isMutating || isStatusLoading}
+          className={`shrink-0 px-4 py-1.5 rounded-md text-sm font-semibold transition-colors disabled:opacity-50 ${
+            isSubscribed
+              ? 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400'
+              : 'bg-primary-600 text-white hover:bg-primary-700'
+          }`}
+        >
+          {isMutating ? '...' : isSubscribed ? '구독중' : '구독'}
+        </button>
+      )}
     </Link>
   );
 };

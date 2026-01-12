@@ -359,7 +359,7 @@ export default function ExplorePage() {
                 ))}
               </div>
             ) : filteredNews.length > 0 ? (
-              <div className="divide-y divide-neutral-100">
+              <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
                 {filteredNews.map((article, index) => (
                   <NewsCard
                     key={`${article.link}-${index}`}
@@ -394,7 +394,7 @@ export default function ExplorePage() {
                 ))}
               </div>
             ) : filteredCreators && filteredCreators.length > 0 ? (
-              <div className="divide-y divide-neutral-100">
+              <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
                 {filteredCreators.map((creator, index) => (
                   <CreatorCard
                     key={creator.memberId}
@@ -426,7 +426,7 @@ export default function ExplorePage() {
                 ))}
               </div>
             ) : filteredDebates && filteredDebates.length > 0 ? (
-              <div className="divide-y divide-neutral-100">
+              <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
                 {filteredDebates.map((post, index) => (
                   <VoteCard
                     key={post.postId}
