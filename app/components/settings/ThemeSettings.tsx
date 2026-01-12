@@ -17,27 +17,29 @@ export default function ThemeSettings() {
   const { mode, setMode } = useThemeStore();
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
-      <h4 className="text-base font-medium text-gray-900 dark:text-gray-100 mb-2">
-        테마 설정
-      </h4>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        화면 테마를 설정합니다
-      </p>
+    <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-lg p-6">
+      <div className="mb-4">
+        <h4 className="text-base font-medium text-gray-900 dark:text-neutral-100">
+          테마
+        </h4>
+        <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
+          화면 테마를 설정합니다
+        </p>
+      </div>
 
-      <div className="flex gap-2">
+      <div className="grid grid-cols-3 gap-3">
         {themeOptions.map(({ value, label, icon: Icon }) => (
           <button
             key={value}
             onClick={() => setMode(value)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`flex flex-col items-center gap-2 p-4 rounded-md border transition-all ${
               mode === value
-                ? 'bg-primary-600 text-white'
-                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
+                ? 'border-gray-400 dark:border-neutral-500 text-gray-900 dark:text-neutral-100'
+                : 'border-gray-200 dark:border-neutral-700 text-gray-500 dark:text-neutral-400 hover:border-gray-300 dark:hover:border-neutral-600'
             }`}
           >
-            <Icon className="h-4 w-4" />
-            {label}
+            <Icon className="h-6 w-6" />
+            <span className="text-sm font-medium">{label}</span>
           </button>
         ))}
       </div>
