@@ -42,13 +42,13 @@ export default function NotesPage() {
   const isChatOpen = selectedUserId !== null;
 
   return (
-    <div className="flex h-[calc(100vh-50px)] lg:h-screen text-black bg-white -mx-0 lg:-mx-6 -mt-4">
+    <div className="flex h-[calc(100vh-50px)] lg:h-screen text-black dark:text-neutral-100 bg-white dark:bg-neutral-950 -mx-0 lg:-mx-6 -mt-4">
       {/* 쪽지방 목록 */}
       <aside
-        className={`${isChatOpen ? 'hidden' : 'w-full'} lg:block lg:w-80 xl:w-96 border-r border-gray-200 flex flex-col bg-white flex-shrink-0`}
+        className={`${isChatOpen ? 'hidden' : 'w-full'} lg:block lg:w-80 xl:w-96 border-r border-gray-200 dark:border-neutral-800 flex flex-col bg-white dark:bg-neutral-950 flex-shrink-0`}
       >
-        <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold">쪽지</h1>
+        <div className="p-4 border-b border-gray-200 dark:border-neutral-800">
+          <h1 className="text-xl font-bold dark:text-neutral-100">쪽지</h1>
         </div>
         <RoomList
           selectedRoomId={selectedRoomId}
@@ -58,7 +58,7 @@ export default function NotesPage() {
 
       {/* 채팅창 */}
       <main
-        className={`${isChatOpen ? 'w-full' : 'hidden'} lg:block lg:flex-1 flex flex-col bg-white min-w-0`}
+        className={`${isChatOpen ? 'w-full' : 'hidden'} lg:block lg:flex-1 flex flex-col bg-white dark:bg-neutral-950 min-w-0`}
       >
         {selectedUserId ? (
           <ChatRoom
@@ -68,9 +68,9 @@ export default function NotesPage() {
             onBack={handleBack}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500">
+          <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-neutral-400">
             <UserIcon className="h-20 w-20" />
-            <h2 className="mt-4 text-xl font-bold">대화를 선택하세요</h2>
+            <h2 className="mt-4 text-xl font-bold dark:text-neutral-100">대화를 선택하세요</h2>
             <p className="mt-2 text-sm">
               왼쪽 목록에서 대화를 선택하여 메시지를 확인하세요.
             </p>

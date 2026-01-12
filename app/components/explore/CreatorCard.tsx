@@ -21,7 +21,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
   return (
     <Link
       href={`/@${creator.username}`}
-      className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors"
+      className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
     >
       {rank && (
         <span className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
@@ -37,19 +37,19 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1">
-          <span className="font-semibold text-sm text-neutral-900 truncate">
+          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate">
             {creator.name}
           </span>
         </div>
-        <div className="text-sm text-neutral-500 truncate">
+        <div className="text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 truncate">
           @{creator.username}
         </div>
         {showStats && (
           <div className="flex items-center gap-3 mt-0.5">
-            <span className="text-xs text-neutral-400">
+            <span className="text-xs text-neutral-400 dark:text-neutral-500">
               구독자 {creator.subscriberCount.toLocaleString()}명
             </span>
-            <span className="text-xs text-neutral-400">
+            <span className="text-xs text-neutral-400 dark:text-neutral-500">
               게시물 {creator.postCount.toLocaleString()}개
             </span>
           </div>

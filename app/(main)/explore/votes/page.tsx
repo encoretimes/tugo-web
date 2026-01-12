@@ -45,11 +45,11 @@ export default function ExploreVotesPage() {
       <div className="flex items-center gap-4 mb-6">
         <Link
           href="/explore"
-          className="p-2 -ml-2 rounded-full hover:bg-neutral-100 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
         >
-          <ArrowLeftIcon className="h-5 w-5 text-neutral-700" />
+          <ArrowLeftIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
         </Link>
-        <h1 className="text-xl font-bold text-neutral-900">Hot한 투표</h1>
+        <h1 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">Hot한 투표</h1>
       </div>
 
       {/* 정렬 버튼 */}
@@ -61,7 +61,7 @@ export default function ExploreVotesPage() {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               sortBy === option.id
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
             }`}
           >
             {option.label}
@@ -70,12 +70,12 @@ export default function ExploreVotesPage() {
       </div>
 
       {/* 콘텐츠 */}
-      <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         {isLoading ? (
           <div className="p-8">
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-20 bg-neutral-100 rounded-lg animate-pulse" />
+                <div key={i} className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
               ))}
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function ExploreVotesPage() {
           </div>
         ) : (
           <>
-            <div className="divide-y divide-neutral-100">
+            <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
               {posts.map((post, index) => (
                 <VoteCard key={post.postId} post={post} rank={index + 1} />
               ))}
@@ -100,7 +100,7 @@ export default function ExploreVotesPage() {
                 {isFetchingNextPage ? (
                   <div className="space-y-4 px-4">
                     {[1, 2].map((i) => (
-                      <div key={i} className="h-20 bg-neutral-100 rounded-lg animate-pulse" />
+                      <div key={i} className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
                     ))}
                   </div>
                 ) : (

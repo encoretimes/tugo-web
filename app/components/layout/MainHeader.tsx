@@ -9,7 +9,7 @@ const MainHeader = () => {
   const showBadge = unreadCount !== undefined && unreadCount > 0;
 
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-gray-800 lg:hidden">
+    <header className="sticky top-0 z-50 bg-white dark:bg-neutral-950 border-b border-gray-100 dark:border-neutral-800 lg:hidden">
       {/* 모바일 헤더만 표시 */}
       <div className="flex items-center justify-between px-8 py-3">
         <Link href="/" className="flex items-center">
@@ -18,7 +18,7 @@ const MainHeader = () => {
             alt="TUGO"
             width={64}
             height={26}
-            className="h-6 w-auto"
+            className="h-6 w-auto dark:invert"
             priority
           />
         </Link>

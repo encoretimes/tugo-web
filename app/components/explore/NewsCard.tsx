@@ -27,26 +27,26 @@ const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
       href={article.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="block px-4 py-3 hover:bg-neutral-50 transition-colors"
+      className="block px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
     >
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center shrink-0">
           <NewspaperIcon className="w-5 h-5 text-neutral-400" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">
+            <span className="text-xs font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 px-2 py-0.5 rounded">
               {article.source}
             </span>
             <span className="text-xs text-neutral-400">
               {formatTime(article.publishedAt)}
             </span>
           </div>
-          <p className="text-sm font-medium text-neutral-900 line-clamp-2 mb-1">
+          <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 line-clamp-2 mb-1">
             {article.title}
           </p>
           {article.description && (
-            <p className="text-xs text-neutral-500 line-clamp-2">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2">
               {article.description}
             </p>
           )}

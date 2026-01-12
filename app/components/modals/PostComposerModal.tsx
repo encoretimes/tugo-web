@@ -83,7 +83,7 @@ export default function PostComposerModal({
               <Dialog.Panel
                 className={`w-full ${
                   isExpanded ? 'max-w-3xl' : 'max-w-md'
-                } transform overflow-visible rounded-lg bg-white dark:bg-slate-800 p-6 text-left align-middle shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300`}
+                } transform overflow-visible rounded-lg bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-lg border border-gray-200 dark:border-neutral-700 transition-all duration-300`}
               >
                 {/* Header */}
                 <div className="flex items-center justify-between">
@@ -139,7 +139,7 @@ export default function PostComposerModal({
                         placeholder="무슨 생각을 하고 계신가요?"
                         rows={isExpanded ? 10 : 4}
                         disabled={composer.isPending}
-                        className="w-full resize-none border-none bg-transparent p-2 text-black focus:ring-0"
+                        className="w-full resize-none border-none bg-transparent p-2 text-black dark:text-neutral-100 focus:ring-0"
                       />
                       <div className="flex justify-end px-2">
                         <span
@@ -185,7 +185,7 @@ export default function PostComposerModal({
                   )}
 
                   {/* Bottom Toolbar */}
-                  <div className="mt-4 flex items-center justify-between border-t pt-4">
+                  <div className="mt-4 flex items-center justify-between border-t border-gray-200 dark:border-neutral-700 pt-4">
                     <ComposerToolbar
                       onImageSelect={composer.handleImageSelect}
                       onPollClick={composer.handlePollButtonClick}
@@ -199,7 +199,7 @@ export default function PostComposerModal({
                       <Menu as="div" className="relative">
                         <Menu.Button
                           disabled={composer.isPending}
-                          className="flex items-center gap-2 rounded-md bg-white px-4 py-2.5 font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                          className="flex items-center gap-2 rounded-md bg-white dark:bg-neutral-800 px-4 py-2.5 font-semibold text-gray-500 dark:text-neutral-300 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                         >
                           {composer.postType === 'FREE' ? (
                             <>
@@ -223,15 +223,15 @@ export default function PostComposerModal({
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute bottom-full mb-2 left-0 w-48 origin-bottom-left rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                          <Menu.Items className="absolute bottom-full mb-2 left-0 w-48 origin-bottom-left rounded-lg bg-white dark:bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 focus:outline-none z-10">
                             <div className="py-1">
                               <Menu.Item>
                                 {({ active }) => (
                                   <button
                                     onClick={() => composer.setPostType('FREE')}
                                     className={`${
-                                      active ? 'bg-gray-100' : ''
-                                    } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900`}
+                                      active ? 'bg-gray-100 dark:bg-neutral-700' : ''
+                                    } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900 dark:text-neutral-100`}
                                   >
                                     <div className="flex items-center gap-2">
                                       <LockOpenIcon className="h-5 w-5 text-gray-500" />
@@ -250,8 +250,8 @@ export default function PostComposerModal({
                                       composer.setPostType('SUBSCRIBER_ONLY')
                                     }
                                     className={`${
-                                      active ? 'bg-gray-100' : ''
-                                    } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900`}
+                                      active ? 'bg-gray-100 dark:bg-neutral-700' : ''
+                                    } group flex w-full items-center justify-between px-4 py-2 text-sm text-gray-900 dark:text-neutral-100`}
                                   >
                                     <div className="flex items-center gap-2">
                                       <LockClosedIcon className="h-5 w-5 text-gray-500" />

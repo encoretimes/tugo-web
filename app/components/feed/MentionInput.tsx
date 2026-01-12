@@ -205,7 +205,7 @@ export default function MentionInput({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute z-10 mt-1 w-full max-w-xs rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 max-h-60 overflow-y-auto"
+          className="absolute z-10 mt-1 w-full max-w-xs rounded-lg bg-white dark:bg-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 max-h-60 overflow-y-auto"
           style={{
             bottom: 'auto',
             top: '100%',
@@ -215,8 +215,8 @@ export default function MentionInput({
             <button
               key={user.memberId}
               onClick={() => insertMention(user)}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 ${
-                index === selectedIndex ? 'bg-gray-100' : ''
+              className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-800 ${
+                index === selectedIndex ? 'bg-gray-100 dark:bg-neutral-800' : ''
               }`}
             >
               {user.profileImageUrl ? (
@@ -228,13 +228,13 @@ export default function MentionInput({
                   className="h-8 w-8 rounded-full"
                 />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300">
-                  <UserIcon className="h-5 w-5 text-gray-500" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
+                  <UserIcon className="h-5 w-5 text-gray-500 dark:text-neutral-400" />
                 </div>
               )}
               <div className="flex flex-col items-start">
-                <span className="font-medium text-gray-900">{user.name}</span>
-                <span className="text-gray-500">@{user.username}</span>
+                <span className="font-medium text-gray-900 dark:text-neutral-100">{user.name}</span>
+                <span className="text-gray-500 dark:text-neutral-400">@{user.username}</span>
               </div>
             </button>
           ))}

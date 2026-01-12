@@ -56,7 +56,7 @@ export default function PostDetailDesktop({
       </button>
 
       <div
-        className="relative w-full max-w-6xl bg-white rounded-lg shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-200 max-h-[90vh] overflow-hidden"
+        className="relative w-full max-w-6xl bg-white dark:bg-neutral-900 rounded-lg shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-200 max-h-[90vh] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Content */}

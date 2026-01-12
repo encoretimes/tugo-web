@@ -16,17 +16,17 @@ const LeftSidebar = () => {
   const user = useUserStore((state) => state.user);
 
   return (
-    <aside className="relative h-full w-16 xl:w-64 flex flex-col pt-4 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900">
+    <aside className="relative h-full w-16 xl:w-64 flex flex-col pt-4 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
       {/* 로고 */}
-      <div className="px-1 xl:px-4 mb-6 h-8 flex items-center justify-center xl:justify-start">
-        <Link href="/" className="flex items-center">
+      <div className="px-1 xl:px-4 mb-6">
+        <Link href="/" className="flex items-center justify-center xl:justify-start p-2">
           {/* 축소 시 T 로고 */}
           <Image
             src="/logo_one.svg"
             alt="TUGO"
             width={28}
-            height={32}
-            className="h-8 w-auto xl:hidden"
+            height={28}
+            className="h-7 w-7 xl:hidden dark:invert"
             priority
           />
           {/* 확장 시 TUGO 전체 로고 */}
@@ -34,8 +34,8 @@ const LeftSidebar = () => {
             src="/logo.svg"
             alt="TUGO"
             width={80}
-            height={32}
-            className="h-8 w-auto hidden xl:block"
+            height={28}
+            className="h-7 w-auto hidden xl:block dark:invert"
             priority
           />
         </Link>
@@ -52,7 +52,7 @@ const LeftSidebar = () => {
                 alt="홈"
                 width={28}
                 height={28}
-                className="w-7 h-7"
+                className="w-7 h-7 dark:invert dark:brightness-200"
               />
             }
             label="홈"
@@ -66,7 +66,7 @@ const LeftSidebar = () => {
                 alt="탐색"
                 width={28}
                 height={28}
-                className="w-7 h-7"
+                className="w-7 h-7 dark:invert dark:brightness-200"
               />
             }
             label="탐색"
@@ -95,7 +95,7 @@ const LeftSidebar = () => {
                 alt="쪽지"
                 width={28}
                 height={28}
-                className="w-7 h-7"
+                className="w-7 h-7 dark:invert dark:brightness-200"
               />
             }
             label="쪽지"
@@ -110,7 +110,7 @@ const LeftSidebar = () => {
                 alt="알림"
                 width={28}
                 height={28}
-                className="w-7 h-7"
+                className="w-7 h-7 dark:invert dark:brightness-200"
               />
             }
             label="알림"
@@ -127,7 +127,7 @@ const LeftSidebar = () => {
                   alt="투고하기"
                   width={28}
                   height={28}
-                  className="w-7 h-7"
+                  className="w-7 h-7 dark:invert dark:brightness-200"
                 />
               }
               label="투고하기"
@@ -148,7 +148,7 @@ const LeftSidebar = () => {
                 alt="보관함"
                 width={28}
                 height={28}
-                className="w-7 h-7"
+                className="w-7 h-7 dark:invert dark:brightness-200"
               />
             }
             label="보관함"
@@ -162,10 +162,24 @@ const LeftSidebar = () => {
                 alt="프로필"
                 width={28}
                 height={28}
-                className="w-7 h-7"
+                className="w-7 h-7 dark:invert dark:brightness-200"
               />
             }
             label="프로필"
+            isCustomIcon
+          />
+          <NavItem
+            href="/settings"
+            icon={
+              <Image
+                src="/system_ico/settings_pc.svg"
+                alt="설정"
+                width={28}
+                height={28}
+                className="w-7 h-7 dark:invert dark:brightness-200"
+              />
+            }
+            label="설정"
             isCustomIcon
           />
         </ul>

@@ -18,13 +18,13 @@ const ExploreSection: React.FC<ExploreSectionProps> = ({
   showMoreText = '더보기',
 }) => {
   return (
-    <section className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-neutral-100">
+    <section className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+      <div className="px-4 py-3 border-b border-neutral-100 dark:border-neutral-800">
         <Link
           href={href}
           className="flex items-center justify-between hover:opacity-70 transition-opacity"
         >
-          <h2 className="text-lg font-bold text-neutral-900">{title}</h2>
+          <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">{title}</h2>
           <div className="flex items-center gap-1 text-primary-600">
             <span className="text-sm font-medium">{showMoreText}</span>
             <ChevronRightIcon className="h-4 w-4" />

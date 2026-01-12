@@ -44,11 +44,11 @@ export default function MainLayout({
     /^\/post\/\d+$/.test(pathname);
 
   if (!hasHydrated) {
-    return <div className="min-h-screen bg-white dark:bg-slate-900" />;
+    return <div className="min-h-screen bg-white dark:bg-neutral-950" />;
   }
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-slate-900">
+    <div className="relative min-h-screen bg-white dark:bg-neutral-950">
       <NotesWebSocketInitializer />
       {/* 상단 헤더 */}
       <MainHeader />
@@ -70,7 +70,7 @@ export default function MainLayout({
 
           {/* 우측 사이드바 */}
           {!hideRightPanel && (
-            <aside className="hidden lg:block lg:w-80 flex-shrink-0 border-l border-gray-200 dark:border-gray-700">
+            <aside className="hidden lg:block lg:w-80 flex-shrink-0 border-l border-gray-200 dark:border-neutral-800">
               <div className="sticky top-0 h-screen overflow-y-auto">
                 <RightSidebar />
               </div>

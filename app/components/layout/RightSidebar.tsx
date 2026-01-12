@@ -13,7 +13,7 @@ const RightSidebar = () => {
     usePopularCreators(3);
 
   return (
-    <aside className="h-full p-4 text-black dark:text-white bg-white dark:bg-slate-900">
+    <aside className="h-full p-4 text-black dark:text-neutral-50 bg-white dark:bg-neutral-950">
       <div className="max-w-xs mx-auto pt-4">
         {/* 실시간 인기 투표 */}
         <div className="mb-6">
@@ -35,7 +35,7 @@ const RightSidebar = () => {
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
-                    className="h-8 bg-gray-50 dark:bg-gray-800 rounded animate-pulse"
+                    className="h-8 bg-gray-50 dark:bg-neutral-800 rounded animate-pulse"
                   />
                 ))}
               </div>
@@ -48,7 +48,7 @@ const RightSidebar = () => {
                       {post ? (
                         <Link
                           href={`/${post.author.username}/post/${post.postId}`}
-                          className="flex items-center gap-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+                          className="flex items-center gap-3 py-2 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-md transition-colors"
                         >
                           <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
                             {index + 1}
@@ -82,7 +82,7 @@ const RightSidebar = () => {
         </div>
 
         {/* 구분선 */}
-        <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6" />
+        <div className="h-px bg-gray-200 dark:bg-neutral-800 mb-6" />
 
         {/* 인기 크리에이터 */}
         <div>
@@ -104,10 +104,10 @@ const RightSidebar = () => {
             {isLoadingCreators ? (
               [1, 2, 3].map((i) => (
                 <li key={i} className="flex items-center gap-2">
-                  <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-gray-800 animate-pulse shrink-0" />
+                  <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-neutral-800 animate-pulse shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="h-4 w-20 bg-gray-100 dark:bg-gray-800 rounded animate-pulse mb-1" />
-                    <div className="h-3 w-16 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
+                    <div className="h-4 w-20 bg-gray-100 dark:bg-neutral-800 rounded animate-pulse mb-1" />
+                    <div className="h-3 w-16 bg-gray-100 dark:bg-neutral-800 rounded animate-pulse" />
                   </div>
                 </li>
               ))
@@ -119,7 +119,7 @@ const RightSidebar = () => {
                 >
                   <Link
                     href={`/@${creator.username}`}
-                    className="flex items-center gap-2 flex-1 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md p-2 -m-2 min-w-0"
+                    className="flex items-center gap-2 flex-1 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-md p-2 -m-2 min-w-0"
                   >
                     <Image
                       src={

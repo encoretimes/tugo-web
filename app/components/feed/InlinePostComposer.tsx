@@ -37,7 +37,7 @@ const InlinePostComposer = () => {
     composer.pollData !== null;
 
   return (
-    <div className="bg-[#FAF8FF] rounded-[20px] mx-4 mt-4">
+    <div className="bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-[20px] mx-4 mt-4">
       <div className="p-4">
         <div className="flex gap-3">
           {/* 프로필 이미지 */}
@@ -71,7 +71,7 @@ const InlinePostComposer = () => {
                 placeholder="무슨 생각을 하고 계신가요?"
                 rows={isExpanded ? 3 : 1}
                 disabled={composer.isPending}
-                className={`w-full resize-none border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 text-base md:text-lg leading-relaxed ${
+                className={`w-full resize-none border-0 bg-transparent text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:ring-0 text-base md:text-lg leading-relaxed ${
                   isExpanded ? 'py-2' : 'py-3 md:py-2'
                 }`}
               />
@@ -101,7 +101,7 @@ const InlinePostComposer = () => {
 
             {/* 하단 툴바 */}
             <div
-              className={`flex items-center justify-between mt-3 pt-3 border-t border-gray-100 ${
+              className={`flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-neutral-800 ${
                 isExpanded
                   ? 'opacity-100'
                   : 'opacity-100 md:opacity-70 md:hover:opacity-100'
@@ -112,7 +112,7 @@ const InlinePostComposer = () => {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={composer.isPending}
-                  className="p-2 text-primary-500 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-colors"
+                  className="p-2 text-primary-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-full transition-colors"
                   title="이미지 추가"
                 >
                   <PhotoIcon className="h-5 w-5" />

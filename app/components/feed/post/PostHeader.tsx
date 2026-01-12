@@ -47,29 +47,29 @@ export default function PostHeader({
               className="h-10 w-10 rounded-full hover:opacity-80 transition-opacity"
             />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-400 transition-colors">
-              <UserIcon className="h-6 w-6 text-neutral-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-400 dark:hover:bg-neutral-600 transition-colors">
+              <UserIcon className="h-6 w-6 text-neutral-500 dark:text-neutral-400" />
             </div>
           )}
         </Link>
         <div className="flex flex-col">
           <Link
             href={`/@${author.username}`}
-            className="font-semibold text-gray-900 text-[15px] hover:underline"
+            className="font-semibold text-gray-900 dark:text-neutral-100 text-[15px] hover:underline"
             onClick={handleLinkClick}
           >
             {author.name}
           </Link>
           <Link
             href={`/@${author.username}`}
-            className="text-xs text-gray-500 hover:underline"
+            className="text-xs text-gray-500 dark:text-neutral-400 hover:underline"
             onClick={handleLinkClick}
           >
             @{author.username}
           </Link>
         </div>
       </div>
-      <time className="text-xs text-gray-400">
+      <time className="text-xs text-gray-400 dark:text-neutral-500">
         {formatRelativeTime(createdAt)}
       </time>
     </div>

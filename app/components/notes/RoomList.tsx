@@ -21,7 +21,7 @@ export default function RoomList({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">로딩 중...</p>
+        <p className="text-gray-500 dark:text-neutral-400">로딩 중...</p>
       </div>
     );
   }
@@ -46,15 +46,15 @@ export default function RoomList({
   return (
     <div className="flex flex-col h-full">
       {/* 검색 */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200 dark:border-neutral-800">
         <div className="relative">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-neutral-500" />
           <input
             type="text"
             placeholder="쪽지 검색"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-900 text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </div>
@@ -66,8 +66,8 @@ export default function RoomList({
             <div
               key={room.roomId}
               onClick={() => onSelectRoom(room)}
-              className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition ${
-                selectedRoomId === room.roomId ? 'bg-primary-50' : ''
+              className={`p-4 border-b border-gray-200 dark:border-neutral-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800 transition ${
+                selectedRoomId === room.roomId ? 'bg-primary-50 dark:bg-primary-900/30' : ''
               }`}
             >
               <div className="flex items-center gap-3">
@@ -81,18 +81,18 @@ export default function RoomList({
                     className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                    <span className="text-gray-500 text-lg font-medium">
+                  <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center flex-shrink-0">
+                    <span className="text-gray-500 dark:text-neutral-300 text-lg font-medium">
                       {room.otherUser.username[0]}
                     </span>
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center mb-1">
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-neutral-100">
                       {room.otherUser.username}
                     </p>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-neutral-400">
                       {new Date(room.lastMessageTimestamp).toLocaleTimeString(
                         'ko-KR',
                         {
@@ -103,7 +103,7 @@ export default function RoomList({
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-gray-600 truncate">
+                    <p className="text-sm text-gray-600 dark:text-neutral-400 truncate">
                       {room.isMyLastMessage && '나: '}
                       {room.lastMessage}
                     </p>
@@ -119,7 +119,7 @@ export default function RoomList({
           ))
         ) : (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500">쪽지방이 없습니다</p>
+            <p className="text-gray-500 dark:text-neutral-400">쪽지방이 없습니다</p>
           </div>
         )}
       </div>

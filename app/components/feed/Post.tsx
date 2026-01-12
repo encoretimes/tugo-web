@@ -159,7 +159,7 @@ const Post: React.FC<PostProps> = ({
   }, [queryClient, post, author.username, router]);
 
   return (
-    <div className="px-6 lg:px-6 py-5 hover:bg-gray-50/50 transition-colors">
+    <div className="px-6 lg:px-6 py-5">
       <PostHeader
         author={author}
         createdAt={createdAt}

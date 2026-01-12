@@ -34,8 +34,8 @@ export default function CommentInput({
             className="h-8 w-8 rounded-full"
           />
         ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-            <UserIcon className="h-5 w-5 text-neutral-500" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-700">
+            <UserIcon className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
           </div>
         )}
         <div className="flex-1">
@@ -45,12 +45,12 @@ export default function CommentInput({
             placeholder="댓글을 입력하세요..."
             rows={2}
             disabled={isPending}
-            className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
+            className="w-full resize-none rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 p-2 text-sm focus:border-primary-600 dark:focus:border-primary-400 focus:outline-none"
           />
           <div className="mt-2 flex justify-between items-center">
             <EmojiPickerButton
               onEmojiSelect={(emoji) => onChange(value + emoji)}
-              buttonClassName="text-gray-500 hover:text-gray-700"
+              buttonClassName="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200"
             />
             <button
               onClick={onSubmit}

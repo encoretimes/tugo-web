@@ -92,17 +92,17 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-lg border border-gray-200 transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-lg font-medium leading-6 text-gray-900 dark:text-neutral-100"
                   >
                     게시물 공유
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-500 hover:text-gray-700"
+                    className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -110,13 +110,13 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                 <div className="space-y-3">
                   {/* 링크 URL 표시 및 복사 */}
-                  <div className="p-4 bg-gray-50 rounded-md border border-gray-200">
+                  <div className="p-4 bg-gray-50 dark:bg-neutral-800 rounded-md border border-gray-200 dark:border-neutral-700">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-500 mb-1">
+                        <p className="text-xs text-gray-500 dark:text-neutral-400 mb-1">
                           게시물 링크
                         </p>
-                        <p className="text-sm text-gray-900 truncate">{url}</p>
+                        <p className="text-sm text-gray-900 dark:text-neutral-100 truncate">{url}</p>
                       </div>
                       <button
                         onClick={handleCopyLink}
@@ -168,12 +168,12 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleCopyLink}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md transition-colors"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center bg-gray-300 rounded-full">
-                        <LinkIcon className="h-6 w-6 text-gray-700" />
+                      <div className="w-12 h-12 flex items-center justify-center bg-gray-300 dark:bg-neutral-700 rounded-full">
+                        <LinkIcon className="h-6 w-6 text-gray-700 dark:text-neutral-300" />
                       </div>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 dark:text-neutral-100">
                         링크 복사
                       </span>
                     </button>
