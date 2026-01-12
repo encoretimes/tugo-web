@@ -2,9 +2,11 @@ import {
   useMutation,
   useQueryClient,
   useInfiniteQuery,
+  InfiniteData,
 } from '@tanstack/react-query';
 import { getComments, createComment, deleteComment } from '@/services/comments';
 import type { Comment } from '@/types/post';
+import type { PageResponse } from '@/types/common';
 import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
 import { useToastStore } from '@/store/toastStore';
 import { useUserStore } from '@/store/userStore';
@@ -20,7 +22,9 @@ export const useComments = (postId: number, enabled: boolean = true) => {
     queryFn: ({ pageParam = 0 }) => getComments(postId, pageParam, 20),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      return lastPage.last ? undefined : lastPage.pageable.pageNumber + 1;
+      if (lastPage.last) return undefined;
+      const currentPage = lastPage.pageable?.pageNumber ?? lastPage.number;
+      return currentPage + 1;
     },
     enabled: !!postId && enabled,
   });
@@ -54,15 +58,13 @@ export const useCreateComment = () => {
           createdAt: new Date().toISOString(),
         };
 
-        queryClient.setQueryData(
+        queryClient.setQueryData<InfiniteData<PageResponse<Comment>>>(
           queryKeys.comments(newCommentData.postId),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (old: any) => {
+          (old) => {
             if (!old) return old;
             return {
               ...old,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              pages: old.pages.map((page: any, index: number) => {
+              pages: old.pages.map((page, index) => {
                 // 마지막 페이지에 새 댓글 추가
                 if (index === old.pages.length - 1) {
                   return {
@@ -86,7 +88,6 @@ export const useCreateComment = () => {
           context.previousComments
         );
       }
-      console.error('Failed to create comment:', error);
       addToast(
         error.message || '댓글 작성에 실패했습니다. 다시 시도해주세요.',
         'error'
@@ -123,7 +124,6 @@ export const useDeleteComment = () => {
       addToast('댓글이 삭제되었습니다', 'success');
     },
     onError: (error: Error) => {
-      console.error('Failed to delete comment:', error);
       addToast(
         error.message || '댓글 삭제에 실패했습니다. 다시 시도해주세요.',
         'error'

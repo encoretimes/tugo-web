@@ -174,7 +174,8 @@ describe('usePosts', () => {
         expect(result.current.isSuccess).toBe(true);
       });
 
-      expect(postsService.createPost).toHaveBeenCalledWith({
+      expect(postsService.createPost).toHaveBeenCalled();
+      expect((postsService.createPost as jest.Mock).mock.calls[0][0]).toEqual({
         contentText: '새 게시물입니다',
         postType: 'FREE',
       });
@@ -218,7 +219,8 @@ describe('usePosts', () => {
         expect(result.current.isSuccess).toBe(true);
       });
 
-      expect(postsService.deletePost).toHaveBeenCalledWith(1);
+      expect(postsService.deletePost).toHaveBeenCalled();
+      expect((postsService.deletePost as jest.Mock).mock.calls[0][0]).toBe(1);
     });
   });
 

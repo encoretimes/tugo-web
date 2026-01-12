@@ -6,120 +6,25 @@ import Cropper, { ReactCropperElement } from 'react-cropper';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 import {
   XMarkIcon,
-  ArrowPathIcon,
-  ArrowUturnLeftIcon,
-  MagnifyingGlassMinusIcon,
-  MagnifyingGlassPlusIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   AdjustmentsHorizontalIcon,
   Squares2X2Icon,
   SparklesIcon,
   EyeIcon,
-  ArrowsRightLeftIcon,
 } from '@heroicons/react/24/outline';
-import Image from 'next/image';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import {
   ImageEditData,
   ImageAdjustments,
   DEFAULT_ADJUSTMENTS,
-  ASPECT_RATIOS,
   DEFAULT_ASPECT_RATIO,
 } from '../image-editor/constants';
 import { useImageFilters } from '../image-editor/hooks/useImageFilters';
 import FilterPanel from '../image-editor/FilterPanel';
 import AdjustmentPanel from '../image-editor/AdjustmentPanel';
 import BeforeAfterSlider from '../image-editor/BeforeAfterSlider';
-
-interface SortableImageProps {
-  image: ImageEditData;
-  index: number;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-function SortableImage({
-  image,
-  index,
-  isActive,
-  onClick,
-}: SortableImageProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging,
-  } = useSortable({ id: image.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition: isDragging ? 'none' : 'transform 150ms ease',
-    opacity: isDragging ? 0.8 : 1,
-    zIndex: isDragging ? 10 : 0,
-  };
-
-  const hasEdits = image.editedFile || image.filterId || image.adjustments;
-
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isDragging) {
-      onClick();
-    }
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
-        isDragging
-          ? 'cursor-grabbing scale-105 shadow-lg border-primary-400'
-          : 'cursor-pointer'
-      } ${
-        isActive
-          ? 'border-primary-500 ring-2 ring-primary-500/30'
-          : 'border-gray-200 hover:border-gray-300'
-      }`}
-      onClick={handleClick}
-    >
-      <Image
-        src={image.url}
-        alt={`Image ${index + 1}`}
-        fill
-        className="object-cover pointer-events-none"
-        draggable={false}
-      />
-      {hasEdits && (
-        <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full pointer-events-none" />
-      )}
-      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center pointer-events-none">
-        <span className="text-[10px] text-white">{index + 1}</span>
-      </div>
-    </div>
-  );
-}
+import CropPanel from '../image-editor/CropPanel';
+import ThumbnailStrip from '../image-editor/ThumbnailStrip';
 
 interface MultiImageEditorProps {
   isOpen: boolean;
@@ -152,17 +57,6 @@ export default function MultiImageEditor({
   const { generateFilterString, getFilterById, applyFilterToCanvas } =
     useImageFilters();
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   useEffect(() => {
     if (imageFiles.length > 0) {
       const imageData = imageFiles.map((file, index) => ({
@@ -181,7 +75,7 @@ export default function MultiImageEditor({
         imageData.forEach(({ url }) => URL.revokeObjectURL(url));
       };
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFiles]);
 
   const resetControls = useCallback(() => {
@@ -210,55 +104,44 @@ export default function MultiImageEditor({
     );
   }, [currentIndex, aspectRatio, selectedFilterId, adjustments]);
 
-  const loadImageState = useCallback((index: number) => {
-    const image = images[index];
-    if (image) {
-      setAspectRatio(image.aspectRatio ?? DEFAULT_ASPECT_RATIO);
-      setSelectedFilterId(image.filterId ?? 'original');
-      setAdjustments(image.adjustments ?? { ...DEFAULT_ADJUSTMENTS });
+  const loadImageState = useCallback(
+    (index: number) => {
+      const image = images[index];
+      if (image) {
+        setAspectRatio(image.aspectRatio ?? DEFAULT_ASPECT_RATIO);
+        setSelectedFilterId(image.filterId ?? 'original');
+        setAdjustments(image.adjustments ?? { ...DEFAULT_ADJUSTMENTS });
+      }
+    },
+    [images]
+  );
+
+  const handleImageSelect = (index: number) => {
+    if (index !== currentIndex) {
+      saveCurrentImageState();
+      setCurrentIndex(index);
+      loadImageState(index);
+      setZoomLevel(0);
     }
-  }, [images]);
+  };
+
+  const handleReorder = (
+    newImages: ImageEditData[],
+    newCurrentIndex: number
+  ) => {
+    setImages(newImages);
+    setCurrentIndex(newCurrentIndex);
+  };
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      saveCurrentImageState();
-      const newIndex = currentIndex - 1;
-      setCurrentIndex(newIndex);
-      loadImageState(newIndex);
-      setZoomLevel(0);
+      handleImageSelect(currentIndex - 1);
     }
   };
 
   const handleNext = () => {
     if (currentIndex < images.length - 1) {
-      saveCurrentImageState();
-      const newIndex = currentIndex + 1;
-      setCurrentIndex(newIndex);
-      loadImageState(newIndex);
-      setZoomLevel(0);
-    }
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      setImages((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-
-        if (currentIndex === oldIndex) {
-          setCurrentIndex(newIndex);
-        } else if (currentIndex === newIndex) {
-          setCurrentIndex(oldIndex < newIndex ? newIndex - 1 : newIndex + 1);
-        } else if (oldIndex < currentIndex && newIndex >= currentIndex) {
-          setCurrentIndex(currentIndex - 1);
-        } else if (oldIndex > currentIndex && newIndex <= currentIndex) {
-          setCurrentIndex(currentIndex + 1);
-        }
-
-        return arrayMove(items, oldIndex, newIndex);
-      });
+      handleImageSelect(currentIndex + 1);
     }
   };
 
@@ -284,30 +167,8 @@ export default function MultiImageEditor({
     }
   };
 
-  const handleZoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    setZoomLevel(value);
-
-    const cropper = cropperRef.current?.cropper;
-    if (cropper) {
-      cropper.zoomTo(value);
-    }
-  };
-
-  const handleZoomIn = () => {
-    const newZoom = Math.min(zoomLevel + 0.1, 3);
+  const handleZoomChange = (newZoom: number) => {
     setZoomLevel(newZoom);
-
-    const cropper = cropperRef.current?.cropper;
-    if (cropper) {
-      cropper.zoomTo(newZoom);
-    }
-  };
-
-  const handleZoomOut = () => {
-    const newZoom = Math.max(zoomLevel - 0.1, 0);
-    setZoomLevel(newZoom);
-
     const cropper = cropperRef.current?.cropper;
     if (cropper) {
       cropper.zoomTo(newZoom);
@@ -367,7 +228,11 @@ export default function MultiImageEditor({
     });
 
     const filter = getFilterById(selectedFilterId);
-    const filteredCanvas = applyFilterToCanvas(canvas, filter.filters, adjustments);
+    const filteredCanvas = applyFilterToCanvas(
+      canvas,
+      filter.filters,
+      adjustments
+    );
 
     return new Promise<File | null>((resolve) => {
       filteredCanvas.toBlob(
@@ -386,8 +251,16 @@ export default function MultiImageEditor({
         0.92
       );
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aspectRatio, selectedFilterId, adjustments, getFilterById, applyFilterToCanvas, images, currentIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    aspectRatio,
+    selectedFilterId,
+    adjustments,
+    getFilterById,
+    applyFilterToCanvas,
+    images,
+    currentIndex,
+  ]);
 
   const handleSave = async () => {
     saveCurrentImageState();
@@ -404,7 +277,10 @@ export default function MultiImageEditor({
     setTimeout(async () => {
       const finalImages = [...images];
       if (editedFile) {
-        finalImages[currentIndex] = { ...finalImages[currentIndex], editedFile };
+        finalImages[currentIndex] = {
+          ...finalImages[currentIndex],
+          editedFile,
+        };
       }
 
       const editPromises = finalImages.map(async (img, index) => {
@@ -514,37 +390,14 @@ export default function MultiImageEditor({
                 <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                   {/* Left: Thumbnail Strip (Desktop) */}
                   {images.length > 1 && (
-                    <div className="hidden md:flex flex-col items-center w-20 bg-gray-50 border-r border-gray-200 py-3 overflow-y-auto overflow-x-hidden">
-                      <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                        modifiers={[restrictToVerticalAxis]}
-                      >
-                        <SortableContext
-                          items={images.map((img) => img.id)}
-                          strategy={verticalListSortingStrategy}
-                        >
-                          <div className="flex flex-col items-center gap-2">
-                            {images.map((img, index) => (
-                              <SortableImage
-                                key={img.id}
-                                image={img}
-                                index={index}
-                                isActive={index === currentIndex}
-                                onClick={() => {
-                                  if (index !== currentIndex) {
-                                    saveCurrentImageState();
-                                    setCurrentIndex(index);
-                                    loadImageState(index);
-                                    setZoomLevel(0);
-                                  }
-                                }}
-                              />
-                            ))}
-                          </div>
-                        </SortableContext>
-                      </DndContext>
+                    <div className="hidden md:block">
+                      <ThumbnailStrip
+                        images={images}
+                        currentIndex={currentIndex}
+                        onImageSelect={handleImageSelect}
+                        onReorder={handleReorder}
+                        variant="vertical"
+                      />
                     </div>
                   )}
 
@@ -612,37 +465,14 @@ export default function MultiImageEditor({
 
                     {/* Mobile Thumbnail Strip */}
                     {images.length > 1 && (
-                      <div className="md:hidden px-4 py-2 bg-white border-t border-gray-200">
-                        <div className="flex gap-2 overflow-x-auto justify-center">
-                          {images.map((img, index) => (
-                            <button
-                              key={img.id}
-                              onClick={() => {
-                                if (index !== currentIndex) {
-                                  saveCurrentImageState();
-                                  setCurrentIndex(index);
-                                  loadImageState(index);
-                                  setZoomLevel(0);
-                                }
-                              }}
-                              className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
-                                index === currentIndex
-                                  ? 'border-primary-500 ring-2 ring-primary-500/30'
-                                  : 'border-gray-200 hover:border-gray-300'
-                              }`}
-                            >
-                              <Image
-                                src={img.url}
-                                alt={`Image ${index + 1}`}
-                                fill
-                                className="object-cover"
-                              />
-                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center">
-                                <span className="text-[10px] text-white">{index + 1}</span>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
+                      <div className="md:hidden">
+                        <ThumbnailStrip
+                          images={images}
+                          currentIndex={currentIndex}
+                          onImageSelect={handleImageSelect}
+                          onReorder={handleReorder}
+                          variant="horizontal"
+                        />
                       </div>
                     )}
                   </div>
@@ -670,102 +500,15 @@ export default function MultiImageEditor({
                     {/* Tab Content */}
                     <div className="flex-1 p-4 overflow-y-auto">
                       {activeTab === 'crop' && (
-                        <div className="space-y-6">
-                          {/* Aspect Ratio */}
-                          <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
-                              비율
-                            </h3>
-                            <div className="grid grid-cols-4 gap-2">
-                              {ASPECT_RATIOS.map((ratio) => (
-                                <button
-                                  key={ratio.id}
-                                  onClick={() =>
-                                    handleAspectRatioChange(ratio.value)
-                                  }
-                                  className={`px-3 py-2.5 text-xs rounded-lg border transition-all ${
-                                    aspectRatio === ratio.value
-                                      ? 'border-primary-500 bg-primary-50 text-primary-700'
-                                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                  }`}
-                                >
-                                  {ratio.label}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Rotation & Flip */}
-                          <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
-                              회전 및 반전
-                            </h3>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={handleRotateLeft}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-                              >
-                                <ArrowUturnLeftIcon className="h-4 w-4" />
-                                <span className="text-xs">좌회전</span>
-                              </button>
-                              <button
-                                onClick={handleRotateRight}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-                              >
-                                <ArrowPathIcon className="h-4 w-4" />
-                                <span className="text-xs">우회전</span>
-                              </button>
-                              <button
-                                onClick={handleFlipHorizontal}
-                                className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-                              >
-                                <ArrowsRightLeftIcon className="h-4 w-4" />
-                                <span className="text-xs">반전</span>
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Zoom */}
-                          <div>
-                            <h3 className="text-sm font-medium text-gray-900 mb-3">
-                              확대/축소
-                            </h3>
-                            <div className="flex items-center gap-3">
-                              <button
-                                onClick={handleZoomOut}
-                                className="p-2 text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                              >
-                                <MagnifyingGlassMinusIcon className="h-4 w-4" />
-                              </button>
-                              <div className="flex-1 relative">
-                                <div className="h-2 bg-gray-200 rounded-full">
-                                  <div
-                                    className="h-full bg-primary-500 rounded-full"
-                                    style={{ width: `${(zoomLevel / 3) * 100}%` }}
-                                  />
-                                </div>
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="3"
-                                  step="0.1"
-                                  value={zoomLevel}
-                                  onChange={handleZoomChange}
-                                  className="absolute inset-0 w-full opacity-0 cursor-pointer"
-                                />
-                              </div>
-                              <button
-                                onClick={handleZoomIn}
-                                className="p-2 text-gray-600 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                              >
-                                <MagnifyingGlassPlusIcon className="h-4 w-4" />
-                              </button>
-                            </div>
-                            <div className="text-center text-xs text-gray-500 mt-2">
-                              {Math.round(zoomLevel * 100)}%
-                            </div>
-                          </div>
-                        </div>
+                        <CropPanel
+                          aspectRatio={aspectRatio}
+                          zoomLevel={zoomLevel}
+                          onAspectRatioChange={handleAspectRatioChange}
+                          onZoomChange={handleZoomChange}
+                          onRotateLeft={handleRotateLeft}
+                          onRotateRight={handleRotateRight}
+                          onFlipHorizontal={handleFlipHorizontal}
+                        />
                       )}
 
                       {activeTab === 'filter' && currentImage && (

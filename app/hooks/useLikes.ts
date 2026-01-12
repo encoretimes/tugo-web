@@ -15,7 +15,6 @@ export const useToggleLike = () => {
       });
     },
     onError: (error: Error) => {
-      console.error('Failed to like post:', error);
       addToast(
         error.message || '좋아요 처리에 실패했습니다. 다시 시도해주세요.',
         'error'
@@ -29,7 +28,6 @@ export const useToggleLike = () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
     },
     onError: (error: Error) => {
-      console.error('Failed to unlike post:', error);
       addToast(
         error.message || '좋아요 취소에 실패했습니다. 다시 시도해주세요.',
         'error'

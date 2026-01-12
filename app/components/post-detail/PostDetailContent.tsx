@@ -6,17 +6,15 @@ import { useRouter } from 'next/navigation';
 import { Post as PostType } from '@/types/post';
 import { UserIcon, ChartBarIcon } from '@heroicons/react/24/outline';
 import { useComments, useCreateComment } from '@/hooks/useComments';
-import { useUserStore } from '@/store/userStore';
-import { useToastStore } from '@/store/toastStore';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { formatRelativeTime } from '@/lib/date-utils';
 import PollCard from '@/app/components/feed/PollCard';
 import { useVote } from '@/hooks/useVote';
 import ImageCarousel from '@/app/components/feed/ImageCarousel';
-import MentionInput from '@/app/components/feed/MentionInput';
-import MentionText from '@/app/components/feed/MentionText';
-import EmojiPickerButton from '@/app/components/feed/EmojiPicker';
 import ImageGalleryModal from '@/app/components/modals/ImageGalleryModal';
 import Post from '@/app/components/feed/Post';
+import CommentItem from '@/app/components/feed/comments/CommentItem';
+import CommentInput from '@/app/components/feed/comments/CommentInput';
 
 interface PostDetailContentProps {
   post: PostType | undefined;
@@ -45,8 +43,7 @@ export default function PostDetailContent({
   onClose,
 }: PostDetailContentProps) {
   const router = useRouter();
-  const { user } = useUserStore();
-  const addToast = useToastStore((state) => state.addToast);
+  const { checkAuth, user } = useRequireAuth();
   const [commentText, setCommentText] = useState('');
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -77,11 +74,7 @@ export default function PostDetailContent({
   );
 
   const handleCommentSubmit = () => {
-    if (!user) {
-      addToast('로그인이 필요합니다', 'warning');
-      return;
-    }
-
+    if (!checkAuth()) return;
     if (!commentText.trim() || createCommentMutation.isPending || !post) return;
 
     createCommentMutation.mutate(
@@ -284,38 +277,7 @@ export default function PostDetailContent({
               ) : comments.length > 0 ? (
                 <>
                   {comments.map((comment) => (
-                    <div key={comment.id} className="flex space-x-2">
-                      {comment.author.profileImageUrl ? (
-                        <Image
-                          src={comment.author.profileImageUrl}
-                          alt={comment.author.name}
-                          width={32}
-                          height={32}
-                          className="h-8 w-8 rounded-full"
-                        />
-                      ) : (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                          <UserIcon className="h-5 w-5 text-neutral-500" />
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <div className="rounded-lg bg-neutral-100 p-2">
-                          <p className="text-xs font-semibold text-neutral-900">
-                            {comment.author.name}{' '}
-                            <span className="font-normal text-neutral-500">
-                              @{comment.author.username}
-                            </span>
-                          </p>
-                          <MentionText
-                            content={comment.content}
-                            className="text-sm mt-1"
-                          />
-                        </div>
-                        <p className="mt-1 text-xs text-neutral-500">
-                          {formatRelativeTime(comment.createdAt)}
-                        </p>
-                      </div>
-                    </div>
+                    <CommentItem key={comment.id} comment={comment} />
                   ))}
                   {hasNextPage && (
                     <div className="flex justify-center pt-2">
@@ -339,52 +301,16 @@ export default function PostDetailContent({
             </div>
           </div>
 
-          {/* 댓글 작성 영역 - 하단 고정 (스크롤 영향 없음) */}
+          {/* 댓글 작성 영역 - 하단 고정 */}
           <div className="border-t border-gray-200 pt-4 mt-4 flex-shrink-0">
-            <div className="flex space-x-2">
-              {user?.profileImageUrl ? (
-                <Image
-                  src={user.profileImageUrl}
-                  alt={user.name}
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 rounded-full"
-                />
-              ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                  <UserIcon className="h-5 w-5 text-neutral-500" />
-                </div>
-              )}
-              <div className="flex-1">
-                <MentionInput
-                  value={commentText}
-                  onChange={setCommentText}
-                  placeholder="댓글을 입력하세요..."
-                  rows={2}
-                  disabled={createCommentMutation.isPending}
-                  className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
-                />
-                <div className="mt-2 flex justify-between items-center">
-                  <EmojiPickerButton
-                    onEmojiSelect={(emoji) => {
-                      setCommentText(commentText + emoji);
-                    }}
-                    buttonClassName="text-gray-500 hover:text-gray-700"
-                  />
-                  <button
-                    onClick={handleCommentSubmit}
-                    disabled={
-                      !commentText.trim() || createCommentMutation.isPending
-                    }
-                    className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
-                  >
-                    {createCommentMutation.isPending
-                      ? '작성 중...'
-                      : '댓글 달기'}
-                  </button>
-                </div>
-              </div>
-            </div>
+            <CommentInput
+              userProfileImageUrl={user?.profileImageUrl}
+              userName={user?.name || ''}
+              value={commentText}
+              onChange={setCommentText}
+              onSubmit={handleCommentSubmit}
+              isPending={createCommentMutation.isPending}
+            />
           </div>
         </div>
       </div>

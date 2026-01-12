@@ -36,16 +36,10 @@ export const usePost = (postId: number) => {
 
   return useQuery({
     queryKey: [...queryKeys.posts, postId],
-    queryFn: () => {
-      console.log('[usePost] Fetching post from API:', postId);
-      return getPost(postId);
-    },
+    queryFn: () => getPost(postId),
     enabled: !!postId,
-    // 캐시에 데이터가 있으면 staleTime 동안 재요청하지 않음
-    staleTime: 5 * 60 * 1000, // 5분
-    // placeholderData를 사용하여 즉시 렌더링 (loading 상태 없음)
+    staleTime: 5 * 60 * 1000,
     placeholderData: () => {
-      // 먼저 infinite query 캐시에서 찾기 (subscriptionOnly=false인 기본 피드)
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
       >([...queryKeys.posts, 'infinite', false]);
@@ -53,14 +47,10 @@ export const usePost = (postId: number) => {
       if (infiniteData) {
         for (const page of infiniteData.pages) {
           const post = page.content.find((p) => p.postId === postId);
-          if (post) {
-            console.log('[usePost] Found in cache (infinite, false):', postId);
-            return post;
-          }
+          if (post) return post;
         }
       }
 
-      // subscriptionOnly=true 캐시에서도 찾기
       const infiniteDataSub = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
       >([...queryKeys.posts, 'infinite', true]);
@@ -68,19 +58,14 @@ export const usePost = (postId: number) => {
       if (infiniteDataSub) {
         for (const page of infiniteDataSub.pages) {
           const post = page.content.find((p) => p.postId === postId);
-          if (post) {
-            console.log('[usePost] Found in cache (infinite, true):', postId);
-            return post;
-          }
+          if (post) return post;
         }
       }
 
-      console.log('[usePost] Not found in cache:', postId);
       return undefined;
     },
-    // initialData를 사용하여 캐시가 있으면 즉시 확정 (refetch 없음)
+
     initialData: () => {
-      // 먼저 infinite query 캐시에서 찾기 (subscriptionOnly=false인 기본 피드)
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
       >([...queryKeys.posts, 'infinite', false]);
@@ -94,7 +79,6 @@ export const usePost = (postId: number) => {
         }
       }
 
-      // subscriptionOnly=true 캐시에서도 찾기
       const infiniteDataSub = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
       >([...queryKeys.posts, 'infinite', true]);
@@ -110,7 +94,6 @@ export const usePost = (postId: number) => {
 
       return undefined;
     },
-    // initialData가 있으면 fresh 상태로 유지
     initialDataUpdatedAt: () => {
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
@@ -138,14 +121,6 @@ export const usePost = (postId: number) => {
   });
 };
 
-/**
- * 게시물 생성 Mutation Hook
- *
- * 기능:
- * - 게시물 생성 후 ID만 반환 (백엔드 API Spec 변경 대응)
- * - 성공 시 posts, bookmarks 캐시 무효화
- * - 성공/실패 Toast 표시
- */
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
   const addToast = useToastStore((state) => state.addToast);
@@ -160,7 +135,6 @@ export const useCreatePost = () => {
       addToast('게시물이 작성되었습니다', 'success');
     },
     onError: (error: Error) => {
-      console.error('Failed to create post:', error);
       addToast(
         error.message || '게시물 작성에 실패했습니다. 다시 시도해주세요.',
         'error'
@@ -225,7 +199,6 @@ export const useUpdatePost = () => {
           context.previousData
         );
       }
-      console.error('Failed to update post:', error);
       addToast(
         error.message || '게시물 수정에 실패했습니다. 다시 시도해주세요.',
         'error'
@@ -242,14 +215,6 @@ export const useUpdatePost = () => {
   });
 };
 
-/**
- * 게시물 삭제 Mutation Hook
- *
- * 기능:
- * - 게시물 삭제 (Soft Delete)
- * - 성공 시 posts, bookmarks 캐시 무효화
- * - 성공/실패 Toast 표시
- */
 export const useDeletePost = () => {
   const queryClient = useQueryClient();
   const addToast = useToastStore((state) => state.addToast);
@@ -264,7 +229,6 @@ export const useDeletePost = () => {
       addToast('게시물이 삭제되었습니다', 'success');
     },
     onError: (error: Error) => {
-      console.error('Failed to delete post:', error);
       addToast(
         error.message || '게시물 삭제에 실패했습니다. 다시 시도해주세요.',
         'error'
