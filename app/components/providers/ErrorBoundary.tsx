@@ -72,7 +72,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </button>
               <button
                 onClick={() => window.location.reload()}
-                className="flex-1 rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
+                className="flex-1 rounded-md bg-primary-600 px-4 py-2 font-semibold text-white hover:bg-primary-700"
               >
                 새로고침
               </button>

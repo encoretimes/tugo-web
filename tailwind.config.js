@@ -6,6 +6,7 @@ export default {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       maxWidth: {
@@ -13,16 +14,21 @@ export default {
       },
       colors: {
         primary: {
-          50: '#faf5ff',
-          100: '#f3e8ff',
-          200: '#e9d5ff',
-          300: '#d8b4fe',
-          400: '#c084fc',
-          500: '#a855f7',
-          600: '#6956E3',
-          700: '#7c3aed',
-          800: '#6b21a8',
-          900: '#581c87',
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#1E3A5F', // 딥 네이비 - 메인 컬러
+          700: '#162D4D',
+          800: '#0F1F33',
+          900: '#0A1421',
+        },
+        surface: {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#E5E5E5',
         },
         neutral: {
           50: '#f9fafb',

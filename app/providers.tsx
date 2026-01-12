@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import AuthProvider from './components/providers/AuthProvider';
 import { ErrorBoundary } from './components/providers/ErrorBoundary';
+import ThemeProvider from './components/providers/ThemeProvider';
 import ToastContainer from './components/ui/ToastContainer';
 
 function createQueryClient() {
@@ -27,12 +28,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          {children}
-          <ToastContainer />
-        </AuthProvider>
-      </QueryClientProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            {children}
+            <ToastContainer />
+          </AuthProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

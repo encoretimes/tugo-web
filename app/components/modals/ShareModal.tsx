@@ -92,7 +92,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-lg border border-gray-200 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <Dialog.Title
                     as="h3"
@@ -110,7 +110,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                 <div className="space-y-3">
                   {/* 링크 URL 표시 및 복사 */}
-                  <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="p-4 bg-gray-50 rounded-md border border-gray-200">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-gray-500 mb-1">
@@ -120,7 +120,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
                       </div>
                       <button
                         onClick={handleCopyLink}
-                        className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
+                        className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 transition-colors"
                       >
                         <LinkIcon className="h-4 w-4" />
                         복사
@@ -132,7 +132,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     <button
                       onClick={handleShareKakao}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 p-4 bg-yellow-400 hover:bg-yellow-500 rounded-md transition-colors"
                     >
                       <div className="w-12 h-12 flex items-center justify-center bg-yellow-500 rounded-full">
                         <span className="text-2xl">💬</span>
@@ -144,7 +144,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleShareTwitter}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-sky-400 hover:bg-sky-500 rounded-lg transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 p-4 bg-sky-400 hover:bg-sky-500 rounded-md transition-colors"
                     >
                       <div className="w-12 h-12 flex items-center justify-center bg-sky-500 rounded-full">
                         <span className="text-2xl text-white">𝕏</span>
@@ -156,7 +156,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleShareFacebook}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 p-4 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
                     >
                       <div className="w-12 h-12 flex items-center justify-center bg-blue-700 rounded-full">
                         <span className="text-2xl text-white">f</span>
@@ -168,7 +168,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleCopyLink}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
                     >
                       <div className="w-12 h-12 flex items-center justify-center bg-gray-300 rounded-full">
                         <LinkIcon className="h-6 w-6 text-gray-700" />

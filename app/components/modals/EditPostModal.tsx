@@ -104,7 +104,7 @@ export default function EditPostModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-lg border border-gray-200 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <Dialog.Title
                     as="h3"
@@ -184,14 +184,14 @@ export default function EditPostModal({
                       type="button"
                       onClick={handleClose}
                       disabled={updatePostMutation.isPending}
-                      className="rounded-full px-6 py-2 font-semibold text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-50"
+                      className="rounded-md px-6 py-2.5 font-semibold text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-50"
                     >
                       취소
                     </button>
                     <button
                       type="submit"
                       disabled={!content.trim() || updatePostMutation.isPending}
-                      className="rounded-full bg-primary-600 px-6 py-2 font-semibold text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                      className="rounded-md bg-primary-600 px-6 py-2.5 font-semibold text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
                     >
                       {updatePostMutation.isPending ? '수정 중...' : '수정하기'}
                     </button>

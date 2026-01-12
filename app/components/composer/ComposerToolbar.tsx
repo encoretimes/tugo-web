@@ -39,7 +39,7 @@ export default function ComposerToolbar({
         onClick={onPollClick}
         className={`flex items-center justify-center ${
           hasPoll
-            ? 'text-blue-600'
+            ? 'text-primary-600'
             : 'text-primary-500 hover:text-primary-700'
         }`}
         disabled={disabled}

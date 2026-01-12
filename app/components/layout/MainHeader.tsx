@@ -9,7 +9,7 @@ const MainHeader = () => {
   const showBadge = unreadCount !== undefined && unreadCount > 0;
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 lg:hidden">
+    <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-gray-800 lg:hidden">
       {/* 모바일 헤더만 표시 */}
       <div className="flex items-center justify-between px-8 py-3">
         <Link href="/" className="flex items-center">

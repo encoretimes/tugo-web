@@ -250,13 +250,13 @@ export default function ChatRoom({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 border border-gray-300 rounded-md px-4 py-2 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             disabled={!roomId || isSending}
           />
           <button
             onClick={handleSend}
             disabled={!inputValue.trim() || !roomId || isSending}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition flex items-center gap-2"
+            className="bg-primary-600 text-white px-4 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition flex items-center gap-2"
           >
             <PaperAirplaneIcon className="h-5 w-5" />
             <span className="hidden sm:inline">전송</span>

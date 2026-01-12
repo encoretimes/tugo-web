@@ -24,12 +24,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
       className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors"
     >
       {rank && (
-        <span
-          className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-          style={{
-            background: 'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)',
-          }}
-        >
+        <span className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
           {rank}
         </span>
       )}
@@ -66,7 +61,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           e.stopPropagation();
           // TODO: 구독 처리
         }}
-        className="shrink-0 px-4 py-1.5 rounded-full bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
+        className="shrink-0 px-4 py-1.5 rounded-md bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
       >
         구독
       </button>

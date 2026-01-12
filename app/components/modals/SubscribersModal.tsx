@@ -48,7 +48,7 @@ export default function SubscribersModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white shadow-lg border border-gray-200 transition-all">
                 {/* Header */}
                 <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                   <Dialog.Title className="text-lg font-semibold">
@@ -56,7 +56,7 @@ export default function SubscribersModal({
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="rounded-full p-1 hover:bg-gray-100 transition-colors"
+                    className="rounded-md p-1 hover:bg-gray-100 transition-colors"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -86,7 +86,7 @@ export default function SubscribersModal({
                                 className="object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500 text-white font-bold text-lg">
+                              <div className="w-full h-full flex items-center justify-center bg-primary-600 text-white font-bold text-lg">
                                 {subscription.memberName?.[0] || '?'}
                               </div>
                             )}

@@ -54,7 +54,7 @@ export default function RoomList({
             placeholder="쪽지 검색"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function RoomList({
               key={room.roomId}
               onClick={() => onSelectRoom(room)}
               className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition ${
-                selectedRoomId === room.roomId ? 'bg-blue-50' : ''
+                selectedRoomId === room.roomId ? 'bg-primary-50' : ''
               }`}
             >
               <div className="flex items-center gap-3">

@@ -2,11 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Light Theme (Default) ===== */
 :root {
+  /* Background */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --bg-hover: #f3f4f6;
+
+  /* Foreground / Text */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #9ca3af;
+  --text-inverse: #ffffff;
+
+  /* Brand */
+  --brand-primary: #1E3A5F;
+  --brand-hover: #162D4D;
+  --brand-light: #EFF6FF;
+
+  /* Border */
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+
+  /* Surface (Cards, Modals) */
+  --surface-primary: #ffffff;
+  --surface-secondary: #f9fafb;
+  --surface-elevated: #ffffff;
+
+  /* Status */
+  --status-success: #10b981;
+  --status-error: #ef4444;
+  --status-warning: #f59e0b;
+
+  /* Legacy (for backwards compatibility) */
   --background: #ffffff;
   --foreground: #1f2937;
-  --primary: #6956e3;
-  --primary-hover: #7c3aed;
+  --primary: #1E3A5F;
+  --primary-hover: #162D4D;
+  --surface: #F8FAFC;
+  --border: #E5E7EB;
+}
+
+/* ===== Dark Theme ===== */
+.dark {
+  /* Background */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-hover: #334155;
+
+  /* Foreground / Text */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #64748b;
+  --text-inverse: #0f172a;
+
+  /* Brand */
+  --brand-primary: #3b82f6;
+  --brand-hover: #60a5fa;
+  --brand-light: #1e3a5f;
+
+  /* Border */
+  --border-primary: #334155;
+  --border-secondary: #475569;
+
+  /* Surface (Cards, Modals) */
+  --surface-primary: #1e293b;
+  --surface-secondary: #0f172a;
+  --surface-elevated: #334155;
+
+  /* Status */
+  --status-success: #34d399;
+  --status-error: #f87171;
+  --status-warning: #fbbf24;
+
+  /* Legacy */
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --surface: #1e293b;
+  --border: #334155;
 }
 
 html {
@@ -21,14 +98,15 @@ html::-webkit-scrollbar {
 }
 
 body {
-  color: #1f2937;
-  background: #ffffff;
+  color: var(--text-primary);
+  background: var(--bg-primary);
   overflow-x: hidden;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE, Edge */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none; /* 오버스크롤 바운스 효과 제거 */
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 body::-webkit-scrollbar {

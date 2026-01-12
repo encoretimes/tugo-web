@@ -10,6 +10,7 @@ import {
 import ProfileSection from './ProfileSection';
 import NotificationSection from './NotificationSection';
 import SecuritySection from './SecuritySection';
+import ThemeSettings from '@/components/settings/ThemeSettings';
 import { useRouter } from 'next/navigation';
 
 const SettingsPage = () => {
@@ -39,18 +40,21 @@ const SettingsPage = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 고급 설정
               </h3>
-              <p className="text-sm text-gray-500">계정 관리 및 시스템 설정</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">계정 관리 및 시스템 설정</p>
             </div>
 
+            {/* Theme Settings */}
+            <ThemeSettings />
+
             {/* Logout Section */}
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h4 className="text-base font-medium text-gray-900 mb-2">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+              <h4 className="text-base font-medium text-gray-900 dark:text-gray-100 mb-2">
                 로그아웃
               </h4>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                 현재 기기에서 로그아웃합니다
               </p>
               <button
@@ -59,18 +63,18 @@ const SettingsPage = () => {
                   localStorage.removeItem('token');
                   router.push('/login');
                 }}
-                className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
               >
                 로그아웃
               </button>
             </div>
 
             {/* Account Deletion Section */}
-            <div className="bg-red-50 rounded-lg p-6 border border-red-200">
-              <h4 className="text-base font-medium text-red-900 mb-2">
+            <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-6 border border-red-200 dark:border-red-800">
+              <h4 className="text-base font-medium text-red-900 dark:text-red-300 mb-2">
                 계정 삭제
               </h4>
-              <p className="text-sm text-red-700 mb-4">
+              <p className="text-sm text-red-700 dark:text-red-400 mb-4">
                 계정을 삭제하면 모든 데이터가 영구적으로 삭제되며 복구할 수
                 없습니다
               </p>
@@ -86,17 +90,17 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="p-6 md:p-8 text-black max-w-4xl mx-auto">
+    <div className="p-6 md:p-8 text-black dark:text-white max-w-4xl mx-auto">
       {/* Header */}
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">설정</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">설정</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
           계정, 알림 및 시스템 설정을 관리합니다
         </p>
       </header>
 
       {/* Tab navigation */}
-      <nav className="flex gap-1 border-b border-gray-200 mb-8">
+      <nav className="flex gap-1 border-b border-gray-200 dark:border-gray-700 mb-8">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -105,8 +109,8 @@ const SettingsPage = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab.id
-                  ? 'border-b-2 border-primary-600 text-primary-600'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'border-b-2 border-primary-600 dark:border-primary-400 text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
             >
               <Icon className="h-5 w-5" />

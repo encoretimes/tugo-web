@@ -50,7 +50,7 @@ const PostComposer = () => {
           </div>
           <div className="flex-grow">
             <div
-              className="w-full cursor-text rounded-full border bg-gray-100 px-4 py-3 text-gray-500"
+              className="w-full cursor-text rounded-md border bg-gray-100 px-4 py-3 text-gray-500"
               onClick={openModal}
             >
               무슨 생각을 하고 계신가요?
@@ -68,7 +68,7 @@ const PostComposer = () => {
                 </button>
               </div>
               <button
-                className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700"
+                className="rounded-md bg-primary-600 px-4 py-2.5 font-semibold text-white hover:bg-primary-700"
                 onClick={openModal}
               >
                 투고하기

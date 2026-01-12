@@ -111,7 +111,7 @@ export default function LoginPromptModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-3xl bg-white p-8 text-left align-middle shadow-2xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-8 text-left align-middle shadow-lg border border-gray-200 transition-all">
                 <div className="relative text-center">
                   {/* Close Button */}
                   <button
@@ -153,7 +153,7 @@ export default function LoginPromptModal({
                   </p>
 
                   {/* Features */}
-                  <div className="mb-8 space-y-3 rounded-2xl bg-neutral-50 p-4">
+                  <div className="mb-8 space-y-3 rounded-md bg-neutral-50 p-4 border border-gray-100">
                     {content.features.map((feature, index) => (
                       <div
                         key={index}
@@ -185,7 +185,7 @@ export default function LoginPromptModal({
                   <div className="space-y-3">
                     <button
                       onClick={handleLogin}
-                      className="w-full rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-base font-bold text-white shadow-lg shadow-primary-600/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                      className="w-full rounded-md bg-primary-600 px-6 py-4 text-base font-semibold text-white shadow-md transition-all hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     >
                       지금 로그인하기
                     </button>

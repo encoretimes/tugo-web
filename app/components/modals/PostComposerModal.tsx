@@ -83,20 +83,20 @@ export default function PostComposerModal({
               <Dialog.Panel
                 className={`w-full ${
                   isExpanded ? 'max-w-3xl' : 'max-w-md'
-                } transform overflow-visible rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all duration-300`}
+                } transform overflow-visible rounded-lg bg-white dark:bg-slate-800 p-6 text-left align-middle shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300`}
               >
                 {/* Header */}
                 <div className="flex items-center justify-between">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
                   >
                     새 게시물 작성
                   </Dialog.Title>
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                     >
                       {isExpanded ? (
                         <ArrowsPointingInIcon className="h-6 w-6" />
@@ -106,7 +106,7 @@ export default function PostComposerModal({
                     </button>
                     <button
                       onClick={handleClose}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                       disabled={composer.isPending}
                     >
                       <XMarkIcon className="h-6 w-6" />
@@ -199,7 +199,7 @@ export default function PostComposerModal({
                       <Menu as="div" className="relative">
                         <Menu.Button
                           disabled={composer.isPending}
-                          className="flex items-center gap-2 rounded-full bg-white px-4 py-2 font-bold text-gray-500 border-[1.5px] border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                          className="flex items-center gap-2 rounded-md bg-white px-4 py-2.5 font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
                         >
                           {composer.postType === 'FREE' ? (
                             <>
@@ -271,7 +271,7 @@ export default function PostComposerModal({
                       <button
                         onClick={composer.handleSubmit}
                         disabled={!composer.canSubmit}
-                        className="rounded-full bg-primary-600 px-4 py-2 font-bold text-white hover:bg-primary-700 disabled:opacity-50"
+                        className="rounded-md bg-primary-600 px-4 py-2.5 font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
                       >
                         {composer.isPending ? '작성 중...' : '투고하기'}
                       </button>

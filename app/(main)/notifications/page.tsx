@@ -1,12 +1,6 @@
 'use client';
 
-import { Fragment, useRef, useEffect } from 'react';
-import {
-  UserPlusIcon,
-  HeartIcon,
-  ChatBubbleBottomCenterTextIcon,
-  AtSymbolIcon,
-} from '@heroicons/react/24/solid';
+import { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
   useNotifications,
@@ -16,20 +10,18 @@ import {
 import { Notification, NotificationType } from '@/types/notification';
 import { formatRelativeTime } from '@/lib/date-utils';
 
-const NotificationIcon = ({ type }: { type: NotificationType }) => {
+const getNotificationLabel = (type: NotificationType): string => {
   switch (type) {
     case 'SUBSCRIPTION':
-      return <UserPlusIcon className="h-8 w-8 text-blue-500" />;
+      return '구독';
     case 'LIKE':
-      return <HeartIcon className="h-8 w-8 text-red-500" />;
+      return '좋아요';
     case 'COMMENT':
-      return (
-        <ChatBubbleBottomCenterTextIcon className="h-8 w-8 text-green-500" />
-      );
+      return '댓글';
     case 'MENTION':
-      return <AtSymbolIcon className="h-8 w-8 text-purple-500" />;
+      return '멘션';
     default:
-      return null;
+      return '알림';
   }
 };
 
@@ -52,22 +44,28 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
     <Link
       href={getLink()}
       onClick={handleClick}
-      className={`flex gap-4 p-4 border-b border-gray-200 transition-colors ${
-        !isRead ? 'bg-primary-50' : 'hover:bg-gray-50'
+      className={`flex items-start gap-3 px-4 py-3 border-b border-gray-100 transition-colors hover:bg-gray-50 ${
+        !isRead ? 'bg-gray-50' : ''
       }`}
     >
-      <div className="flex-shrink-0 w-10">
-        <NotificationIcon type={type} />
-      </div>
-      <div className="flex-grow">
-        <div className="text-gray-800">{message}</div>
-        <div className="text-sm text-gray-400 mt-1">
-          {formatRelativeTime(createdAt)}
+      {/* 읽지 않음 표시 - 왼쪽 라인 */}
+      <div className={`w-0.5 h-full min-h-[40px] rounded-full flex-shrink-0 ${!isRead ? 'bg-primary-600' : 'bg-transparent'}`} />
+
+      <div className="flex-grow min-w-0">
+        {/* 알림 타입 라벨 */}
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs text-gray-500 font-medium">
+            {getNotificationLabel(type)}
+          </span>
+          <span className="text-xs text-gray-400">
+            {formatRelativeTime(createdAt)}
+          </span>
         </div>
+        {/* 알림 내용 */}
+        <p className={`text-sm leading-relaxed ${!isRead ? 'text-gray-900 font-medium' : 'text-gray-600'}`}>
+          {message}
+        </p>
       </div>
-      {!isRead && (
-        <div className="h-3 w-3 rounded-full bg-primary-500 self-center flex-shrink-0"></div>
-      )}
     </Link>
   );
 };
@@ -128,11 +126,8 @@ const NotificationsPage = () => {
 
     if (allNotifications.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-          <h2 className="text-2xl font-bold">알림이 없습니다</h2>
-          <p className="text-gray-500 mt-2">
-            다른 사람들과 소통을 시작하면 여기에 알림이 표시됩니다.
-          </p>
+        <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
+          <p className="text-gray-500 text-sm">알림이 없습니다</p>
         </div>
       );
     }

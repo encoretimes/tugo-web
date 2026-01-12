@@ -16,7 +16,7 @@ const LeftSidebar = () => {
   const user = useUserStore((state) => state.user);
 
   return (
-    <aside className="relative h-full w-16 xl:w-64 flex flex-col pt-4 border-r border-gray-200">
+    <aside className="relative h-full w-16 xl:w-64 flex flex-col pt-4 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900">
       {/* 로고 */}
       <div className="px-1 xl:px-4 mb-6 h-8 flex items-center justify-center xl:justify-start">
         <Link href="/" className="flex items-center">

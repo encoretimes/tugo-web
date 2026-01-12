@@ -54,7 +54,7 @@ const BottomNavBar = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 w-full bg-white lg:hidden z-50 py-3 border-t border-gray-100 rounded-t-2xl">
+    <nav className="fixed bottom-0 w-full bg-white dark:bg-slate-900 lg:hidden z-50 py-3 border-t border-gray-200 dark:border-gray-700">
       <ul className="flex justify-center gap-8">
         {navItems.map(({ href, icon, activeIcon, label, badge }) => {
           const active = isActive(href);

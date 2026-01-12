@@ -130,9 +130,9 @@ const InlinePostComposer = () => {
                 <button
                   onClick={composer.handlePollButtonClick}
                   disabled={composer.isPending}
-                  className={`p-2 rounded-full transition-colors ${
+                  className={`p-2 rounded-md transition-colors ${
                     composer.pollData
-                      ? 'text-blue-600 bg-blue-50'
+                      ? 'text-primary-600 bg-primary-50'
                       : 'text-primary-500 hover:text-primary-600 hover:bg-primary-50'
                   }`}
                   title="투표 추가"

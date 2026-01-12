@@ -13,7 +13,7 @@ const RightSidebar = () => {
     usePopularCreators(3);
 
   return (
-    <aside className="h-full p-4 text-black">
+    <aside className="h-full p-4 text-black dark:text-white bg-white dark:bg-slate-900">
       <div className="max-w-xs mx-auto pt-4">
         {/* 실시간 인기 투표 */}
         <div className="mb-6">
@@ -22,12 +22,12 @@ const RightSidebar = () => {
               href="/explore?tab=votes"
               className="flex items-center gap-1 hover:opacity-70 transition-opacity"
             >
-              <h3 className="text-base font-bold text-gray-900">
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
                 실시간 인기 투표
               </h3>
-              <ChevronRightIcon className="h-4 w-4 text-gray-900" />
+              <ChevronRightIcon className="h-4 w-4 text-gray-900 dark:text-gray-100" />
             </Link>
-            <span className="text-xs text-gray-400">오늘 23시 30분 기준</span>
+            <span className="text-xs text-gray-400 dark:text-gray-500">오늘 23시 30분 기준</span>
           </div>
           <div className="py-2">
             {isLoadingDebates ? (
@@ -35,7 +35,7 @@ const RightSidebar = () => {
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
-                    className="h-8 bg-gray-50 rounded animate-pulse"
+                    className="h-8 bg-gray-50 dark:bg-gray-800 rounded animate-pulse"
                   />
                 ))}
               </div>
@@ -48,33 +48,23 @@ const RightSidebar = () => {
                       {post ? (
                         <Link
                           href={`/${post.author.username}/post/${post.postId}`}
-                          className="flex items-center gap-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                          className="flex items-center gap-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
                         >
-                          <span
-                            className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-                            style={{
-                              background:
-                                'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)',
-                            }}
-                          >
+                          <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
                             {index + 1}
                           </span>
-                          <span className="flex-1 text-sm text-gray-800 truncate">
+                          <span className="flex-1 text-sm text-gray-800 dark:text-gray-200 truncate">
                             {post.poll?.question ||
                               post.contentText.slice(0, 30)}
                           </span>
-                          <span className="text-xs text-gray-400 shrink-0">
+                          <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0">
                             {post.poll?.totalVoters.toLocaleString()}명
                           </span>
                         </Link>
                       ) : (
                         <div className="flex items-center gap-3 py-2">
                           <span
-                            className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
-                            style={{
-                              background:
-                                'linear-gradient(135deg, #6956E3 0%, #8B7BE8 100%)',
-                            }}
+                            className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600"
                           >
                             {index + 1}
                           </span>
@@ -92,7 +82,7 @@ const RightSidebar = () => {
         </div>
 
         {/* 구분선 */}
-        <div className="h-px bg-gray-200 mb-6" />
+        <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6" />
 
         {/* 인기 크리에이터 */}
         <div>
@@ -101,23 +91,23 @@ const RightSidebar = () => {
               href="/explore?tab=creators"
               className="flex items-center gap-1 hover:opacity-70 transition-opacity"
             >
-              <h3 className="text-base font-bold text-gray-900">
+              <h3 className="text-base font-bold text-gray-900 dark:text-gray-100">
                 인기 크리에이터
               </h3>
-              <ChevronRightIcon className="h-4 w-4 text-gray-900" />
+              <ChevronRightIcon className="h-4 w-4 text-gray-900 dark:text-gray-100" />
             </Link>
           </div>
-          <p className="text-xs text-gray-400 mb-4">
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">
             지금 가장 주목받는 크리에이터들이에요!
           </p>
           <ul className="space-y-3">
             {isLoadingCreators ? (
               [1, 2, 3].map((i) => (
                 <li key={i} className="flex items-center gap-2">
-                  <div className="h-9 w-9 rounded-full bg-gray-100 animate-pulse shrink-0" />
+                  <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-gray-800 animate-pulse shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="h-4 w-20 bg-gray-100 rounded animate-pulse mb-1" />
-                    <div className="h-3 w-16 bg-gray-100 rounded animate-pulse" />
+                    <div className="h-4 w-20 bg-gray-100 dark:bg-gray-800 rounded animate-pulse mb-1" />
+                    <div className="h-3 w-16 bg-gray-100 dark:bg-gray-800 rounded animate-pulse" />
                   </div>
                 </li>
               ))
@@ -129,7 +119,7 @@ const RightSidebar = () => {
                 >
                   <Link
                     href={`/@${creator.username}`}
-                    className="flex items-center gap-2 flex-1 hover:bg-gray-50 rounded-lg p-2 -m-2 min-w-0"
+                    className="flex items-center gap-2 flex-1 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md p-2 -m-2 min-w-0"
                   >
                     <Image
                       src={
@@ -142,21 +132,21 @@ const RightSidebar = () => {
                       className="h-9 w-9 rounded-full object-cover shrink-0"
                     />
                     <div className="min-w-0 flex-1">
-                      <div className="font-semibold text-sm text-gray-900 truncate">
+                      <div className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
                         {creator.name}
                       </div>
-                      <div className="text-xs text-gray-500 truncate">
+                      <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
                         @{creator.username}
                       </div>
                     </div>
                   </Link>
-                  <button className="rounded-full bg-[#6956E3] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#5a48c9] shrink-0">
+                  <button className="rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 shrink-0">
                     구독
                   </button>
                 </li>
               ))
             ) : (
-              <li className="text-sm text-gray-400 text-center py-4">
+              <li className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">
                 아직 크리에이터가 없습니다
               </li>
             )}
