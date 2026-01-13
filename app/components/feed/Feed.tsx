@@ -1,14 +1,18 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Post from './Post';
-import { useInfinitePosts } from '@/hooks/usePosts';
+import { useInfinitePosts, FeedType } from '@/hooks/usePosts';
 import { useScrollStore } from '@/store/scrollStore';
+import { useUserStore } from '@/store/userStore';
 import PostSkeleton from './PostSkeleton';
 import InlinePostComposer from './InlinePostComposer';
 
 const Feed = () => {
+  const { isAuthenticated, hasHydrated } = useUserStore();
+  const [feedType, setFeedType] = useState<FeedType>('recommended');
+
   const {
     data,
     fetchNextPage,
@@ -16,7 +20,7 @@ const Feed = () => {
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfinitePosts(false);
+  } = useInfinitePosts(feedType);
 
   const { ref, inView } = useInView();
   const feedScrollPosition = useScrollStore(
@@ -53,6 +57,33 @@ const Feed = () => {
       <InlinePostComposer />
 
       <div className="h-4" />
+
+      {/* 피드 타입 탭 */}
+      {hasHydrated && isAuthenticated && (
+        <div className="flex border-b border-gray-200 dark:border-neutral-700 mb-0">
+          <button
+            onClick={() => setFeedType('following')}
+            className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
+              feedType === 'following'
+                ? 'text-primary-600 border-b-2 border-primary-600'
+                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
+            }`}
+          >
+            구독
+          </button>
+          <button
+            onClick={() => setFeedType('recommended')}
+            className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
+              feedType === 'recommended'
+                ? 'text-primary-600 border-b-2 border-primary-600'
+                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
+            }`}
+          >
+            추천
+          </button>
+        </div>
+      )}
+
       <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
 
       <div>
@@ -77,7 +108,18 @@ const Feed = () => {
             </p>
           </div>
         ) : posts.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">게시물이 없습니다</div>
+          <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
+            {feedType === 'following' ? (
+              <div>
+                <p className="font-medium mb-2">구독 중인 크리에이터가 없습니다</p>
+                <p className="text-sm">
+                  크리에이터를 구독하고 새로운 게시물을 받아보세요
+                </p>
+              </div>
+            ) : (
+              '추천 게시물이 없습니다'
+            )}
+          </div>
         ) : (
           <>
             {posts.map((post, index) => (

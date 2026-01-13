@@ -14,7 +14,7 @@ const ExploreFeed = () => {
     isFetchingNextPage,
     isLoading,
     error,
-  } = useInfinitePosts(false);
+  } = useInfinitePosts('recommended');
 
   const { ref, inView } = useInView();
   const posts = data?.pages.flatMap((page) => page.content) ?? [];

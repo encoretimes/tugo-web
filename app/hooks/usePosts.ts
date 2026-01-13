@@ -13,7 +13,8 @@ import {
   updatePost,
   deletePost,
 } from '@/services/posts';
-import type { UpdatePostRequest } from '@/services/posts';
+import type { UpdatePostRequest, FeedType } from '@/services/posts';
+export type { FeedType } from '@/services/posts';
 import { Post } from '@/types/post';
 import { PageResponse } from '@/types/common';
 import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
@@ -34,15 +35,13 @@ export const usePosts = () => {
 export const usePost = (postId: number) => {
   const queryClient = useQueryClient();
 
-  return useQuery({
-    queryKey: [...queryKeys.posts, postId],
-    queryFn: () => getPost(postId),
-    enabled: !!postId,
-    staleTime: 5 * 60 * 1000,
-    placeholderData: () => {
+  const findPostInCache = (): Post | undefined => {
+    const feedTypes: FeedType[] = ['recommended', 'following'];
+
+    for (const feedType of feedTypes) {
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', false]);
+      >([...queryKeys.posts, 'infinite', feedType]);
 
       if (infiniteData) {
         for (const page of infiniteData.pages) {
@@ -50,74 +49,39 @@ export const usePost = (postId: number) => {
           if (post) return post;
         }
       }
+    }
 
-      const infiniteDataSub = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', true]);
+    return undefined;
+  };
 
-      if (infiniteDataSub) {
-        for (const page of infiniteDataSub.pages) {
-          const post = page.content.find((p) => p.postId === postId);
-          if (post) return post;
-        }
-      }
+  const getCacheUpdatedAt = (): number | undefined => {
+    const feedTypes: FeedType[] = ['recommended', 'following'];
 
-      return undefined;
-    },
-
-    initialData: () => {
+    for (const feedType of feedTypes) {
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', false]);
-
-      if (infiniteData) {
-        for (const page of infiniteData.pages) {
-          const post = page.content.find((p) => p.postId === postId);
-          if (post) {
-            return post;
-          }
-        }
-      }
-
-      const infiniteDataSub = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', true]);
-
-      if (infiniteDataSub) {
-        for (const page of infiniteDataSub.pages) {
-          const post = page.content.find((p) => p.postId === postId);
-          if (post) {
-            return post;
-          }
-        }
-      }
-
-      return undefined;
-    },
-    initialDataUpdatedAt: () => {
-      const infiniteData = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', false]);
+      >([...queryKeys.posts, 'infinite', feedType]);
 
       if (infiniteData) {
         return queryClient.getQueryState([
           ...queryKeys.posts,
           'infinite',
-          false,
+          feedType,
         ])?.dataUpdatedAt;
       }
+    }
 
-      const infiniteDataSub = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', true]);
+    return 0;
+  };
 
-      if (infiniteDataSub) {
-        return queryClient.getQueryState([...queryKeys.posts, 'infinite', true])
-          ?.dataUpdatedAt;
-      }
-
-      return 0;
-    },
+  return useQuery({
+    queryKey: [...queryKeys.posts, postId],
+    queryFn: () => getPost(postId),
+    enabled: !!postId,
+    staleTime: 5 * 60 * 1000,
+    placeholderData: findPostInCache,
+    initialData: findPostInCache,
+    initialDataUpdatedAt: getCacheUpdatedAt,
   });
 };
 
@@ -127,14 +91,96 @@ export const useCreatePost = () => {
 
   return useMutation({
     mutationFn: createPost,
-    onSuccess: () => {
-      // 관련 쿼리 캐시 무효화
-      invalidationHelpers.onPostMutation().forEach((queryKey) => {
-        queryClient.invalidateQueries({ queryKey });
+    onMutate: async () => {
+      // 진행 중인 쿼리 취소
+      await queryClient.cancelQueries({
+        queryKey: [...queryKeys.posts, 'infinite'],
       });
+
+      // 현재 피드 데이터들 백업
+      const previousFollowing = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', 'following']);
+      const previousRecommended = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', 'recommended']);
+
+      return { previousFollowing, previousRecommended };
+    },
+    onSuccess: (postId, newPostData) => {
+      // 게시글 작성 성공 시 피드 상단에 임시로 표시
+      const userStorage = localStorage.getItem('user-storage');
+      if (userStorage) {
+        try {
+          const { state } = JSON.parse(userStorage);
+          const user = state?.user;
+
+          if (user) {
+            const optimisticPost: Post = {
+              postId: postId,
+              author: {
+                name: user.name || '나',
+                username: user.username || '',
+                profileImageUrl: user.profileImageUrl || null,
+              },
+              contentText: newPostData.contentText,
+              postType: newPostData.postType,
+              ppvPrice: newPostData.ppvPrice || null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              stats: {
+                comments: 0,
+                likes: 0,
+              },
+              mediaUrls: newPostData.mediaUrls || [],
+              isLiked: false,
+              isSaved: false,
+            };
+
+            // 모든 피드 타입에 낙관적으로 추가
+            const feedTypes: FeedType[] = ['following', 'recommended'];
+            feedTypes.forEach((feedType) => {
+              queryClient.setQueryData<InfiniteData<PageResponse<Post>>>(
+                [...queryKeys.posts, 'infinite', feedType],
+                (old) => {
+                  if (!old || !old.pages.length) return old;
+
+                  // 첫 번째 페이지에 새 게시글 추가
+                  return {
+                    ...old,
+                    pages: old.pages.map((page, index) => {
+                      if (index === 0) {
+                        return {
+                          ...page,
+                          content: [optimisticPost, ...page.content],
+                        };
+                      }
+                      return page;
+                    }),
+                  };
+                }
+              );
+            });
+          }
+        } catch {}
+      }
+
       addToast('게시물이 작성되었습니다', 'success');
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _, context) => {
+      // 에러 발생 시 롤백
+      if (context?.previousFollowing) {
+        queryClient.setQueryData(
+          [...queryKeys.posts, 'infinite', 'following'],
+          context.previousFollowing
+        );
+      }
+      if (context?.previousRecommended) {
+        queryClient.setQueryData(
+          [...queryKeys.posts, 'infinite', 'recommended'],
+          context.previousRecommended
+        );
+      }
       addToast(
         error.message || '게시물 작성에 실패했습니다. 다시 시도해주세요.',
         'error'
@@ -239,14 +285,16 @@ export const useDeletePost = () => {
 
 /**
  * 무한 스크롤 게시물 조회 Hook
- * @param subscriptionOnly - true일 경우 구독한 크리에이터의 게시물만 조회
+ * @param feedType - 피드 타입 (following: 구독 피드, recommended: 추천 피드)
  * @param pageSize - 페이지당 게시물 수
  */
-export const useInfinitePosts = (subscriptionOnly = false, pageSize = 20) => {
+export const useInfinitePosts = (
+  feedType: FeedType = 'recommended',
+  pageSize = 20
+) => {
   return useInfiniteQuery({
-    queryKey: [...queryKeys.posts, 'infinite', subscriptionOnly],
-    queryFn: ({ pageParam = 0 }) =>
-      getPostsPage(pageParam, pageSize, subscriptionOnly),
+    queryKey: [...queryKeys.posts, 'infinite', feedType],
+    queryFn: ({ pageParam = 0 }) => getPostsPage(pageParam, pageSize, feedType),
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
     },

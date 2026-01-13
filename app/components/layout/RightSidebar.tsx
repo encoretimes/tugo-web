@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ChevronRightIcon } from '@heroicons/react/24/solid';
+import { ChevronRightIcon, UserIcon } from '@heroicons/react/24/solid';
 import { useDebates } from '@/hooks/useDebates';
 import { usePopularCreators } from '@/hooks/useCreators';
 
@@ -121,16 +121,19 @@ const RightSidebar = () => {
                     href={`/@${creator.username}`}
                     className="flex items-center gap-2 flex-1 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-md p-2 -m-2 min-w-0"
                   >
-                    <Image
-                      src={
-                        creator.profileImageUrl ||
-                        `https://i.pravatar.cc/150?u=${creator.username}`
-                      }
-                      alt={creator.name}
-                      width={36}
-                      height={36}
-                      className="h-9 w-9 rounded-full object-cover shrink-0"
-                    />
+                    {creator.profileImageUrl ? (
+                      <Image
+                        src={creator.profileImageUrl}
+                        alt={creator.name}
+                        width={36}
+                        height={36}
+                        className="h-9 w-9 rounded-full object-cover shrink-0"
+                      />
+                    ) : (
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0">
+                        <UserIcon className="h-5 w-5 text-neutral-400 dark:text-neutral-500" />
+                      </div>
+                    )}
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
                         {creator.name}
