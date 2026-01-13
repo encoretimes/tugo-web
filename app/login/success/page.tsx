@@ -50,8 +50,6 @@ export default function LoginSuccessPage() {
           sessionStorage.removeItem('returnUrl');
         }
 
-        // username이 없으면 메인으로 가서 자연스럽게 설정하도록 유도
-        // (계정 설정 페이지에서 크리에이터 전환 시 username 입력)
         if (returnUrl) {
           router.push(returnUrl);
         } else {

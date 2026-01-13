@@ -18,7 +18,6 @@ function LoginContent() {
       sessionStorage.setItem('returnUrl', returnUrl);
     }
     
-    // Fetch runtime config to check environment
     getConfig().then((config) => {
       setIsDev(config.runtimeEnv === 'development');
     });
@@ -35,7 +34,6 @@ function LoginContent() {
 
   const handleDevLogin = async () => {
     try {
-      // Call backend dev login endpoint to create a real session
       const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/api/v1/dev/login`, {
         method: 'POST',
