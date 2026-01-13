@@ -3,9 +3,9 @@
  * This file fetches config from the server at runtime, not build time
  */
 
-let cachedConfig: { apiUrl: string } | null = null;
+let cachedConfig: { apiUrl: string; runtimeEnv: string } | null = null;
 
-export async function getConfig(): Promise<{ apiUrl: string }> {
+export async function getConfig(): Promise<{ apiUrl: string; runtimeEnv: string }> {
   if (cachedConfig) {
     return cachedConfig;
   }
@@ -22,6 +22,7 @@ export async function getConfig(): Promise<{ apiUrl: string }> {
       // Fallback to window.location for same-cluster communication
       return {
         apiUrl: `${window.location.protocol}//${window.location.hostname}:30000`,
+        runtimeEnv: 'production',
       };
     }
   }
@@ -29,6 +30,7 @@ export async function getConfig(): Promise<{ apiUrl: string }> {
   // Server-side: read from environment
   return {
     apiUrl: process.env.API_URL || 'http://tugo-server:8080',
+    runtimeEnv: process.env.RUNTIME_ENV || 'production',
   };
 }
 

@@ -1,22 +1,27 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
+import { useEffect, Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-import { getApiUrl } from '@/config/env';
+import { getApiUrl, getConfig } from '@/config/env';
 
 function LoginContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { setUser } = useUserStore();
-  const isDev = process.env.NODE_ENV === 'development';
+  const [isDev, setIsDev] = useState(false);
 
   useEffect(() => {
     const returnUrl = searchParams.get('returnUrl');
     if (returnUrl) {
       sessionStorage.setItem('returnUrl', returnUrl);
     }
+    
+    // Fetch runtime config to check environment
+    getConfig().then((config) => {
+      setIsDev(config.runtimeEnv === 'development');
+    });
   }, [searchParams]);
 
   const handleSocialLogin = (provider: 'kakao' | 'naver') => {
