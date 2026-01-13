@@ -4,8 +4,9 @@ import { create } from 'zustand';
 import SockJS from 'sockjs-client';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import type { MessageResponse } from '@/types/notes';
+import { getApiUrl } from '@/config/env';
 
-const WS_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+const getWsBaseUrl = () => getApiUrl();
 
 interface NotesState {
   connected: boolean;
@@ -50,7 +51,7 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
       return;
     }
 
-    const wsUrl = `${WS_BASE_URL}/ws-stomp`;
+    const wsUrl = `${getWsBaseUrl()}/ws-stomp`;
     const socket = new SockJS(wsUrl);
 
     const client = new Client({

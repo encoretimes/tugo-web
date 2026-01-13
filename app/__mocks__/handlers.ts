@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+// For tests, use localhost as default
+const API_URL = 'http://localhost:30000';
 
 // Mock data
 const mockPosts = [

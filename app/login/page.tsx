@@ -1,25 +1,30 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
+import { useEffect, Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
+import { getApiUrl, getConfig } from '@/config/env';
 
 function LoginContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { setUser } = useUserStore();
-  const isDev = process.env.NODE_ENV === 'development';
+  const [isDev, setIsDev] = useState(false);
 
   useEffect(() => {
     const returnUrl = searchParams.get('returnUrl');
     if (returnUrl) {
       sessionStorage.setItem('returnUrl', returnUrl);
     }
+    
+    getConfig().then((config) => {
+      setIsDev(config.runtimeEnv === 'development');
+    });
   }, [searchParams]);
 
   const handleSocialLogin = (provider: 'kakao' | 'naver') => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+    const apiUrl = getApiUrl();
     if (provider === 'kakao') {
       window.location.href = `${apiUrl}/oauth/kakao/login`;
     } else if (provider === 'naver') {
@@ -29,8 +34,7 @@ function LoginContent() {
 
   const handleDevLogin = async () => {
     try {
-      const apiUrl =
-        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:30000';
+      const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/api/v1/dev/login`, {
         method: 'POST',
         credentials: 'include',
