@@ -15,6 +15,7 @@ import ImageGalleryModal from '@/app/components/modals/ImageGalleryModal';
 import Post from '@/app/components/feed/Post';
 import CommentItem from '@/app/components/feed/comments/CommentItem';
 import CommentInput from '@/app/components/feed/comments/CommentInput';
+import MentionText from '@/app/components/feed/MentionText';
 
 interface PostDetailContentProps {
   post: PostType | undefined;
@@ -196,7 +197,7 @@ export default function PostDetailContent({
 
             {/* 글 내용 */}
             <div className="text-gray-900 dark:text-neutral-100 whitespace-pre-wrap break-words">
-              {contentText}
+              <MentionText content={contentText} />
             </div>
 
             {/* 사진 */}
