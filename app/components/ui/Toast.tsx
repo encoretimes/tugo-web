@@ -25,23 +25,25 @@ const Toast: React.FC<ToastProps> = ({ toast }) => {
   };
 
   const bgColors = {
-    success: 'bg-green-50 border-green-200',
-    error: 'bg-red-50 border-red-200',
-    info: 'bg-blue-50 border-blue-200',
-    warning: 'bg-yellow-50 border-yellow-200',
+    success:
+      'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800',
+    error: 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800',
+    info: 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800',
+    warning:
+      'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-800',
   };
 
   return (
     <div
-      className={`${bgColors[toast.type]} flex items-center gap-3 rounded-lg border p-4 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out animate-slide-in`}
+      className={`${bgColors[toast.type]} flex items-center gap-3 rounded-md border p-4 shadow-md backdrop-blur-sm transition-all duration-300 ease-in-out animate-slide-in`}
     >
       {icons[toast.type]}
-      <p className="flex-1 text-sm font-medium text-neutral-900">
+      <p className="flex-1 text-sm font-medium text-neutral-900 dark:text-neutral-100">
         {toast.message}
       </p>
       <button
         onClick={() => removeToast(toast.id)}
-        className="text-neutral-400 hover:text-neutral-600 transition-colors"
+        className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors"
       >
         <XMarkIcon className="h-5 w-5" />
       </button>

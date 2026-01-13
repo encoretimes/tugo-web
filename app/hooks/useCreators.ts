@@ -29,7 +29,8 @@ export const useInfinitePopularCreators = (
 ) => {
   return useInfiniteQuery({
     queryKey: [...queryKeys.creators, 'popular', 'infinite', sort],
-    queryFn: ({ pageParam = 0 }) => getPopularCreators(pageParam, pageSize, sort),
+    queryFn: ({ pageParam = 0 }) =>
+      getPopularCreators(pageParam, pageSize, sort),
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
     },

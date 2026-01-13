@@ -40,8 +40,8 @@ export default function MessageBubble({
               className="w-8 h-8 rounded-full object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500 text-xs font-medium">
+            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center">
+              <span className="text-gray-500 dark:text-neutral-300 text-xs font-medium">
                 {(otherUserName || '?')[0]}
               </span>
             </div>
@@ -49,14 +49,18 @@ export default function MessageBubble({
         </div>
       )}
       <div
-        className={`max-w-[70%] rounded-lg px-4 py-2 ${
-          isMyMessage ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-900'
+        className={`max-w-[70%] rounded-md px-4 py-2 ${
+          isMyMessage
+            ? 'bg-primary-600 text-white'
+            : 'bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-neutral-100'
         }`}
       >
         <p className="whitespace-pre-wrap break-words">{message.content}</p>
         <span
           className={`text-xs mt-1 block ${
-            isMyMessage ? 'text-blue-100' : 'text-gray-500'
+            isMyMessage
+              ? 'text-primary-200'
+              : 'text-gray-500 dark:text-neutral-400'
           }`}
         >
           {formatTime(message.timestamp)}

@@ -48,36 +48,36 @@ export default function SubscribersModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                  <Dialog.Title className="text-lg font-semibold">
+                <div className="flex items-center justify-between border-b border-gray-200 dark:border-neutral-700 px-6 py-4">
+                  <Dialog.Title className="text-lg font-semibold dark:text-neutral-100">
                     {memberName}의 구독자
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="rounded-full p-1 hover:bg-gray-100 transition-colors"
+                    className="rounded-md p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
                   >
-                    <XMarkIcon className="h-6 w-6" />
+                    <XMarkIcon className="h-6 w-6 dark:text-neutral-100" />
                   </button>
                 </div>
 
                 {/* Content */}
                 <div className="h-96 overflow-y-auto">
                   {isLoading ? (
-                    <div className="p-6 text-center text-gray-500">
+                    <div className="p-6 text-center text-gray-500 dark:text-neutral-400">
                       로딩 중...
                     </div>
                   ) : data?.content && data.content.length > 0 ? (
-                    <div className="divide-y divide-gray-100">
+                    <div className="divide-y divide-gray-100 dark:divide-neutral-800">
                       {data.content.map((subscription) => (
                         <Link
                           key={subscription.id}
                           href={`/@${subscription.memberUsername || subscription.memberId}`}
-                          className="flex items-center gap-3 px-6 py-3 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-3 px-6 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                           onClick={onClose}
                         >
-                          <div className="relative h-12 w-12 rounded-full bg-gray-200 overflow-hidden">
+                          <div className="relative h-12 w-12 rounded-full bg-gray-200 dark:bg-neutral-700 overflow-hidden">
                             {subscription.memberProfileImageUrl ? (
                               <Image
                                 src={subscription.memberProfileImageUrl}
@@ -86,17 +86,17 @@ export default function SubscribersModal({
                                 className="object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500 text-white font-bold text-lg">
+                              <div className="w-full h-full flex items-center justify-center bg-primary-600 text-white font-bold text-lg">
                                 {subscription.memberName?.[0] || '?'}
                               </div>
                             )}
                           </div>
                           <div className="flex-1">
-                            <div className="font-semibold">
+                            <div className="font-semibold dark:text-neutral-100">
                               {subscription.memberName ||
                                 `구독자 #${subscription.memberId}`}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 dark:text-neutral-400">
                               {subscription.memberUsername &&
                                 `@${subscription.memberUsername} · `}
                               {new Date(
@@ -109,7 +109,7 @@ export default function SubscribersModal({
                       ))}
                     </div>
                   ) : (
-                    <div className="p-6 text-center text-gray-500">
+                    <div className="p-6 text-center text-gray-500 dark:text-neutral-400">
                       아직 구독자가 없습니다.
                     </div>
                   )}
@@ -117,7 +117,7 @@ export default function SubscribersModal({
 
                 {/* Footer */}
                 {data && data.totalElements > 0 && (
-                  <div className="border-t border-gray-200 px-6 py-3 text-center text-sm text-gray-500">
+                  <div className="border-t border-gray-200 dark:border-neutral-700 px-6 py-3 text-center text-sm text-gray-500 dark:text-neutral-400">
                     총 {data.totalElements.toLocaleString()}명의 구독자
                   </div>
                 )}

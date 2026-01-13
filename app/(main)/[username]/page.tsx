@@ -34,7 +34,9 @@ const ProfilePage = () => {
   const router = useRouter();
   // URL에서 @ 기호 제거 (/@sangminn200 -> sangminn200)
   const rawUsername = params.username as string;
-  const username = rawUsername.startsWith('@') ? rawUsername.slice(1) : rawUsername;
+  const username = rawUsername.startsWith('@')
+    ? rawUsername.slice(1)
+    : rawUsername;
   const { user: currentUser } = useUserStore();
   const { addToast } = useToastStore();
 
@@ -153,7 +155,7 @@ const ProfilePage = () => {
 
   if (isUserLoading) {
     return (
-      <div className="min-h-screen bg-white animate-in slide-in-from-right duration-300">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 animate-in slide-in-from-right duration-300">
         <div className="flex h-96 items-center justify-center">
           <div className="text-center">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary-600 border-t-transparent mx-auto mb-4"></div>
@@ -166,7 +168,7 @@ const ProfilePage = () => {
 
   if (userError || !user) {
     return (
-      <div className="min-h-screen bg-white animate-in slide-in-from-right duration-300">
+      <div className="min-h-screen bg-white dark:bg-neutral-950 animate-in slide-in-from-right duration-300">
         <div className="flex h-96 items-center justify-center">
           <div className="text-center">
             <p className="text-gray-500 text-lg mb-4">
@@ -189,19 +191,23 @@ const ProfilePage = () => {
     posts?.filter((post) => post.mediaUrls && post.mediaUrls.length > 0) || [];
 
   return (
-    <div className="min-h-screen bg-white animate-in slide-in-from-right duration-300">
+    <div className="min-h-screen bg-white dark:bg-neutral-950 animate-in slide-in-from-right duration-300">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-gray-200">
+      <header className="sticky top-0 z-10 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm border-b border-gray-200 dark:border-neutral-800">
         <div className="flex items-center px-4 py-3">
           <button
             onClick={handleBack}
-            className="p-2 hover:bg-primary-50 hover:text-primary-600 rounded-full transition-colors"
+            className="p-2 hover:bg-primary-50 dark:hover:bg-neutral-800 hover:text-primary-600 rounded-full transition-colors"
           >
-            <ArrowLeftIcon className="h-6 w-6" />
+            <ArrowLeftIcon className="h-6 w-6 dark:text-neutral-100" />
           </button>
           <div className="ml-4 flex-1">
-            <h1 className="text-xl font-bold">{user.name}</h1>
-            <p className="text-sm text-gray-500">{user.stats.posts}개 게시물</p>
+            <h1 className="text-xl font-bold dark:text-neutral-100">
+              {user.name}
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-neutral-400">
+              {user.stats.posts}개 게시물
+            </p>
           </div>
         </div>
       </header>
@@ -209,7 +215,7 @@ const ProfilePage = () => {
       {/* Profile Header */}
       <div className="relative">
         {/* Background Image */}
-        <div className="h-48 bg-gray-200 relative overflow-hidden">
+        <div className="h-48 bg-gray-200 dark:bg-neutral-800 relative overflow-hidden">
           {user.backgroundImageUrl ? (
             <Image
               src={user.backgroundImageUrl}
@@ -226,7 +232,7 @@ const ProfilePage = () => {
         <div className="px-4 pb-4">
           {/* Profile Image */}
           <div className="relative -mt-16 mb-4">
-            <div className="w-32 h-32 rounded-full border-4 border-white overflow-hidden bg-gray-200">
+            <div className="w-32 h-32 rounded-full border-4 border-white dark:border-neutral-900 overflow-hidden bg-gray-200 dark:bg-neutral-800">
               {user.profileImageUrl ? (
                 <Image
                   src={user.profileImageUrl}
@@ -236,8 +242,8 @@ const ProfilePage = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-300">
-                  <UserIcon className="h-16 w-16 text-gray-500" />
+                <div className="w-full h-full flex items-center justify-center bg-gray-300 dark:bg-neutral-700">
+                  <UserIcon className="h-16 w-16 text-gray-500 dark:text-neutral-400" />
                 </div>
               )}
             </div>
@@ -248,19 +254,23 @@ const ProfilePage = () => {
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-2xl font-bold">{user.name}</h2>
+                  <h2 className="text-2xl font-bold dark:text-neutral-100">
+                    {user.name}
+                  </h2>
                   {user.isVerified && (
                     <CheckBadgeIcon className="h-6 w-6 text-primary-600" />
                   )}
                 </div>
-                <p className="text-gray-500">@{user.username}</p>
+                <p className="text-gray-500 dark:text-neutral-400">
+                  @{user.username}
+                </p>
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-2">
                 <button
                   onClick={handleShare}
-                  className="p-2 bg-transparent border border-primary-600 text-gray-900 rounded-md hover:bg-primary-50 transition-colors"
+                  className="p-2 bg-transparent border border-primary-600 text-gray-900 dark:text-neutral-100 rounded-md hover:bg-primary-50 dark:hover:bg-neutral-800 transition-colors"
                   title="공유하기"
                 >
                   <ShareIcon className="h-4 w-4" />
@@ -268,7 +278,7 @@ const ProfilePage = () => {
                 {!isOwnProfile && (
                   <button
                     onClick={handleSendNote}
-                    className="p-2 bg-transparent border border-primary-600 text-gray-900 rounded-md hover:bg-primary-50 transition-colors"
+                    className="p-2 bg-transparent border border-primary-600 text-gray-900 dark:text-neutral-100 rounded-md hover:bg-primary-50 dark:hover:bg-neutral-800 transition-colors"
                     title="쪽지 보내기"
                   >
                     <EnvelopeIcon className="h-4 w-4" />
@@ -277,7 +287,7 @@ const ProfilePage = () => {
                 {isOwnProfile && (
                   <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="px-3 py-1.5 text-sm bg-transparent border border-primary-600 text-gray-900 font-semibold rounded-md hover:bg-primary-50 transition-colors"
+                    className="px-3 py-1.5 text-sm bg-transparent border border-primary-600 text-gray-900 dark:text-neutral-100 font-semibold rounded-md hover:bg-primary-50 dark:hover:bg-neutral-800 transition-colors"
                   >
                     프로필 수정
                   </button>
@@ -285,9 +295,9 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <p className="text-gray-900">{user.bio}</p>
+            <p className="text-gray-900 dark:text-neutral-200">{user.bio}</p>
 
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+            <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-neutral-400">
               {user.location && (
                 <div className="flex items-center gap-1">
                   <MapPinIcon className="h-4 w-4" />
@@ -311,7 +321,7 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className="flex gap-6 text-sm">
+            <div className="flex gap-6 text-sm dark:text-neutral-100">
               <button
                 onClick={() => setIsSubscribersModalOpen(true)}
                 className="hover:underline"
@@ -319,14 +329,18 @@ const ProfilePage = () => {
                 <strong>
                   {(subscriberCount?.count || 0).toLocaleString()}
                 </strong>{' '}
-                <span className="text-gray-500">구독자</span>
+                <span className="text-gray-500 dark:text-neutral-400">
+                  구독자
+                </span>
               </button>
               {isOwnProfile && (
                 <span>
                   <strong>
                     {(bookmarksData?.totalElements || 0).toLocaleString()}
                   </strong>{' '}
-                  <span className="text-gray-500">보관함</span>
+                  <span className="text-gray-500 dark:text-neutral-400">
+                    보관함
+                  </span>
                 </span>
               )}
             </div>
@@ -336,11 +350,13 @@ const ProfilePage = () => {
         {/* Subscribe Button - only show if not own profile */}
         {!isOwnProfile && (
           <div className="px-4 pb-4">
-            <div className="bg-gray-50 rounded-xl p-4">
+            <div className="bg-gray-50 dark:bg-neutral-900 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold">이 회원을 구독하시겠습니까?</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-semibold dark:text-neutral-100">
+                    이 회원을 구독하시겠습니까?
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-neutral-400">
                     최신 게시물을 받아보세요
                   </p>
                 </div>
@@ -349,7 +365,7 @@ const ProfilePage = () => {
                     <button
                       onClick={handleUnsubscribeClick}
                       disabled={unsubscribeMutation.isPending}
-                      className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 transition-colors"
+                      className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 dark:bg-neutral-700 text-gray-800 dark:text-neutral-200 hover:bg-gray-300 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors"
                     >
                       {unsubscribeMutation.isPending ? '처리 중...' : '구독 중'}
                     </button>
@@ -370,14 +386,14 @@ const ProfilePage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200 sticky top-[73px] bg-white/90 backdrop-blur-sm z-10">
+      <div className="border-b border-gray-200 dark:border-neutral-800 sticky top-[73px] bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm z-10">
         <div className="flex">
           <button
             onClick={() => setActiveTab('posts')}
             className={`flex-1 p-4 font-semibold text-center transition-colors ${
               activeTab === 'posts'
                 ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800'
             }`}
           >
             게시물 {user.stats.posts}
@@ -387,7 +403,7 @@ const ProfilePage = () => {
             className={`flex-1 p-4 font-semibold text-center transition-colors ${
               activeTab === 'media'
                 ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800'
             }`}
           >
             미디어 {user.stats.media}
@@ -398,7 +414,7 @@ const ProfilePage = () => {
               className={`flex-1 p-4 font-semibold text-center transition-colors ${
                 activeTab === 'archives'
                   ? 'text-primary-600 border-b-2 border-primary-600'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                  : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800'
               }`}
             >
               보관함 {bookmarksData?.totalElements || 0}
@@ -426,7 +442,7 @@ const ProfilePage = () => {
                 />
               ))
             ) : (
-              <div className="p-8 text-center text-gray-500">
+              <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
                 게시물이 없습니다.
               </div>
             )}
@@ -441,7 +457,9 @@ const ProfilePage = () => {
                   <div
                     key={post.postId}
                     className="aspect-square relative cursor-pointer hover:opacity-90 transition-opacity group"
-                    onClick={() => router.push(`/@${username}/post/${post.postId}`)}
+                    onClick={() =>
+                      router.push(`/@${username}/post/${post.postId}`)
+                    }
                   >
                     <Image
                       src={post.mediaUrls![0]}
@@ -459,7 +477,7 @@ const ProfilePage = () => {
                 ))}
               </div>
             ) : (
-              <div className="p-8 text-center text-gray-500">
+              <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
                 미디어가 없습니다.
               </div>
             )}
@@ -490,7 +508,7 @@ const ProfilePage = () => {
                 />
               ))
             ) : (
-              <div className="p-8 text-center text-gray-500">
+              <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
                 보관한 게시물이 없습니다.
               </div>
             )}

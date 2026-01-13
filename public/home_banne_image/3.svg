@@ -59,7 +59,7 @@
 </filter>
 <linearGradient id="paint0_linear_318_445" x1="19.9871" y1="35.3947" x2="140.923" y2="264.432" gradientUnits="userSpaceOnUse">
 <stop offset="0.30898" stop-color="white" stop-opacity="0.4"/>
-<stop offset="1" stop-color="#6956E3"/>
+<stop offset="1" stop-color="#1E3A5F"/>
 </linearGradient>
 <radialGradient id="paint1_radial_318_445" cx="0" cy="0" r="1" gradientTransform="matrix(-84.5541 -108.677 112.477 -81.6975 146.692 212.469)" gradientUnits="userSpaceOnUse">
 <stop stop-color="white" stop-opacity="0"/>
@@ -67,11 +67,11 @@
 </radialGradient>
 <linearGradient id="paint2_linear_318_445" x1="97.4046" y1="-5.55389e-07" x2="140.147" y2="53.1661" gradientUnits="userSpaceOnUse">
 <stop offset="0.30898" stop-color="white" stop-opacity="0.4"/>
-<stop offset="1" stop-color="#6956E3"/>
+<stop offset="1" stop-color="#1E3A5F"/>
 </linearGradient>
 <linearGradient id="paint3_linear_318_445" x1="177.633" y1="25.9561" x2="220.375" y2="79.1223" gradientUnits="userSpaceOnUse">
 <stop offset="0.30898" stop-color="white" stop-opacity="0.4"/>
-<stop offset="1" stop-color="#6956E3"/>
+<stop offset="1" stop-color="#1E3A5F"/>
 </linearGradient>
 <linearGradient id="paint4_linear_318_445" x1="55.617" y1="155.609" x2="70.5336" y2="183.426" gradientUnits="userSpaceOnUse">
 <stop offset="0.557692" stop-opacity="0"/>

@@ -64,18 +64,18 @@ export default function PollCreatorModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 shadow-xl transition-all">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-semibold text-gray-900"
+                    className="text-lg font-semibold text-gray-900 dark:text-neutral-100"
                   >
                     투표 만들기
                   </Dialog.Title>
                   <button
                     onClick={handleCancel}
-                    className="text-gray-500 hover:text-gray-700 p-1"
+                    className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 p-1"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -90,10 +90,10 @@ export default function PollCreatorModal({
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end space-x-3 border-t border-gray-200 px-6 py-4">
+                <div className="flex justify-end space-x-3 border-t border-gray-200 dark:border-neutral-700 px-6 py-4">
                   <button
                     onClick={handleCancel}
-                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="px-4 py-2 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                   >
                     취소
                   </button>

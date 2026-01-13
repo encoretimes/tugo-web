@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useToastStore } from '@/store/toastStore';
-import { UserIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import { UserIcon, CameraIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import ProfileImageEditor from '@/components/modals/ProfileImageEditor';
 import { uploadImage } from '@/services/media';
@@ -13,11 +13,10 @@ const ProfileSection = () => {
   const { user, updateProfile } = useUserStore();
   const { addToast } = useToastStore();
 
-  // Form state - initialize from userStore
   const [name, setName] = useState(user?.name || '');
   const [bio, setBio] = useState(user?.introduction || '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Image editor state
   const [showProfileEditor, setShowProfileEditor] = useState(false);
   const [showBannerEditor, setShowBannerEditor] = useState(false);
   const [pendingProfileImage, setPendingProfileImage] = useState<File | null>(
@@ -33,7 +32,6 @@ const ProfileSection = () => {
     null
   );
 
-  // Sync form state with userStore when user data changes
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -71,16 +69,9 @@ const ProfileSection = () => {
     try {
       const preview = URL.createObjectURL(editedFile);
       setProfileImagePreview(preview);
-
-      // Upload image to backend
       const imageUrl = await uploadImage(editedFile);
-
-      // Update backend profile
       await updateMyProfile({ profileUrl: imageUrl });
-
-      // Update local store
       updateProfile({ profileImageUrl: imageUrl });
-
       addToast('프로필 사진이 변경되었습니다', 'success');
     } catch (error) {
       console.error('Failed to save profile image:', error);
@@ -93,16 +84,9 @@ const ProfileSection = () => {
     try {
       const preview = URL.createObjectURL(editedFile);
       setBannerImagePreview(preview);
-
-      // Upload image to backend
       const imageUrl = await uploadImage(editedFile);
-
-      // Update backend profile
       await updateMyProfile({ bannerImageUrl: imageUrl });
-
-      // Update local store
       updateProfile({ bannerImageUrl: imageUrl });
-
       addToast('배경 이미지가 변경되었습니다', 'success');
     } catch (error) {
       console.error('Failed to save banner image:', error);
@@ -114,18 +98,12 @@ const ProfileSection = () => {
   const handleRemoveProfileImage = async () => {
     try {
       setProfileImagePreview(null);
-
-      // Update backend profile
       await updateMyProfile({ profileUrl: '' });
-
-      // Update local store
       updateProfile({ profileImageUrl: null });
-
       addToast('프로필 사진이 삭제되었습니다', 'success');
     } catch (error) {
       console.error('Failed to remove profile image:', error);
       addToast('프로필 사진 삭제에 실패했습니다', 'error');
-      // Restore preview if backend update failed
       if (user?.profileImageUrl) {
         setProfileImagePreview(user.profileImageUrl);
       }
@@ -135,18 +113,12 @@ const ProfileSection = () => {
   const handleRemoveBannerImage = async () => {
     try {
       setBannerImagePreview(null);
-
-      // Update backend profile
       await updateMyProfile({ bannerImageUrl: '' });
-
-      // Update local store
       updateProfile({ bannerImageUrl: null });
-
       addToast('배너 이미지가 삭제되었습니다', 'success');
     } catch (error) {
       console.error('Failed to remove banner image:', error);
       addToast('배너 이미지 삭제에 실패했습니다', 'error');
-      // Restore preview if backend update failed
       if (user?.bannerImageUrl) {
         setBannerImagePreview(user.bannerImageUrl);
       }
@@ -161,160 +133,124 @@ const ProfileSection = () => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      // Update backend profile
       await updateMyProfile({
         name: name.trim(),
         introduction: bio.trim() || undefined,
       });
-
-      // Update local store
       updateProfile({
         name: name.trim(),
         introduction: bio.trim() || undefined,
       });
-
       addToast('프로필이 저장되었습니다', 'success');
     } catch (error) {
       console.error('Failed to update profile:', error);
       addToast('프로필 저장에 실패했습니다', 'error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-6 text-gray-900 pb-3 border-b border-gray-200">
-        프로필
-      </h2>
-      <form onSubmit={handleSubmit}>
-        <div className="space-y-6">
-          {/* Profile Image */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-4">
-              프로필 사진
-            </label>
-            <div className="flex items-center gap-5">
-              <div className="relative h-20 w-20">
-                {profileImagePreview || user?.profileImageUrl ? (
-                  <Image
-                    src={profileImagePreview || user?.profileImageUrl || ''}
-                    alt={user?.name || 'Profile'}
-                    width={80}
-                    height={80}
-                    className="h-full w-full rounded-full object-cover border border-gray-200"
-                  />
-                ) : (
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-50 border border-gray-200">
-                    <UserIcon className="h-10 w-10 text-gray-300" />
-                  </div>
-                )}
-              </div>
-              <div className="flex gap-2">
-                {profileImagePreview || user?.profileImageUrl ? (
-                  <>
-                    <label htmlFor="profile-image-upload">
-                      <span className="inline-block px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg hover:border-gray-400 text-gray-700 cursor-pointer transition-colors">
-                        변경
-                      </span>
-                      <input
-                        id="profile-image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleProfileImageSelect}
-                        className="sr-only"
-                      />
-                    </label>
-                    <button
-                      type="button"
-                      onClick={handleRemoveProfileImage}
-                      className="px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg hover:border-red-400 hover:text-red-600 text-gray-700 transition-colors"
-                    >
-                      삭제
-                    </button>
-                  </>
-                ) : (
-                  <label htmlFor="profile-image-upload">
-                    <span className="inline-block px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg hover:border-gray-400 text-gray-700 cursor-pointer transition-colors">
-                      추가하기
-                    </span>
-                    <input
-                      id="profile-image-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProfileImageSelect}
-                      className="sr-only"
-                    />
-                  </label>
-                )}
-              </div>
-            </div>
-          </div>
+    <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+      {/* Banner Image */}
+      <div className="relative w-full h-32 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-neutral-800 dark:to-neutral-900">
+        {(bannerImagePreview || user?.bannerImageUrl) && (
+          <Image
+            src={bannerImagePreview || user?.bannerImageUrl || ''}
+            alt="Banner"
+            fill
+            className="object-cover"
+          />
+        )}
+        <label
+          htmlFor="banner-image-upload"
+          className="absolute bottom-3 right-3 p-2 bg-black/50 hover:bg-black/70 rounded-full cursor-pointer transition-colors"
+        >
+          <CameraIcon className="h-4 w-4 text-white" />
+          <input
+            id="banner-image-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleBannerImageSelect}
+            className="sr-only"
+          />
+        </label>
+        {(bannerImagePreview || user?.bannerImageUrl) && (
+          <button
+            type="button"
+            onClick={handleRemoveBannerImage}
+            className="absolute bottom-3 right-12 p-2 bg-black/50 hover:bg-red-600/80 rounded-full transition-colors"
+          >
+            <svg
+              className="h-4 w-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
+      </div>
 
-          {/* Banner Image */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-4">
-              배너 이미지
-            </label>
-            <div className="relative w-full aspect-[21/9] bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
-              {bannerImagePreview || user?.bannerImageUrl ? (
+      {/* Profile Content */}
+      <div className="px-6 pb-6">
+        {/* Profile Image - Overlapping banner */}
+        <div className="relative -mt-12 mb-6">
+          <div className="relative inline-block">
+            <div className="h-24 w-24 rounded-full border-4 border-white dark:border-neutral-900 overflow-hidden bg-gray-100 dark:bg-neutral-800">
+              {profileImagePreview || user?.profileImageUrl ? (
                 <Image
-                  src={bannerImagePreview || user?.bannerImageUrl || ''}
-                  alt="Banner"
-                  fill
-                  className="object-cover"
+                  src={profileImagePreview || user?.profileImageUrl || ''}
+                  alt={user?.name || 'Profile'}
+                  width={96}
+                  height={96}
+                  className="h-full w-full object-cover"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <PhotoIcon className="h-8 w-8 text-gray-300" />
+                  <UserIcon className="h-12 w-12 text-gray-300 dark:text-neutral-600" />
                 </div>
               )}
-              {/* 버튼을 우측 하단에 배치 */}
-              <div className="absolute bottom-4 right-4 flex gap-2">
-                {bannerImagePreview || user?.bannerImageUrl ? (
-                  <>
-                    <label htmlFor="banner-image-upload">
-                      <span className="inline-block px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg hover:border-gray-400 text-gray-700 cursor-pointer transition-colors shadow-sm">
-                        변경
-                      </span>
-                      <input
-                        id="banner-image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleBannerImageSelect}
-                        className="sr-only"
-                      />
-                    </label>
-                    <button
-                      type="button"
-                      onClick={handleRemoveBannerImage}
-                      className="px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg hover:border-red-400 hover:text-red-600 text-gray-700 transition-colors shadow-sm"
-                    >
-                      삭제
-                    </button>
-                  </>
-                ) : (
-                  <label htmlFor="banner-image-upload">
-                    <span className="inline-block px-4 py-2 text-sm font-medium bg-white border border-gray-300 rounded-lg hover:border-gray-400 text-gray-700 cursor-pointer transition-colors shadow-sm">
-                      추가하기
-                    </span>
-                    <input
-                      id="banner-image-upload"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleBannerImageSelect}
-                      className="sr-only"
-                    />
-                  </label>
-                )}
-              </div>
             </div>
+            <label
+              htmlFor="profile-image-upload"
+              className="absolute bottom-0 right-0 p-2 bg-gray-900 dark:bg-neutral-700 hover:bg-gray-800 dark:hover:bg-neutral-600 rounded-full cursor-pointer transition-colors shadow-lg"
+            >
+              <CameraIcon className="h-4 w-4 text-white" />
+              <input
+                id="profile-image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleProfileImageSelect}
+                className="sr-only"
+              />
+            </label>
           </div>
+          {(profileImagePreview || user?.profileImageUrl) && (
+            <button
+              type="button"
+              onClick={handleRemoveProfileImage}
+              className="ml-4 text-sm text-gray-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+            >
+              삭제
+            </button>
+          )}
+        </div>
 
-          {/* User Name */}
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-700 mb-3"
+              className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
             >
               이름
             </label>
@@ -323,40 +259,41 @@ const ProfileSection = () => {
               id="username"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white focus:border-gray-900 focus:outline-none transition-colors"
+              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors"
               required
             />
           </div>
 
-          {/* User Bio */}
           <div>
             <label
               htmlFor="bio"
-              className="block text-sm font-medium text-gray-700 mb-3"
+              className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
             >
               자기소개
             </label>
             <textarea
               id="bio"
-              rows={4}
+              rows={3}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white focus:border-gray-900 focus:outline-none transition-colors resize-none"
-            ></textarea>
+              placeholder="자신을 소개해주세요"
+              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors resize-none placeholder:text-gray-400 dark:placeholder:text-neutral-500"
+            />
           </div>
-        </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-100 flex justify-end">
-          <button
-            type="submit"
-            className="px-6 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 transition-colors"
-          >
-            저장
-          </button>
-        </div>
-      </form>
+          <div className="flex justify-end pt-2">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+            >
+              {isSubmitting ? '저장 중...' : '저장'}
+            </button>
+          </div>
+        </form>
+      </div>
 
-      {/* Profile Image Editor */}
+      {/* Image Editors */}
       <ProfileImageEditor
         isOpen={showProfileEditor}
         onClose={() => {
@@ -368,7 +305,6 @@ const ProfileSection = () => {
         imageType="profile"
       />
 
-      {/* Banner Image Editor */}
       <ProfileImageEditor
         isOpen={showBannerEditor}
         onClose={() => {

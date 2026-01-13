@@ -10,7 +10,11 @@ export default function PostRedirectPage() {
   const params = useParams();
   const postId = Number(params.postId);
 
-  const { data: post, isLoading, error } = useQuery({
+  const {
+    data: post,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['post', postId],
     queryFn: () => getPost(postId),
     enabled: !!postId && !isNaN(postId),

@@ -1,3 +1,6 @@
-<svg width="36" height="44" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5.96044 11.9197C2.94772 11.9197 0.408869 9.67117 0.0447908 6.68053C-0.421414 2.85099 2.81855 -0.40554 6.65041 0.0411194L31.2929 2.91356C33.5705 3.17904 35.288 5.10844 35.288 7.40143C35.288 9.8968 33.2651 11.9197 30.7698 11.9197H29.2432C25.9047 11.9197 23.1983 14.6261 23.1983 17.9646V37.544C23.1983 40.8868 20.5566 43.632 17.2163 43.7605C13.4936 43.9037 10.4806 40.7651 10.7757 37.0513L12.2457 18.5485C12.5295 14.9757 9.7067 11.9197 6.12258 11.9197H5.96044Z" fill="#6956E3"/>
+<svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&amp;display=swap');
+  </style>
+  <text x="0" y="32" font-family="'Playfair Display', Georgia, serif" font-size="36" font-weight="900" fill="currentColor">T</text>
 </svg>

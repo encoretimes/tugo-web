@@ -45,8 +45,10 @@ const NavItem: React.FC<NavItemProps> = ({
     </>
   );
 
-  const className = `flex items-center justify-center xl:justify-start space-x-2 rounded-full p-2 hover:bg-primary-50 hover:text-primary-700 transition-colors ${
-    isActive ? 'font-bold text-primary-700' : ''
+  const className = `flex items-center justify-center xl:justify-start space-x-2 rounded-md p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors ${
+    isActive
+      ? 'font-semibold text-primary-600 dark:text-primary-400 bg-gray-50 dark:bg-neutral-800'
+      : 'text-gray-700 dark:text-neutral-300'
   }`;
 
   if (onClick) {

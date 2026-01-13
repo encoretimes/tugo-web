@@ -104,20 +104,20 @@ export default function EditPostModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
                 <div className="flex items-center justify-between mb-4">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold leading-6 text-gray-900"
+                    className="text-xl font-bold leading-6 text-gray-900 dark:text-neutral-100"
                   >
                     게시물 수정
                   </Dialog.Title>
                   <button
                     onClick={handleClose}
                     disabled={updatePostMutation.isPending}
-                    className="rounded-full p-1 hover:bg-gray-100 transition-colors"
+                    className="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
                   >
-                    <XMarkIcon className="h-6 w-6 text-gray-500" />
+                    <XMarkIcon className="h-6 w-6 text-gray-500 dark:text-neutral-400" />
                   </button>
                 </div>
 
@@ -127,12 +127,12 @@ export default function EditPostModal({
                       value={content}
                       onChange={(e) => setContent(e.target.value)}
                       placeholder="무슨 일이 일어나고 있나요?"
-                      className="w-full resize-none rounded-lg border border-neutral-300 p-3 text-base focus:border-primary-600 focus:outline-none min-h-[150px]"
+                      className="w-full resize-none rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 p-3 text-base focus:border-primary-600 dark:focus:border-primary-400 focus:outline-none min-h-[150px]"
                       disabled={updatePostMutation.isPending}
                       maxLength={1000}
                     />
                     <div className="mt-2 flex justify-between items-center">
-                      <span className="text-sm text-neutral-500">
+                      <span className="text-sm text-neutral-500 dark:text-neutral-400">
                         {content.length}/1000
                       </span>
                       {error && (
@@ -142,8 +142,8 @@ export default function EditPostModal({
                   </div>
 
                   {/* PostType & PPV Price Selection */}
-                  <div className="mb-4 border-t pt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <div className="mb-4 border-t border-gray-200 dark:border-neutral-700 pt-4">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2">
                       게시물 타입
                     </label>
                     <select
@@ -154,7 +154,7 @@ export default function EditPostModal({
                         )
                       }
                       disabled={updatePostMutation.isPending}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full p-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     >
                       <option value="FREE">무료 (모두 공개)</option>
                       <option value="SUBSCRIBER_ONLY">구독자 전용</option>
@@ -163,7 +163,7 @@ export default function EditPostModal({
 
                     {postType === 'PPV' && (
                       <div className="mt-3">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2">
                           PPV 가격 (원)
                         </label>
                         <input
@@ -173,7 +173,7 @@ export default function EditPostModal({
                           placeholder="예: 1000"
                           min="0"
                           disabled={updatePostMutation.isPending}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          className="w-full p-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         />
                       </div>
                     )}
@@ -184,14 +184,14 @@ export default function EditPostModal({
                       type="button"
                       onClick={handleClose}
                       disabled={updatePostMutation.isPending}
-                      className="rounded-full px-6 py-2 font-semibold text-neutral-700 hover:bg-neutral-100 transition-colors disabled:opacity-50"
+                      className="rounded-md px-6 py-2.5 font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors disabled:opacity-50"
                     >
                       취소
                     </button>
                     <button
                       type="submit"
                       disabled={!content.trim() || updatePostMutation.isPending}
-                      className="rounded-full bg-primary-600 px-6 py-2 font-semibold text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                      className="rounded-md bg-primary-600 px-6 py-2.5 font-semibold text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
                     >
                       {updatePostMutation.isPending ? '수정 중...' : '수정하기'}
                     </button>

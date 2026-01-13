@@ -170,7 +170,7 @@ export default function ChatRoom({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">로딩 중...</p>
+        <p className="text-gray-500 dark:text-neutral-400">로딩 중...</p>
       </div>
     );
   }
@@ -186,15 +186,15 @@ export default function ChatRoom({
   return (
     <div className="flex flex-col h-full">
       {/* 헤더 */}
-      <div className="border-b border-gray-200 p-4">
+      <div className="border-b border-gray-200 dark:border-neutral-800 p-4">
         <div className="flex items-center gap-3">
           {/* 모바일 뒤로가기 버튼 */}
           {onBack && (
             <button
               onClick={onBack}
-              className="lg:hidden p-1 -ml-1 rounded-full hover:bg-gray-100 transition"
+              className="lg:hidden p-1 -ml-1 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
             >
-              <ArrowLeftIcon className="h-6 w-6 text-gray-600" />
+              <ArrowLeftIcon className="h-6 w-6 text-gray-600 dark:text-neutral-300" />
             </button>
           )}
           {/* 프로필 이미지 */}
@@ -207,20 +207,20 @@ export default function ChatRoom({
               className="w-10 h-10 rounded-full object-cover"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500 text-sm font-medium">
+            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center">
+              <span className="text-gray-500 dark:text-neutral-300 text-sm font-medium">
                 {(otherUserName || '?')[0]}
               </span>
             </div>
           )}
-          <h2 className="font-bold text-gray-900">
+          <h2 className="font-bold text-gray-900 dark:text-neutral-100">
             {otherUserName || `사용자 #${otherUserId}`}
           </h2>
         </div>
       </div>
 
       {/* 메시지 목록 */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-white">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-white dark:bg-neutral-950">
         {messages.length > 0 ? (
           messages.map((message) => (
             <MessageBubble
@@ -233,7 +233,7 @@ export default function ChatRoom({
           ))
         ) : (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-neutral-400">
               메시지가 없습니다. 대화를 시작해보세요!
             </p>
           </div>
@@ -242,7 +242,7 @@ export default function ChatRoom({
       </div>
 
       {/* 입력 영역 */}
-      <div className="border-t border-gray-200 p-4 bg-white">
+      <div className="border-t border-gray-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-950">
         <div className="flex gap-2">
           <input
             type="text"
@@ -250,13 +250,13 @@ export default function ChatRoom({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 border border-gray-300 dark:border-neutral-700 rounded-md px-4 py-2 bg-white dark:bg-neutral-900 text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
             disabled={!roomId || isSending}
           />
           <button
             onClick={handleSend}
             disabled={!inputValue.trim() || !roomId || isSending}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition flex items-center gap-2"
+            className="bg-primary-600 text-white px-4 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition flex items-center gap-2"
           >
             <PaperAirplaneIcon className="h-5 w-5" />
             <span className="hidden sm:inline">전송</span>

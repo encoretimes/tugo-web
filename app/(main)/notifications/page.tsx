@@ -1,12 +1,6 @@
 'use client';
 
-import { Fragment, useRef, useEffect } from 'react';
-import {
-  UserPlusIcon,
-  HeartIcon,
-  ChatBubbleBottomCenterTextIcon,
-  AtSymbolIcon,
-} from '@heroicons/react/24/solid';
+import { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
   useNotifications,
@@ -16,20 +10,18 @@ import {
 import { Notification, NotificationType } from '@/types/notification';
 import { formatRelativeTime } from '@/lib/date-utils';
 
-const NotificationIcon = ({ type }: { type: NotificationType }) => {
+const getNotificationLabel = (type: NotificationType): string => {
   switch (type) {
     case 'SUBSCRIPTION':
-      return <UserPlusIcon className="h-8 w-8 text-blue-500" />;
+      return '구독';
     case 'LIKE':
-      return <HeartIcon className="h-8 w-8 text-red-500" />;
+      return '좋아요';
     case 'COMMENT':
-      return (
-        <ChatBubbleBottomCenterTextIcon className="h-8 w-8 text-green-500" />
-      );
+      return '댓글';
     case 'MENTION':
-      return <AtSymbolIcon className="h-8 w-8 text-purple-500" />;
+      return '멘션';
     default:
-      return null;
+      return '알림';
   }
 };
 
@@ -52,22 +44,32 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
     <Link
       href={getLink()}
       onClick={handleClick}
-      className={`flex gap-4 p-4 border-b border-gray-200 transition-colors ${
-        !isRead ? 'bg-primary-50' : 'hover:bg-gray-50'
+      className={`flex items-start gap-3 px-4 py-3 border-b border-gray-100 dark:border-neutral-800 transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800 ${
+        !isRead ? 'bg-gray-50 dark:bg-neutral-900' : ''
       }`}
     >
-      <div className="flex-shrink-0 w-10">
-        <NotificationIcon type={type} />
-      </div>
-      <div className="flex-grow">
-        <div className="text-gray-800">{message}</div>
-        <div className="text-sm text-gray-400 mt-1">
-          {formatRelativeTime(createdAt)}
+      {/* 읽지 않음 표시 - 왼쪽 라인 */}
+      <div
+        className={`w-0.5 h-full min-h-[40px] rounded-full flex-shrink-0 ${!isRead ? 'bg-primary-600' : 'bg-transparent'}`}
+      />
+
+      <div className="flex-grow min-w-0">
+        {/* 알림 타입 라벨 */}
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs text-gray-500 dark:text-neutral-400 font-medium">
+            {getNotificationLabel(type)}
+          </span>
+          <span className="text-xs text-gray-400 dark:text-neutral-500">
+            {formatRelativeTime(createdAt)}
+          </span>
         </div>
+        {/* 알림 내용 */}
+        <p
+          className={`text-sm leading-relaxed ${!isRead ? 'text-gray-900 dark:text-neutral-100 font-medium' : 'text-gray-600 dark:text-neutral-400'}`}
+        >
+          {message}
+        </p>
       </div>
-      {!isRead && (
-        <div className="h-3 w-3 rounded-full bg-primary-500 self-center flex-shrink-0"></div>
-      )}
     </Link>
   );
 };
@@ -115,7 +117,11 @@ const NotificationsPage = () => {
 
   const renderContent = () => {
     if (isLoading) {
-      return <div className="p-8 text-center">알림을 불러오는 중...</div>;
+      return (
+        <div className="p-8 text-center dark:text-neutral-400">
+          알림을 불러오는 중...
+        </div>
+      );
     }
 
     if (error) {
@@ -128,10 +134,9 @@ const NotificationsPage = () => {
 
     if (allNotifications.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-          <h2 className="text-2xl font-bold">알림이 없습니다</h2>
-          <p className="text-gray-500 mt-2">
-            다른 사람들과 소통을 시작하면 여기에 알림이 표시됩니다.
+        <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
+          <p className="text-gray-500 dark:text-neutral-400 text-sm">
+            알림이 없습니다
           </p>
         </div>
       );
@@ -143,7 +148,9 @@ const NotificationsPage = () => {
           <NotificationItem key={notification.id} notification={notification} />
         ))}
         {isFetchingNextPage && (
-          <div className="p-4 text-center text-gray-500">더 불러오는 중...</div>
+          <div className="p-4 text-center text-gray-500 dark:text-neutral-400">
+            더 불러오는 중...
+          </div>
         )}
         <div ref={observerTarget} className="h-4" />
       </>
@@ -151,10 +158,10 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="text-black h-full">
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm">
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold">알림</h1>
+    <div className="text-black dark:text-neutral-100 h-full">
+      <header className="sticky top-0 z-10 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-sm">
+        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-neutral-800">
+          <h1 className="text-xl font-bold dark:text-neutral-100">알림</h1>
           <button
             onClick={handleMarkAllAsRead}
             disabled={markAllAsReadMutation.isPending}

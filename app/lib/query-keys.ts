@@ -94,4 +94,18 @@ export const invalidationHelpers = {
     queryKeys.posts,
     queryKeys.post(postId),
   ],
+
+  /**
+   * 투표 시 무효화할 쿼리들
+   */
+  onVoteMutation: (postId: number) => [queryKeys.posts, queryKeys.post(postId)],
+
+  /**
+   * 구독 변경 시 무효화할 쿼리들
+   */
+  onSubscriptionMutation: (targetMemberId: number) => [
+    queryKeys.subscriptionStatus(targetMemberId),
+    queryKeys.subscriberCount(targetMemberId),
+    queryKeys.mySubscriptions,
+  ],
 } as const;

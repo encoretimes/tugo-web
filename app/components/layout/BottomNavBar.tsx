@@ -54,7 +54,7 @@ const BottomNavBar = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 w-full bg-white lg:hidden z-50 py-3 border-t border-gray-100 rounded-t-2xl">
+    <nav className="fixed bottom-0 w-full bg-white dark:bg-neutral-950 lg:hidden z-50 py-3 border-t border-gray-200 dark:border-neutral-800">
       <ul className="flex justify-center gap-8">
         {navItems.map(({ href, icon, activeIcon, label, badge }) => {
           const active = isActive(href);
@@ -70,7 +70,7 @@ const BottomNavBar = () => {
                   alt={label}
                   width={32}
                   height={32}
-                  className="w-8 h-8 transition-all duration-200"
+                  className={`w-8 h-8 transition-all duration-200 ${!active ? 'dark:invert dark:brightness-200' : ''}`}
                 />
                 {badge !== undefined && badge > 0 && (
                   <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">

@@ -111,12 +111,12 @@ export default function LoginPromptModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-3xl bg-white p-8 text-left align-middle shadow-2xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 p-8 text-left align-middle shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
                 <div className="relative text-center">
                   {/* Close Button */}
                   <button
                     onClick={onClose}
-                    className="absolute right-0 top-0 rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-300"
+                    className="absolute right-0 top-0 rounded-lg p-2 text-neutral-400 dark:text-neutral-500 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-600 dark:hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-neutral-300"
                     aria-label="닫기"
                   >
                     <svg
@@ -135,25 +135,25 @@ export default function LoginPromptModal({
                   </button>
 
                   {/* Icon */}
-                  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary-100 to-primary-200">
+                  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900 dark:to-primary-800">
                     {content.icon}
                   </div>
 
                   {/* Title */}
                   <Dialog.Title
                     as="h3"
-                    className="mb-3 text-2xl font-bold text-neutral-900"
+                    className="mb-3 text-2xl font-bold text-neutral-900 dark:text-neutral-100"
                   >
                     {content.title}
                   </Dialog.Title>
 
                   {/* Description */}
-                  <p className="mb-6 whitespace-pre-line text-base leading-relaxed text-neutral-600">
+                  <p className="mb-6 whitespace-pre-line text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
                     {content.description}
                   </p>
 
                   {/* Features */}
-                  <div className="mb-8 space-y-3 rounded-2xl bg-neutral-50 p-4">
+                  <div className="mb-8 space-y-3 rounded-md bg-neutral-50 dark:bg-neutral-800 p-4 border border-gray-100 dark:border-neutral-700">
                     {content.features.map((feature, index) => (
                       <div
                         key={index}
@@ -174,7 +174,7 @@ export default function LoginPromptModal({
                             />
                           </svg>
                         </div>
-                        <span className="text-sm font-medium text-neutral-700">
+                        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                           {feature}
                         </span>
                       </div>
@@ -185,7 +185,7 @@ export default function LoginPromptModal({
                   <div className="space-y-3">
                     <button
                       onClick={handleLogin}
-                      className="w-full rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-base font-bold text-white shadow-lg shadow-primary-600/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-primary-600/40 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                      className="w-full rounded-md bg-primary-600 px-6 py-4 text-base font-semibold text-white shadow-md transition-all hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                     >
                       지금 로그인하기
                     </button>

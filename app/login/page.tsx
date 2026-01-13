@@ -34,7 +34,7 @@ function LoginContent() {
       const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/api/v1/dev/login`, {
         method: 'POST',
-        credentials: 'include', // Important: include cookies for session
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -43,7 +43,6 @@ function LoginContent() {
         throw new Error(`Dev login failed: ${response.status} - ${errorText}`);
       }
 
-      // Set user in frontend store
       setUser({
         id: 1,
         name: '개발자',
@@ -70,45 +69,45 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8FF]">
+    <div className="min-h-screen bg-gray-50">
       <div className="flex min-h-screen">
         {/* Left Brand Section - PC only */}
-        <div className="hidden lg:flex lg:w-1/2 bg-[#6956E3] items-center justify-center relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-1/2 bg-primary-600 items-center justify-center relative overflow-hidden">
           <div className="text-white px-12 xl:px-16 relative z-10">
             {/* TUGO 투고 */}
-            <p className="text-lg font-bold text-white/70 mb-4">TUGO 투고</p>
+            <p className="text-sm font-semibold text-white/60 mb-4 tracking-wide uppercase">
+              TUGO 투고
+            </p>
 
             {/* 메인 타이틀 */}
             <h1 className="mb-8">
               <span className="block text-3xl xl:text-4xl font-bold leading-tight">
-                모든 우리의 정치는
+                건강한 정치 토론의
               </span>
-              <span className="block leading-tight">
+              <span className="block leading-tight mt-2">
                 <span className="text-3xl xl:text-4xl font-bold">
-                  이제 여기{' '}
+                  새로운 공간,{' '}
                 </span>
-                <span className="text-4xl xl:text-5xl font-bold text-white">
-                  TUGO
-                </span>
-                <span className="text-3xl xl:text-4xl font-bold">에서!</span>
+                <span className="text-4xl xl:text-5xl font-bold">TUGO</span>
               </span>
             </h1>
 
             {/* 설명 텍스트 */}
-            <p className="text-base xl:text-lg text-white/80 leading-relaxed">
-              당신이 어떤 시각을 가지고 있는지,
+            <p className="text-base xl:text-lg text-white/70 leading-relaxed">
+              다양한 시각을 존중하는 열린 토론 플랫폼.
               <br />
-              무엇을 선택하는지 세상은 알고 싶어 합니다.
+              정치 크리에이터를 만나고, 여론을 확인하세요.
               <br />
-              <span className="block mt-2">
+              <span className="block mt-3 text-white/90 font-medium">
                 지금 당장 새로운 이야기를 시작하세요.
               </span>
             </p>
           </div>
 
-          {/* 배경 장식 원 */}
-          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-white/5 rounded-full" />
-          <div className="absolute -top-10 -left-10 w-40 h-40 bg-white/5 rounded-full" />
+          {/* 배경 장식 - 직선적인 사각형 패턴 */}
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/5" />
+          <div className="absolute top-0 left-0 w-40 h-40 bg-white/5" />
+          <div className="absolute bottom-20 left-20 w-24 h-24 border border-white/10" />
         </div>
 
         {/* Right Login Section */}
@@ -116,7 +115,7 @@ function LoginContent() {
           <div className="w-full max-w-sm">
             {/* Mobile Logo */}
             <div className="lg:hidden text-center mb-12">
-              <h1 className="text-3xl font-bold text-[#6956E3] mb-2">Tugo</h1>
+              <h1 className="text-3xl font-bold text-primary-600 mb-2">Tugo</h1>
               <p className="text-gray-500 text-sm">
                 차세대 정치 커뮤니티 플랫폼
               </p>
@@ -136,7 +135,7 @@ function LoginContent() {
                 <div className="mb-6">
                   <button
                     onClick={handleDevLogin}
-                    className="w-full flex items-center justify-center gap-3 bg-purple-600 text-white font-medium py-3.5 px-6 rounded-xl hover:bg-purple-700 transition-all border-2 border-purple-400"
+                    className="w-full flex items-center justify-center gap-3 bg-primary-600 text-white font-medium py-3.5 px-6 rounded-md hover:bg-primary-700 transition-all border border-primary-700"
                   >
                     <svg
                       className="w-5 h-5"
@@ -168,7 +167,7 @@ function LoginContent() {
             <div className="space-y-3 mb-8">
               <button
                 onClick={() => handleSocialLogin('kakao')}
-                className="w-full flex items-center justify-center gap-3 bg-[#FEE500] text-[#191919] font-medium py-3.5 px-6 rounded-xl hover:brightness-95 transition-all"
+                className="w-full flex items-center justify-center gap-3 bg-[#FEE500] text-[#191919] font-medium py-3.5 px-6 rounded-md hover:brightness-95 transition-all"
               >
                 <svg
                   className="w-5 h-5"
@@ -182,7 +181,7 @@ function LoginContent() {
 
               <button
                 onClick={() => handleSocialLogin('naver')}
-                className="w-full flex items-center justify-center gap-3 bg-[#03C75A] text-white font-medium py-3.5 px-6 rounded-xl hover:brightness-95 transition-all"
+                className="w-full flex items-center justify-center gap-3 bg-[#03C75A] text-white font-medium py-3.5 px-6 rounded-md hover:brightness-95 transition-all"
               >
                 <svg
                   className="w-5 h-5"
@@ -207,7 +206,7 @@ function LoginContent() {
               <p className="text-gray-500 text-sm mb-3">Tugo가 처음이신가요?</p>
               <Link
                 href="/about"
-                className="text-[#6956E3] text-sm font-medium hover:underline"
+                className="text-primary-600 text-sm font-medium hover:underline"
               >
                 서비스 소개 보기 →
               </Link>
@@ -217,15 +216,15 @@ function LoginContent() {
       </div>
 
       {/* Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-100 px-4 py-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 px-4 py-3">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400">
-            <a href="#" className="hover:text-gray-600">
+            <Link href="/terms" className="hover:text-gray-600">
               이용약관
-            </a>
-            <a href="#" className="hover:text-gray-600 font-medium">
+            </Link>
+            <Link href="/privacy" className="hover:text-gray-600 font-medium">
               개인정보처리방침
-            </a>
+            </Link>
             <a href="#" className="hover:text-gray-600">
               고객센터
             </a>

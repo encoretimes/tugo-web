@@ -49,7 +49,7 @@ const ExploreDebates = () => {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               sortBy === option.id
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
             }`}
           >
             {option.label}
@@ -70,7 +70,7 @@ const ExploreDebates = () => {
           <p>투표 게시물을 불러오는 중 오류가 발생했습니다.</p>
         </div>
       ) : posts.length === 0 ? (
-        <div className="p-8 text-center text-gray-500">
+        <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
           투표가 있는 게시물이 없습니다
         </div>
       ) : (

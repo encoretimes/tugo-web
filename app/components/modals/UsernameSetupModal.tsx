@@ -34,7 +34,9 @@ export default function UsernameSetupModal({
   };
 
   // Nickname 유효성 검사 (1-20자, 공백만 있는 것은 불허)
-  const validateNickname = (value: string): { valid: boolean; error: string } => {
+  const validateNickname = (
+    value: string
+  ): { valid: boolean; error: string } => {
     const trimmed = value.trim();
     if (!trimmed) {
       return { valid: false, error: '닉네임을 입력해주세요' };
@@ -57,7 +59,8 @@ export default function UsernameSetupModal({
   };
 
   // 전체 폼 유효성 확인
-  const isFormValid = isAvailable === true && nickname.trim().length >= 1 && !nicknameError;
+  const isFormValid =
+    isAvailable === true && nickname.trim().length >= 1 && !nicknameError;
 
   // Username 중복 확인
   useEffect(() => {

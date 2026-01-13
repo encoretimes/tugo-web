@@ -5,11 +5,11 @@ import {
   removeBookmark,
 } from '@/services/bookmarks';
 import { useToastStore } from '@/store/toastStore';
-import { queryKeys } from '@/lib/query-keys';
+import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
 
 export const useBookmarks = (page = 0, size = 10) => {
   return useQuery({
-    queryKey: ['bookmarks', page, size],
+    queryKey: queryKeys.bookmarks(page, size),
     queryFn: () => getBookmarks(page, size),
   });
 };
@@ -18,12 +18,17 @@ export const useToggleBookmark = () => {
   const queryClient = useQueryClient();
   const addToast = useToastStore((state) => state.addToast);
 
+  const invalidateBookmarkQueries = (postId: number) => {
+    invalidationHelpers.onBookmarkToggle().forEach((key) => {
+      queryClient.invalidateQueries({ queryKey: key });
+    });
+    queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
+  };
+
   const addMutation = useMutation({
     mutationFn: addBookmark,
     onSuccess: (_data, postId) => {
-      // 북마크 목록과 해당 게시물만 무효화
-      queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
+      invalidateBookmarkQueries(postId);
       addToast('보관함에 저장되었습니다', 'success');
     },
     onError: () => {
@@ -34,9 +39,7 @@ export const useToggleBookmark = () => {
   const removeMutation = useMutation({
     mutationFn: removeBookmark,
     onSuccess: (_data, postId) => {
-      // 북마크 목록과 해당 게시물만 무효화
-      queryClient.invalidateQueries({ queryKey: ['bookmarks'] });
-      queryClient.invalidateQueries({ queryKey: queryKeys.post(postId) });
+      invalidateBookmarkQueries(postId);
       addToast('보관함에서 제거되었습니다', 'info');
     },
     onError: () => {

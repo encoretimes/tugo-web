@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Providers from './providers';
-import { notoSansKr } from './fonts';
+import { notoSansKr, playfairDisplay } from './fonts';
 
 export const metadata: Metadata = {
   title: 'Tugo',
@@ -15,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={notoSansKr.className}>
+      <body
+        className={`${notoSansKr.className} ${notoSansKr.variable} ${playfairDisplay.variable}`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>

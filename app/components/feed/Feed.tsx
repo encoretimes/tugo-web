@@ -53,19 +53,19 @@ const Feed = () => {
       <InlinePostComposer />
 
       <div className="h-4" />
-      <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+      <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
 
       <div>
         {isLoading ? (
           <div>
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
           </div>
         ) : error ? (
@@ -84,7 +84,7 @@ const Feed = () => {
               <React.Fragment key={post.postId}>
                 <Post post={post} />
                 {index < posts.length - 1 && (
-                  <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+                  <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
                 )}
               </React.Fragment>
             ))}
@@ -92,9 +92,9 @@ const Feed = () => {
               <div ref={ref} className="py-8">
                 {isFetchingNextPage ? (
                   <div>
-                    <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+                    <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
                     <PostSkeleton />
-                    <div className="h-[8px] bg-[#F6F6F6] lg:-mx-6" />
+                    <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
                     <PostSkeleton />
                   </div>
                 ) : (

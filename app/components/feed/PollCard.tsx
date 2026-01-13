@@ -83,10 +83,10 @@ export default function PollCard({
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4">
+    <div className="border border-gray-200 dark:border-neutral-700 rounded-md p-4">
       {/* 투표 질문 */}
       {!hideQuestion && poll.question && (
-        <h4 className="text-base font-medium text-gray-900 mb-3">
+        <h4 className="text-base font-medium text-gray-900 dark:text-neutral-100 mb-3">
           {poll.question}
         </h4>
       )}
@@ -104,22 +104,22 @@ export default function PollCard({
                 // 결과 표시 모드 - 심플한 바 차트
                 <div className="relative overflow-hidden rounded">
                   <div
-                    className="absolute inset-0 bg-gray-100 transition-all duration-300"
+                    className="absolute inset-0 bg-gray-100 dark:bg-neutral-700 transition-all duration-300"
                     style={{ width: `${percentage}%` }}
                   />
                   <div className="relative px-3 py-2.5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-gray-900 dark:text-neutral-100">
                         {option.optionText}
                       </span>
                       {wasSelectedByMe && (
                         <CheckIcon
-                          className="w-4 h-4 text-gray-900"
+                          className="w-4 h-4 text-gray-900 dark:text-neutral-100"
                           strokeWidth={2.5}
                         />
                       )}
                     </div>
-                    <span className="text-sm font-medium text-gray-900">
+                    <span className="text-sm font-medium text-gray-900 dark:text-neutral-100">
                       {percentage}%
                     </span>
                   </div>
@@ -129,24 +129,28 @@ export default function PollCard({
                 <button
                   onClick={() => handleOptionClick(option.optionId)}
                   className={`w-full px-3 py-2.5 rounded text-left transition ${
-                    isSelected ? 'bg-gray-100' : 'hover:bg-gray-50'
+                    isSelected
+                      ? 'bg-gray-100 dark:bg-neutral-700'
+                      : 'hover:bg-gray-50 dark:hover:bg-neutral-800'
                   }`}
                   disabled={disabled}
                 >
                   <div className="flex items-center gap-2.5">
                     <div
                       className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${
-                        isSelected ? 'bg-gray-900' : 'bg-gray-200'
+                        isSelected
+                          ? 'bg-gray-900 dark:bg-neutral-100'
+                          : 'bg-gray-200 dark:bg-neutral-600'
                       }`}
                     >
                       {isSelected && (
                         <CheckIcon
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3 text-white dark:text-neutral-900"
                           strokeWidth={3}
                         />
                       )}
                     </div>
-                    <span className="text-sm text-gray-900">
+                    <span className="text-sm text-gray-900 dark:text-neutral-100">
                       {option.optionText}
                     </span>
                   </div>
@@ -160,7 +164,7 @@ export default function PollCard({
       {/* 하단 정보 및 버튼 */}
       <div className="mt-3 flex items-center justify-between">
         {/* 왼쪽: 투표 정보 */}
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-neutral-400">
           <span>{poll.totalVoters.toLocaleString()}명</span>
           {poll.endDate && (
             <>
@@ -177,7 +181,7 @@ export default function PollCard({
           {!isRevoting && !showResults && selectedOptions.length > 0 && (
             <button
               onClick={handleVote}
-              className="px-3 py-1.5 bg-gray-900 text-white text-xs font-medium rounded hover:bg-gray-800 transition"
+              className="px-3 py-1.5 bg-gray-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-medium rounded hover:bg-gray-800 dark:hover:bg-neutral-200 transition"
               disabled={disabled}
             >
               투표
@@ -187,7 +191,7 @@ export default function PollCard({
           {!isRevoting && poll.hasVoted && !poll.isEnded && onRevote && (
             <button
               onClick={startRevoting}
-              className="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded hover:bg-gray-200 transition"
+              className="px-3 py-1.5 bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 text-xs font-medium rounded hover:bg-gray-200 dark:hover:bg-neutral-700 transition"
               disabled={disabled}
             >
               다시 투표하기
@@ -198,14 +202,14 @@ export default function PollCard({
             <>
               <button
                 onClick={cancelRevoting}
-                className="px-3 py-1.5 text-gray-600 text-xs font-medium hover:text-gray-900 transition"
+                className="px-3 py-1.5 text-gray-600 dark:text-neutral-400 text-xs font-medium hover:text-gray-900 dark:hover:text-neutral-100 transition"
               >
                 취소
               </button>
               {selectedOptions.length > 0 && (
                 <button
                   onClick={handleRevote}
-                  className="px-3 py-1.5 bg-gray-900 text-white text-xs font-medium rounded hover:bg-gray-800 transition"
+                  className="px-3 py-1.5 bg-gray-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-medium rounded hover:bg-gray-800 dark:hover:bg-neutral-200 transition"
                   disabled={disabled}
                 >
                   저장

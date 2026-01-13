@@ -71,7 +71,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 p-6 shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
                     <ExclamationTriangleIcon
@@ -81,12 +81,14 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                   <div className="flex-1">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-bold text-neutral-900"
+                      className="text-lg font-bold text-neutral-900 dark:text-neutral-100"
                     >
                       {title}
                     </Dialog.Title>
                     <div className="mt-2">
-                      <p className="text-sm text-neutral-600">{message}</p>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                        {message}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -94,14 +96,14 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 <div className="mt-6 flex justify-end gap-3">
                   <button
                     type="button"
-                    className="rounded-full bg-neutral-100 px-5 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-200 transition-colors"
+                    className="rounded-md bg-neutral-100 dark:bg-neutral-800 px-5 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
                     onClick={onClose}
                   >
                     {cancelText}
                   </button>
                   <button
                     type="button"
-                    className={`rounded-full px-5 py-2 text-sm font-semibold text-white transition-colors ${typeStyles[type].button}`}
+                    className={`rounded-md px-5 py-2.5 text-sm font-semibold text-white transition-colors ${typeStyles[type].button}`}
                     onClick={handleConfirm}
                   >
                     {confirmText}

@@ -1,22 +1,10 @@
+'use client';
+
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  ChatBubbleOvalLeftIcon,
-  BookmarkIcon,
-  HeartIcon,
-  UserIcon,
-  EllipsisVerticalIcon,
-} from '@heroicons/react/24/outline';
-import {
-  HeartIcon as HeartIconSolid,
-  BookmarkIcon as BookmarkIconSolid,
-} from '@heroicons/react/24/solid';
 import { Post as PostType } from '@/types/post';
-import { useUserStore } from '@/store/userStore';
-import { useToastStore } from '@/store/toastStore';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useToggleBookmark } from '@/hooks/useBookmarks';
 import { useToggleLike } from '@/hooks/useLikes';
 import { useComments, useCreateComment } from '@/hooks/useComments';
@@ -30,17 +18,16 @@ import ImageGalleryModal from '@/app/components/modals/ImageGalleryModal';
 import PostMenuModal from '@/app/components/modals/PostMenuModal';
 import ShareModal from '@/app/components/modals/ShareModal';
 import PollCard from './PollCard';
-import EmojiPickerButton from './EmojiPicker';
-import MentionInput from './MentionInput';
-import MentionText from './MentionText';
 import ImageCarousel from './ImageCarousel';
-import { formatRelativeTime } from '@/lib/date-utils';
+import PostHeader from './post/PostHeader';
+import PostActions from './post/PostActions';
+import CommentSection from './comments/CommentSection';
 
 interface PostProps {
   post: PostType;
   onPostDeleted?: () => void;
   onPostUpdated?: () => void;
-  disableNavigation?: boolean; // 상세 페이지에서는 네비게이션 비활성화
+  disableNavigation?: boolean;
 }
 
 const Post: React.FC<PostProps> = ({
@@ -51,20 +38,25 @@ const Post: React.FC<PostProps> = ({
 }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { user } = useUserStore();
-  const addToast = useToastStore((state) => state.addToast);
+  const { checkAuth, user } = useRequireAuth();
   const { toggleBookmark } = useToggleBookmark();
   const { likeMutation, unlikeMutation } = useToggleLike();
   const createCommentMutation = useCreateComment();
   const deletePostMutation = useDeletePost();
 
   const { author, contentText, createdAt, stats } = post;
+
+  // Like/Bookmark state
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [isSaved, setIsSaved] = useState(post.isSaved);
   const [likeCount, setLikeCount] = useState(stats.likes);
   const [commentCount, setCommentCount] = useState(stats.comments);
+
+  // Comment state
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState('');
+
+  // Modal state
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showImageGallery, setShowImageGallery] = useState(false);
@@ -72,7 +64,6 @@ const Post: React.FC<PostProps> = ({
   const [showPostMenu, setShowPostMenu] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  // 댓글 목록 조회 (무한 스크롤) - showComments가 true일 때만 활성화
   const {
     data: commentsData,
     isLoading: isLoadingComments,
@@ -97,10 +88,7 @@ const Post: React.FC<PostProps> = ({
   }, [post.isLiked, post.isSaved, stats.likes, stats.comments]);
 
   const handleLikeToggle = useCallback(() => {
-    if (!user) {
-      addToast('로그인이 필요합니다', 'warning');
-      return;
-    }
+    if (!checkAuth()) return;
 
     const previousIsLiked = isLiked;
     const previousLikeCount = likeCount;
@@ -128,8 +116,7 @@ const Post: React.FC<PostProps> = ({
       );
     }
   }, [
-    user,
-    addToast,
+    checkAuth,
     isLiked,
     likeCount,
     unlikeMutation,
@@ -138,32 +125,21 @@ const Post: React.FC<PostProps> = ({
   ]);
 
   const handleBookmarkToggle = useCallback(() => {
-    if (!user) {
-      addToast('로그인이 필요합니다', 'warning');
-      return;
-    }
-
+    if (!checkAuth()) return;
     toggleBookmark(post.postId, isSaved);
     setIsSaved(!isSaved);
-  }, [user, addToast, toggleBookmark, post.postId, isSaved]);
+  }, [checkAuth, toggleBookmark, post.postId, isSaved]);
 
   const handleCommentToggle = useCallback(() => {
     setShowComments((prev) => !prev);
   }, []);
 
   const handleCommentSubmit = useCallback(() => {
-    if (!user) {
-      addToast('로그인이 필요합니다', 'warning');
-      return;
-    }
-
+    if (!checkAuth()) return;
     if (!commentText.trim() || createCommentMutation.isPending) return;
 
     createCommentMutation.mutate(
-      {
-        postId: post.postId,
-        content: commentText,
-      },
+      { postId: post.postId, content: commentText },
       {
         onSuccess: () => {
           setCommentText('');
@@ -171,15 +147,11 @@ const Post: React.FC<PostProps> = ({
         },
       }
     );
-  }, [user, addToast, commentText, createCommentMutation, post.postId]);
+  }, [checkAuth, commentText, createCommentMutation, post.postId]);
 
   const handleDeletePost = useCallback(() => {
     deletePostMutation.mutate(post.postId, {
-      onSuccess: () => {
-        if (onPostDeleted) {
-          onPostDeleted();
-        }
-      },
+      onSuccess: () => onPostDeleted?.(),
     });
   }, [deletePostMutation, post.postId, onPostDeleted]);
 
@@ -190,72 +162,17 @@ const Post: React.FC<PostProps> = ({
 
   const handlePostClick = useCallback(() => {
     queryClient.setQueryData([...queryKeys.posts, post.postId], post);
-
     router.push(`/@${author.username}/post/${post.postId}`);
   }, [queryClient, post, author.username, router]);
 
   return (
-    <div className="px-6 lg:px-6 py-5 hover:bg-gray-50/50 transition-colors">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <Link
-            href={`/@${author.username}`}
-            className="flex-shrink-0"
-            onClick={(e) => {
-              if (disableNavigation) {
-                e.preventDefault();
-                router.push(`/@${author.username}`);
-              }
-            }}
-          >
-            {author.profileImageUrl ? (
-              <Image
-                src={author.profileImageUrl}
-                alt={author.name}
-                width={40}
-                height={40}
-                className="h-10 w-10 rounded-full hover:opacity-80 transition-opacity"
-              />
-            ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-400 transition-colors">
-                <UserIcon className="h-6 w-6 text-neutral-500" />
-              </div>
-            )}
-          </Link>
-          <div className="flex flex-col">
-            <Link
-              href={`/@${author.username}`}
-              className="font-semibold text-gray-900 text-[15px] hover:underline"
-              onClick={(e) => {
-                if (disableNavigation) {
-                  e.preventDefault();
-                  router.push(`/@${author.username}`);
-                }
-              }}
-            >
-              {author.name}
-            </Link>
-            <Link
-              href={`/@${author.username}`}
-              className="text-xs text-gray-500 hover:underline"
-              onClick={(e) => {
-                if (disableNavigation) {
-                  e.preventDefault();
-                  router.push(`/@${author.username}`);
-                }
-              }}
-            >
-              @{author.username}
-            </Link>
-          </div>
-        </div>
-        <time className="text-xs text-gray-400">
-          {formatRelativeTime(createdAt)}
-        </time>
-      </div>
+    <div className="px-6 lg:px-6 py-5">
+      <PostHeader
+        author={author}
+        createdAt={createdAt}
+        disableNavigation={disableNavigation}
+      />
 
-      {/* 콘텐츠 */}
       <div className="ml-0">
         <ExpandableText
           text={contentText}
@@ -264,7 +181,6 @@ const Post: React.FC<PostProps> = ({
           showFullContent={disableNavigation}
         />
 
-        {/* Poll Card */}
         {post.poll && (
           <div className="mt-3">
             <PollCard
@@ -284,162 +200,31 @@ const Post: React.FC<PostProps> = ({
           </div>
         )}
 
-        <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <button
-              onClick={handleLikeToggle}
-              className={`flex items-center gap-1 rounded-full px-3 py-1.5 transition-colors ${
-                isLiked
-                  ? 'text-red-600 hover:bg-red-50'
-                  : 'text-neutral-500 hover:text-red-600 hover:bg-red-50'
-              }`}
-            >
-              {isLiked ? (
-                <HeartIconSolid className="h-5 w-5" />
-              ) : (
-                <HeartIcon className="h-5 w-5" />
-              )}
-              <span className="text-sm">{likeCount}</span>
-            </button>
-            <button
-              onClick={handleCommentToggle}
-              className="flex items-center gap-1 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-full px-3 py-1.5 transition-colors"
-            >
-              <ChatBubbleOvalLeftIcon className="h-5 w-5" />
-              <span className="text-sm">{commentCount}</span>
-            </button>
-            <button
-              onClick={handleBookmarkToggle}
-              className={`flex items-center rounded-full p-1.5 transition-colors ${
-                isSaved
-                  ? 'text-primary-600 hover:bg-primary-50'
-                  : 'text-neutral-500 hover:text-primary-600 hover:bg-primary-50'
-              }`}
-            >
-              {isSaved ? (
-                <BookmarkIconSolid className="h-5 w-5" />
-              ) : (
-                <BookmarkIcon className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-          <button
-            onClick={() => setShowPostMenu(true)}
-            className="flex items-center text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-full p-1.5 transition-colors"
-          >
-            <EllipsisVerticalIcon className="h-5 w-5" />
-          </button>
-        </div>
+        <PostActions
+          isLiked={isLiked}
+          isSaved={isSaved}
+          likeCount={likeCount}
+          commentCount={commentCount}
+          onLikeToggle={handleLikeToggle}
+          onBookmarkToggle={handleBookmarkToggle}
+          onCommentToggle={handleCommentToggle}
+          onMenuClick={() => setShowPostMenu(true)}
+        />
 
         {showComments && (
-          <div className="mt-4 border-t pt-4">
-            <div className="mb-4">
-              <div className="flex space-x-2">
-                {user?.profileImageUrl ? (
-                  <Image
-                    src={user.profileImageUrl}
-                    alt={user.name}
-                    width={32}
-                    height={32}
-                    className="h-8 w-8 rounded-full"
-                  />
-                ) : (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                    <UserIcon className="h-5 w-5 text-neutral-500" />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <MentionInput
-                    value={commentText}
-                    onChange={setCommentText}
-                    placeholder="댓글을 입력하세요..."
-                    rows={2}
-                    disabled={createCommentMutation.isPending}
-                    className="w-full resize-none rounded-lg border border-neutral-300 p-2 text-sm focus:border-primary-600 focus:outline-none"
-                  />
-                  <div className="mt-2 flex justify-between items-center">
-                    <EmojiPickerButton
-                      onEmojiSelect={(emoji) => {
-                        setCommentText(commentText + emoji);
-                      }}
-                      buttonClassName="text-gray-500 hover:text-gray-700"
-                    />
-                    <button
-                      onClick={handleCommentSubmit}
-                      disabled={
-                        !commentText.trim() || createCommentMutation.isPending
-                      }
-                      className="rounded-full bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
-                    >
-                      {createCommentMutation.isPending
-                        ? '작성 중...'
-                        : '댓글 달기'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {isLoadingComments ? (
-              <div className="py-4 text-center text-sm text-neutral-500">
-                댓글을 불러오는 중...
-              </div>
-            ) : comments.length > 0 ? (
-              <div className="space-y-3">
-                {comments.map((comment) => (
-                  <div key={comment.id} className="flex space-x-2">
-                    {comment.author.profileImageUrl ? (
-                      <Image
-                        src={comment.author.profileImageUrl}
-                        alt={comment.author.name}
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 rounded-full"
-                      />
-                    ) : (
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300">
-                        <UserIcon className="h-5 w-5 text-neutral-500" />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <div className="rounded-lg bg-neutral-100 p-2">
-                        <p className="text-xs font-semibold text-neutral-900">
-                          {comment.author.name}{' '}
-                          <span className="font-normal text-neutral-500">
-                            @{comment.author.username}
-                          </span>
-                        </p>
-                        <MentionText
-                          content={comment.content}
-                          className="text-sm mt-1"
-                        />
-                      </div>
-                      <p className="mt-1 text-xs text-neutral-500">
-                        {formatRelativeTime(comment.createdAt)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                {hasNextPage && (
-                  <div className="flex justify-center pt-2">
-                    <button
-                      onClick={() => fetchNextPage()}
-                      disabled={isFetchingNextPage}
-                      className="rounded-full bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-200 disabled:opacity-50"
-                    >
-                      {isFetchingNextPage
-                        ? '댓글 불러오는 중...'
-                        : '댓글 더 보기'}
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="py-4 text-center text-sm text-neutral-500">
-                댓글이 없습니다. 첫 댓글을 작성해보세요!
-              </div>
-            )}
-          </div>
+          <CommentSection
+            comments={comments}
+            isLoading={isLoadingComments}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            onFetchNextPage={fetchNextPage}
+            userProfileImageUrl={user?.profileImageUrl}
+            userName={user?.name || ''}
+            commentValue={commentText}
+            onCommentChange={setCommentText}
+            onCommentSubmit={handleCommentSubmit}
+            isSubmitting={createCommentMutation.isPending}
+          />
         )}
       </div>
 

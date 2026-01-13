@@ -53,7 +53,7 @@ const HomeBanner = () => {
       {/* 텍스트 컨텐츠 */}
       <div className="max-w-content mx-auto py-16 lg:py-20 relative z-30">
         {/* TUGO 투고 */}
-        <p className="text-[24px] font-extrabold text-[#2F1E9D] mb-3">
+        <p className="text-[24px] font-extrabold text-primary-700 mb-3">
           TUGO 투고
         </p>
 
@@ -66,7 +66,7 @@ const HomeBanner = () => {
             <span className="text-[40px] font-extrabold text-black">
               이제 여기{' '}
             </span>
-            <span className="text-[48px] font-bold text-[#6956E3]">TUGO</span>
+            <span className="text-[48px] font-bold text-primary-600">TUGO</span>
             <span className="text-[40px] font-extrabold text-black">에서!</span>
           </span>
         </h1>

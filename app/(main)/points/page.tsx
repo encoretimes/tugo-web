@@ -84,7 +84,7 @@ const PointsPage = () => {
               {currentPoints.toLocaleString()} P
             </p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 rounded-lg bg-white text-blue-600 font-bold hover:bg-gray-100 transition-colors">
+          <button className="flex items-center gap-2 px-6 py-3 rounded-md bg-white text-primary-600 font-bold hover:bg-gray-100 transition-colors">
             <BanknotesIcon className="w-6 h-6" />
             <span>충전하기</span>
           </button>
@@ -98,7 +98,7 @@ const PointsPage = () => {
           <nav className="flex space-x-4">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-3 py-2 font-semibold transition-colors ${activeTab === 'all' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500 hover:text-blue-500'}`}
+              className={`px-3 py-2 font-semibold transition-colors ${activeTab === 'all' ? 'border-b-2 border-primary-600 text-primary-600' : 'text-gray-500 hover:text-primary-600'}`}
             >
               전체
             </button>

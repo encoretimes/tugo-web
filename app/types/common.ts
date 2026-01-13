@@ -7,8 +7,20 @@ export interface PageResponse<T> {
   number: number; // Current page number (0-indexed)
   first: boolean;
   last: boolean;
-  numberOfElements: number;
-  empty: boolean;
+  numberOfElements?: number;
+  empty?: boolean;
+  pageable?: {
+    pageNumber: number;
+    pageSize: number;
+    sort?: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset?: number;
+    paged?: boolean;
+    unpaged?: boolean;
+  };
 }
 
 /**
