@@ -13,7 +13,8 @@ import {
   updatePost,
   deletePost,
 } from '@/services/posts';
-import type { UpdatePostRequest } from '@/services/posts';
+import type { UpdatePostRequest, FeedType } from '@/services/posts';
+export type { FeedType } from '@/services/posts';
 import { Post } from '@/types/post';
 import { PageResponse } from '@/types/common';
 import { queryKeys, invalidationHelpers } from '@/lib/query-keys';
@@ -34,15 +35,13 @@ export const usePosts = () => {
 export const usePost = (postId: number) => {
   const queryClient = useQueryClient();
 
-  return useQuery({
-    queryKey: [...queryKeys.posts, postId],
-    queryFn: () => getPost(postId),
-    enabled: !!postId,
-    staleTime: 5 * 60 * 1000,
-    placeholderData: () => {
+  const findPostInCache = (): Post | undefined => {
+    const feedTypes: FeedType[] = ['recommended', 'following'];
+
+    for (const feedType of feedTypes) {
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', false]);
+      >([...queryKeys.posts, 'infinite', feedType]);
 
       if (infiniteData) {
         for (const page of infiniteData.pages) {
@@ -50,74 +49,39 @@ export const usePost = (postId: number) => {
           if (post) return post;
         }
       }
+    }
 
-      const infiniteDataSub = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', true]);
+    return undefined;
+  };
 
-      if (infiniteDataSub) {
-        for (const page of infiniteDataSub.pages) {
-          const post = page.content.find((p) => p.postId === postId);
-          if (post) return post;
-        }
-      }
+  const getCacheUpdatedAt = (): number | undefined => {
+    const feedTypes: FeedType[] = ['recommended', 'following'];
 
-      return undefined;
-    },
-
-    initialData: () => {
+    for (const feedType of feedTypes) {
       const infiniteData = queryClient.getQueryData<
         InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', false]);
-
-      if (infiniteData) {
-        for (const page of infiniteData.pages) {
-          const post = page.content.find((p) => p.postId === postId);
-          if (post) {
-            return post;
-          }
-        }
-      }
-
-      const infiniteDataSub = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', true]);
-
-      if (infiniteDataSub) {
-        for (const page of infiniteDataSub.pages) {
-          const post = page.content.find((p) => p.postId === postId);
-          if (post) {
-            return post;
-          }
-        }
-      }
-
-      return undefined;
-    },
-    initialDataUpdatedAt: () => {
-      const infiniteData = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', false]);
+      >([...queryKeys.posts, 'infinite', feedType]);
 
       if (infiniteData) {
         return queryClient.getQueryState([
           ...queryKeys.posts,
           'infinite',
-          false,
+          feedType,
         ])?.dataUpdatedAt;
       }
+    }
 
-      const infiniteDataSub = queryClient.getQueryData<
-        InfiniteData<PageResponse<Post>>
-      >([...queryKeys.posts, 'infinite', true]);
+    return 0;
+  };
 
-      if (infiniteDataSub) {
-        return queryClient.getQueryState([...queryKeys.posts, 'infinite', true])
-          ?.dataUpdatedAt;
-      }
-
-      return 0;
-    },
+  return useQuery({
+    queryKey: [...queryKeys.posts, postId],
+    queryFn: () => getPost(postId),
+    enabled: !!postId,
+    staleTime: 5 * 60 * 1000,
+    placeholderData: findPostInCache,
+    initialData: findPostInCache,
+    initialDataUpdatedAt: getCacheUpdatedAt,
   });
 };
 
@@ -239,14 +203,16 @@ export const useDeletePost = () => {
 
 /**
  * 무한 스크롤 게시물 조회 Hook
- * @param subscriptionOnly - true일 경우 구독한 크리에이터의 게시물만 조회
+ * @param feedType - 피드 타입 (following: 구독 피드, recommended: 추천 피드)
  * @param pageSize - 페이지당 게시물 수
  */
-export const useInfinitePosts = (subscriptionOnly = false, pageSize = 20) => {
+export const useInfinitePosts = (
+  feedType: FeedType = 'recommended',
+  pageSize = 20
+) => {
   return useInfiniteQuery({
-    queryKey: [...queryKeys.posts, 'infinite', subscriptionOnly],
-    queryFn: ({ pageParam = 0 }) =>
-      getPostsPage(pageParam, pageSize, subscriptionOnly),
+    queryKey: [...queryKeys.posts, 'infinite', feedType],
+    queryFn: ({ pageParam = 0 }) => getPostsPage(pageParam, pageSize, feedType),
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
     },

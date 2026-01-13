@@ -7,10 +7,18 @@ export const getPosts = async (): Promise<Post[]> => {
   return response.content;
 };
 
+export type FeedType = 'following' | 'recommended';
+
+/**
+ * 피드 게시물 목록 조회
+ * @param page 페이지 번호
+ * @param size 페이지 크기
+ * @param feedType 피드 타입 (following: 구독, recommended: 추천)
+ */
 export const getPostsPage = async (
   page = 0,
   size = 20,
-  subscriptionOnly = false
+  feedType: FeedType = 'recommended'
 ): Promise<PageResponse<Post>> => {
   const params = new URLSearchParams({
     page: page.toString(),
@@ -18,13 +26,12 @@ export const getPostsPage = async (
     sort: 'createdAt,desc',
   });
 
-  if (subscriptionOnly) {
-    params.append('subscriptionOnly', 'true');
-  }
+  const endpoint =
+    feedType === 'following'
+      ? `/api/v1/posts/following?${params.toString()}`
+      : `/api/v1/posts/recommended?${params.toString()}`;
 
-  return apiClient.get<PageResponse<Post>>(
-    `/api/v1/posts?${params.toString()}`
-  );
+  return apiClient.get<PageResponse<Post>>(endpoint);
 };
 
 export const getPost = async (postId: number): Promise<Post> => {
