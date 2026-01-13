@@ -91,14 +91,96 @@ export const useCreatePost = () => {
 
   return useMutation({
     mutationFn: createPost,
-    onSuccess: () => {
-      // 관련 쿼리 캐시 무효화
-      invalidationHelpers.onPostMutation().forEach((queryKey) => {
-        queryClient.invalidateQueries({ queryKey });
+    onMutate: async () => {
+      // 진행 중인 쿼리 취소
+      await queryClient.cancelQueries({
+        queryKey: [...queryKeys.posts, 'infinite'],
       });
+
+      // 현재 피드 데이터들 백업
+      const previousFollowing = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', 'following']);
+      const previousRecommended = queryClient.getQueryData<
+        InfiniteData<PageResponse<Post>>
+      >([...queryKeys.posts, 'infinite', 'recommended']);
+
+      return { previousFollowing, previousRecommended };
+    },
+    onSuccess: (postId, newPostData) => {
+      // 게시글 작성 성공 시 피드 상단에 임시로 표시
+      const userStorage = localStorage.getItem('user-storage');
+      if (userStorage) {
+        try {
+          const { state } = JSON.parse(userStorage);
+          const user = state?.user;
+
+          if (user) {
+            const optimisticPost: Post = {
+              postId: postId,
+              author: {
+                name: user.name || '나',
+                username: user.username || '',
+                profileImageUrl: user.profileImageUrl || null,
+              },
+              contentText: newPostData.contentText,
+              postType: newPostData.postType,
+              ppvPrice: newPostData.ppvPrice || null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              stats: {
+                comments: 0,
+                likes: 0,
+              },
+              mediaUrls: newPostData.mediaUrls || [],
+              isLiked: false,
+              isSaved: false,
+            };
+
+            // 모든 피드 타입에 낙관적으로 추가
+            const feedTypes: FeedType[] = ['following', 'recommended'];
+            feedTypes.forEach((feedType) => {
+              queryClient.setQueryData<InfiniteData<PageResponse<Post>>>(
+                [...queryKeys.posts, 'infinite', feedType],
+                (old) => {
+                  if (!old || !old.pages.length) return old;
+
+                  // 첫 번째 페이지에 새 게시글 추가
+                  return {
+                    ...old,
+                    pages: old.pages.map((page, index) => {
+                      if (index === 0) {
+                        return {
+                          ...page,
+                          content: [optimisticPost, ...page.content],
+                        };
+                      }
+                      return page;
+                    }),
+                  };
+                }
+              );
+            });
+          }
+        } catch {}
+      }
+
       addToast('게시물이 작성되었습니다', 'success');
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _, context) => {
+      // 에러 발생 시 롤백
+      if (context?.previousFollowing) {
+        queryClient.setQueryData(
+          [...queryKeys.posts, 'infinite', 'following'],
+          context.previousFollowing
+        );
+      }
+      if (context?.previousRecommended) {
+        queryClient.setQueryData(
+          [...queryKeys.posts, 'infinite', 'recommended'],
+          context.previousRecommended
+        );
+      }
       addToast(
         error.message || '게시물 작성에 실패했습니다. 다시 시도해주세요.',
         'error'
