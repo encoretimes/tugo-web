@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { UserIcon } from '@heroicons/react/24/solid';
 import { Creator } from '@/types/creator';
 import { useUserStore } from '@/store/userStore';
 import {
@@ -25,7 +26,6 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
 }) => {
   const router = useRouter();
   const { isAuthenticated, user } = useUserStore();
-  const defaultProfileImage = `https://i.pravatar.cc/150?u=${creator.username}`;
 
   const { data: subscriptionStatus, isLoading: isStatusLoading } =
     useSubscriptionStatus(creator.memberId);
@@ -69,13 +69,19 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           {rank}
         </span>
       )}
-      <Image
-        src={creator.profileImageUrl || defaultProfileImage}
-        alt={creator.name}
-        width={44}
-        height={44}
-        className="h-11 w-11 rounded-full object-cover shrink-0"
-      />
+      {creator.profileImageUrl ? (
+        <Image
+          src={creator.profileImageUrl}
+          alt={creator.name}
+          width={44}
+          height={44}
+          className="h-11 w-11 rounded-full object-cover shrink-0"
+        />
+      ) : (
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0">
+          <UserIcon className="h-6 w-6 text-neutral-400 dark:text-neutral-500" />
+        </div>
+      )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1">
           <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate">
