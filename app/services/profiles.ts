@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api-client';
 
 export interface ProfileUpdateRequest {
-  name?: string;
+  nickname?: string; // 표시용 이름 (name 대신 이것을 수정)
   introduction?: string;
   profileUrl?: string;
   bannerImageUrl?: string;

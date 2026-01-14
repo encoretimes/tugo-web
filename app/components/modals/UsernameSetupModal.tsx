@@ -111,15 +111,15 @@ export default function UsernameSetupModal({
       // 1. Username 설정
       await apiClient.put(`/api/v1/members/me/username?username=${username}`);
 
-      // 2. Profile name(닉네임) 설정
-      await updateMyProfile({ name: nickname.trim() });
+      // 2. Profile 닉네임 설정
+      await updateMyProfile({ nickname: nickname.trim() });
 
       // User 정보 업데이트 (Zustand store)
       if (user) {
         setUser({
           ...user,
           username: username,
-          name: nickname.trim(),
+          nickname: nickname.trim(),
         });
       }
 

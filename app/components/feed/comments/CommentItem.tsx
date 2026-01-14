@@ -16,7 +16,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
       {comment.author.profileImageUrl ? (
         <Image
           src={comment.author.profileImageUrl}
-          alt={comment.author.name}
+          alt={comment.author.nickname || comment.author.name}
           width={32}
           height={32}
           className="h-8 w-8 rounded-full"
@@ -29,7 +29,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
       <div className="flex-1">
         <div className="rounded-lg bg-neutral-100 dark:bg-neutral-800 p-2">
           <p className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-            {comment.author.name}{' '}
+            {comment.author.nickname || comment.author.name}{' '}
             <span className="font-normal text-neutral-500 dark:text-neutral-400">
               @{comment.author.username}
             </span>

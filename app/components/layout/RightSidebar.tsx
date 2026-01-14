@@ -149,7 +149,7 @@ const RightSidebar = () => {
                     {creator.profileImageUrl ? (
                       <Image
                         src={creator.profileImageUrl}
-                        alt={creator.name}
+                        alt={creator.nickname || creator.name}
                         width={36}
                         height={36}
                         className="h-9 w-9 rounded-full object-cover shrink-0"
@@ -161,7 +161,7 @@ const RightSidebar = () => {
                     )}
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
-                        {creator.name}
+                        {creator.nickname || creator.name}
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
                         @{creator.username}

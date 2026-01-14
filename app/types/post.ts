@@ -5,6 +5,7 @@ export interface Post {
   postId: number;
   author: {
     name: string;
+    nickname?: string; // 표시용 이름 (있으면 이것을 우선 표시)
     username: string;
     profileImageUrl: string | null;
   };
@@ -28,6 +29,7 @@ export interface Comment {
   id: number;
   author: {
     name: string;
+    nickname?: string; // 표시용 이름 (있으면 이것을 우선 표시)
     username: string;
     profileImageUrl: string | null;
   };
@@ -78,6 +80,7 @@ export interface MemberSearchResult {
   memberId: number;
   username: string;
   name: string;
+  nickname?: string; // 표시용 이름
   profileImageUrl: string | null;
 }
 

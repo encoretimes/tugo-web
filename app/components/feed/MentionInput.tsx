@@ -234,7 +234,7 @@ export default function MentionInput({
               )}
               <div className="flex flex-col items-start">
                 <span className="font-medium text-gray-900 dark:text-neutral-100">
-                  {user.name}
+                  {user.nickname || user.name}
                 </span>
                 <span className="text-gray-500 dark:text-neutral-400">
                   @{user.username}

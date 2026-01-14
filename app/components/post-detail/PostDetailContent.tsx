@@ -161,7 +161,7 @@ export default function PostDetailContent({
                 {author.profileImageUrl ? (
                   <Image
                     src={author.profileImageUrl}
-                    alt={author.name}
+                    alt={author.nickname || author.name}
                     width={48}
                     height={48}
                     className="h-12 w-12 rounded-full hover:opacity-80 transition-opacity"
@@ -178,7 +178,7 @@ export default function PostDetailContent({
                     className="font-semibold text-gray-900 dark:text-neutral-100 hover:underline text-left"
                     onClick={() => handleProfileNavigation(author.username)}
                   >
-                    {author.name}
+                    {author.nickname || author.name}
                   </button>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-neutral-400">

@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 interface User {
   id: number;
   name: string;
+  nickname?: string | null; // 표시용 이름 (항상 이것만 표시)
   email?: string;
   role: string;
   profileImageUrl?: string | null;
