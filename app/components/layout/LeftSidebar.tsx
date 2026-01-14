@@ -8,6 +8,7 @@ import { useUnreadCount } from '@/hooks/useNotifications';
 import { useTotalUnreadCount } from '@/hooks/useNotes';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 import { useUserStore } from '@/store/userStore';
+import { PencilSquareIcon } from '@heroicons/react/24/solid';
 
 const LeftSidebar = () => {
   const { data: unreadCount } = useUnreadCount();
@@ -135,21 +136,15 @@ const LeftSidebar = () => {
             isCustomIcon
           />
           {user && (
-            <NavItem
-              href="#"
-              onClick={() => setIsComposerOpen(true)}
-              icon={
-                <Image
-                  src="/system_ico/write_pc.svg"
-                  alt="투고하기"
-                  width={28}
-                  height={28}
-                  className="w-7 h-7 dark:invert dark:brightness-200"
-                />
-              }
-              label="투고하기"
-              isCustomIcon
-            />
+            <li>
+              <button
+                onClick={() => setIsComposerOpen(true)}
+                className="w-full flex items-center justify-center xl:justify-start gap-3 p-3 xl:px-4 xl:py-3 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+              >
+                <PencilSquareIcon className="w-6 h-6 flex-shrink-0" />
+                <span className="hidden xl:inline">투고하기</span>
+              </button>
+            </li>
           )}
         </ul>
       </nav>
