@@ -166,7 +166,7 @@ const InlinePostComposer = () => {
                 <button
                   onClick={composer.handleSubmit}
                   disabled={!composer.canSubmit}
-                  className="px-4 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-full hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {composer.isPending ? '작성 중...' : '투고'}
                 </button>
