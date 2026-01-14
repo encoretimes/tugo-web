@@ -182,7 +182,7 @@ export default function PollCreator({
           placeholder="투표 질문 (선택사항)"
           value={question}
           onChange={(e) => handleQuestionChange(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 placeholder:text-gray-400 dark:placeholder:text-neutral-500"
           maxLength={200}
         />
       </div>
@@ -196,7 +196,7 @@ export default function PollCreator({
               placeholder={`옵션 ${index + 1}`}
               value={option}
               onChange={(e) => handleOptionChange(index, e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 placeholder:text-gray-400 dark:placeholder:text-neutral-500"
               maxLength={100}
             />
             {options.length > 2 && (
@@ -263,7 +263,7 @@ export default function PollCreator({
               dateFormat="yyyy년 MM월 dd일 HH:mm"
               minDate={new Date()}
               placeholderText="날짜와 시간을 선택하세요"
-              className="w-full px-3 py-2 pl-10 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 pl-10 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 placeholder:text-gray-400 dark:placeholder:text-neutral-500"
               wrapperClassName="w-full"
             />
             <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -274,7 +274,7 @@ export default function PollCreator({
           <select
             value={presetDuration}
             onChange={(e) => handlePresetDurationChange(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100"
           >
             <option value="1day">1일 후 종료</option>
             <option value="3days">3일 후 종료</option>

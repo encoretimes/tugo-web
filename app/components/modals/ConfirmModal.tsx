@@ -32,45 +32,45 @@ export default function ConfirmModal({
       <Dialog as="div" className="relative z-50" onClose={onClose}>
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
+          enter="ease-out duration-200"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in duration-200"
+          leave="ease-in duration-150"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
+              enter="ease-out duration-200"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
+              leave="ease-in duration-150"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex items-start justify-between mb-4">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold leading-6 text-gray-900"
+                    className="text-xl font-bold leading-6 text-gray-900 dark:text-neutral-100"
                   >
                     {title}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
                     disabled={isLoading}
-                    className="text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
+                    className="text-gray-400 dark:text-neutral-500 hover:text-gray-600 dark:hover:text-neutral-300 transition-colors disabled:opacity-50"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
                 </div>
 
-                <Dialog.Description className="text-gray-600 mb-6 whitespace-pre-line">
+                <Dialog.Description className="text-gray-600 dark:text-neutral-400 mb-6 whitespace-pre-line">
                   {description}
                 </Dialog.Description>
 
@@ -78,14 +78,14 @@ export default function ConfirmModal({
                   <button
                     onClick={onClose}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 font-semibold hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors disabled:opacity-50"
                   >
                     {cancelText}
                   </button>
                   <button
                     onClick={onConfirm}
                     disabled={isLoading}
-                    className={`flex-1 px-4 py-2 font-semibold rounded-lg transition-colors disabled:opacity-50 ${confirmButtonClass}`}
+                    className={`flex-1 px-4 py-2 font-semibold transition-colors disabled:opacity-50 ${confirmButtonClass}`}
                   >
                     {isLoading ? '처리 중...' : confirmText}
                   </button>
