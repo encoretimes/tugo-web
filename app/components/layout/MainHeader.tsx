@@ -19,7 +19,7 @@ const MainHeader = () => {
   return (
     <>
       <header className="sticky top-0 z-50 bg-white dark:bg-neutral-950 border-b border-gray-100 dark:border-neutral-800 lg:hidden pt-safe">
-        <div className="flex items-center justify-between px-4 h-12">
+        <div className="flex items-center justify-between px-4 h-14">
           <Link href="/" className="flex items-center">
             <Image
               src="/logo.svg"
@@ -30,22 +30,22 @@ const MainHeader = () => {
               priority
             />
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {isProfilePage ? (
               <button
                 onClick={() => setIsMenuOpen(true)}
-                className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                className="flex items-center justify-center w-11 h-11 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="메뉴 열기"
               >
-                <MenuIcon className="w-5 h-5" />
+                <MenuIcon className="w-6 h-6" />
               </button>
             ) : (
               <Link
                 href="/notes"
-                className="p-2 relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                className="flex items-center justify-center w-11 h-11 relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="쪽지"
               >
-                <MailIcon className="w-5 h-5" />
+                <MailIcon className="w-6 h-6" />
                 {showNotesBadge && (
                   <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                     {notesUnreadCount > 99 ? '99+' : notesUnreadCount}
