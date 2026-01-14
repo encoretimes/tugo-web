@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
+import { useComposerStore } from '@/store/composerStore';
 import { useUnreadCount } from '@/hooks/useNotifications';
 import {
   HomeIcon,
@@ -28,8 +29,8 @@ interface NavItemConfig {
 
 const BottomNavBar: FC = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const { user } = useUserStore();
+  const { openComposer } = useComposerStore();
   const { data: unreadCount } = useUnreadCount();
 
   const profileHref = user?.username ? `/@${user.username}` : '/login';
@@ -74,10 +75,10 @@ const BottomNavBar: FC = () => {
 
   const handleWriteClick = () => {
     if (!user) {
-      router.push('/login');
+      openComposer();
       return;
     }
-    router.push('/compose');
+    openComposer();
   };
 
   return (

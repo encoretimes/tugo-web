@@ -5,10 +5,12 @@ import LeftSidebar from '@/components/layout/LeftSidebar';
 import MainHeader from '@/components/layout/MainHeader';
 import RightSidebar from '@/components/layout/RightSidebar';
 import LoginPromptModal from '@/components/modals/LoginPromptModal';
+import PostComposerModal from '@/components/modals/PostComposerModal';
 import NotesWebSocketInitializer from '@/components/NotesWebSocketInitializer';
 import { useRouteGuard } from '@/hooks/useRouteGuard';
 import { useInteractionGuard } from '@/hooks/useInteractionGuard';
 import { useUserStore } from '@/store/userStore';
+import { useComposerStore } from '@/store/composerStore';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -21,6 +23,7 @@ export default function MainLayout({
 }) {
   const pathname = usePathname();
   const { hasHydrated } = useUserStore();
+  const { isOpen: isComposerOpen, closeComposer } = useComposerStore();
   const {
     showLoginPrompt,
     closeLoginPrompt,
@@ -85,6 +88,7 @@ export default function MainLayout({
         onClose={closeLoginPrompt}
         isProtectedRoute={isProtectedRoute}
       />
+      <PostComposerModal isOpen={isComposerOpen} onClose={closeComposer} />
       {modal}
     </div>
   );
