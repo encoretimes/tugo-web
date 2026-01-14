@@ -27,7 +27,7 @@ export async function getConfig(): Promise<{
 
   const config = {
     apiUrl: getApiUrl(),
-    runtimeEnv: process.env.RUNTIME_ENV || 'production',
+    runtimeEnv: process.env.NEXT_PUBLIC_RUNTIME_ENV || 'production',
   };
 
   // Cache When CSR
