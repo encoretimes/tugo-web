@@ -23,22 +23,22 @@ const LeftSidebar = () => {
           href="/"
           className="flex items-center justify-center xl:justify-start p-2"
         >
-          {/* 축소 시 T 로고 */}
+          {/* 축소 시 T. 로고 */}
           <Image
             src="/logo_one.svg"
-            alt="TUGO"
-            width={28}
-            height={28}
-            className="h-7 w-7 xl:hidden dark:invert"
+            alt="Tugo"
+            width={36}
+            height={40}
+            className="h-8 w-auto xl:hidden"
             priority
           />
-          {/* 확장 시 TUGO 전체 로고 */}
+          {/* 확장 시 Tugo. 전체 로고 */}
           <Image
             src="/logo.svg"
-            alt="TUGO"
-            width={80}
-            height={28}
-            className="h-7 w-auto hidden xl:block dark:invert"
+            alt="Tugo"
+            width={120}
+            height={44}
+            className="h-9 w-auto hidden xl:block"
             priority
           />
         </Link>
