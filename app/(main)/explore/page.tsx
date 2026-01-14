@@ -17,7 +17,7 @@ import CreatorCard from '@/components/explore/CreatorCard';
 import NewsCard from '@/components/explore/NewsCard';
 import { useDebates } from '@/hooks/useDebates';
 import { usePopularCreators } from '@/hooks/useCreators';
-import { useInfiniteNews, useNewsSources } from '@/hooks/useNews';
+import { useInfiniteNews, useCategories, useNewsSources } from '@/hooks/useNews';
 import { useTrendingKeywords } from '@/hooks/useSearch';
 
 type TabType = 'news' | 'creators' | 'votes';
@@ -78,6 +78,7 @@ export default function ExplorePage() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('politics');
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -86,9 +87,14 @@ export default function ExplorePage() {
     usePopularCreators(20);
   const { data: newsData, isLoading: isLoadingNews } = useInfiniteNews(
     20,
+    selectedCategory,
     selectedSource ?? undefined
   );
+  const { data: categories } = useCategories();
   const { data: newsSources } = useNewsSources();
+
+  // 현재 카테고리 정보
+  const currentCategory = categories?.find((c) => c.id === selectedCategory);
   const { data: trendingKeywords } = useTrendingKeywords(10);
 
   // URL의 tab 파라미터가 변경되면 탭 업데이트
@@ -102,6 +108,11 @@ export default function ExplorePage() {
   useEffect(() => {
     setSearchHistory(getSearchHistory());
   }, []);
+
+  // 카테고리 변경 시 언론사 필터 초기화
+  useEffect(() => {
+    setSelectedSource(null);
+  }, [selectedCategory]);
 
   // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
@@ -355,67 +366,92 @@ export default function ExplorePage() {
         {/* 뉴스 탭 */}
         {activeTab === 'news' && (
           <div>
-            {/* 언론사 필터 드롭다운 */}
+            {/* 카테고리 탭 */}
             <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-700">
-              <Menu as="div" className="relative inline-block text-left">
-                <Menu.Button className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
-                  <NewspaperIcon className="h-4 w-4" />
-                  {selectedSource || '전체 언론사'}
-                  <ChevronDownIcon className="h-4 w-4" />
-                </Menu.Button>
+              <nav className="flex gap-1 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-full w-fit">
+                {(categories || [
+                  { id: 'politics', name: '정치', hasSourceFilter: true },
+                  { id: 'economy', name: '경제', hasSourceFilter: false },
+                  { id: 'society', name: '사회', hasSourceFilter: false },
+                ]).map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                      selectedCategory === cat.id
+                        ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
+                        : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </nav>
+            </div>
 
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-lg bg-white dark:bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 focus:outline-none z-10 max-h-64 overflow-y-auto">
-                    <div className="py-1">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            onClick={() => setSelectedSource(null)}
-                            className={`${
-                              active
-                                ? 'bg-neutral-100 dark:bg-neutral-700'
-                                : ''
-                            } flex w-full items-center justify-between px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100`}
-                          >
-                            전체 언론사
-                            {!selectedSource && (
-                              <CheckIcon className="h-4 w-4 text-primary-600" />
-                            )}
-                          </button>
-                        )}
-                      </Menu.Item>
-                      {newsSources?.map((source) => (
-                        <Menu.Item key={source}>
+            {/* 언론사 필터 드롭다운 (정치 카테고리에서만 표시) */}
+            {currentCategory?.hasSourceFilter && (
+              <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-700">
+                <Menu as="div" className="relative inline-block text-left">
+                  <Menu.Button className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+                    <NewspaperIcon className="h-4 w-4" />
+                    {selectedSource || '전체 언론사'}
+                    <ChevronDownIcon className="h-4 w-4" />
+                  </Menu.Button>
+
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-lg bg-white dark:bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 focus:outline-none z-10 max-h-64 overflow-y-auto">
+                      <div className="py-1">
+                        <Menu.Item>
                           {({ active }) => (
                             <button
-                              onClick={() => setSelectedSource(source)}
+                              onClick={() => setSelectedSource(null)}
                               className={`${
                                 active
                                   ? 'bg-neutral-100 dark:bg-neutral-700'
                                   : ''
                               } flex w-full items-center justify-between px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100`}
                             >
-                              {source}
-                              {selectedSource === source && (
+                              전체 언론사
+                              {!selectedSource && (
                                 <CheckIcon className="h-4 w-4 text-primary-600" />
                               )}
                             </button>
                           )}
                         </Menu.Item>
-                      ))}
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </div>
+                        {newsSources?.map((source) => (
+                          <Menu.Item key={source}>
+                            {({ active }) => (
+                              <button
+                                onClick={() => setSelectedSource(source)}
+                                className={`${
+                                  active
+                                    ? 'bg-neutral-100 dark:bg-neutral-700'
+                                    : ''
+                                } flex w-full items-center justify-between px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100`}
+                              >
+                                {source}
+                                {selectedSource === source && (
+                                  <CheckIcon className="h-4 w-4 text-primary-600" />
+                                )}
+                              </button>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+            )}
 
             {isLoadingNews ? (
               <div className="p-4 space-y-3">
