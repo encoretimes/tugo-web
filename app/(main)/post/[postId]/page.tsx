@@ -22,7 +22,7 @@ export default function PostRedirectPage() {
 
   useEffect(() => {
     if (post?.author?.username) {
-      router.replace(`/${post.author.username}/post/${postId}`);
+      router.replace(`/@${post.author.username}/post/${postId}`);
     }
   }, [post, postId, router]);
 

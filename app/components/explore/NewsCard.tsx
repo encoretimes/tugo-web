@@ -9,7 +9,23 @@ interface NewsCardProps {
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
-  // 시간 포맷
+  // HTML 엔티티 디코딩
+  const decodeHtmlEntities = (text: string): string => {
+    const entities: Record<string, string> = {
+      '&nbsp;': ' ',
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&apos;': "'",
+    };
+    return text.replace(
+      /&[a-zA-Z0-9#]+;/g,
+      (match) => entities[match] || match
+    );
+  };
+
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -21,6 +37,15 @@ const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
     if (diffHours < 24) return `${diffHours}시간 전`;
     return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
   };
+
+  const isGoogleSource = article.source.toLowerCase().includes('google');
+  const decodedTitle = decodeHtmlEntities(article.title);
+  const displayTitle = isGoogleSource
+    ? decodedTitle
+    : `${decodedTitle} - ${article.source}`;
+  const displayDescription = article.description
+    ? decodeHtmlEntities(article.description)
+    : null;
 
   return (
     <a
@@ -34,22 +59,17 @@ const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
           <NewspaperIcon className="w-5 h-5 text-neutral-400" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 px-2 py-0.5 rounded">
-              {article.source}
-            </span>
-            <span className="text-xs text-neutral-400">
-              {formatTime(article.publishedAt)}
-            </span>
-          </div>
           <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100 line-clamp-2 mb-1">
-            {article.title}
+            {displayTitle}
           </p>
-          {article.description && (
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2">
-              {article.description}
+          {displayDescription && (
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 mb-1">
+              {displayDescription}
             </p>
           )}
+          <span className="text-xs text-neutral-400">
+            {formatTime(article.publishedAt)}
+          </span>
         </div>
       </div>
     </a>

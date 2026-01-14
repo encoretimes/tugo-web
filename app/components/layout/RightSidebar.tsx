@@ -4,22 +4,108 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { ChevronRightIcon, UserIcon } from '@heroicons/react/24/solid';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useDebates } from '@/hooks/useDebates';
 import { usePopularCreators } from '@/hooks/useCreators';
+import {
+  useSubscribeMutation,
+  useUnsubscribeMutation,
+} from '@/hooks/useSubscription';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useToastStore } from '@/store/toastStore';
+import { queryKeys } from '@/lib/query-keys';
+import ConfirmModal from '@/components/modals/ConfirmModal';
 
 const RightSidebar = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [subscriptions, setSubscriptions] = useState<Map<number, number>>(
+    new Map()
+  );
+  const [unsubscribeTarget, setUnsubscribeTarget] = useState<{
+    memberId: number;
+    subscriptionId: number;
+    displayName: string;
+  } | null>(null);
   const { data: debates, isLoading: isLoadingDebates } = useDebates(5);
   const { data: creatorsData, isLoading: isLoadingCreators } =
     usePopularCreators(3);
+  const subscribeMutation = useSubscribeMutation();
+  const unsubscribeMutation = useUnsubscribeMutation();
+  const { checkAuth } = useRequireAuth();
+  const { addToast } = useToastStore();
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
       router.push(`/explore?q=${encodeURIComponent(searchQuery.trim())}`);
     }
+  };
+
+  const handleSubscribe = (memberId: number, displayName: string) => {
+    if (!checkAuth()) return;
+
+    // Optimistic update
+    setSubscriptions((prev) => new Map(prev).set(memberId, -1)); // -1은 임시 값
+
+    subscribeMutation.mutate(
+      { targetMemberId: memberId },
+      {
+        onSuccess: (data) => {
+          setSubscriptions((prev) => new Map(prev).set(memberId, data.id));
+          addToast(`${displayName}님을 구독했습니다!`, 'success');
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.subscriptionStatus(memberId),
+          });
+        },
+        onError: () => {
+          setSubscriptions((prev) => {
+            const newMap = new Map(prev);
+            newMap.delete(memberId);
+            return newMap;
+          });
+          addToast('구독에 실패했습니다. 다시 시도해주세요.', 'error');
+        },
+      }
+    );
+  };
+
+  const handleUnsubscribeClick = (
+    memberId: number,
+    subscriptionId: number,
+    displayName: string
+  ) => {
+    setUnsubscribeTarget({ memberId, subscriptionId, displayName });
+  };
+
+  const handleUnsubscribeConfirm = () => {
+    if (!unsubscribeTarget) return;
+
+    const { memberId, subscriptionId, displayName } = unsubscribeTarget;
+
+    unsubscribeMutation.mutate(
+      { subscriptionId, targetMemberId: memberId },
+      {
+        onSuccess: () => {
+          setSubscriptions((prev) => {
+            const newMap = new Map(prev);
+            newMap.delete(memberId);
+            return newMap;
+          });
+          addToast(`${displayName}님 구독을 취소했습니다.`, 'success');
+          queryClient.invalidateQueries({
+            queryKey: queryKeys.subscriptionStatus(memberId),
+          });
+          setUnsubscribeTarget(null);
+        },
+        onError: () => {
+          addToast('구독 취소에 실패했습니다. 다시 시도해주세요.', 'error');
+        },
+      }
+    );
   };
 
   return (
@@ -74,7 +160,7 @@ const RightSidebar = () => {
                     <li key={index}>
                       {post ? (
                         <Link
-                          href={`/${post.author.username}/post/${post.postId}`}
+                          href={`/@${post.author.username}/post/${post.postId}`}
                           className="flex items-center gap-3 py-2 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-md transition-colors"
                         >
                           <span className="w-6 h-6 rounded flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
@@ -168,9 +254,33 @@ const RightSidebar = () => {
                       </div>
                     </div>
                   </Link>
-                  <button className="rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 shrink-0">
-                    구독
-                  </button>
+                  {subscriptions.has(creator.memberId) ? (
+                    <button
+                      onClick={() =>
+                        handleUnsubscribeClick(
+                          creator.memberId,
+                          subscriptions.get(creator.memberId) || 0,
+                          creator.nickname || creator.name
+                        )
+                      }
+                      className="rounded-md bg-neutral-200 dark:bg-neutral-700 px-3 py-1.5 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-600 shrink-0 transition-colors"
+                    >
+                      구독 중
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() =>
+                        handleSubscribe(
+                          creator.memberId,
+                          creator.nickname || creator.name
+                        )
+                      }
+                      disabled={subscribeMutation.isPending}
+                      className="rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 disabled:opacity-50 shrink-0 transition-colors"
+                    >
+                      구독
+                    </button>
+                  )}
                 </li>
               ))
             ) : (
@@ -181,6 +291,19 @@ const RightSidebar = () => {
           </ul>
         </div>
       </div>
+
+      {/* 구독 취소 확인 모달 */}
+      <ConfirmModal
+        isOpen={!!unsubscribeTarget}
+        onClose={() => setUnsubscribeTarget(null)}
+        onConfirm={handleUnsubscribeConfirm}
+        title="구독 취소"
+        description={`${unsubscribeTarget?.displayName}님의 구독을 취소하시겠습니까?`}
+        confirmText="구독 취소"
+        cancelText="유지하기"
+        confirmButtonClass="bg-red-500 hover:bg-red-600 text-white"
+        isLoading={unsubscribeMutation.isPending}
+      />
     </aside>
   );
 };

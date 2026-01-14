@@ -23,7 +23,7 @@ export default function ComposerToolbar({
 
   return (
     <div className="flex items-center space-x-2">
-      <label className="flex items-center justify-center text-primary-500 hover:text-primary-700 cursor-pointer">
+      <label className="flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg p-1.5 cursor-pointer transition-colors">
         <input
           ref={fileInputRef}
           type="file"
@@ -37,10 +37,10 @@ export default function ComposerToolbar({
       </label>
       <button
         onClick={onPollClick}
-        className={`flex items-center justify-center ${
+        className={`flex items-center justify-center rounded-lg p-1.5 transition-colors ${
           hasPoll
-            ? 'text-primary-600'
-            : 'text-primary-500 hover:text-primary-700'
+            ? 'text-primary-600 dark:text-primary-400'
+            : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
         }`}
         disabled={disabled}
       >
@@ -48,7 +48,7 @@ export default function ComposerToolbar({
       </button>
       <EmojiPickerButton
         onEmojiSelect={onEmojiSelect}
-        buttonClassName="flex items-center justify-center text-primary-500 hover:text-primary-700"
+        buttonClassName="flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg p-1.5 transition-colors"
       />
     </div>
   );

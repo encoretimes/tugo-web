@@ -33,7 +33,8 @@ const ProfilePage = () => {
   const params = useParams();
   const router = useRouter();
   // URL에서 @ 기호 제거 (/@sangminn200 -> sangminn200)
-  const rawUsername = params.username as string;
+  // URL 인코딩된 %40도 처리
+  const rawUsername = decodeURIComponent(params.username as string);
   const username = rawUsername.startsWith('@')
     ? rawUsername.slice(1)
     : rawUsername;
@@ -68,7 +69,11 @@ const ProfilePage = () => {
   const subscribeMutation = useSubscribeMutation();
   const unsubscribeMutation = useUnsubscribeMutation();
 
-  const isOwnProfile = currentUser && currentUser.username === username;
+  // 본인 프로필 확인 (ID와 username 둘 다 비교, 타입 통일)
+  const isOwnProfile =
+    currentUser &&
+    (Number(currentUser.id) === memberId ||
+      (currentUser.username && currentUser.username === username));
 
   const handleBack = useCallback(() => {
     router.back();

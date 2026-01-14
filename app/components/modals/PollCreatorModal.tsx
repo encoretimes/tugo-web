@@ -90,17 +90,17 @@ export default function PollCreatorModal({
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end space-x-3 border-t border-gray-200 dark:border-neutral-700 px-6 py-4">
+                <div className="flex justify-end space-x-3 border-t border-neutral-200 dark:border-neutral-700 px-6 py-4">
                   <button
                     onClick={handleCancel}
-                    className="px-4 py-2 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                    className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={!currentPollData}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     투표 추가
                   </button>

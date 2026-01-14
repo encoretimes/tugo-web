@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef, Fragment } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu } from '@headlessui/react';
 import {
   MagnifyingGlassIcon,
   XMarkIcon,
@@ -399,16 +399,10 @@ export default function ExplorePage() {
                     <ChevronDownIcon className="h-4 w-4" />
                   </Menu.Button>
 
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
+                  <Menu.Items
+                    anchor="bottom start"
+                    className="z-50 mt-2 w-48 rounded-lg bg-white dark:bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 focus:outline-none max-h-64 overflow-y-auto [--anchor-gap:8px] origin-top-left transition duration-100 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
                   >
-                    <Menu.Items className="absolute left-0 mt-2 w-48 origin-top-left rounded-lg bg-white dark:bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 focus:outline-none z-10 max-h-64 overflow-y-auto">
                       <div className="py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -448,7 +442,6 @@ export default function ExplorePage() {
                         ))}
                       </div>
                     </Menu.Items>
-                  </Transition>
                 </Menu>
               </div>
             )}

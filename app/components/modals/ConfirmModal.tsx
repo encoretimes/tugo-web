@@ -2,7 +2,6 @@
 
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -53,24 +52,15 @@ export default function ConfirmModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex items-start justify-between mb-4">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-bold leading-6 text-gray-900 dark:text-neutral-100"
-                  >
-                    {title}
-                  </Dialog.Title>
-                  <button
-                    onClick={onClose}
-                    disabled={isLoading}
-                    className="text-gray-400 dark:text-neutral-500 hover:text-gray-600 dark:hover:text-neutral-300 transition-colors disabled:opacity-50"
-                  >
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
-                </div>
+              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-5 text-left align-middle shadow-xl transition-all">
+                <Dialog.Title
+                  as="h3"
+                  className="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-2"
+                >
+                  {title}
+                </Dialog.Title>
 
-                <Dialog.Description className="text-gray-600 dark:text-neutral-400 mb-6 whitespace-pre-line">
+                <Dialog.Description className="text-sm text-neutral-500 dark:text-neutral-400 mb-5">
                   {description}
                 </Dialog.Description>
 
@@ -78,14 +68,14 @@ export default function ConfirmModal({
                   <button
                     onClick={onClose}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 font-semibold hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2.5 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors disabled:opacity-50"
                   >
                     {cancelText}
                   </button>
                   <button
                     onClick={onConfirm}
                     disabled={isLoading}
-                    className={`flex-1 px-4 py-2 font-semibold transition-colors disabled:opacity-50 ${confirmButtonClass}`}
+                    className={`flex-1 px-4 py-2.5 rounded-xl font-medium transition-colors disabled:opacity-50 ${confirmButtonClass}`}
                   >
                     {isLoading ? '처리 중...' : confirmText}
                   </button>

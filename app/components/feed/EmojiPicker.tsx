@@ -2,7 +2,7 @@
 
 import { Popover, Transition } from '@headlessui/react';
 import { FaceSmileIcon } from '@heroicons/react/24/outline';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { Fragment } from 'react';
 
 interface EmojiPickerButtonProps {
@@ -31,7 +31,7 @@ export default function EmojiPickerButton({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Popover.Panel className="absolute bottom-full mb-2 left-0 z-[100] shadow-2xl">
+            <Popover.Panel className="absolute bottom-full mb-2 left-0 z-[100] shadow-2xl rounded-lg overflow-hidden">
               <EmojiPicker
                 onEmojiClick={(emojiData) => {
                   onEmojiSelect(emojiData.emoji);
@@ -39,6 +39,7 @@ export default function EmojiPickerButton({
                 }}
                 width={320}
                 height={400}
+                theme={Theme.AUTO}
                 previewConfig={{ showPreview: false }}
               />
             </Popover.Panel>

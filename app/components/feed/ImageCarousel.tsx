@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
@@ -7,12 +7,37 @@ interface ImageCarouselProps {
   onImageClick: (index: number) => void;
 }
 
+interface ImageDimensions {
+  width: number;
+  height: number;
+  aspectRatio: number;
+}
+
 const ImageCarousel: React.FC<ImageCarouselProps> = ({
   images,
   onImageClick,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [singleImageDimensions, setSingleImageDimensions] =
+    useState<ImageDimensions | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const isSingleImage = images.length === 1;
+
+  useEffect(() => {
+    if (isSingleImage && images[0]) {
+      const img = new window.Image();
+      img.src = images[0];
+      img.onload = () => {
+        const aspectRatio = img.width / img.height;
+        setSingleImageDimensions({
+          width: img.width,
+          height: img.height,
+          aspectRatio,
+        });
+      };
+    }
+  }, [images, isSingleImage]);
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;
@@ -47,12 +72,49 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     }
   };
 
+  const getSingleImageStyle = () => {
+    if (!singleImageDimensions) {
+      return { paddingBottom: '75%' };
+    }
+
+    const { aspectRatio } = singleImageDimensions;
+    const maxHeight = 400;
+    const containerWidth = 600;
+
+    if (aspectRatio >= 1) {
+      const height = Math.min(containerWidth / aspectRatio, maxHeight);
+      return { paddingBottom: `${(height / containerWidth) * 100}%` };
+    } else {
+      const height = Math.min(containerWidth / aspectRatio, maxHeight);
+      return { paddingBottom: `${Math.min((height / containerWidth) * 100, 100)}%` };
+    }
+  };
+
+  if (isSingleImage) {
+    return (
+      <div
+        className="relative group cursor-pointer rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 overflow-hidden"
+        onClick={() => onImageClick(0)}
+      >
+        <div className="relative w-full" style={getSingleImageStyle()}>
+          <Image
+            src={images[0]}
+            alt="Post image"
+            fill
+            className="object-cover hover:opacity-95 transition-opacity"
+            sizes="(max-width: 768px) 100vw, 600px"
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative group">
       <div
         ref={scrollContainerRef}
         onScroll={handleScrollEvent}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide rounded-2xl border border-neutral-200 bg-gray-100"
+        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -64,7 +126,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             className="w-full flex-shrink-0 snap-center cursor-pointer hover:opacity-95 transition-opacity"
             onClick={() => onImageClick(index)}
           >
-            <div className="relative aspect-square w-full">
+            <div className="relative aspect-[4/5] w-full">
               <Image
                 src={url}
                 alt={`Post image ${index + 1}`}

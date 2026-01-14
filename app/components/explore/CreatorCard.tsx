@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ import {
   useUnsubscribeMutation,
   useSubscriptionStatus,
 } from '@/hooks/useSubscription';
+import ConfirmModal from '@/components/modals/ConfirmModal';
 
 interface CreatorCardProps {
   creator: Creator;
@@ -26,6 +27,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
 }) => {
   const router = useRouter();
   const { isAuthenticated, user } = useUserStore();
+  const [showUnsubscribeModal, setShowUnsubscribeModal] = useState(false);
 
   const { data: subscriptionStatus, isLoading: isStatusLoading } =
     useSubscriptionStatus(creator.memberId);
@@ -50,12 +52,26 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
     if (isOwnProfile) return;
 
     if (isSubscribed && subscriptionId) {
-      unsubscribeMutation.mutate({
-        subscriptionId,
-        targetMemberId: creator.memberId,
-      });
+      // 구독 취소 확인 모달 표시
+      setShowUnsubscribeModal(true);
     } else {
       subscribeMutation.mutate({ targetMemberId: creator.memberId });
+    }
+  };
+
+  const handleUnsubscribeConfirm = () => {
+    if (subscriptionId) {
+      unsubscribeMutation.mutate(
+        {
+          subscriptionId,
+          targetMemberId: creator.memberId,
+        },
+        {
+          onSuccess: () => {
+            setShowUnsubscribeModal(false);
+          },
+        }
+      );
     }
   };
 
@@ -108,13 +124,26 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           disabled={isMutating || isStatusLoading}
           className={`shrink-0 px-4 py-1.5 rounded-md text-sm font-semibold transition-colors disabled:opacity-50 ${
             isSubscribed
-              ? 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400'
+              ? 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-600'
               : 'bg-primary-600 text-white hover:bg-primary-700'
           }`}
         >
-          {isMutating ? '...' : isSubscribed ? '구독중' : '구독'}
+          {isMutating ? '...' : isSubscribed ? '구독 중' : '구독'}
         </button>
       )}
+
+      {/* 구독 취소 확인 모달 */}
+      <ConfirmModal
+        isOpen={showUnsubscribeModal}
+        onClose={() => setShowUnsubscribeModal(false)}
+        onConfirm={handleUnsubscribeConfirm}
+        title="구독 취소"
+        description={`${creator.nickname || creator.name}님의 구독을 취소하시겠습니까?`}
+        confirmText="구독 취소"
+        cancelText="유지하기"
+        confirmButtonClass="bg-red-500 hover:bg-red-600 text-white"
+        isLoading={unsubscribeMutation.isPending}
+      />
     </Link>
   );
 };
