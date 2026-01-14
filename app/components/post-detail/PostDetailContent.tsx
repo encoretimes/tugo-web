@@ -48,7 +48,6 @@ export default function PostDetailContent({
   const [commentText, setCommentText] = useState('');
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [isPollExpanded, setIsPollExpanded] = useState(true);
 
   const handleProfileNavigation = (username: string) => {
     onClose();
@@ -162,14 +161,14 @@ export default function PostDetailContent({
                 {author.profileImageUrl ? (
                   <Image
                     src={author.profileImageUrl}
-                    alt={author.name}
+                    alt={author.nickname || author.name}
                     width={48}
                     height={48}
                     className="h-12 w-12 rounded-full hover:opacity-80 transition-opacity"
                   />
                 ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-400 dark:hover:bg-neutral-600 transition-colors">
-                    <UserIcon className="h-7 w-7 text-neutral-500 dark:text-neutral-400" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 transition-colors">
+                    <UserIcon className="h-6 w-6 text-neutral-400 dark:text-neutral-500" />
                   </div>
                 )}
               </button>
@@ -179,7 +178,7 @@ export default function PostDetailContent({
                     className="font-semibold text-gray-900 dark:text-neutral-100 hover:underline text-left"
                     onClick={() => handleProfileNavigation(author.username)}
                   >
-                    {author.name}
+                    {author.nickname || author.name}
                   </button>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-neutral-400">
@@ -199,6 +198,28 @@ export default function PostDetailContent({
             <div className="text-gray-900 dark:text-neutral-100 whitespace-pre-wrap break-words">
               <MentionText content={contentText} />
             </div>
+
+            {/* 투표 */}
+            {post.poll && (
+              <div className="mt-4">
+                <div className="rounded-xl bg-gray-50 dark:bg-neutral-900 p-4 border border-gray-100 dark:border-neutral-800">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30">
+                      <ChartBarIcon className="h-4 w-4 text-primary-600" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-neutral-100">
+                      {post.poll.question || '투표에 참여해주세요'}
+                    </span>
+                  </div>
+                  <PollCard
+                    poll={post.poll}
+                    onVote={voteOnPoll}
+                    onRevote={updateVoteOnPoll}
+                    hideQuestion={true}
+                  />
+                </div>
+              </div>
+            )}
 
             {/* 사진 */}
             {post.mediaUrls && post.mediaUrls.length > 0 && (
@@ -224,52 +245,6 @@ export default function PostDetailContent({
             className="overflow-y-auto scrollbar-hide pr-4 relative"
             style={{ flex: '1 1 0', minHeight: 0 }}
           >
-            {/* 설문조사 (댓글처럼 표시, 함께 스크롤) */}
-            {post.poll && (
-              <div className="pb-3">
-                <div className="flex space-x-2">
-                  {/* 투표 아이콘 */}
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/30 flex-shrink-0">
-                    <ChartBarIcon className="h-5 w-5 text-primary-600" />
-                  </div>
-                  {/* 투표 카드 */}
-                  <div className="flex-1">
-                    <div className="rounded-lg bg-primary-50 dark:bg-primary-900/20 p-3">
-                      <button
-                        onClick={() => setIsPollExpanded(!isPollExpanded)}
-                        className="w-full flex items-center justify-between mb-2 text-left"
-                      >
-                        <span className="text-sm font-medium text-gray-900 dark:text-neutral-100">
-                          {post.poll.question || '투표에 참여해주세요'}
-                        </span>
-                        <svg
-                          className={`w-4 h-4 text-primary-600 transition-transform flex-shrink-0 ml-2 ${isPollExpanded ? 'rotate-180' : ''}`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                      {isPollExpanded && (
-                        <PollCard
-                          poll={post.poll}
-                          onVote={voteOnPoll}
-                          onRevote={updateVoteOnPoll}
-                          hideQuestion={true}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             <div className="space-y-3">
               {isLoadingComments ? (
                 <>
@@ -308,7 +283,7 @@ export default function PostDetailContent({
           <div className="border-t border-gray-200 dark:border-neutral-700 pt-4 mt-4 flex-shrink-0">
             <CommentInput
               userProfileImageUrl={user?.profileImageUrl}
-              userName={user?.name || ''}
+              userName={user?.displayName || ''}
               value={commentText}
               onChange={setCommentText}
               onSubmit={handleCommentSubmit}

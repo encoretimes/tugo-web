@@ -54,35 +54,35 @@ const Feed = () => {
 
   return (
     <div>
-      <InlinePostComposer />
-
-      <div className="h-4" />
-
-      {/* 피드 타입 탭 */}
+      {/* 피드 타입 탭 - 상단 sticky */}
       {hasHydrated && isAuthenticated && (
-        <div className="flex border-b border-gray-200 dark:border-neutral-700 mb-0">
-          <button
-            onClick={() => setFeedType('following')}
-            className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
-              feedType === 'following'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
-            }`}
-          >
-            구독
-          </button>
-          <button
-            onClick={() => setFeedType('recommended')}
-            className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
-              feedType === 'recommended'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
-            }`}
-          >
-            추천
-          </button>
+        <div className="sticky top-0 z-10 bg-white dark:bg-neutral-950 -mx-4 px-4 -mt-4 pt-4">
+          <div className="flex border-b border-gray-200 dark:border-neutral-700">
+            <button
+              onClick={() => setFeedType('following')}
+              className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
+                feedType === 'following'
+                  ? 'text-primary-600 border-b-2 border-primary-600'
+                  : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
+              }`}
+            >
+              구독
+            </button>
+            <button
+              onClick={() => setFeedType('recommended')}
+              className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
+                feedType === 'recommended'
+                  ? 'text-primary-600 border-b-2 border-primary-600'
+                  : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
+              }`}
+            >
+              추천
+            </button>
+          </div>
         </div>
       )}
+
+      <InlinePostComposer />
 
       <div>
         {isLoading ? (

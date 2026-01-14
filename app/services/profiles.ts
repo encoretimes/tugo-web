@@ -1,7 +1,7 @@
 import { apiClient } from '@/lib/api-client';
 
 export interface ProfileUpdateRequest {
-  name?: string;
+  displayName?: string;
   introduction?: string;
   profileUrl?: string;
   bannerImageUrl?: string;

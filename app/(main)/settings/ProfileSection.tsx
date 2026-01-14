@@ -13,7 +13,7 @@ const ProfileSection = () => {
   const { user, updateProfile } = useUserStore();
   const { addToast } = useToastStore();
 
-  const [name, setName] = useState(user?.name || '');
+  const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [bio, setBio] = useState(user?.introduction || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,7 +34,7 @@ const ProfileSection = () => {
 
   useEffect(() => {
     if (user) {
-      setName(user.name);
+      setDisplayName(user.displayName || '');
       setBio(user.introduction || '');
     }
   }, [user]);
@@ -128,19 +128,19 @@ const ProfileSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name.trim()) {
-      addToast('이름을 입력해주세요', 'error');
+    if (!displayName.trim()) {
+      addToast('별명을 입력해주세요', 'error');
       return;
     }
 
     setIsSubmitting(true);
     try {
       await updateMyProfile({
-        name: name.trim(),
+        displayName: displayName.trim(),
         introduction: bio.trim() || undefined,
       });
       updateProfile({
-        name: name.trim(),
+        displayName: displayName.trim(),
         introduction: bio.trim() || undefined,
       });
       addToast('프로필이 저장되었습니다', 'success');
@@ -209,14 +209,14 @@ const ProfileSection = () => {
               {profileImagePreview || user?.profileImageUrl ? (
                 <Image
                   src={profileImagePreview || user?.profileImageUrl || ''}
-                  alt={user?.name || 'Profile'}
+                  alt={user?.displayName || 'Profile'}
                   width={96}
                   height={96}
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <UserIcon className="h-12 w-12 text-gray-300 dark:text-neutral-600" />
+                <div className="flex h-full w-full items-center justify-center bg-neutral-200 dark:bg-neutral-700">
+                  <UserIcon className="h-12 w-12 text-neutral-400 dark:text-neutral-500" />
                 </div>
               )}
             </div>
@@ -249,17 +249,18 @@ const ProfileSection = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
-              htmlFor="username"
+              htmlFor="displayName"
               className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
             >
-              이름
+              별명 (닉네임)
             </label>
             <input
               type="text"
-              id="username"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors"
+              id="displayName"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="다른 사용자에게 표시될 이름"
+              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors placeholder:text-gray-400 dark:placeholder:text-neutral-500"
               required
             />
           </div>

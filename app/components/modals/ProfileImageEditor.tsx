@@ -8,8 +8,8 @@ import {
   XMarkIcon,
   ArrowPathIcon,
   ArrowUturnLeftIcon,
-  MagnifyingGlassMinusIcon,
-  MagnifyingGlassPlusIcon,
+  MinusIcon,
+  PlusIcon,
 } from '@heroicons/react/24/outline';
 
 interface ProfileImageEditorProps {
@@ -149,85 +149,68 @@ export default function ProfileImageEditor({
       <Dialog as="div" className="relative z-50" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
+          enter="ease-out duration-200"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in duration-200"
+          leave="ease-in duration-150"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-90" />
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
+              enter="ease-out duration-200"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
+              leave="ease-in duration-150"
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-4xl bg-white rounded-lg shadow-xl">
+              <Dialog.Panel
+                className={`w-full ${imageType === 'profile' ? 'max-w-md' : 'max-w-2xl'} bg-white dark:bg-neutral-900 shadow-2xl transition-all`}
+              >
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-neutral-800">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-semibold text-gray-900"
+                    className="text-base font-semibold text-gray-900 dark:text-neutral-100 tracking-tight"
                   >
-                    {imageType === 'profile'
-                      ? '프로필 사진 편집'
-                      : '배경 이미지 편집'}
+                    {imageType === 'profile' ? '프로필 사진' : '배경 이미지'}
                   </Dialog.Title>
                   <button
                     onClick={handleCancel}
-                    className="text-gray-500 hover:text-gray-700 p-1"
+                    className="p-1.5 text-gray-400 dark:text-neutral-500 hover:text-gray-600 dark:hover:text-neutral-300 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
                   >
-                    <XMarkIcon className="h-6 w-6" />
+                    <XMarkIcon className="h-5 w-5" />
                   </button>
                 </div>
 
-                {/* Main Content */}
-                <div className="p-6">
+                {/* Cropper Area */}
+                <div className="relative bg-neutral-950">
                   {imageUrl && (
-                    <div className="relative bg-gray-50 rounded-lg overflow-hidden">
-                      {/* 원형 마스크 오버레이 (프로필 사진만) */}
+                    <>
+                      {/* 프로필: 원형 가이드 오버레이 */}
                       {imageType === 'profile' && (
-                        <svg
-                          className="absolute inset-0 w-full h-full pointer-events-none z-10"
-                          preserveAspectRatio="xMidYMid meet"
-                        >
-                          <defs>
-                            <mask id="circleMask">
-                              <rect width="100%" height="100%" fill="white" />
-                              <circle cx="50%" cy="50%" r="35%" fill="black" />
-                            </mask>
-                          </defs>
-                          <rect
-                            width="100%"
-                            height="100%"
-                            fill="rgba(0, 0, 0, 0.6)"
-                            mask="url(#circleMask)"
+                        <div className="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
+                          <div
+                            className="border-2 border-white/40 border-dashed rounded-full"
+                            style={{
+                              width: '70%',
+                              aspectRatio: '1',
+                            }}
                           />
-                          <circle
-                            cx="50%"
-                            cy="50%"
-                            r="35%"
-                            fill="none"
-                            stroke="white"
-                            strokeWidth="2"
-                            strokeDasharray="5,5"
-                          />
-                        </svg>
+                        </div>
                       )}
 
                       <Cropper
                         ref={cropperRef}
                         src={imageUrl}
                         style={{
-                          height: '60vh',
+                          height: imageType === 'profile' ? '320px' : '280px',
                           width: '100%',
                         }}
                         aspectRatio={aspectRatio}
@@ -235,7 +218,7 @@ export default function ProfileImageEditor({
                         guides={false}
                         background={false}
                         responsive={true}
-                        autoCropArea={0.7}
+                        autoCropArea={0.8}
                         checkOrientation={false}
                         dragMode="move"
                         cropBoxMovable={false}
@@ -248,104 +231,90 @@ export default function ProfileImageEditor({
                           }
                         }}
                       />
-                    </div>
+                    </>
                   )}
+                </div>
 
-                  {/* Controls */}
-                  <div className="mt-6 space-y-4">
-                    {/* Rotation */}
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">
-                        회전
-                      </h3>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={handleRotateLeft}
-                          className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 min-h-[44px]"
-                        >
-                          <ArrowUturnLeftIcon className="h-5 w-5" />
-                          <span className="text-sm">좌회전</span>
-                        </button>
-                        <button
-                          onClick={handleRotateRight}
-                          className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 min-h-[44px]"
-                        >
-                          <ArrowPathIcon className="h-5 w-5" />
-                          <span className="text-sm">우회전</span>
-                        </button>
-                      </div>
+                {/* Controls */}
+                <div className="px-5 py-4 space-y-4 border-t border-gray-100 dark:border-neutral-800">
+                  {/* Zoom */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleZoomOut}
+                      className="p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                      aria-label="축소"
+                    >
+                      <MinusIcon className="h-4 w-4" />
+                    </button>
+                    <div className="flex-1 relative">
+                      <input
+                        type="range"
+                        min="0"
+                        max="3"
+                        step="0.05"
+                        value={zoomLevel}
+                        onChange={handleZoomChange}
+                        className="w-full h-1 bg-gray-200 dark:bg-neutral-700 rounded-full appearance-none cursor-pointer
+                          [&::-webkit-slider-thumb]:appearance-none
+                          [&::-webkit-slider-thumb]:w-3.5
+                          [&::-webkit-slider-thumb]:h-3.5
+                          [&::-webkit-slider-thumb]:rounded-full
+                          [&::-webkit-slider-thumb]:bg-gray-900
+                          [&::-webkit-slider-thumb]:dark:bg-neutral-100
+                          [&::-webkit-slider-thumb]:cursor-pointer
+                          [&::-webkit-slider-thumb]:transition-transform
+                          [&::-webkit-slider-thumb]:hover:scale-110"
+                      />
                     </div>
-
-                    {/* Zoom */}
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-2">
-                        확대/축소
-                      </h3>
-                      <div className="flex items-center space-x-3">
-                        <button
-                          onClick={handleZoomOut}
-                          className="p-2 text-gray-600 hover:text-gray-800 min-h-[44px] min-w-[44px]"
-                        >
-                          <MagnifyingGlassMinusIcon className="h-5 w-5" />
-                        </button>
-                        <input
-                          type="range"
-                          min="0"
-                          max="3"
-                          step="0.1"
-                          value={zoomLevel}
-                          onChange={handleZoomChange}
-                          className="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                        />
-                        <button
-                          onClick={handleZoomIn}
-                          className="p-2 text-gray-600 hover:text-gray-800 min-h-[44px] min-w-[44px]"
-                        >
-                          <MagnifyingGlassPlusIcon className="h-5 w-5" />
-                        </button>
-                      </div>
-                      <div className="text-center text-xs text-gray-500 mt-1">
-                        {Math.round(zoomLevel * 100)}%
-                      </div>
-                    </div>
-
-                    <div className="text-xs text-gray-500 bg-gray-50 border border-gray-200 p-3 rounded">
-                      {imageType === 'profile' ? (
-                        <>
-                          <p className="font-medium mb-1">
-                            원형 영역 안이 실제 프로필 사진으로 표시됩니다
-                          </p>
-                          <p className="text-gray-400">
-                            이미지를 드래그하거나 확대/축소하여 위치를
-                            조정하세요
-                          </p>
-                        </>
-                      ) : (
-                        <>
-                          <p className="font-medium mb-1">
-                            중앙 직사각형 영역이 배경 이미지로 표시됩니다
-                          </p>
-                          <p className="text-gray-400">
-                            이미지를 드래그하거나 확대/축소하여 위치를
-                            조정하세요
-                          </p>
-                        </>
-                      )}
-                    </div>
+                    <button
+                      onClick={handleZoomIn}
+                      className="p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                      aria-label="확대"
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </button>
+                    <span className="text-xs text-gray-400 dark:text-neutral-500 w-10 text-right tabular-nums">
+                      {Math.round(zoomLevel * 100)}%
+                    </span>
                   </div>
+
+                  {/* Rotation */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleRotateLeft}
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors"
+                    >
+                      <ArrowUturnLeftIcon className="h-4 w-4" />
+                      <span>좌회전</span>
+                    </button>
+                    <button
+                      onClick={handleRotateRight}
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors"
+                    >
+                      <ArrowPathIcon className="h-4 w-4" />
+                      <span>우회전</span>
+                    </button>
+                  </div>
+
+                  {/* Helper text */}
+                  <p className="text-xs text-gray-400 dark:text-neutral-500 text-center">
+                    {imageType === 'profile'
+                      ? '드래그하여 위치 조정 · 원형 영역이 프로필로 저장됩니다'
+                      : '드래그하여 위치 조정'}
+                  </p>
                 </div>
 
                 {/* Actions */}
-                <div className="px-6 py-4 bg-white border-t border-gray-200 flex justify-end space-x-3">
+                <div className="flex gap-3 px-5 py-4 border-t border-gray-100 dark:border-neutral-800">
                   <button
                     onClick={handleCancel}
-                    className="px-6 py-2.5 border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                    className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-neutral-400 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleSave}
-                    className="px-6 py-2.5 bg-gray-900 text-white hover:bg-gray-800 transition-colors font-medium"
+                    className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-gray-900 dark:bg-neutral-100 dark:text-neutral-900 hover:bg-gray-800 dark:hover:bg-neutral-200 transition-colors"
                   >
                     저장
                   </button>

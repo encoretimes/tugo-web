@@ -37,7 +37,7 @@ const PostComposer = () => {
             {user?.profileImageUrl ? (
               <Image
                 src={user.profileImageUrl}
-                alt={user.name}
+                alt={user.displayName}
                 width={48}
                 height={48}
                 className="h-12 w-12 rounded-full"

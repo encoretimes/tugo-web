@@ -67,7 +67,7 @@ function SortableImage({
       } ${
         isActive
           ? 'border-primary-500 ring-2 ring-primary-500/30'
-          : 'border-gray-200 hover:border-gray-300'
+          : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
       }`}
       onClick={handleClick}
     >
@@ -138,7 +138,7 @@ export default function ThumbnailStrip({
 
   if (variant === 'horizontal') {
     return (
-      <div className="px-4 py-2 bg-white border-t border-gray-200">
+      <div className="px-4 py-2 bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-800">
         <div className="flex gap-2 overflow-x-auto justify-center">
           {images.map((img, index) => (
             <button
@@ -147,7 +147,7 @@ export default function ThumbnailStrip({
               className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
                 index === currentIndex
                   ? 'border-primary-500 ring-2 ring-primary-500/30'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
               }`}
             >
               <Image
@@ -167,7 +167,7 @@ export default function ThumbnailStrip({
   }
 
   return (
-    <div className="flex flex-col items-center w-20 bg-gray-50 border-r border-gray-200 py-3 overflow-y-auto overflow-x-hidden">
+    <div className="flex flex-col items-center w-20 bg-gray-50 dark:bg-neutral-800 border-r border-gray-200 dark:border-neutral-800 py-3 overflow-y-auto overflow-x-hidden">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

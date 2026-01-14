@@ -1,6 +1,9 @@
-<svg width="130" height="40" viewBox="0 0 130 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="120" height="44" viewBox="0 0 120 44" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&amp;display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&amp;display=swap');
   </style>
-  <text x="0" y="32" font-family="'Playfair Display', Georgia, serif" font-size="36" font-weight="900" fill="currentColor" letter-spacing="2">TUGO</text>
+  <g transform="rotate(-3, 60, 22)">
+    <text x="4" y="34" font-family="'Playfair Display', Georgia, serif" font-size="38" font-weight="700" font-style="italic" fill="#1e3a5f" letter-spacing="-1">Tugo</text>
+    <text x="92" y="34" font-family="'Playfair Display', Georgia, serif" font-size="38" font-weight="700" font-style="italic" fill="#3b82f6">.</text>
+  </g>
 </svg>

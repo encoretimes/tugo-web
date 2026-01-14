@@ -50,7 +50,7 @@ export const useCreateComment = () => {
         const optimisticComment: Comment = {
           id: Date.now(),
           author: {
-            name: user.name,
+            name: user.displayName,
             username: user.username || 'unknown',
             profileImageUrl: user.profileImageUrl || null,
           },

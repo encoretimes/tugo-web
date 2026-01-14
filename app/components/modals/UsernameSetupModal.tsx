@@ -111,15 +111,15 @@ export default function UsernameSetupModal({
       // 1. Username 설정
       await apiClient.put(`/api/v1/members/me/username?username=${username}`);
 
-      // 2. Profile name(닉네임) 설정
-      await updateMyProfile({ name: nickname.trim() });
+      // 2. Profile 닉네임 설정
+      await updateMyProfile({ displayName: nickname.trim() });
 
       // User 정보 업데이트 (Zustand store)
       if (user) {
         setUser({
           ...user,
           username: username,
-          name: nickname.trim(),
+          displayName: nickname.trim(),
         });
       }
 
@@ -171,7 +171,7 @@ export default function UsernameSetupModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all">
                 {/* 헤더 영역 */}
                 <div className="text-center mb-6">
                   <div className="mx-auto w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4">
@@ -191,11 +191,11 @@ export default function UsernameSetupModal({
                   </div>
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold leading-6 text-gray-900 mb-2"
+                    className="text-xl font-bold leading-6 text-gray-900 dark:text-neutral-100 mb-2"
                   >
                     프로필 설정
                   </Dialog.Title>
-                  <Dialog.Description className="text-sm text-gray-600">
+                  <Dialog.Description className="text-sm text-gray-600 dark:text-neutral-400">
                     Tugo에서 사용할 프로필을 설정해주세요
                   </Dialog.Description>
                 </div>
@@ -205,7 +205,7 @@ export default function UsernameSetupModal({
                   <div className="mb-5">
                     <label
                       htmlFor="nickname"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
                     >
                       닉네임
                       <span className="text-red-500 ml-1">*</span>
@@ -216,12 +216,12 @@ export default function UsernameSetupModal({
                         id="nickname"
                         value={nickname}
                         onChange={(e) => handleNicknameChange(e.target.value)}
-                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 ${
+                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 text-gray-900 dark:text-neutral-100 bg-white dark:bg-neutral-800 placeholder:text-gray-400 dark:placeholder:text-neutral-500 ${
                           nicknameError
-                            ? 'border-red-300'
+                            ? 'border-red-300 dark:border-red-500'
                             : nickname.trim()
-                              ? 'border-green-300'
-                              : 'border-gray-300'
+                              ? 'border-green-300 dark:border-green-500'
+                              : 'border-gray-300 dark:border-neutral-600'
                         }`}
                         placeholder="다른 사용자에게 보여질 이름"
                         required
@@ -236,7 +236,7 @@ export default function UsernameSetupModal({
                         {nicknameError}
                       </p>
                     )}
-                    <p className="mt-2 text-xs text-gray-500">
+                    <p className="mt-2 text-xs text-gray-500 dark:text-neutral-400">
                       한글, 영문, 숫자 등 자유롭게 사용 가능 (최대 20자)
                     </p>
                   </div>
@@ -245,13 +245,13 @@ export default function UsernameSetupModal({
                   <div className="mb-5">
                     <label
                       htmlFor="username"
-                      className="block text-sm font-medium text-gray-700 mb-2"
+                      className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
                     >
                       사용자 아이디
                       <span className="text-red-500 ml-1">*</span>
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-neutral-400">
                         @
                       </span>
                       <input
@@ -261,12 +261,12 @@ export default function UsernameSetupModal({
                         onChange={(e) =>
                           setUsername(e.target.value.toLowerCase())
                         }
-                        className={`w-full pl-8 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 ${
+                        className={`w-full pl-8 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 text-gray-900 dark:text-neutral-100 bg-white dark:bg-neutral-800 placeholder:text-gray-400 dark:placeholder:text-neutral-500 ${
                           isAvailable === true
-                            ? 'border-green-300'
+                            ? 'border-green-300 dark:border-green-500'
                             : isAvailable === false
-                              ? 'border-red-300'
-                              : 'border-gray-300'
+                              ? 'border-red-300 dark:border-red-500'
+                              : 'border-gray-300 dark:border-neutral-600'
                         }`}
                         placeholder="username"
                         required
@@ -296,7 +296,7 @@ export default function UsernameSetupModal({
                         사용 가능한 아이디입니다
                       </p>
                     )}
-                    <p className="mt-2 text-xs text-gray-500">
+                    <p className="mt-2 text-xs text-gray-500 dark:text-neutral-400">
                       프로필 URL에 사용됩니다 (3-20자, 영문/숫자/언더스코어)
                     </p>
                   </div>
@@ -306,7 +306,7 @@ export default function UsernameSetupModal({
                     <button
                       type="submit"
                       disabled={!isFormValid || isSubmitting}
-                      className="w-full rounded-lg bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                      className="w-full rounded-lg bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 disabled:bg-gray-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center justify-center">

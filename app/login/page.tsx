@@ -48,7 +48,7 @@ function LoginContent() {
 
       setUser({
         id: 1,
-        name: '개발자',
+        displayName: '개발자',
         email: 'dev@tugo.local',
         role: 'USER',
         profileImageUrl: null,

@@ -23,10 +23,10 @@ const MainHeader = () => {
           <Link href="/" className="flex items-center">
             <Image
               src="/logo.svg"
-              alt="TUGO"
-              width={64}
-              height={26}
-              className="h-6 w-auto dark:invert"
+              alt="Tugo"
+              width={120}
+              height={44}
+              className="h-7 w-auto"
               priority
             />
           </Link>

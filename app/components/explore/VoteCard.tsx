@@ -51,13 +51,13 @@ const VoteCard: React.FC<VoteCardProps> = ({ post, rank }) => {
           <div className="flex items-center gap-2 mb-1">
             <Image
               src={post.author.profileImageUrl || defaultProfileImage}
-              alt={post.author.name}
+              alt={post.author.nickname || post.author.name}
               width={20}
               height={20}
               className="h-5 w-5 rounded-full object-cover"
             />
             <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
-              {post.author.name}
+              {post.author.nickname || post.author.name}
             </span>
             <span className="text-sm text-neutral-400">·</span>
             <span className="text-sm text-neutral-400">

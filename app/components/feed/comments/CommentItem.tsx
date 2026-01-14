@@ -16,20 +16,20 @@ export default function CommentItem({ comment }: CommentItemProps) {
       {comment.author.profileImageUrl ? (
         <Image
           src={comment.author.profileImageUrl}
-          alt={comment.author.name}
+          alt={comment.author.nickname || comment.author.name}
           width={32}
           height={32}
           className="h-8 w-8 rounded-full"
         />
       ) : (
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-700">
-          <UserIcon className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700">
+          <UserIcon className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />
         </div>
       )}
       <div className="flex-1">
         <div className="rounded-lg bg-neutral-100 dark:bg-neutral-800 p-2">
           <p className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-            {comment.author.name}{' '}
+            {comment.author.nickname || comment.author.name}{' '}
             <span className="font-normal text-neutral-500 dark:text-neutral-400">
               @{comment.author.username}
             </span>

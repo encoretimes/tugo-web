@@ -53,7 +53,7 @@ export default function DebateCard({ post }: DebateCardProps) {
           {author.profileImageUrl ? (
             <Image
               src={author.profileImageUrl}
-              alt={author.name}
+              alt={author.nickname || author.name}
               width={32}
               height={32}
               className="w-8 h-8 rounded-full object-cover"
@@ -66,7 +66,7 @@ export default function DebateCard({ post }: DebateCardProps) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
               <p className="text-sm font-semibold text-gray-900 truncate">
-                {author.name}
+                {author.nickname || author.name}
               </p>
             </div>
             <p className="text-xs text-gray-500">@{author.username}</p>

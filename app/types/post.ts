@@ -5,6 +5,7 @@ export interface Post {
   postId: number;
   author: {
     name: string;
+    nickname?: string;
     username: string;
     profileImageUrl: string | null;
   };
@@ -28,6 +29,7 @@ export interface Comment {
   id: number;
   author: {
     name: string;
+    nickname?: string;
     username: string;
     profileImageUrl: string | null;
   };
@@ -77,7 +79,7 @@ export interface VoteRequest {
 export interface MemberSearchResult {
   memberId: number;
   username: string;
-  name: string;
+  displayName: string;
   profileImageUrl: string | null;
 }
 

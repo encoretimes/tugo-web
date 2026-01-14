@@ -34,7 +34,7 @@ export default function AuthProvider({
 
       setUser({
         id: member.id,
-        name: member.name,
+        displayName: member.displayName,
         email: member.email,
         role: member.role,
         profileImageUrl: null,

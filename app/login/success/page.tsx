@@ -9,7 +9,7 @@ import { getApiUrl } from '@/config/env';
 interface MemberResponse {
   id: number;
   email: string;
-  name: string;
+  displayName: string;
   role: string;
   createdAt: string;
   updatedAt: string;
@@ -38,7 +38,7 @@ export default function LoginSuccessPage() {
 
         setUser({
           id: userData.id,
-          name: userData.name,
+          displayName: userData.displayName,
           email: userData.email,
           role: userData.role,
           profileImageUrl: null,

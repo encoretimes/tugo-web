@@ -34,8 +34,8 @@ export default function CommentInput({
             className="h-8 w-8 rounded-full"
           />
         ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-700">
-            <UserIcon className="h-5 w-5 text-neutral-500 dark:text-neutral-400" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700">
+            <UserIcon className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />
           </div>
         )}
         <div className="flex-1">

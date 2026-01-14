@@ -328,14 +328,14 @@ export default function MultiImageEditor({
       <Dialog as="div" className="relative z-50" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
+          enter="ease-out duration-200"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in duration-200"
+          leave="ease-in duration-150"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-90" />
+          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
@@ -349,26 +349,26 @@ export default function MultiImageEditor({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-7xl h-screen flex flex-col bg-white">
+              <Dialog.Panel className="w-full max-w-7xl h-screen flex flex-col bg-white dark:bg-neutral-900">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-white border-b border-gray-200">
+                <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={handleCancel}
-                      className="text-gray-500 hover:text-gray-700 p-1 transition-colors"
+                      className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 p-1 transition-colors"
                     >
                       <XMarkIcon className="h-6 w-6" />
                     </button>
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-semibold text-gray-900"
+                      className="text-lg font-semibold text-gray-900 dark:text-neutral-100"
                     >
                       이미지 편집
                     </Dialog.Title>
                   </div>
                   <div className="flex items-center gap-3">
                     {images.length > 1 && (
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-neutral-400">
                         {currentIndex + 1} / {images.length}
                       </span>
                     )}
@@ -377,7 +377,7 @@ export default function MultiImageEditor({
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                         showBeforeAfter
                           ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700'
                       }`}
                     >
                       <EyeIcon className="h-4 w-4" />
@@ -402,7 +402,7 @@ export default function MultiImageEditor({
                   )}
 
                   {/* Center: Preview Area */}
-                  <div className="flex-1 flex flex-col bg-gray-100 min-h-0 relative">
+                  <div className="flex-1 flex flex-col bg-gray-100 dark:bg-neutral-950 min-h-0 relative">
                     {/* Navigation Arrows */}
                     {images.length > 1 && currentIndex > 0 && (
                       <button
@@ -424,7 +424,7 @@ export default function MultiImageEditor({
                     {/* Image Preview */}
                     <div className="flex-1 flex items-center justify-center p-4 md:p-6">
                       {currentImage && (
-                        <div className="w-full h-full max-w-3xl max-h-[60vh] md:max-h-[70vh] bg-white rounded-xl overflow-hidden shadow-lg">
+                        <div className="w-full h-full max-w-3xl max-h-[60vh] md:max-h-[70vh] bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-lg">
                           {showBeforeAfter ? (
                             <BeforeAfterSlider
                               beforeImage={currentImage.url}
@@ -478,17 +478,17 @@ export default function MultiImageEditor({
                   </div>
 
                   {/* Right: Control Panel */}
-                  <div className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-l border-gray-200 flex flex-col max-h-[40vh] md:max-h-none">
+                  <div className="w-full md:w-80 bg-white dark:bg-neutral-900 border-t md:border-t-0 md:border-l border-gray-200 dark:border-neutral-800 flex flex-col max-h-[40vh] md:max-h-none">
                     {/* Tabs */}
-                    <div className="flex border-b border-gray-200">
+                    <div className="flex border-b border-gray-200 dark:border-neutral-800">
                       {tabs.map((tab) => (
                         <button
                           key={tab.id}
                           onClick={() => setActiveTab(tab.id)}
                           className={`flex-1 flex flex-col items-center gap-1 px-3 py-3 text-sm font-medium border-b-2 transition-colors ${
                             activeTab === tab.id
-                              ? 'border-primary-500 text-primary-600'
-                              : 'border-transparent text-gray-500 hover:text-gray-700'
+                              ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                              : 'border-transparent text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200'
                           }`}
                         >
                           {tab.icon}
@@ -513,7 +513,7 @@ export default function MultiImageEditor({
 
                       {activeTab === 'filter' && currentImage && (
                         <div className="space-y-4">
-                          <h3 className="text-sm font-medium text-gray-900">
+                          <h3 className="text-sm font-medium text-gray-900 dark:text-neutral-100">
                             필터 선택
                           </h3>
                           <FilterPanel
@@ -533,11 +533,11 @@ export default function MultiImageEditor({
                     </div>
 
                     {/* Actions */}
-                    <div className="p-4 border-t border-gray-200">
+                    <div className="p-4 border-t border-gray-200 dark:border-neutral-800">
                       <div className="flex gap-3">
                         <button
                           onClick={handleCancel}
-                          className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
+                          className="flex-1 px-4 py-3 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors font-medium"
                         >
                           취소
                         </button>

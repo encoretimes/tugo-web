@@ -75,11 +75,11 @@ export default function FilterPanel({
               className={`relative w-20 h-24 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                 selectedFilterId === filter.id
                   ? 'border-primary-500 ring-2 ring-primary-500/30 scale-105'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
               }`}
             >
               {isLoading ? (
-                <div className="w-full h-full bg-gray-100 animate-pulse" />
+                <div className="w-full h-full bg-gray-100 dark:bg-neutral-800 animate-pulse" />
               ) : (
                 <div className="relative w-full h-full">
                   <Image
@@ -98,8 +98,8 @@ export default function FilterPanel({
             <span
               className={`text-xs font-medium transition-colors ${
                 selectedFilterId === filter.id
-                  ? 'text-primary-600'
-                  : 'text-gray-600'
+                  ? 'text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-neutral-400'
               }`}
             >
               {filter.name}

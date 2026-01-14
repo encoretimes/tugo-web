@@ -49,14 +49,14 @@ const InlinePostComposer = () => {
             {user.profileImageUrl ? (
               <Image
                 src={user.profileImageUrl}
-                alt={user.name}
+                alt={user.displayName}
                 width={48}
                 height={48}
                 className="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover"
               />
             ) : (
-              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-gray-200">
-                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
+              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700">
+                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-neutral-400 dark:text-neutral-500" />
               </div>
             )}
           </div>
@@ -166,7 +166,7 @@ const InlinePostComposer = () => {
                 <button
                   onClick={composer.handleSubmit}
                   disabled={!composer.canSubmit}
-                  className="px-4 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-full hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {composer.isPending ? '작성 중...' : '투고'}
                 </button>
