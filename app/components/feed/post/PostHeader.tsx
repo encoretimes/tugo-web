@@ -47,8 +47,8 @@ export default function PostHeader({
               className="h-10 w-10 rounded-full hover:opacity-80 transition-opacity"
             />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-400 dark:hover:bg-neutral-600 transition-colors">
-              <UserIcon className="h-6 w-6 text-neutral-500 dark:text-neutral-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 transition-colors">
+              <UserIcon className="h-5 w-5 text-neutral-400 dark:text-neutral-500" />
             </div>
           )}
         </Link>

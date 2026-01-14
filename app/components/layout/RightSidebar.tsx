@@ -131,7 +131,7 @@ const RightSidebar = () => {
                       />
                     ) : (
                       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0">
-                        <UserIcon className="h-5 w-5 text-neutral-400 dark:text-neutral-500" />
+                        <UserIcon className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />
                       </div>
                     )}
                     <div className="min-w-0 flex-1">

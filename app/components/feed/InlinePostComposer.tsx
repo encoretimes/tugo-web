@@ -55,8 +55,8 @@ const InlinePostComposer = () => {
                 className="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover"
               />
             ) : (
-              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-gray-200">
-                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-gray-500" />
+              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700">
+                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-neutral-400 dark:text-neutral-500" />
               </div>
             )}
           </div>
