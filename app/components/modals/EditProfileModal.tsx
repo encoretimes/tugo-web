@@ -21,7 +21,7 @@ interface EditProfileModalProps {
 }
 
 interface ProfileUpdateRequest {
-  name: string;
+  displayName: string;
   introduction?: string;
   profileUrl?: string;
   bannerImageUrl?: string;
@@ -141,7 +141,7 @@ export default function EditProfileModal({
       }
 
       const requestData: ProfileUpdateRequest = {
-        name: name.trim(),
+        displayName: name.trim(),
         introduction: introduction.trim() || undefined,
         profileUrl: finalProfileUrl || undefined,
         bannerImageUrl: finalBannerUrl || undefined,
@@ -151,7 +151,7 @@ export default function EditProfileModal({
 
       // Update user store with new profile data
       updateProfile({
-        name: name.trim(),
+        displayName: name.trim(),
         introduction: introduction.trim() || undefined,
         profileImageUrl: finalProfileUrl || undefined,
         bannerImageUrl: finalBannerUrl || undefined,

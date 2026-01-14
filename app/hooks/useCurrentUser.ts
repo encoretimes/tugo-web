@@ -4,7 +4,7 @@ import { apiClient } from '@/lib/api-client';
 interface MemberResponse {
   id: number;
   email: string;
-  name: string;
+  displayName: string;
   role: string;
   createdAt: string;
   updatedAt: string;

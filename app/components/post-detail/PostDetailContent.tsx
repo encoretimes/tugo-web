@@ -283,7 +283,7 @@ export default function PostDetailContent({
           <div className="border-t border-gray-200 dark:border-neutral-700 pt-4 mt-4 flex-shrink-0">
             <CommentInput
               userProfileImageUrl={user?.profileImageUrl}
-              userName={user?.name || ''}
+              userName={user?.displayName || ''}
               value={commentText}
               onChange={setCommentText}
               onSubmit={handleCommentSubmit}

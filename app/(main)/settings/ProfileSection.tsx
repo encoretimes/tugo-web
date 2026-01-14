@@ -13,8 +13,7 @@ const ProfileSection = () => {
   const { user, updateProfile } = useUserStore();
   const { addToast } = useToastStore();
 
-  // nickname이 있으면 nickname, 없으면 name을 초기값으로 사용
-  const [nickname, setNickname] = useState(user?.nickname || user?.name || '');
+  const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [bio, setBio] = useState(user?.introduction || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,7 +34,7 @@ const ProfileSection = () => {
 
   useEffect(() => {
     if (user) {
-      setNickname(user.nickname || user.name);
+      setDisplayName(user.displayName || '');
       setBio(user.introduction || '');
     }
   }, [user]);
@@ -129,7 +128,7 @@ const ProfileSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!nickname.trim()) {
+    if (!displayName.trim()) {
       addToast('별명을 입력해주세요', 'error');
       return;
     }
@@ -137,11 +136,11 @@ const ProfileSection = () => {
     setIsSubmitting(true);
     try {
       await updateMyProfile({
-        nickname: nickname.trim(),
+        displayName: displayName.trim(),
         introduction: bio.trim() || undefined,
       });
       updateProfile({
-        nickname: nickname.trim(),
+        displayName: displayName.trim(),
         introduction: bio.trim() || undefined,
       });
       addToast('프로필이 저장되었습니다', 'success');
@@ -210,7 +209,7 @@ const ProfileSection = () => {
               {profileImagePreview || user?.profileImageUrl ? (
                 <Image
                   src={profileImagePreview || user?.profileImageUrl || ''}
-                  alt={user?.name || 'Profile'}
+                  alt={user?.displayName || 'Profile'}
                   width={96}
                   height={96}
                   className="h-full w-full object-cover"
@@ -250,16 +249,16 @@ const ProfileSection = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
-              htmlFor="nickname"
+              htmlFor="displayName"
               className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
             >
               별명 (닉네임)
             </label>
             <input
               type="text"
-              id="nickname"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              id="displayName"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
               placeholder="다른 사용자에게 표시될 이름"
               className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors placeholder:text-gray-400 dark:placeholder:text-neutral-500"
               required

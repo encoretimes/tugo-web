@@ -119,7 +119,7 @@ export const useCreatePost = () => {
             const optimisticPost: Post = {
               postId: postId,
               author: {
-                name: user.name || '나',
+                name: user.displayName || '나',
                 username: user.username || '',
                 profileImageUrl: user.profileImageUrl || null,
               },
