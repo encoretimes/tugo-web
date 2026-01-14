@@ -84,19 +84,13 @@ const Feed = () => {
         </div>
       )}
 
-      <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
-
       <div>
         {isLoading ? (
-          <div>
+          <div className="divide-y divide-gray-100 dark:divide-neutral-800">
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
-            <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
             <PostSkeleton />
           </div>
         ) : error ? (
@@ -122,21 +116,16 @@ const Feed = () => {
           </div>
         ) : (
           <>
-            {posts.map((post, index) => (
-              <React.Fragment key={post.postId}>
-                <Post post={post} />
-                {index < posts.length - 1 && (
-                  <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
-                )}
-              </React.Fragment>
-            ))}
+            <div className="divide-y divide-gray-100 dark:divide-neutral-800">
+              {posts.map((post) => (
+                <Post key={post.postId} post={post} />
+              ))}
+            </div>
             {hasNextPage && (
               <div ref={ref} className="py-8">
                 {isFetchingNextPage ? (
-                  <div>
-                    <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
+                  <div className="divide-y divide-gray-100 dark:divide-neutral-800 border-t border-gray-100 dark:border-neutral-800">
                     <PostSkeleton />
-                    <div className="h-[8px] bg-[#F6F6F6] dark:bg-neutral-900 lg:-mx-6" />
                     <PostSkeleton />
                   </div>
                 ) : (

@@ -419,3 +419,54 @@ a {
 .hover-lift {
   will-change: transform, box-shadow;
 }
+
+/* ===== Mobile Browser Compatibility ===== */
+
+/* Safe Area Utilities */
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.px-safe {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* DVH Fallback with svh and vh */
+.min-h-screen-safe {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.h-screen-safe {
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+}
+
+/* Bottom Navigation Safe Area */
+.bottom-nav-height {
+  height: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+.pb-bottom-nav {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ===== Navigation Icon Colors ===== */
+:root {
+  --nav-icon-default: #9ca3af;
+  --nav-icon-hover: #6b7280;
+  --nav-icon-active: var(--brand-primary);
+}
+
+.dark {
+  --nav-icon-default: #71717a;
+  --nav-icon-hover: #a1a1aa;
+  --nav-icon-active: var(--brand-primary);
+}
