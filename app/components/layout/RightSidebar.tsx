@@ -1,20 +1,45 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ChevronRightIcon, UserIcon } from '@heroicons/react/24/solid';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useDebates } from '@/hooks/useDebates';
 import { usePopularCreators } from '@/hooks/useCreators';
 
 const RightSidebar = () => {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
   const { data: debates, isLoading: isLoadingDebates } = useDebates(5);
   const { data: creatorsData, isLoading: isLoadingCreators } =
     usePopularCreators(3);
 
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/explore?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <aside className="h-full p-4 text-black dark:text-neutral-50 bg-white dark:bg-neutral-950">
       <div className="max-w-xs mx-auto pt-4">
+        {/* 검색 */}
+        <div className="mb-6">
+          <div className="relative">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-neutral-500 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="게시물, 크리에이터 검색..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-100 dark:bg-neutral-800 border-0 rounded-lg text-sm text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-shadow"
+            />
+          </div>
+        </div>
+
         {/* 실시간 인기 투표 */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-1">
