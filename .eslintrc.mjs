@@ -1,4 +1,4 @@
-export default {
+const config = {
   root: true,
   parser: '@typescript-eslint/parser',
   plugins: ['tailwindcss', '@typescript-eslint', 'prettier'],
@@ -10,3 +10,5 @@ export default {
     'plugin:prettier/recommended',
   ],
 };
+
+export default config;
