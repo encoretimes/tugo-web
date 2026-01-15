@@ -1,17 +1,20 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useSearchParams } from 'next/navigation';
 import Post from './Post';
 import { useInfinitePosts, FeedType } from '@/hooks/usePosts';
 import { useScrollStore } from '@/store/scrollStore';
 import { useUserStore } from '@/store/userStore';
 import PostSkeleton from './PostSkeleton';
 import InlinePostComposer from './InlinePostComposer';
+import FeedTabs from './FeedTabs';
 
 const Feed = () => {
   const { isAuthenticated, hasHydrated } = useUserStore();
-  const [feedType, setFeedType] = useState<FeedType>('recommended');
+  const searchParams = useSearchParams();
+  const feedType: FeedType = searchParams.get('tab') === 'following' ? 'following' : 'recommended';
 
   const {
     data,
@@ -20,6 +23,8 @@ const Feed = () => {
     isFetchingNextPage,
     isLoading,
     error,
+    refetch,
+    isRefetching,
   } = useInfinitePosts(feedType);
 
   const { ref, inView } = useInView();
@@ -52,33 +57,49 @@ const Feed = () => {
     }
   }, [feedScrollPosition, posts.length, clearFeedScrollPosition]);
 
+  // Pull-to-refresh 이벤트 핸들러
+  useEffect(() => {
+    const handlePullToRefresh = () => {
+      refetch();
+    };
+
+    window.addEventListener('pulltorefresh', handlePullToRefresh);
+    return () => {
+      window.removeEventListener('pulltorefresh', handlePullToRefresh);
+    };
+  }, [refetch]);
+
   return (
     <div>
-      {/* 피드 타입 탭 - 스크롤 컨테이너 상단에 sticky */}
+      {/* PC 전용 피드 타입 탭 - 모바일에서는 layout에서 별도 렌더링 */}
       {hasHydrated && isAuthenticated && (
-        <div className="sticky top-0 z-10 bg-white dark:bg-neutral-950 -mx-4 px-4 -mt-4 pt-4">
-          <div className="flex border-b border-gray-200 dark:border-neutral-700">
-            <button
-              onClick={() => setFeedType('following')}
-              className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
-                feedType === 'following'
-                  ? 'text-primary-600 border-b-2 border-primary-600'
-                  : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
-              }`}
-            >
-              구독
-            </button>
-            <button
-              onClick={() => setFeedType('recommended')}
-              className={`flex-1 py-3 text-sm font-medium text-center transition-colors ${
-                feedType === 'recommended'
-                  ? 'text-primary-600 border-b-2 border-primary-600'
-                  : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
-              }`}
-            >
-              추천
-            </button>
-          </div>
+        <FeedTabs className="hidden lg:block sticky top-0 z-10 -mx-6 px-6" />
+      )}
+
+      {/* Pull-to-refresh 인디케이터 */}
+      {isRefetching && (
+        <div className="flex items-center justify-center py-3 text-sm text-gray-500 dark:text-neutral-400">
+          <svg
+            className="animate-spin h-4 w-4 mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+          새로고침 중...
         </div>
       )}
 
