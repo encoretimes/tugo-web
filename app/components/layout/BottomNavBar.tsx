@@ -82,7 +82,7 @@ const BottomNavBar: FC = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-950 lg:hidden z-50 border-t border-gray-200 dark:border-neutral-800 pb-safe">
+    <nav className="relative flex-shrink-0 bg-white dark:bg-neutral-950 lg:hidden z-50 border-t border-gray-200 dark:border-neutral-800 pb-safe">
       <ul className="flex justify-around items-center h-14">
         {navItems.map(({ href, Icon, label, badge, isWriteButton }) => {
           const active = isActive(href);

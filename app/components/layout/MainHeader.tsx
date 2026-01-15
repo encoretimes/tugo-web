@@ -18,7 +18,7 @@ const MainHeader = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white dark:bg-neutral-950 border-b border-gray-100 dark:border-neutral-800 lg:hidden pt-safe">
+      <header className="relative flex-shrink-0 z-50 bg-white dark:bg-neutral-950 border-b border-gray-100 dark:border-neutral-800 lg:hidden pt-safe">
         <div className="flex items-center justify-between px-4 h-14">
           <Link href="/" className="flex items-center">
             <Image

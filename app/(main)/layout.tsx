@@ -51,38 +51,54 @@ export default function MainLayout({
   }
 
   return (
-    <div className="relative min-h-screen bg-white dark:bg-neutral-950">
+    <div
+      className="
+        bg-white dark:bg-neutral-950
+        fixed inset-0 flex flex-col h-dvh-safe
+        lg:relative lg:inset-auto lg:block lg:h-auto lg:min-h-screen
+      "
+    >
       <NotesWebSocketInitializer />
-      {/* 상단 헤더 */}
+
+      {/* 모바일 상단 헤더 - shell 안에서 상대 위치 */}
       <MainHeader />
 
-      {/* 콘텐츠 영역 */}
-      <div className="max-w-content mx-auto">
-        <div className="flex">
-          {/* 왼쪽 사이드바 */}
-          <div className="hidden lg:block lg:w-16 xl:w-64 flex-shrink-0">
-            <div className="sticky top-0 h-screen">
-              <LeftSidebar />
-            </div>
-          </div>
-
-          {/* 메인 콘텐츠 */}
-          <main className={`w-full flex-1 min-h-screen-safe pb-bottom-nav lg:pb-0`}>
-            <div className="px-0 lg:px-6 pt-4">{children}</div>
-          </main>
-
-          {/* 우측 사이드바 */}
-          {!hideRightPanel && (
-            <aside className="hidden lg:block lg:w-80 flex-shrink-0 border-l border-gray-200 dark:border-neutral-800">
-              <div className="sticky top-0 h-screen overflow-y-auto">
-                <RightSidebar />
+      {/* 스크롤 가능한 메인 영역 */}
+      <div
+        className="
+          flex-1 overflow-y-auto overflow-x-hidden
+          lg:overflow-visible lg:flex-none
+        "
+      >
+        <div className="max-w-content mx-auto">
+          <div className="flex">
+            {/* 왼쪽 사이드바 */}
+            <div className="hidden lg:block lg:w-16 xl:w-64 flex-shrink-0">
+              <div className="sticky top-0 h-screen">
+                <LeftSidebar />
               </div>
-            </aside>
-          )}
+            </div>
+
+            {/* 메인 콘텐츠 */}
+            <main className="w-full flex-1 min-w-0">
+              <div className="px-0 lg:px-6 pt-4">{children}</div>
+            </main>
+
+            {/* 우측 사이드바 */}
+            {!hideRightPanel && (
+              <aside className="hidden lg:block lg:w-80 flex-shrink-0 border-l border-gray-200 dark:border-neutral-800">
+                <div className="sticky top-0 h-screen overflow-y-auto">
+                  <RightSidebar />
+                </div>
+              </aside>
+            )}
+          </div>
         </div>
       </div>
 
+      {/* 모바일 하단 네비 - shell 안에서 상대 위치 */}
       <BottomNavBar />
+
       <LoginPromptModal
         isOpen={showLoginPrompt}
         onClose={closeLoginPrompt}
