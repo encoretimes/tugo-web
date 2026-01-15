@@ -1,21 +1,18 @@
 import { useCallback } from 'react';
 import { useUserStore } from '@/store/userStore';
-import { useToastStore } from '@/store/toastStore';
+import { useLoginPrompt } from '@/contexts/LoginPromptContext';
 
 export function useRequireAuth() {
   const { user } = useUserStore();
-  const addToast = useToastStore((state) => state.addToast);
+  const { requireLogin } = useLoginPrompt();
 
-  const checkAuth = useCallback(
-    (message = '로그인이 필요합니다') => {
-      if (!user) {
-        addToast(message, 'warning');
-        return false;
-      }
-      return true;
-    },
-    [user, addToast]
-  );
+  const checkAuth = useCallback(() => {
+    if (!user) {
+      requireLogin();
+      return false;
+    }
+    return true;
+  }, [user, requireLogin]);
 
   return {
     checkAuth,
