@@ -470,3 +470,12 @@ a {
   --nav-icon-hover: #a1a1aa;
   --nav-icon-active: var(--brand-primary);
 }
+
+/* ===== Mobile Fixed Shell Layout ===== */
+
+/* 모바일 fixed shell 높이 (dvh with fallback) */
+.h-dvh-safe {
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+}

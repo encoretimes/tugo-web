@@ -54,7 +54,7 @@ const Feed = () => {
 
   return (
     <div>
-      {/* 피드 타입 탭 - 상단 sticky */}
+      {/* 피드 타입 탭 - 스크롤 컨테이너 상단에 sticky */}
       {hasHydrated && isAuthenticated && (
         <div className="sticky top-0 z-10 bg-white dark:bg-neutral-950 -mx-4 px-4 -mt-4 pt-4">
           <div className="flex border-b border-gray-200 dark:border-neutral-700">

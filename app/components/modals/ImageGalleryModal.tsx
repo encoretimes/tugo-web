@@ -128,6 +128,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                     width={1200}
                     height={800}
                     className="max-h-[80vh] w-auto object-contain"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
                     priority
                   />
                 </div>

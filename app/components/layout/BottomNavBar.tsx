@@ -82,7 +82,7 @@ const BottomNavBar: FC = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-950 lg:hidden z-50 border-t border-gray-200 dark:border-neutral-800 pb-safe">
+    <nav className="relative flex-shrink-0 bg-white dark:bg-neutral-950 lg:hidden z-50 border-t border-gray-200 dark:border-neutral-800 pb-safe">
       <ul className="flex justify-around items-center h-14">
         {navItems.map(({ href, Icon, label, badge, isWriteButton }) => {
           const active = isActive(href);
@@ -92,7 +92,7 @@ const BottomNavBar: FC = () => {
               <li key={label}>
                 <button
                   onClick={handleWriteClick}
-                  className="flex flex-col items-center justify-center min-w-[56px] py-1"
+                  className="flex flex-col items-center justify-center min-w-[56px] py-2"
                   aria-label={label}
                 >
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--brand-primary)] text-white">
@@ -107,7 +107,7 @@ const BottomNavBar: FC = () => {
             <li key={label}>
               <Link
                 href={href}
-                className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
+                className={`flex flex-col items-center justify-center min-w-[56px] py-2 transition-colors ${
                   active
                     ? 'text-[var(--brand-primary)]'
                     : 'text-[var(--nav-icon-default)] hover:text-[var(--nav-icon-hover)]'
