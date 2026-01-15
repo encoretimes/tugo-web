@@ -63,7 +63,7 @@ export default function RoomList({
       </div>
 
       {/* 쪽지방 목록 */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto min-h-0">
         {filteredRooms && filteredRooms.length > 0 ? (
           filteredRooms.map((room) => (
             <div
@@ -123,7 +123,7 @@ export default function RoomList({
             </div>
           ))
         ) : (
-          <div className="flex flex-col items-center justify-center h-full px-6 text-center">
+          <div className="flex flex-col items-center justify-center h-full px-6 pb-20 text-center">
             <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
               <ChatBubbleLeftRightIcon className="w-8 h-8 text-gray-400 dark:text-neutral-500" />
             </div>

@@ -50,7 +50,7 @@ export default function NotesPage() {
         <div className="p-4 border-b border-gray-200 dark:border-neutral-800 flex-shrink-0">
           <h1 className="text-xl font-bold dark:text-neutral-100">쪽지</h1>
         </div>
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 h-full">
           <RoomList
             selectedRoomId={selectedRoomId}
             onSelectRoom={handleSelectRoom}
