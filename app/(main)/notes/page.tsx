@@ -45,15 +45,17 @@ export default function NotesPage() {
     <div className="flex h-[calc(100vh-50px)] lg:h-screen text-black dark:text-neutral-100 bg-white dark:bg-neutral-950 -mx-0 lg:-mx-6 -mt-4">
       {/* 쪽지방 목록 */}
       <aside
-        className={`${isChatOpen ? 'hidden' : 'w-full'} lg:block lg:w-80 xl:w-96 border-r border-gray-200 dark:border-neutral-800 flex flex-col bg-white dark:bg-neutral-950 flex-shrink-0`}
+        className={`${isChatOpen ? 'hidden' : 'w-full'} lg:block lg:w-80 xl:w-96 h-full border-r border-gray-200 dark:border-neutral-800 flex flex-col bg-white dark:bg-neutral-950 flex-shrink-0`}
       >
-        <div className="p-4 border-b border-gray-200 dark:border-neutral-800">
+        <div className="p-4 border-b border-gray-200 dark:border-neutral-800 flex-shrink-0">
           <h1 className="text-xl font-bold dark:text-neutral-100">쪽지</h1>
         </div>
-        <RoomList
-          selectedRoomId={selectedRoomId}
-          onSelectRoom={handleSelectRoom}
-        />
+        <div className="flex-1 h-full">
+          <RoomList
+            selectedRoomId={selectedRoomId}
+            onSelectRoom={handleSelectRoom}
+          />
+        </div>
       </aside>
 
       {/* 채팅창 */}
