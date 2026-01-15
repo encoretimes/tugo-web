@@ -92,7 +92,7 @@ const BottomNavBar: FC = () => {
               <li key={label}>
                 <button
                   onClick={handleWriteClick}
-                  className="flex flex-col items-center justify-center min-w-[56px] py-1"
+                  className="flex flex-col items-center justify-center min-w-[56px] py-2"
                   aria-label={label}
                 >
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--brand-primary)] text-white">
@@ -107,7 +107,7 @@ const BottomNavBar: FC = () => {
             <li key={label}>
               <Link
                 href={href}
-                className={`flex flex-col items-center justify-center min-w-[56px] py-1 transition-colors ${
+                className={`flex flex-col items-center justify-center min-w-[56px] py-2 transition-colors ${
                   active
                     ? 'text-[var(--brand-primary)]'
                     : 'text-[var(--nav-icon-default)] hover:text-[var(--nav-icon-hover)]'
