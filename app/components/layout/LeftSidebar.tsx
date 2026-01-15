@@ -8,7 +8,10 @@ import { useUnreadCount } from '@/hooks/useNotifications';
 import { useTotalUnreadCount } from '@/hooks/useNotes';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 import { useUserStore } from '@/store/userStore';
-import { PencilSquareIcon } from '@heroicons/react/24/solid';
+import {
+  PencilSquareIcon,
+  ArrowRightOnRectangleIcon,
+} from '@heroicons/react/24/solid';
 
 const LeftSidebar = () => {
   const { data: unreadCount } = useUnreadCount();
@@ -152,20 +155,30 @@ const LeftSidebar = () => {
       {/* 하단: 프로필 + 설정 */}
       <nav className="mt-auto px-1 xl:px-4 pb-2 md:pb-4">
         <ul className="space-y-3 w-full">
-          <NavItem
-            href={user ? `/@${user.username}` : '/login'}
-            icon={
-              <Image
-                src="/system_ico/profile_pc.svg"
-                alt="프로필"
-                width={28}
-                height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
-              />
-            }
-            label="프로필"
-            isCustomIcon
-          />
+          {user ? (
+            <NavItem
+              href={`/@${user.username}`}
+              icon={
+                <Image
+                  src="/system_ico/profile_pc.svg"
+                  alt="프로필"
+                  width={28}
+                  height={28}
+                  className="w-7 h-7 dark:invert dark:brightness-200"
+                />
+              }
+              label="프로필"
+              isCustomIcon
+            />
+          ) : (
+            <NavItem
+              href="/login"
+              icon={
+                <ArrowRightOnRectangleIcon className="w-7 h-7 text-neutral-700 dark:text-neutral-200" />
+              }
+              label="로그인"
+            />
+          )}
           <NavItem
             href="/settings"
             icon={

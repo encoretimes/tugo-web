@@ -16,6 +16,7 @@ export const RouteConfig = {
     '/help',
     '/contact',
     '/',
+    '/explore',
   ],
 
   /**

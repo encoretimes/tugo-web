@@ -6,6 +6,7 @@ import AuthProvider from './components/providers/AuthProvider';
 import { ErrorBoundary } from './components/providers/ErrorBoundary';
 import ThemeProvider from './components/providers/ThemeProvider';
 import ToastContainer from './components/ui/ToastContainer';
+import { LoginPromptProvider } from './contexts/LoginPromptContext';
 
 function createQueryClient() {
   return new QueryClient({
@@ -31,8 +32,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            {children}
-            <ToastContainer />
+            <LoginPromptProvider>
+              {children}
+              <ToastContainer />
+            </LoginPromptProvider>
           </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>

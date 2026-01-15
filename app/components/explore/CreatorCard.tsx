@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { UserIcon } from '@heroicons/react/24/solid';
 import { Creator } from '@/types/creator';
 import { useUserStore } from '@/store/userStore';
+import { useLoginPrompt } from '@/contexts/LoginPromptContext';
 import {
   useSubscribeMutation,
   useUnsubscribeMutation,
@@ -25,8 +25,8 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
   rank,
   showStats = true,
 }) => {
-  const router = useRouter();
   const { isAuthenticated, user } = useUserStore();
+  const { requireLogin } = useLoginPrompt();
   const [showUnsubscribeModal, setShowUnsubscribeModal] = useState(false);
 
   const { data: subscriptionStatus, isLoading: isStatusLoading } =
@@ -45,7 +45,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      router.push('/login');
+      requireLogin();
       return;
     }
 
