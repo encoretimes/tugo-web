@@ -3,6 +3,10 @@ import { getApiUrl } from '@/config/env';
 interface OAuthResult {
   success: boolean;
   error?: string;
+  tokens?: {
+    accessToken: string;
+    refreshToken: string;
+  } | null;
 }
 
 /**
