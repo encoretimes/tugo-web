@@ -16,6 +16,7 @@ import {
   SunIcon,
   LogoutIcon,
 } from '@/components/icons/NavIcons';
+import { apiClient, clearAuthData } from '@/lib/api-client';
 
 interface HamburgerMenuProps {
   isOpen: boolean;
@@ -29,7 +30,13 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
 
   const isDarkMode = resolvedTheme === 'dark';
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await apiClient.post('/api/v1/auth/logout');
+    } catch {}
+
+    clearAuthData();
+
     logout();
     onClose();
     router.push('/');
@@ -87,18 +94,18 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-[280px]">
-                  <div className="flex h-full flex-col bg-white dark:bg-neutral-950 shadow-xl">
+                  <div className="flex h-full flex-col bg-white shadow-xl dark:bg-neutral-950">
                     {/* 헤더 */}
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-neutral-800 pt-safe">
+                    <div className="pt-safe flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-neutral-800">
                       <Dialog.Title className="text-lg font-semibold text-[var(--text-primary)]">
                         메뉴
                       </Dialog.Title>
                       <button
                         onClick={onClose}
-                        className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                        className="p-2 text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                         aria-label="메뉴 닫기"
                       >
-                        <CloseIcon className="w-5 h-5" />
+                        <CloseIcon className="h-5 w-5" />
                       </button>
                     </div>
 
@@ -111,51 +118,51 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
                             key={label}
                             href={href}
                             onClick={onClose}
-                            className="flex items-center gap-3 px-3 py-3 rounded-lg text-[var(--text-primary)] hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                            className="flex items-center gap-3 rounded-lg px-3 py-3 text-[var(--text-primary)] transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800"
                           >
-                            <Icon className="w-5 h-5 text-[var(--text-secondary)]" />
+                            <Icon className="h-5 w-5 text-[var(--text-secondary)]" />
                             <span className="font-medium">{label}</span>
                           </Link>
                         ))}
                       </nav>
 
                       {/* 구분선 */}
-                      <div className="my-2 mx-4 border-t border-gray-100 dark:border-neutral-800" />
+                      <div className="mx-4 my-2 border-t border-gray-100 dark:border-neutral-800" />
 
                       {/* 설정 및 테마 */}
                       <nav className="px-2">
                         <Link
                           href="/settings"
                           onClick={onClose}
-                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-[var(--text-primary)] hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                          className="flex items-center gap-3 rounded-lg px-3 py-3 text-[var(--text-primary)] transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800"
                         >
-                          <SettingsIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                          <SettingsIcon className="h-5 w-5 text-[var(--text-secondary)]" />
                           <span className="font-medium">설정</span>
                         </Link>
 
                         <button
                           onClick={handleThemeToggle}
-                          className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-[var(--text-primary)] hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                          className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-[var(--text-primary)] transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800"
                         >
                           <div className="flex items-center gap-3">
                             {isDarkMode ? (
-                              <SunIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                              <SunIcon className="h-5 w-5 text-[var(--text-secondary)]" />
                             ) : (
-                              <MoonIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                              <MoonIcon className="h-5 w-5 text-[var(--text-secondary)]" />
                             )}
                             <span className="font-medium">
                               {isDarkMode ? '라이트 모드' : '다크 모드'}
                             </span>
                           </div>
                           <div
-                            className={`w-10 h-6 rounded-full transition-colors ${
+                            className={`h-6 w-10 rounded-full transition-colors ${
                               isDarkMode
                                 ? 'bg-[var(--brand-primary)]'
                                 : 'bg-gray-300 dark:bg-neutral-600'
                             }`}
                           >
                             <div
-                              className={`w-5 h-5 mt-0.5 rounded-full bg-white shadow transition-transform ${
+                              className={`mt-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
                                 isDarkMode
                                   ? 'translate-x-[18px]'
                                   : 'translate-x-0.5'
@@ -166,16 +173,16 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
                       </nav>
 
                       {/* 구분선 */}
-                      <div className="my-2 mx-4 border-t border-gray-100 dark:border-neutral-800" />
+                      <div className="mx-4 my-2 border-t border-gray-100 dark:border-neutral-800" />
 
                       {/* 로그아웃 */}
                       {user && (
                         <nav className="px-2">
                           <button
                             onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
                           >
-                            <LogoutIcon className="w-5 h-5" />
+                            <LogoutIcon className="h-5 w-5" />
                             <span className="font-medium">로그아웃</span>
                           </button>
                         </nav>

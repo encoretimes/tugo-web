@@ -13,7 +13,8 @@ import { useInteractionGuard } from '@/hooks/useInteractionGuard';
 import { useUserStore } from '@/store/userStore';
 import { useComposerStore } from '@/store/composerStore';
 import { usePathname } from 'next/navigation';
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
+import { refreshTokensIfNeeded } from '@/lib/api-client';
 
 export default function MainLayout({
   children,
@@ -36,6 +37,25 @@ export default function MainLayout({
     onInteractionDetected: triggerLoginPrompt,
     isModalOpen: showLoginPrompt,
   });
+
+  // 선제적 토큰 갱신 (visibilitychange 시 만료 임박한 경우만)
+  // 메인 갱신 로직은 api-client의 401 인터셉터에서 처리
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    // 앱이 포그라운드로 돌아올 때 토큰 만료 임박 시에만 선제 갱신
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        refreshTokensIfNeeded();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [isAuthenticated]);
 
   const hideRightPanel =
     pathname.startsWith('/settings') ||
@@ -107,13 +127,7 @@ export default function MainLayout({
   }
 
   return (
-    <div
-      className="
-        bg-white dark:bg-neutral-950
-        fixed inset-0 flex flex-col h-dvh-safe
-        lg:relative lg:inset-auto lg:block lg:h-auto lg:min-h-screen
-      "
-    >
+    <div className="h-dvh-safe fixed inset-0 flex flex-col bg-white dark:bg-neutral-950 lg:relative lg:inset-auto lg:block lg:h-auto lg:min-h-screen">
       <NotesWebSocketInitializer />
 
       {/* 모바일 상단 헤더 - shell 안에서 상대 위치 */}
@@ -121,7 +135,7 @@ export default function MainLayout({
 
       {/* 모바일 전용 피드 탭 - 스크롤 영역 밖에 고정 */}
       {showMobileFeedTabs && (
-        <FeedTabs className="flex-shrink-0 lg:hidden px-4" />
+        <FeedTabs className="flex-shrink-0 px-4 lg:hidden" />
       )}
 
       {/* 스크롤 가능한 메인 영역 */}
@@ -130,11 +144,7 @@ export default function MainLayout({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="
-          flex-1 overflow-y-auto overflow-x-hidden
-          lg:overflow-visible lg:flex-none
-          main-scroll-area
-        "
+        className="main-scroll-area flex-1 overflow-y-auto overflow-x-hidden lg:flex-none lg:overflow-visible"
       >
         {/* Pull-to-refresh 인디케이터 (모바일 홈 전용) */}
         {enablePullToRefresh && (pullDistance > 0 || isRefreshing) && (
@@ -148,7 +158,9 @@ export default function MainLayout({
             <svg
               className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`}
               style={{
-                transform: isRefreshing ? 'none' : `rotate(${pullDistance * 3}deg)`,
+                transform: isRefreshing
+                  ? 'none'
+                  : `rotate(${pullDistance * 3}deg)`,
               }}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -165,23 +177,23 @@ export default function MainLayout({
             <span>{isRefreshing ? '새로고침 중...' : '당겨서 새로고침'}</span>
           </div>
         )}
-        <div className="max-w-content mx-auto">
+        <div className="mx-auto max-w-content">
           <div className="flex">
             {/* 왼쪽 사이드바 */}
-            <div className="hidden lg:block lg:w-16 xl:w-64 flex-shrink-0">
+            <div className="hidden flex-shrink-0 lg:block lg:w-16 xl:w-64">
               <div className="sticky top-0 h-screen">
                 <LeftSidebar />
               </div>
             </div>
 
             {/* 메인 콘텐츠 */}
-            <main className="w-full flex-1 min-w-0">
-              <div className="px-0 lg:px-6 pt-4">{children}</div>
+            <main className="w-full min-w-0 flex-1">
+              <div className="px-0 pt-4 lg:px-6">{children}</div>
             </main>
 
             {/* 우측 사이드바 */}
             {!hideRightPanel && (
-              <aside className="hidden lg:block lg:w-80 flex-shrink-0 border-l border-gray-200 dark:border-neutral-800">
+              <aside className="hidden flex-shrink-0 border-l border-gray-200 dark:border-neutral-800 lg:block lg:w-80">
                 <div className="sticky top-0 h-screen overflow-y-auto">
                   <RightSidebar />
                 </div>
