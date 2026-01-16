@@ -8,6 +8,8 @@
 .LSOverride
 # macOS custom folder icons (Icon with carriage return)
 Icon?
+# But allow app/components/icons folder
+!app/components/icons/
 ._*
 .DocumentRevisions-V100
 .fseventsd
@@ -87,8 +89,7 @@ yarn-error.log*
 # Environment Variables
 # ============================================
 
-.env*
-.env*.local
+.env
 
 # ============================================
 # Vercel Deployment

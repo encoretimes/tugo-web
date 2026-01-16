@@ -37,3 +37,15 @@ export async function getConfig(): Promise<{
 
   return config;
 }
+
+// Auth Token Configuration
+export const AUTH_CONFIG = {
+  REFRESH_TOKEN_MAX_AGE_MS: parseInt(
+    process.env.NEXT_PUBLIC_REFRESH_TOKEN_MAX_AGE_MS || '604800000',
+    10
+  ),
+  TOKEN_REFRESH_THRESHOLD_MS: parseInt(
+    process.env.NEXT_PUBLIC_TOKEN_REFRESH_THRESHOLD_MS || '2700000',
+    10
+  ),
+} as const;

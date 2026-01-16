@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
 import { apiClient, markLoginSuccess } from '@/lib/api-client';
 import { getApiUrl } from '@/config/env';
+import { isPWAStandalone } from '@/lib/oauth-popup';
+import { saveTokens } from '@/lib/token-storage';
 
 interface MemberResponse {
   id: number;
@@ -14,6 +16,11 @@ interface MemberResponse {
   createdAt: string;
   updatedAt: string;
   username: string | null;
+}
+
+interface TokenResponse {
+  accessToken: string;
+  refreshToken: string;
 }
 
 export default function LoginSuccessPage() {
@@ -42,8 +49,25 @@ export default function LoginSuccessPage() {
           username: userData.username,
         });
 
-        // 토큰 갱신 타이머 초기화
         markLoginSuccess();
+
+        // PWA 모드 -> IndexedDB
+        if (isPWAStandalone()) {
+          try {
+            const tokens = await apiClient.post<TokenResponse>(
+              '/api/v1/auth/token-exchange'
+            );
+            if (tokens?.accessToken && tokens?.refreshToken) {
+              await saveTokens(tokens.accessToken, tokens.refreshToken);
+              console.log('[LoginSuccess] PWA tokens saved to IndexedDB');
+            }
+          } catch (tokenError) {
+            console.warn(
+              '[LoginSuccess] Failed to save PWA tokens:',
+              tokenError
+            );
+          }
+        }
 
         const returnUrl = sessionStorage.getItem('returnUrl');
         if (returnUrl) {
