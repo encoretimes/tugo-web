@@ -67,6 +67,9 @@ export default function MainLayout({
     /\/@[^/]+\/post\/\d+/.test(pathname) ||
     /^\/post\/\d+$/.test(pathname);
 
+  // /notes 페이지에서는 모바일에서 특별 레이아웃 적용
+  const isNotesPage = pathname.startsWith('/notes');
+
   // 홈 페이지에서만 모바일 피드 탭 표시
   const showMobileFeedTabs = pathname === '/' && hasHydrated && isAuthenticated;
 
@@ -130,8 +133,8 @@ export default function MainLayout({
     <div className="h-dvh-safe fixed inset-0 flex flex-col bg-white dark:bg-neutral-950 lg:relative lg:inset-auto lg:block lg:h-auto lg:min-h-screen">
       <NotesWebSocketInitializer />
 
-      {/* 모바일 상단 헤더 - shell 안에서 상대 위치 */}
-      <MainHeader />
+      {/* 모바일 상단 헤더 - /notes 페이지에서는 숨김 (자체 헤더 사용) */}
+      {!isNotesPage && <MainHeader />}
 
       {/* 모바일 전용 피드 탭 - 스크롤 영역 밖에 고정 */}
       {showMobileFeedTabs && (
@@ -189,10 +192,10 @@ export default function MainLayout({
             {/* 메인 콘텐츠 */}
             <main className="w-full min-w-0 flex-1">
               <div
-                className={`px-0 pt-4 lg:px-6 ${
-                  pathname.startsWith('/notes')
-                    ? 'lg:h-[calc(100dvh-1rem)]'
-                    : ''
+                className={`lg:px-6 ${
+                  isNotesPage
+                    ? 'h-full lg:pt-4 lg:h-[calc(100dvh-1rem)]'
+                    : 'px-0 pt-4'
                 }`}
               >
                 {children}

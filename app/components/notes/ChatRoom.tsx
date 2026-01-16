@@ -205,10 +205,10 @@ export default function ChatRoom({
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white dark:bg-neutral-950">
       {/* 헤더 */}
-      <div className="border-b border-gray-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-900">
-        <div className="flex items-center gap-3">
+      <div className="flex-shrink-0 border-b border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 pt-safe lg:pt-0">
+        <div className="flex items-center gap-3 p-4">
           {/* 모바일 뒤로가기 버튼 */}
           {onBack && (
             <button
@@ -241,7 +241,7 @@ export default function ChatRoom({
       </div>
 
       {/* 메시지 목록 */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-gray-50 dark:bg-neutral-950">
+      <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-gray-50 dark:bg-neutral-900">
         {messages.length > 0 ? (
           messages.map((message, index) => {
             const prevMessage = messages[index - 1];
@@ -297,7 +297,7 @@ export default function ChatRoom({
       </div>
 
       {/* 입력 영역 */}
-      <div className="border-t border-gray-200 dark:border-neutral-800 p-4 pb-safe bg-white dark:bg-neutral-900">
+      <div className="flex-shrink-0 border-t border-gray-200 dark:border-neutral-800 p-4 pb-safe bg-white dark:bg-neutral-950">
         <div className="flex gap-2">
           <input
             type="text"
@@ -305,13 +305,13 @@ export default function ChatRoom({
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 border border-gray-300 dark:border-neutral-700 rounded-md px-4 py-2 bg-white dark:bg-neutral-900 text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="flex-1 border border-gray-300 dark:border-neutral-700 rounded-full px-4 py-2 bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             disabled={!roomId || isSending}
           />
           <button
             onClick={handleSend}
             disabled={!inputValue.trim() || !roomId || isSending}
-            className="bg-primary-600 text-white px-4 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition flex items-center gap-2"
+            className="bg-primary-600 text-white px-4 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition flex items-center gap-2"
           >
             <PaperAirplaneIcon className="h-5 w-5" />
             <span className="hidden sm:inline">전송</span>
