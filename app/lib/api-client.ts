@@ -1,6 +1,4 @@
-import { getApiUrl } from '@/config/env';
-
-const TOKEN_REFRESH_THRESHOLD = 45 * 60 * 1000; // 선제 갱신 (45분)
+import { getApiUrl, AUTH_CONFIG } from '@/config/env';
 const STORAGE_KEY_LAST_REFRESH = 'tugo_last_token_refresh';
 const STORAGE_KEY_REFRESH_LOCK = 'tugo_token_refresh_lock';
 const LOCK_TIMEOUT = 10000;
@@ -91,7 +89,7 @@ class AuthService {
   shouldRefreshPreemptively(): boolean {
     const lastRefresh = this.getLastRefreshTime();
     if (lastRefresh === 0) return false; // 아직 로그인 안 함
-    return Date.now() - lastRefresh > TOKEN_REFRESH_THRESHOLD;
+    return Date.now() - lastRefresh > AUTH_CONFIG.TOKEN_REFRESH_THRESHOLD_MS;
   }
 
   /**

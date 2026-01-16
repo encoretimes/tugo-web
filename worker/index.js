@@ -1,11 +1,10 @@
 /// <reference lib="webworker" />
-declare const self: ServiceWorkerGlobalScope;
 
 // Push 이벤트 핸들러
 self.addEventListener('push', (event) => {
   const data = event.data?.json() ?? {};
 
-  const options: NotificationOptions = {
+  const options = {
     body: data.body || '새로운 알림이 있습니다',
     icon: data.icon || '/system_ico/icon-192x192.png',
     badge: data.badge || '/system_ico/icon-72x72.png',
@@ -14,6 +13,7 @@ self.addEventListener('push', (event) => {
     data: {
       url: data.url || '/',
     },
+    vibrate: [100, 50, 100],
   };
 
   event.waitUntil(
@@ -25,7 +25,13 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
+  const action = event.action;
   const url = event.notification.data?.url || '/';
+
+  // 닫기 액션이면 아무것도 안함
+  if (action === 'close') {
+    return;
+  }
 
   event.waitUntil(
     self.clients
@@ -46,8 +52,5 @@ self.addEventListener('notificationclick', (event) => {
 
 // 알림 닫기 핸들러
 self.addEventListener('notificationclose', (event) => {
-  // 알림이 닫힐 때 필요한 로직 (선택적)
   console.log('Notification closed:', event.notification.tag);
 });
-
-export {};
