@@ -7,6 +7,7 @@ import { useUserStore } from '@/store/userStore';
 import { getApiUrl, getConfig } from '@/config/env';
 import { apiClient, markLoginSuccess } from '@/lib/api-client';
 import { isPWAStandalone, openOAuthPopup } from '@/lib/oauth-popup';
+import { saveTokens } from '@/lib/token-storage';
 
 interface MemberResponse {
   id: number;
@@ -16,6 +17,11 @@ interface MemberResponse {
   createdAt: string;
   updatedAt: string;
   username: string | null;
+}
+
+interface TokenResponse {
+  accessToken: string;
+  refreshToken: string;
 }
 
 function LoginContent() {
@@ -60,6 +66,19 @@ function LoginContent() {
 
           // 토큰 갱신 타이머 초기화
           markLoginSuccess();
+
+          // PWA 모드: IndexedDB에 토큰 저장 (앱 재시작 시 세션 복구용)
+          try {
+            const tokens = await apiClient.post<TokenResponse>(
+              '/api/v1/auth/token-exchange'
+            );
+            if (tokens?.accessToken && tokens?.refreshToken) {
+              await saveTokens(tokens.accessToken, tokens.refreshToken);
+              console.log('[Login] PWA tokens saved to IndexedDB');
+            }
+          } catch (tokenError) {
+            console.warn('[Login] PWA token save failed:', tokenError);
+          }
 
           const returnUrl = sessionStorage.getItem('returnUrl');
           if (returnUrl) {
