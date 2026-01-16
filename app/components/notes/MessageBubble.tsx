@@ -64,11 +64,11 @@ export default function MessageBubble({
                 alt={otherUserName || '프로필'}
                 width={32}
                 height={32}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-neutral-900"
+                className="w-8 h-8 rounded-full object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-neutral-600 dark:to-neutral-700 flex items-center justify-center ring-2 ring-white dark:ring-neutral-900">
-                <span className="text-gray-600 dark:text-neutral-200 text-xs font-medium">
+              <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-neutral-700 flex items-center justify-center">
+                <span className="text-gray-600 dark:text-white text-xs font-medium">
                   {(otherUserName || '?')[0]}
                 </span>
               </div>
@@ -86,8 +86,8 @@ export default function MessageBubble({
         <div
           className={`${getBubbleRounding()} px-3 py-2 ${
             isMyMessage
-              ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-md shadow-primary-500/20'
-              : 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 shadow-sm'
+              ? 'bg-primary-600 dark:bg-neutral-700 text-white'
+              : 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-white'
           } ${isPending ? 'opacity-70' : ''}`}
         >
           <p className="whitespace-pre-wrap break-words text-sm">

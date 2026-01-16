@@ -58,7 +58,7 @@ export default function RoomList({
             placeholder="쪽지 검색"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-900 text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-neutral-800 rounded-full bg-gray-100 dark:bg-neutral-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </div>
@@ -95,10 +95,10 @@ export default function RoomList({
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center mb-1">
-                    <p className="font-medium text-gray-900 dark:text-neutral-100">
+                    <p className="font-medium text-gray-900 dark:text-white">
                       {room.otherUser.username}
                     </p>
-                    <span className="text-xs text-gray-500 dark:text-neutral-400">
+                    <span className="text-xs text-gray-500 dark:text-neutral-500">
                       {formatRoomListTime(room.lastMessageTimestamp)}
                     </span>
                   </div>

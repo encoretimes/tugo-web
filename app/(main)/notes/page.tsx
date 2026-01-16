@@ -47,7 +47,7 @@ export default function NotesPage() {
   const isChatOpen = selectedUserId !== null;
 
   return (
-    <div className="flex h-full text-black dark:text-neutral-100 bg-white dark:bg-neutral-950 lg:-mx-6 lg:-mt-4">
+    <div className="flex h-full text-black dark:text-white bg-white dark:bg-neutral-950 lg:-mx-6 lg:-mt-4">
       {/* 모바일 헤더 - 쪽지 목록용 */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-neutral-950 border-b border-gray-200 dark:border-neutral-800 pt-safe">
         <div className="flex items-center h-14 px-4">
