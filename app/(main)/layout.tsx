@@ -9,6 +9,7 @@ import LoginPromptModal from '@/components/modals/LoginPromptModal';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 import NotesWebSocketInitializer from '@/components/NotesWebSocketInitializer';
 import MobileNotesOverlay from '@/components/notes/MobileNotesOverlay';
+import NotesToastNotification from '@/components/notes/NotesToastNotification';
 import { useRouteGuard } from '@/hooks/useRouteGuard';
 import { useInteractionGuard } from '@/hooks/useInteractionGuard';
 import { useUserStore } from '@/store/userStore';
@@ -133,6 +134,7 @@ export default function MainLayout({
   return (
     <div className="h-dvh-safe fixed inset-0 flex flex-col bg-white dark:bg-neutral-950 lg:relative lg:inset-auto lg:block lg:h-auto lg:min-h-screen">
       <NotesWebSocketInitializer />
+      <NotesToastNotification />
 
       {/* 모바일 상단 헤더 - /notes 페이지에서는 숨김 (자체 헤더 사용) */}
       {!isNotesPage && <MainHeader />}
