@@ -8,6 +8,7 @@ import FeedTabs from '@/components/feed/FeedTabs';
 import LoginPromptModal from '@/components/modals/LoginPromptModal';
 import PostComposerModal from '@/components/modals/PostComposerModal';
 import NotesWebSocketInitializer from '@/components/NotesWebSocketInitializer';
+import MobileNotesOverlay from '@/components/notes/MobileNotesOverlay';
 import { useRouteGuard } from '@/hooks/useRouteGuard';
 import { useInteractionGuard } from '@/hooks/useInteractionGuard';
 import { useUserStore } from '@/store/userStore';
@@ -216,6 +217,9 @@ export default function MainLayout({
 
       {/* 모바일 하단 네비 - shell 안에서 상대 위치 */}
       <BottomNavBar />
+
+      {/* 모바일 쪽지 오버레이 */}
+      <MobileNotesOverlay />
 
       <LoginPromptModal
         isOpen={showLoginPrompt}

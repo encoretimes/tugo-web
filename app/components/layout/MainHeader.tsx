@@ -5,12 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useNotesStore } from '@/store/notesStore';
+import { useMobileNotesStore } from '@/store/mobileNotesStore';
 import { MailIcon, MenuIcon } from '@/components/icons/NavIcons';
 import HamburgerMenu from '@/components/layout/HamburgerMenu';
 
 const MainHeader = () => {
   const pathname = usePathname();
   const notesUnreadCount = useNotesStore((state) => state.totalUnreadCount);
+  const openNotes = useMobileNotesStore((state) => state.openNotes);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isProfilePage = pathname.startsWith('/@');
@@ -40,8 +42,8 @@ const MainHeader = () => {
                 <MenuIcon className="w-6 h-6" />
               </button>
             ) : (
-              <Link
-                href="/notes"
+              <button
+                onClick={openNotes}
                 className="flex items-center justify-center w-11 h-11 relative text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="쪽지"
               >
@@ -51,7 +53,7 @@ const MainHeader = () => {
                     {notesUnreadCount > 99 ? '99+' : notesUnreadCount}
                   </span>
                 )}
-              </Link>
+              </button>
             )}
           </div>
         </div>
