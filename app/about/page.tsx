@@ -121,14 +121,14 @@ function FeatureCard({
       className={`reveal-scale ${isRevealed ? 'revealed' : ''} group`}
       style={{ transitionDelay: `${delay}s` }}
     >
-      <div className="feature-card h-full rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 hover-lift cursor-default">
-        <div className="w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br from-[var(--brand-primary)] to-blue-600 flex items-center justify-center mb-4 sm:mb-5 lg:mb-6 group-hover:scale-105 transition-transform duration-300">
-          <Icon className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white" />
+      <div className="feature-card hover-lift h-full cursor-default rounded-xl p-5 sm:rounded-2xl sm:p-6 lg:p-8">
+        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--brand-primary)] to-blue-600 transition-transform duration-300 group-hover:scale-105 sm:mb-5 sm:h-12 sm:w-12 sm:rounded-xl lg:mb-6 lg:h-14 lg:w-14">
+          <Icon className="h-5 w-5 text-white sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
         </div>
-        <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] mb-2 sm:mb-3">
+        <h3 className="mb-2 text-lg font-bold text-[var(--text-primary)] sm:mb-3 sm:text-xl">
           {title}
         </h3>
-        <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
+        <p className="text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
           {description}
         </p>
       </div>
@@ -150,11 +150,11 @@ function StatCounter({
 
   return (
     <div ref={ref} className="text-center">
-      <div className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2">
+      <div className="mb-2 font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl">
         {count.toLocaleString()}
         <span className="text-blue-300">{suffix}</span>
       </div>
-      <p className="text-blue-200/80 text-sm sm:text-base lg:text-lg">
+      <p className="text-sm text-blue-200/80 sm:text-base lg:text-lg">
         {label}
       </p>
     </div>
@@ -210,19 +210,19 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-[var(--bg-primary)]">
       {/* Fixed Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-[var(--bg-primary)]/90 backdrop-blur-xl shadow-sm border-b border-[var(--border-primary)]'
+            ? 'bg-[var(--bg-primary)]/90 border-b border-[var(--border-primary)] shadow-sm backdrop-blur-xl'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link href="/" className="group flex items-center gap-3">
               <Image
                 src="/logo.svg"
                 alt="TUGO"
@@ -238,7 +238,7 @@ export default function AboutPage() {
             </Link>
 
             {/* Nav Links - Desktop */}
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden items-center gap-8 md:flex">
               <button
                 onClick={() => scrollToSection(1)}
                 className={`text-sm font-medium transition-colors ${
@@ -274,7 +274,7 @@ export default function AboutPage() {
             {/* CTA Button */}
             <Link
               href="/login"
-              className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
+              className={`rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 ${
                 isScrolled
                   ? 'bg-[var(--brand-primary)] text-white hover:opacity-90'
                   : 'bg-white text-[#1E3A5F] hover:bg-white/90'
@@ -287,18 +287,18 @@ export default function AboutPage() {
       </header>
 
       {/* Section Navigation Dots - with proper touch targets */}
-      <div className="fixed right-4 lg:right-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-1">
+      <div className="fixed right-4 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-1 lg:right-8 lg:flex">
         {[0, 1, 2, 3, 4, 5].map((index) => (
           <button
             key={index}
             onClick={() => scrollToSection(index)}
-            className="p-3 group"
+            className="group p-3"
             aria-label={`섹션 ${index + 1}로 이동`}
           >
             <span
-              className={`block w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+              className={`block h-2.5 w-2.5 rounded-full transition-all duration-300 ${
                 activeSection === index
-                  ? 'bg-[var(--brand-primary)] scale-125'
+                  ? 'scale-125 bg-[var(--brand-primary)]'
                   : 'bg-[var(--text-tertiary)]/30 group-hover:bg-[var(--text-tertiary)]'
               }`}
             />
@@ -312,52 +312,52 @@ export default function AboutPage() {
         className="landing-section hero-gradient relative overflow-hidden"
       >
         {/* Geometric Background Pattern */}
-        <div className="absolute inset-0 geo-pattern-subtle opacity-50" />
+        <div className="geo-pattern-subtle absolute inset-0 opacity-50" />
 
         {/* Gradient Orbs */}
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse-subtle" />
-        <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl animate-pulse-subtle" />
+        <div className="absolute -left-32 top-1/4 h-96 w-96 animate-pulse-subtle rounded-full bg-blue-500/20 blur-3xl" />
+        <div className="absolute -right-32 bottom-1/4 h-80 w-80 animate-pulse-subtle rounded-full bg-indigo-600/20 blur-3xl" />
 
         {/* Noise Overlay */}
-        <div className="absolute inset-0 noise-overlay" />
+        <div className="noise-overlay absolute inset-0" />
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-20 sm:py-24 md:py-32">
+        <div className="relative z-10 mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-24 md:py-32 lg:px-8">
           <div className="max-w-4xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-white/90 text-sm font-medium mb-6 sm:mb-8 animate-fade-in">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <div className="glass mb-6 inline-flex animate-fade-in items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white/90 sm:mb-8">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
               차세대 정치 커뮤니티 플랫폼
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.15] mb-6 sm:mb-8 animate-fade-in-up">
+            <h1 className="mb-6 animate-fade-in-up text-4xl font-bold leading-[1.15] text-white sm:mb-8 sm:text-5xl md:text-6xl lg:text-7xl">
               <span className="block">건강한 정치 토론의</span>
-              <span className="block mt-1 sm:mt-2">
+              <span className="mt-1 block sm:mt-2">
                 새로운 공간,{' '}
                 <span className="font-display italic text-blue-300">TUGO</span>
               </span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg sm:text-xl lg:text-2xl text-blue-100/80 max-w-2xl leading-relaxed mb-8 sm:mb-10 lg:mb-12 animate-fade-in-up-delayed">
+            <p className="mb-8 max-w-2xl animate-fade-in-up-delayed text-lg leading-relaxed text-blue-100/80 sm:mb-10 sm:text-xl lg:mb-12 lg:text-2xl">
               다양한 시각을 존중하는 열린 토론 플랫폼.
               <br className="hidden sm:block" />
               정치 크리에이터를 만나고, 여론의 흐름을 확인하세요.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up-delayed">
+            <div className="flex animate-fade-in-up-delayed flex-col gap-3 sm:flex-row sm:gap-4">
               <Link
                 href="/login"
-                className="group inline-flex items-center justify-center gap-2 bg-white text-[#1E3A5F] px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-blue-50 transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-base font-semibold text-[#1E3A5F] transition-all duration-300 hover:bg-blue-50 sm:px-8 sm:py-4 sm:text-lg"
               >
                 지금 시작하기
-                <ArrowRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                <ArrowRightIcon className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
               <button
                 onClick={() => scrollToSection(1)}
-                className="inline-flex items-center justify-center gap-2 border border-white/30 text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-base sm:text-lg font-semibold hover:bg-white/10 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-6 py-3.5 text-base font-semibold text-white transition-all duration-300 hover:bg-white/10 sm:px-8 sm:py-4 sm:text-lg"
               >
                 자세히 알아보기
               </button>
@@ -368,38 +368,38 @@ export default function AboutPage() {
         {/* Scroll Indicator - hidden on mobile */}
         <button
           onClick={() => scrollToSection(1)}
-          className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex-col items-center gap-2 hidden sm:flex group"
+          className="group absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 sm:bottom-12 sm:flex"
           aria-label="아래로 스크롤"
         >
-          <span className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
+          <span className="text-sm text-white/60 transition-colors group-hover:text-white/80">
             스크롤
           </span>
-          <ChevronDownIcon className="w-6 h-6 text-white/60 scroll-indicator group-hover:text-white/80 transition-colors" />
+          <ChevronDownIcon className="scroll-indicator h-6 w-6 text-white/60 transition-colors group-hover:text-white/80" />
         </button>
 
         {/* Bottom Gradient Fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 bg-gradient-to-t from-[var(--bg-primary)] to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[var(--bg-primary)] to-transparent sm:h-32" />
       </section>
 
       {/* ===== STATS SECTION ===== */}
       <section
         ref={addSectionRef(1)}
-        className="landing-section bg-gradient-to-br from-slate-900 via-[#1E3A5F] to-blue-900 relative overflow-hidden"
+        className="landing-section relative overflow-hidden bg-gradient-to-br from-slate-900 via-[#1E3A5F] to-blue-900"
       >
-        <div className="absolute inset-0 geo-pattern-subtle" />
+        <div className="geo-pattern-subtle absolute inset-0" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
-          <RevealSection className="text-center mb-12 sm:mb-16 lg:mb-20">
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+        <div className="relative z-10 mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+          <RevealSection className="mb-12 text-center sm:mb-16 lg:mb-20">
+            <h2 className="mb-4 font-display text-3xl font-bold text-white sm:mb-6 sm:text-4xl md:text-5xl">
               성장하는 커뮤니티
             </h2>
-            <p className="text-blue-200/70 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-base text-blue-200/70 sm:text-lg lg:text-xl">
               매일 더 많은 사람들이 TUGO에서 건강한 정치 토론에 참여하고
               있습니다
             </p>
           </RevealSection>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
+          <div className="grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4 lg:gap-12">
             <StatCounter value={10} suffix="K+" label="활성 사용자" />
             <StatCounter value={500} suffix="+" label="정치 크리에이터" />
             <StatCounter value={50} suffix="K+" label="투표 참여" />
@@ -408,17 +408,17 @@ export default function AboutPage() {
 
           {/* Trust Badges */}
           <RevealSection delay={0.3} className="mt-12 sm:mt-16 lg:mt-20">
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 items-center">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8">
               <div className="flex items-center gap-2 text-blue-200/70">
-                <ShieldCheckIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ShieldCheckIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="text-xs sm:text-sm">안전한 플랫폼</span>
               </div>
               <div className="flex items-center gap-2 text-blue-200/70">
-                <GlobeAltIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <GlobeAltIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="text-xs sm:text-sm">다양한 시각 존중</span>
               </div>
               <div className="flex items-center gap-2 text-blue-200/70">
-                <HeartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <HeartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="text-xs sm:text-sm">건강한 토론 문화</span>
               </div>
             </div>
@@ -429,22 +429,22 @@ export default function AboutPage() {
       {/* ===== FEATURES SECTION ===== */}
       <section
         ref={addSectionRef(2)}
-        className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 bg-[var(--bg-primary)] relative"
+        className="relative bg-[var(--bg-primary)] px-5 py-16 sm:px-6 sm:py-24 lg:py-32"
       >
-        <div className="max-w-7xl mx-auto">
-          <RevealSection className="text-center mb-10 sm:mb-14 lg:mb-20">
-            <span className="inline-block text-[var(--brand-primary)] font-semibold text-xs sm:text-sm tracking-wider uppercase mb-3 sm:mb-4">
+        <div className="mx-auto max-w-7xl">
+          <RevealSection className="mb-10 text-center sm:mb-14 lg:mb-20">
+            <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-wider text-[var(--brand-primary)] sm:mb-4 sm:text-sm">
               Platform Features
             </span>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4 sm:mb-6">
+            <h2 className="mb-4 font-display text-3xl font-bold text-[var(--text-primary)] sm:mb-6 sm:text-4xl md:text-5xl">
               정치 토론의 새로운 기준
             </h2>
-            <p className="text-[var(--text-secondary)] text-base sm:text-lg lg:text-xl max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-base text-[var(--text-secondary)] sm:text-lg lg:text-xl">
               건강한 정치 토론을 위한 혁신적인 기능들을 경험하세요
             </p>
           </RevealSection>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
             <FeatureCard
               icon={ChatBubbleLeftRightIcon}
               title="열린 토론 공간"
@@ -488,25 +488,25 @@ export default function AboutPage() {
       {/* ===== CREATOR SECTION ===== */}
       <section
         ref={addSectionRef(3)}
-        className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 bg-[var(--bg-secondary)] relative overflow-hidden"
+        className="relative overflow-hidden bg-[var(--bg-secondary)] px-5 py-16 sm:px-6 sm:py-24 lg:py-32"
       >
         {/* Background accent */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[var(--brand-primary)]/5 to-transparent hidden sm:block" />
+        <div className="from-[var(--brand-primary)]/5 absolute right-0 top-0 hidden h-full w-1/2 bg-gradient-to-l to-transparent sm:block" />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
             {/* Left: Content */}
             <div>
               <RevealSection>
-                <span className="inline-block text-[var(--brand-primary)] font-semibold text-xs sm:text-sm tracking-wider uppercase mb-3 sm:mb-4">
+                <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-wider text-[var(--brand-primary)] sm:mb-4 sm:text-sm">
                   For Creators
                 </span>
-                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--text-primary)] mb-4 sm:mb-6">
+                <h2 className="mb-4 font-display text-3xl font-bold text-[var(--text-primary)] sm:mb-6 sm:text-4xl md:text-5xl">
                   정치 크리에이터로서
                   <br />
                   성장하세요
                 </h2>
-                <p className="text-[var(--text-secondary)] text-base sm:text-lg leading-relaxed mb-8 sm:mb-10">
+                <p className="mb-8 text-base leading-relaxed text-[var(--text-secondary)] sm:mb-10 sm:text-lg">
                   TUGO는 정치 크리에이터들이 자신의 목소리를 내고, 구독자와
                   소통하며, 지속 가능한 활동을 할 수 있는 완벽한 플랫폼입니다.
                 </p>
@@ -532,15 +532,15 @@ export default function AboutPage() {
                   },
                 ].map((item, index) => (
                   <RevealSection key={item.title} delay={0.1 * (index + 1)}>
-                    <div className="flex gap-3 sm:gap-4 group">
-                      <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-[var(--brand-primary)]/10 flex items-center justify-center group-hover:bg-[var(--brand-primary)]/20 transition-colors">
-                        <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--brand-primary)]" />
+                    <div className="group flex gap-3 sm:gap-4">
+                      <div className="bg-[var(--brand-primary)]/10 group-hover:bg-[var(--brand-primary)]/20 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg transition-colors sm:h-12 sm:w-12 sm:rounded-xl">
+                        <item.icon className="h-5 w-5 text-[var(--brand-primary)] sm:h-6 sm:w-6" />
                       </div>
                       <div>
-                        <h3 className="text-base sm:text-lg font-semibold text-[var(--text-primary)] mb-0.5 sm:mb-1">
+                        <h3 className="mb-0.5 text-base font-semibold text-[var(--text-primary)] sm:mb-1 sm:text-lg">
                           {item.title}
                         </h3>
-                        <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                        <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
                           {item.desc}
                         </p>
                       </div>
@@ -552,10 +552,10 @@ export default function AboutPage() {
               <RevealSection delay={0.4} className="mt-8 sm:mt-10">
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 text-[var(--brand-primary)] font-semibold hover:gap-3 transition-all text-sm sm:text-base"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--brand-primary)] transition-all hover:gap-3 sm:text-base"
                 >
                   크리에이터로 시작하기
-                  <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ArrowRightIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Link>
               </RevealSection>
             </div>
@@ -564,23 +564,23 @@ export default function AboutPage() {
             <RevealSection delay={0.2}>
               <div className="relative mt-8 lg:mt-0">
                 {/* Mock Dashboard Card */}
-                <div className="feature-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 shadow-xl sm:shadow-2xl">
-                  <div className="flex items-center justify-between mb-5 sm:mb-6 lg:mb-8">
+                <div className="feature-card rounded-2xl p-5 shadow-xl sm:rounded-3xl sm:p-6 sm:shadow-2xl lg:p-8">
+                  <div className="mb-5 flex items-center justify-between sm:mb-6 lg:mb-8">
                     <div>
-                      <p className="text-[var(--text-tertiary)] text-xs sm:text-sm">
+                      <p className="text-xs text-[var(--text-tertiary)] sm:text-sm">
                         이번 달 수익
                       </p>
-                      <p className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)]">
+                      <p className="font-display text-2xl font-bold text-[var(--text-primary)] sm:text-3xl lg:text-4xl">
                         ₩2,450,000
                       </p>
                     </div>
-                    <div className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm font-medium">
+                    <div className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 sm:px-3 sm:py-1.5 sm:text-sm">
                       +23%
                     </div>
                   </div>
 
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 mb-5 sm:mb-6 lg:mb-8">
+                  <div className="mb-5 grid grid-cols-3 gap-2 sm:mb-6 sm:gap-3 lg:mb-8 lg:gap-4">
                     {[
                       { label: '구독자', value: '2,847' },
                       { label: '게시물', value: '156' },
@@ -588,12 +588,12 @@ export default function AboutPage() {
                     ].map((stat) => (
                       <div
                         key={stat.label}
-                        className="text-center p-2.5 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl bg-[var(--bg-tertiary)]"
+                        className="rounded-lg bg-[var(--bg-tertiary)] p-2.5 text-center sm:rounded-xl sm:p-3 lg:p-4"
                       >
-                        <p className="text-lg sm:text-xl lg:text-2xl font-bold text-[var(--text-primary)]">
+                        <p className="text-lg font-bold text-[var(--text-primary)] sm:text-xl lg:text-2xl">
                           {stat.value}
                         </p>
-                        <p className="text-[10px] sm:text-xs text-[var(--text-tertiary)]">
+                        <p className="text-[10px] text-[var(--text-tertiary)] sm:text-xs">
                           {stat.label}
                         </p>
                       </div>
@@ -601,11 +601,11 @@ export default function AboutPage() {
                   </div>
 
                   {/* Chart Placeholder */}
-                  <div className="h-28 sm:h-32 lg:h-40 rounded-lg sm:rounded-xl bg-gradient-to-br from-[var(--brand-primary)]/10 to-blue-500/5 flex items-end justify-around p-3 sm:p-4">
+                  <div className="from-[var(--brand-primary)]/10 flex h-28 items-end justify-around rounded-lg bg-gradient-to-br to-blue-500/5 p-3 sm:h-32 sm:rounded-xl sm:p-4 lg:h-40">
                     {[40, 65, 45, 80, 55, 90, 70].map((height, i) => (
                       <div
                         key={i}
-                        className="w-5 sm:w-6 lg:w-8 rounded-t-md sm:rounded-t-lg bg-gradient-to-t from-[var(--brand-primary)] to-blue-400"
+                        className="w-5 rounded-t-md bg-gradient-to-t from-[var(--brand-primary)] to-blue-400 sm:w-6 sm:rounded-t-lg lg:w-8"
                         style={{ height: `${height}%` }}
                       />
                     ))}
@@ -613,14 +613,14 @@ export default function AboutPage() {
                 </div>
 
                 {/* Floating Elements - hidden on mobile to prevent overlap */}
-                <div className="hidden md:block absolute -top-4 lg:-top-6 -right-2 lg:-right-6 feature-card rounded-xl lg:rounded-2xl p-3 lg:p-4 shadow-lg lg:shadow-xl animate-float">
+                <div className="feature-card absolute -right-2 -top-4 hidden animate-float rounded-xl p-3 shadow-lg md:block lg:-right-6 lg:-top-6 lg:rounded-2xl lg:p-4 lg:shadow-xl">
                   <div className="flex items-center gap-2 lg:gap-3">
-                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 lg:h-10 lg:w-10" />
                     <div>
-                      <p className="text-xs lg:text-sm font-medium text-[var(--text-primary)]">
+                      <p className="text-xs font-medium text-[var(--text-primary)] lg:text-sm">
                         새 구독자
                       </p>
-                      <p className="text-[10px] lg:text-xs text-[var(--text-tertiary)]">
+                      <p className="text-[10px] text-[var(--text-tertiary)] lg:text-xs">
                         방금 전
                       </p>
                     </div>
@@ -628,11 +628,11 @@ export default function AboutPage() {
                 </div>
 
                 <div
-                  className="hidden md:flex absolute -bottom-2 lg:-bottom-4 -left-2 lg:-left-4 feature-card rounded-xl lg:rounded-2xl p-3 lg:p-4 shadow-lg lg:shadow-xl animate-float items-center gap-2"
+                  className="feature-card absolute -bottom-2 -left-2 hidden animate-float items-center gap-2 rounded-xl p-3 shadow-lg md:flex lg:-bottom-4 lg:-left-4 lg:rounded-2xl lg:p-4 lg:shadow-xl"
                   style={{ animationDelay: '1s' }}
                 >
-                  <HeartIcon className="w-4 h-4 lg:w-5 lg:h-5 text-red-500" />
-                  <span className="text-xs lg:text-sm font-medium text-[var(--text-primary)]">
+                  <HeartIcon className="h-4 w-4 text-red-500 lg:h-5 lg:w-5" />
+                  <span className="text-xs font-medium text-[var(--text-primary)] lg:text-sm">
                     +127 좋아요
                   </span>
                 </div>
@@ -645,16 +645,16 @@ export default function AboutPage() {
       {/* ===== TRUST SECTION ===== */}
       <section
         ref={addSectionRef(4)}
-        className="py-16 sm:py-24 lg:py-32 px-5 sm:px-6 bg-slate-900 relative overflow-hidden"
+        className="relative overflow-hidden bg-slate-900 px-5 py-16 sm:px-6 sm:py-24 lg:py-32"
       >
-        <div className="absolute inset-0 geo-pattern-subtle opacity-30" />
+        <div className="geo-pattern-subtle absolute inset-0 opacity-30" />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <RevealSection className="text-center mb-10 sm:mb-12 lg:mb-16">
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <RevealSection className="mb-10 text-center sm:mb-12 lg:mb-16">
+            <h2 className="mb-4 font-display text-3xl font-bold text-white sm:mb-6 sm:text-4xl md:text-5xl">
               안전하고 투명한 플랫폼
             </h2>
-            <p className="text-slate-300 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed">
+            <p className="mx-auto max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg lg:text-xl">
               TUGO는 건강한 정치 토론 문화를 위해 명확한 커뮤니티 가이드라인을
               운영합니다.
               <br className="hidden sm:block" />
@@ -662,7 +662,7 @@ export default function AboutPage() {
             </p>
           </RevealSection>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:gap-8">
             {[
               {
                 icon: ShieldCheckIcon,
@@ -681,14 +681,14 @@ export default function AboutPage() {
               },
             ].map((item, index) => (
               <RevealSection key={item.title} delay={0.1 * (index + 1)}>
-                <div className="text-center p-5 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl bg-blue-500/20 flex items-center justify-center mx-auto mb-4 sm:mb-5 lg:mb-6">
-                    <item.icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-blue-400" />
+                <div className="rounded-xl border border-white/10 bg-white/5 p-5 text-center transition-colors hover:bg-white/10 sm:rounded-2xl sm:p-6 lg:p-8">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 sm:mb-5 sm:h-14 sm:w-14 sm:rounded-2xl lg:mb-6 lg:h-16 lg:w-16">
+                    <item.icon className="h-6 w-6 text-blue-400 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
+                  <h3 className="mb-2 text-lg font-bold text-white sm:mb-3 sm:text-xl">
                     {item.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
+                  <p className="text-sm leading-relaxed text-slate-400 sm:text-base">
                     {item.desc}
                   </p>
                 </div>
@@ -707,9 +707,9 @@ export default function AboutPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center gap-2 text-slate-300 text-sm sm:text-base"
+                  className="flex items-center gap-2 text-sm text-slate-300 sm:text-base"
                 >
-                  <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
+                  <CheckCircleIcon className="h-4 w-4 text-emerald-400 sm:h-5 sm:w-5" />
                   <span>{item}</span>
                 </div>
               ))}
@@ -721,19 +721,19 @@ export default function AboutPage() {
       {/* ===== CTA SECTION ===== */}
       <section
         ref={addSectionRef(5)}
-        className="landing-section bg-[var(--bg-primary)] relative overflow-hidden"
+        className="landing-section relative overflow-hidden bg-[var(--bg-primary)]"
       >
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/5 via-transparent to-blue-600/5" />
+        <div className="from-[var(--brand-primary)]/5 absolute inset-0 bg-gradient-to-br via-transparent to-blue-600/5" />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-5 sm:px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl px-5 text-center sm:px-6">
           <RevealSection>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--text-primary)] mb-6 sm:mb-8 leading-tight">
+            <h2 className="mb-6 font-display text-3xl font-bold leading-tight text-[var(--text-primary)] sm:mb-8 sm:text-4xl md:text-5xl lg:text-6xl">
               당신의 목소리가
               <br />
               <span className="text-gradient">세상을 바꿉니다</span>
             </h2>
-            <p className="text-[var(--text-secondary)] text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-10 lg:mb-12 max-w-2xl mx-auto">
+            <p className="mx-auto mb-8 max-w-2xl text-base text-[var(--text-secondary)] sm:mb-10 sm:text-lg md:text-xl lg:mb-12 lg:text-2xl">
               TUGO에서 새로운 정치 토론을 경험하세요.
               <br />
               지금 바로 시작할 수 있습니다.
@@ -743,15 +743,15 @@ export default function AboutPage() {
           <RevealSection delay={0.2}>
             <Link
               href="/login"
-              className="group inline-flex items-center gap-2 sm:gap-3 bg-[var(--brand-primary)] text-white px-6 sm:px-8 lg:px-10 py-3.5 sm:py-4 lg:py-5 rounded-full text-base sm:text-lg lg:text-xl font-semibold hover:bg-[var(--brand-hover)] transition-all duration-300 shadow-lg shadow-[var(--brand-primary)]/25 hover:shadow-xl hover:shadow-[var(--brand-primary)]/30"
+              className="shadow-[var(--brand-primary)]/25 hover:shadow-[var(--brand-primary)]/30 group inline-flex items-center gap-2 rounded-full bg-[var(--brand-primary)] px-6 py-3.5 text-base font-semibold text-white shadow-lg transition-all duration-300 hover:bg-[var(--brand-hover)] hover:shadow-xl sm:gap-3 sm:px-8 sm:py-4 sm:text-lg lg:px-10 lg:py-5 lg:text-xl"
             >
               TUGO 시작하기
-              <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-1" />
+              <ArrowRightIcon className="h-5 w-5 transition-transform group-hover:translate-x-1 sm:h-6 sm:w-6" />
             </Link>
           </RevealSection>
 
           <RevealSection delay={0.3} className="mt-6 sm:mt-8">
-            <p className="text-[var(--text-tertiary)] text-xs sm:text-sm">
+            <p className="text-xs text-[var(--text-tertiary)] sm:text-sm">
               가입은 무료입니다. 언제든지 시작하세요.
             </p>
           </RevealSection>
@@ -759,9 +759,9 @@ export default function AboutPage() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="border-t border-[var(--border-primary)] py-10 sm:py-12 lg:py-16 px-5 sm:px-6 bg-[var(--bg-secondary)]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 mb-8 sm:mb-10 lg:mb-12">
+      <footer className="border-t border-[var(--border-primary)] bg-[var(--bg-secondary)] px-5 py-10 sm:px-6 sm:py-12 lg:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 grid gap-8 sm:mb-10 sm:grid-cols-2 sm:gap-10 md:grid-cols-4 lg:mb-12 lg:gap-12">
             {/* Brand */}
             <div className="sm:col-span-2">
               <Image
@@ -771,7 +771,7 @@ export default function AboutPage() {
                 height={32}
                 className="mb-4"
               />
-              <p className="text-[var(--text-secondary)] text-sm max-w-sm leading-relaxed">
+              <p className="max-w-sm text-sm leading-relaxed text-[var(--text-secondary)]">
                 TUGO는 건강한 정치 토론을 위한 차세대 커뮤니티 플랫폼입니다.
                 다양한 시각이 공존하는 열린 공간을 만들어갑니다.
               </p>
@@ -779,14 +779,14 @@ export default function AboutPage() {
 
             {/* Links */}
             <div>
-              <h4 className="font-semibold text-[var(--text-primary)] mb-4">
+              <h4 className="mb-4 font-semibold text-[var(--text-primary)]">
                 서비스
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link
                     href="/"
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                   >
                     홈
                   </Link>
@@ -794,7 +794,7 @@ export default function AboutPage() {
                 <li>
                   <Link
                     href="/explore"
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                   >
                     탐색
                   </Link>
@@ -802,7 +802,7 @@ export default function AboutPage() {
                 <li>
                   <Link
                     href="/explore/creators"
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                   >
                     크리에이터
                   </Link>
@@ -812,14 +812,14 @@ export default function AboutPage() {
 
             {/* Legal */}
             <div>
-              <h4 className="font-semibold text-[var(--text-primary)] mb-4">
+              <h4 className="mb-4 font-semibold text-[var(--text-primary)]">
                 정책
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link
                     href="/terms"
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                   >
                     이용약관
                   </Link>
@@ -827,7 +827,7 @@ export default function AboutPage() {
                 <li>
                   <Link
                     href="/privacy"
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                    className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
                   >
                     개인정보처리방침
                   </Link>
@@ -837,14 +837,14 @@ export default function AboutPage() {
           </div>
 
           {/* Bottom */}
-          <div className="pt-8 border-t border-[var(--border-primary)] flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-[var(--text-tertiary)] text-sm">
+          <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--border-primary)] pt-8 md:flex-row">
+            <p className="text-sm text-[var(--text-tertiary)]">
               &copy; 2025 TUGO. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <a
                 href="#"
-                className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors text-sm"
+                className="text-sm text-[var(--text-tertiary)] transition-colors hover:text-[var(--text-primary)]"
               >
                 고객센터
               </a>

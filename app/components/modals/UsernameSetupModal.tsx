@@ -171,12 +171,12 @@ export default function UsernameSetupModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
                 {/* 헤더 영역 */}
-                <div className="text-center mb-6">
-                  <div className="mx-auto w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+                <div className="mb-6 text-center">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100">
                     <svg
-                      className="w-6 h-6 text-primary-600"
+                      className="h-6 w-6 text-primary-600"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -191,7 +191,7 @@ export default function UsernameSetupModal({
                   </div>
                   <Dialog.Title
                     as="h3"
-                    className="text-xl font-bold leading-6 text-gray-900 dark:text-neutral-100 mb-2"
+                    className="mb-2 text-xl font-bold leading-6 text-gray-900 dark:text-neutral-100"
                   >
                     프로필 설정
                   </Dialog.Title>
@@ -205,10 +205,10 @@ export default function UsernameSetupModal({
                   <div className="mb-5">
                     <label
                       htmlFor="nickname"
-                      className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
+                      className="mb-2 block text-sm font-medium text-gray-700 dark:text-neutral-300"
                     >
                       닉네임
-                      <span className="text-red-500 ml-1">*</span>
+                      <span className="ml-1 text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <input
@@ -216,7 +216,7 @@ export default function UsernameSetupModal({
                         id="nickname"
                         value={nickname}
                         onChange={(e) => handleNicknameChange(e.target.value)}
-                        className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 text-gray-900 dark:text-neutral-100 bg-white dark:bg-neutral-800 placeholder:text-gray-400 dark:placeholder:text-neutral-500 ${
+                        className={`w-full rounded-lg border bg-white px-4 py-2.5 text-gray-900 transition-colors duration-200 placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500 ${
                           nicknameError
                             ? 'border-red-300 dark:border-red-500'
                             : nickname.trim()
@@ -228,7 +228,7 @@ export default function UsernameSetupModal({
                         maxLength={20}
                       />
                       {nickname.trim() && !nicknameError && (
-                        <CheckCircleIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500 transition-all duration-200 ease-in-out" />
+                        <CheckCircleIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-green-500 transition-all duration-200 ease-in-out" />
                       )}
                     </div>
                     {nicknameError && (
@@ -245,10 +245,10 @@ export default function UsernameSetupModal({
                   <div className="mb-5">
                     <label
                       htmlFor="username"
-                      className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
+                      className="mb-2 block text-sm font-medium text-gray-700 dark:text-neutral-300"
                     >
                       사용자 아이디
-                      <span className="text-red-500 ml-1">*</span>
+                      <span className="ml-1 text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-neutral-400">
@@ -261,7 +261,7 @@ export default function UsernameSetupModal({
                         onChange={(e) =>
                           setUsername(e.target.value.toLowerCase())
                         }
-                        className={`w-full pl-8 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 text-gray-900 dark:text-neutral-100 bg-white dark:bg-neutral-800 placeholder:text-gray-400 dark:placeholder:text-neutral-500 ${
+                        className={`w-full rounded-lg border bg-white py-2.5 pl-8 pr-10 text-gray-900 transition-colors duration-200 placeholder:text-gray-400 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500 ${
                           isAvailable === true
                             ? 'border-green-300 dark:border-green-500'
                             : isAvailable === false
@@ -276,23 +276,23 @@ export default function UsernameSetupModal({
                       />
                       {isChecking && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 ease-in-out">
-                          <div className="animate-spin h-5 w-5 border-2 border-primary-500 border-t-transparent rounded-full" />
+                          <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
                         </div>
                       )}
                       {!isChecking && isAvailable === true && (
-                        <CheckCircleIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-500 transition-all duration-200 ease-in-out animate-fade-in" />
+                        <CheckCircleIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 animate-fade-in text-green-500 transition-all duration-200 ease-in-out" />
                       )}
                       {!isChecking && isAvailable === false && (
-                        <XMarkIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500 transition-all duration-200 ease-in-out animate-fade-in" />
+                        <XMarkIcon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 animate-fade-in text-red-500 transition-all duration-200 ease-in-out" />
                       )}
                     </div>
                     {error && (
-                      <p className="mt-2 text-sm text-red-600 transition-opacity duration-200 ease-in-out animate-fade-in">
+                      <p className="mt-2 animate-fade-in text-sm text-red-600 transition-opacity duration-200 ease-in-out">
                         {error}
                       </p>
                     )}
                     {!error && isAvailable === true && (
-                      <p className="mt-2 text-sm text-green-600 transition-opacity duration-200 ease-in-out animate-fade-in">
+                      <p className="mt-2 animate-fade-in text-sm text-green-600 transition-opacity duration-200 ease-in-out">
                         사용 가능한 아이디입니다
                       </p>
                     )}
@@ -306,12 +306,12 @@ export default function UsernameSetupModal({
                     <button
                       type="submit"
                       disabled={!isFormValid || isSubmitting}
-                      className="w-full rounded-lg bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 disabled:bg-gray-300 dark:disabled:bg-neutral-700 disabled:cursor-not-allowed transition-colors"
+                      className="w-full rounded-lg bg-primary-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300 dark:disabled:bg-neutral-700"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center justify-center">
                           <svg
-                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                            className="-ml-1 mr-2 h-4 w-4 animate-spin text-white"
                             fill="none"
                             viewBox="0 0 24 24"
                           >

@@ -37,13 +37,13 @@ const PointsPage = () => {
         {filteredHistory.map((item) => (
           <div
             key={item.id}
-            className="flex items-center justify-between p-4 rounded-lg bg-white dark:bg-neutral-900/50 border border-gray-200 dark:border-gray-800"
+            className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-neutral-900/50"
           >
             <div className="flex items-center gap-4">
               {item.type === 'earn' ? (
-                <ArrowDownCircleIcon className="w-8 h-8 text-green-500" />
+                <ArrowDownCircleIcon className="h-8 w-8 text-green-500" />
               ) : (
-                <ArrowUpCircleIcon className="w-8 h-8 text-red-500" />
+                <ArrowUpCircleIcon className="h-8 w-8 text-red-500" />
               )}
               <div>
                 <p className="font-semibold text-gray-800 dark:text-gray-200">
@@ -67,25 +67,25 @@ const PointsPage = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 text-black dark:text-white">
-      <header className="border-b border-gray-200 dark:border-gray-800 pb-4 mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold">포인트</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">
+    <div className="p-4 text-black dark:text-white md:p-6">
+      <header className="mb-6 border-b border-gray-200 pb-4 dark:border-gray-800">
+        <h1 className="text-2xl font-bold md:text-3xl">포인트</h1>
+        <p className="mt-1 text-gray-500 dark:text-gray-400">
           서비스 내에서 활동하고 포인트를 사용해보세요.
         </p>
       </header>
 
       {/* Current Points & Charge Button */}
-      <section className="mb-8 p-6 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg">
-        <div className="flex justify-between items-center">
+      <section className="mb-8 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg">
+        <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold opacity-80">내 포인트</h2>
-            <p className="text-4xl font-bold mt-1">
+            <p className="mt-1 text-4xl font-bold">
               {currentPoints.toLocaleString()} P
             </p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 rounded-md bg-white text-primary-600 font-bold hover:bg-gray-100 transition-colors">
-            <BanknotesIcon className="w-6 h-6" />
+          <button className="flex items-center gap-2 rounded-md bg-white px-6 py-3 font-bold text-primary-600 transition-colors hover:bg-gray-100">
+            <BanknotesIcon className="h-6 w-6" />
             <span>충전하기</span>
           </button>
         </div>
@@ -93,8 +93,8 @@ const PointsPage = () => {
 
       {/* Points History */}
       <section>
-        <h2 className="text-xl font-bold mb-4">포인트 내역</h2>
-        <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
+        <h2 className="mb-4 text-xl font-bold">포인트 내역</h2>
+        <div className="mb-4 border-b border-gray-200 dark:border-gray-700">
           <nav className="flex space-x-4">
             <button
               onClick={() => setActiveTab('all')}

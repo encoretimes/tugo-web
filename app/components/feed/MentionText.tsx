@@ -131,7 +131,7 @@ export default function MentionText({
           <Link
             key={`mention-${match.start}`}
             href={`/@${match.value}`}
-            className="text-primary-600 hover:text-primary-700 hover:underline font-medium"
+            className="font-medium text-primary-600 hover:text-primary-700 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             @{match.value}
@@ -145,11 +145,11 @@ export default function MentionText({
             href={match.value}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-0.5 text-primary-600 hover:text-primary-700 hover:underline break-all"
+            className="inline-flex items-center gap-0.5 break-all text-primary-600 hover:text-primary-700 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             <span className="break-all">{truncateUrl(match.text)}</span>
-            <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 flex-shrink-0 inline" />
+            <ArrowTopRightOnSquareIcon className="inline h-3.5 w-3.5 flex-shrink-0" />
           </a>
         );
       }

@@ -44,16 +44,18 @@ export default function CropPanel({
     <div className="space-y-6">
       {/* Aspect Ratio */}
       <div>
-        <h3 className="text-sm font-medium text-gray-900 dark:text-neutral-100 mb-3">비율</h3>
+        <h3 className="mb-3 text-sm font-medium text-gray-900 dark:text-neutral-100">
+          비율
+        </h3>
         <div className="grid grid-cols-4 gap-2">
           {ASPECT_RATIOS.map((ratio) => (
             <button
               key={ratio.id}
               onClick={() => onAspectRatioChange(ratio.value)}
-              className={`px-3 py-2.5 text-xs rounded-lg border transition-all ${
+              className={`rounded-lg border px-3 py-2.5 text-xs transition-all ${
                 aspectRatio === ratio.value
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
-                  : 'border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-800'
+                  ? 'border-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800'
               }`}
             >
               {ratio.label}
@@ -64,25 +66,27 @@ export default function CropPanel({
 
       {/* Rotation & Flip */}
       <div>
-        <h3 className="text-sm font-medium text-gray-900 dark:text-neutral-100 mb-3">회전 및 반전</h3>
+        <h3 className="mb-3 text-sm font-medium text-gray-900 dark:text-neutral-100">
+          회전 및 반전
+        </h3>
         <div className="flex gap-2">
           <button
             onClick={onRotateLeft}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 text-gray-700 dark:text-neutral-300 transition-colors"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gray-100 px-3 py-2.5 text-gray-700 transition-colors hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
             <ArrowUturnLeftIcon className="h-4 w-4" />
             <span className="text-xs">좌회전</span>
           </button>
           <button
             onClick={onRotateRight}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 text-gray-700 dark:text-neutral-300 transition-colors"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gray-100 px-3 py-2.5 text-gray-700 transition-colors hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
             <ArrowPathIcon className="h-4 w-4" />
             <span className="text-xs">우회전</span>
           </button>
           <button
             onClick={onFlipHorizontal}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 text-gray-700 dark:text-neutral-300 transition-colors"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gray-100 px-3 py-2.5 text-gray-700 transition-colors hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
             <ArrowsRightLeftIcon className="h-4 w-4" />
             <span className="text-xs">반전</span>
@@ -92,18 +96,20 @@ export default function CropPanel({
 
       {/* Zoom */}
       <div>
-        <h3 className="text-sm font-medium text-gray-900 dark:text-neutral-100 mb-3">확대/축소</h3>
+        <h3 className="mb-3 text-sm font-medium text-gray-900 dark:text-neutral-100">
+          확대/축소
+        </h3>
         <div className="flex items-center gap-3">
           <button
             onClick={handleZoomOut}
-            className="p-2 text-gray-600 dark:text-neutral-400 hover:text-gray-800 dark:hover:text-neutral-200 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="rounded-lg bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-800 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
           >
             <MagnifyingGlassMinusIcon className="h-4 w-4" />
           </button>
-          <div className="flex-1 relative">
-            <div className="h-2 bg-gray-200 dark:bg-neutral-700 rounded-full">
+          <div className="relative flex-1">
+            <div className="h-2 rounded-full bg-gray-200 dark:bg-neutral-700">
               <div
-                className="h-full bg-primary-500 rounded-full"
+                className="h-full rounded-full bg-primary-500"
                 style={{ width: `${(zoomLevel / 3) * 100}%` }}
               />
             </div>
@@ -114,17 +120,17 @@ export default function CropPanel({
               step="0.1"
               value={zoomLevel}
               onChange={handleZoomSliderChange}
-              className="absolute inset-0 w-full opacity-0 cursor-pointer"
+              className="absolute inset-0 w-full cursor-pointer opacity-0"
             />
           </div>
           <button
             onClick={handleZoomIn}
-            className="p-2 text-gray-600 dark:text-neutral-400 hover:text-gray-800 dark:hover:text-neutral-200 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="rounded-lg bg-gray-100 p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-800 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-200"
           >
             <MagnifyingGlassPlusIcon className="h-4 w-4" />
           </button>
         </div>
-        <div className="text-center text-xs text-gray-500 dark:text-neutral-400 mt-2">
+        <div className="mt-2 text-center text-xs text-gray-500 dark:text-neutral-400">
           {Math.round(zoomLevel * 100)}%
         </div>
       </div>

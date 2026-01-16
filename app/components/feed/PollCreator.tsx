@@ -182,7 +182,7 @@ export default function PollCreator({
           placeholder="투표 질문 (선택사항)"
           value={question}
           onChange={(e) => handleQuestionChange(e.target.value)}
-          className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-500 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+          className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:ring-neutral-500"
           maxLength={200}
         />
       </div>
@@ -196,15 +196,15 @@ export default function PollCreator({
               placeholder={`옵션 ${index + 1}`}
               value={option}
               onChange={(e) => handleOptionChange(index, e.target.value)}
-              className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-500 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+              className="flex-1 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:ring-neutral-500"
               maxLength={100}
             />
             {options.length > 2 && (
               <button
                 onClick={() => removeOption(index)}
-                className="p-2 text-neutral-400 hover:text-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-full transition"
+                className="rounded-full p-2 text-neutral-400 transition hover:bg-neutral-100 hover:text-red-500 dark:hover:bg-neutral-700"
               >
-                <XMarkIcon className="w-5 h-5" />
+                <XMarkIcon className="h-5 w-5" />
               </button>
             )}
           </div>
@@ -213,9 +213,9 @@ export default function PollCreator({
         {options.length < 10 && (
           <button
             onClick={addOption}
-            className="flex items-center gap-2 px-4 py-2 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-md transition w-full justify-center border border-dashed border-neutral-300 dark:border-neutral-600"
+            className="flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-neutral-300 px-4 py-2 text-neutral-600 transition hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
-            <PlusIcon className="w-5 h-5" />
+            <PlusIcon className="h-5 w-5" />
             <span className="text-sm font-medium">옵션 추가</span>
           </button>
         )}
@@ -224,12 +224,12 @@ export default function PollCreator({
       {/* 투표 설정 (Compact) */}
       <div className="mb-3 space-y-2">
         {/* 다중 선택 체크박스 */}
-        <label className="flex items-center gap-2 cursor-pointer">
+        <label className="flex cursor-pointer items-center gap-2">
           <input
             type="checkbox"
             checked={isMultipleChoice}
             onChange={(e) => handleMultipleChoiceChange(e.target.checked)}
-            className="w-4 h-4 text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 rounded focus:ring-neutral-500 focus:ring-2 accent-neutral-800 dark:accent-neutral-200"
+            className="h-4 w-4 rounded border-neutral-300 bg-neutral-100 text-neutral-800 accent-neutral-800 focus:ring-2 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:accent-neutral-200"
           />
           <span className="text-sm text-neutral-700 dark:text-neutral-300">
             다중 선택 허용
@@ -237,12 +237,12 @@ export default function PollCreator({
         </label>
 
         {/* 커스텀 날짜 체크박스 */}
-        <label className="flex items-center gap-2 cursor-pointer">
+        <label className="flex cursor-pointer items-center gap-2">
           <input
             type="checkbox"
             checked={useCustomDate}
             onChange={(e) => handleCustomDateChange(e.target.checked)}
-            className="w-4 h-4 text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-700 border-neutral-300 dark:border-neutral-600 rounded focus:ring-neutral-500 focus:ring-2 accent-neutral-800 dark:accent-neutral-200"
+            className="h-4 w-4 rounded border-neutral-300 bg-neutral-100 text-neutral-800 accent-neutral-800 focus:ring-2 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:accent-neutral-200"
           />
           <span className="text-sm text-neutral-700 dark:text-neutral-300">
             종료일 직접 설정
@@ -263,10 +263,10 @@ export default function PollCreator({
               dateFormat="yyyy년 MM월 dd일 HH:mm"
               minDate={new Date()}
               placeholderText="날짜와 시간을 선택하세요"
-              className="w-full px-3 py-2 pl-10 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-500 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500"
+              className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 pl-10 text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:ring-neutral-500"
               wrapperClassName="w-full"
             />
-            <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" />
+            <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" />
           </div>
         </div>
       ) : (
@@ -274,7 +274,7 @@ export default function PollCreator({
           <select
             value={presetDuration}
             onChange={(e) => handlePresetDurationChange(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-500 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100"
+            className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:focus:ring-neutral-500"
           >
             <option value="1day">1일 후 종료</option>
             <option value="3days">3일 후 종료</option>

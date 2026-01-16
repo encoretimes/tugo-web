@@ -35,7 +35,7 @@ const Toast: React.FC<ToastProps> = ({ toast }) => {
 
   return (
     <div
-      className={`${bgColors[toast.type]} flex items-center gap-3 rounded-md border p-4 shadow-md backdrop-blur-sm transition-all duration-300 ease-in-out animate-slide-in`}
+      className={`${bgColors[toast.type]} flex animate-slide-in items-center gap-3 rounded-md border p-4 shadow-md backdrop-blur-sm transition-all duration-300 ease-in-out`}
     >
       {icons[toast.type]}
       <p className="flex-1 text-sm font-medium text-neutral-900 dark:text-neutral-100">
@@ -43,7 +43,7 @@ const Toast: React.FC<ToastProps> = ({ toast }) => {
       </p>
       <button
         onClick={() => removeToast(toast.id)}
-        className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors"
+        className="text-neutral-400 transition-colors hover:text-neutral-600 dark:hover:text-neutral-200"
       >
         <XMarkIcon className="h-5 w-5" />
       </button>

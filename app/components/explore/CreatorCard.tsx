@@ -78,10 +78,10 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
   return (
     <Link
       href={`/@${creator.username}`}
-      className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+      className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800"
     >
       {rank && (
-        <span className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white shrink-0 bg-primary-600">
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary-600 text-xs font-bold text-white">
           {rank}
         </span>
       )}
@@ -91,24 +91,24 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           alt={creator.name}
           width={44}
           height={44}
-          className="h-11 w-11 rounded-full object-cover shrink-0"
+          className="h-11 w-11 shrink-0 rounded-full object-cover"
         />
       ) : (
-        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700">
           <UserIcon className="h-6 w-6 text-neutral-400 dark:text-neutral-500" />
         </div>
       )}
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
-          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate">
+          <span className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-100">
             {creator.name}
           </span>
         </div>
-        <div className="text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500 truncate">
+        <div className="truncate text-sm text-neutral-500 dark:text-neutral-400 dark:text-neutral-500">
           @{creator.username}
         </div>
         {showStats && (
-          <div className="flex items-center gap-3 mt-0.5">
+          <div className="mt-0.5 flex items-center gap-3">
             <span className="text-xs text-neutral-400 dark:text-neutral-500">
               구독자 {creator.subscriberCount.toLocaleString()}명
             </span>
@@ -122,9 +122,9 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
         <button
           onClick={handleSubscribeClick}
           disabled={isMutating || isStatusLoading}
-          className={`shrink-0 px-4 py-1.5 rounded-md text-sm font-semibold transition-colors disabled:opacity-50 ${
+          className={`shrink-0 rounded-md px-4 py-1.5 text-sm font-semibold transition-colors disabled:opacity-50 ${
             isSubscribed
-              ? 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              ? 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
               : 'bg-primary-600 text-white hover:bg-primary-700'
           }`}
         >

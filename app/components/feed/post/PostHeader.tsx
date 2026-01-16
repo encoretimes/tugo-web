@@ -32,7 +32,7 @@ export default function PostHeader({
   };
 
   return (
-    <div className="flex items-center justify-between mb-3">
+    <div className="mb-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <Link
           href={`/@${author.username}`}
@@ -45,10 +45,10 @@ export default function PostHeader({
               alt={author.nickname || author.name}
               width={40}
               height={40}
-              className="h-10 w-10 rounded-full hover:opacity-80 transition-opacity"
+              className="h-10 w-10 rounded-full transition-opacity hover:opacity-80"
             />
           ) : (
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 transition-colors">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 transition-colors hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600">
               <UserIcon className="h-5 w-5 text-neutral-400 dark:text-neutral-500" />
             </div>
           )}
@@ -56,14 +56,14 @@ export default function PostHeader({
         <div className="flex flex-col">
           <Link
             href={`/@${author.username}`}
-            className="font-semibold text-gray-900 dark:text-neutral-100 text-[15px] hover:underline"
+            className="text-[15px] font-semibold text-gray-900 hover:underline dark:text-neutral-100"
             onClick={handleLinkClick}
           >
             {author.nickname || author.name}
           </Link>
           <Link
             href={`/@${author.username}`}
-            className="text-xs text-gray-500 dark:text-neutral-400 hover:underline"
+            className="text-xs text-gray-500 hover:underline dark:text-neutral-400"
             onClick={handleLinkClick}
           >
             @{author.username}

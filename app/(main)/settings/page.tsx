@@ -41,13 +41,13 @@ const SettingsPage = () => {
             <ThemeSettings />
 
             {/* Logout Section */}
-            <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+            <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-950">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-base font-medium text-gray-900 dark:text-neutral-100">
                     로그아웃
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
+                  <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
                     현재 기기에서 로그아웃합니다
                   </p>
                 </div>
@@ -56,7 +56,7 @@ const SettingsPage = () => {
                     localStorage.removeItem('token');
                     router.push('/login');
                   }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md transition-colors"
+                  className="rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                 >
                   로그아웃
                 </button>
@@ -64,17 +64,17 @@ const SettingsPage = () => {
             </div>
 
             {/* Account Deletion Section */}
-            <div className="bg-white dark:bg-neutral-950 border border-red-200 dark:border-red-900/50 rounded-lg p-5">
+            <div className="rounded-lg border border-red-200 bg-white p-5 dark:border-red-900/50 dark:bg-neutral-950">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-base font-medium text-red-600 dark:text-red-400">
                     계정 삭제
                   </h4>
-                  <p className="text-sm text-red-500/80 dark:text-red-400/70 mt-1">
+                  <p className="mt-1 text-sm text-red-500/80 dark:text-red-400/70">
                     모든 데이터가 영구적으로 삭제됩니다
                   </p>
                 </div>
-                <button className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md transition-colors">
+                <button className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700">
                   계정 삭제
                 </button>
               </div>
@@ -88,7 +88,7 @@ const SettingsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-neutral-950">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="mx-auto max-w-2xl px-4 py-8">
         {/* Header */}
         <header className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-neutral-100">
@@ -97,7 +97,7 @@ const SettingsPage = () => {
         </header>
 
         {/* Tab Navigation */}
-        <nav className="flex gap-1 p-1 bg-gray-100 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg mb-8">
+        <nav className="mb-8 flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1 dark:border-neutral-800 dark:bg-neutral-950">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -105,10 +105,10 @@ const SettingsPage = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                className={`flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 border border-transparent dark:border-neutral-700'
-                    : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-300'
+                    ? 'border border-transparent bg-white text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300'
                 }`}
               >
                 <Icon className="h-5 w-5" />

@@ -65,23 +65,23 @@ export default function FilterPanel({
           <button
             key={filter.id}
             onClick={() => onFilterSelect(filter.id)}
-            className={`flex-shrink-0 flex flex-col items-center gap-2 transition-all duration-200 ${
+            className={`flex flex-shrink-0 flex-col items-center gap-2 transition-all duration-200 ${
               selectedFilterId === filter.id
                 ? 'opacity-100'
                 : 'opacity-70 hover:opacity-90'
             }`}
           >
             <div
-              className={`relative w-20 h-24 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+              className={`relative h-24 w-20 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
                 selectedFilterId === filter.id
-                  ? 'border-primary-500 ring-2 ring-primary-500/30 scale-105'
-                  : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
+                  ? 'scale-105 border-primary-500 ring-2 ring-primary-500/30'
+                  : 'border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600'
               }`}
             >
               {isLoading ? (
-                <div className="w-full h-full bg-gray-100 dark:bg-neutral-800 animate-pulse" />
+                <div className="h-full w-full animate-pulse bg-gray-100 dark:bg-neutral-800" />
               ) : (
-                <div className="relative w-full h-full">
+                <div className="relative h-full w-full">
                   <Image
                     src={getThumbnail(filter.id)}
                     alt={filter.name}

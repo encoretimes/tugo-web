@@ -44,19 +44,19 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
     <Link
       href={getLink()}
       onClick={handleClick}
-      className={`flex items-start gap-3 px-4 py-3 border-b border-gray-100 dark:border-neutral-800 transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800 ${
+      className={`flex items-start gap-3 border-b border-gray-100 px-4 py-3 transition-colors hover:bg-gray-50 dark:border-neutral-800 dark:hover:bg-neutral-800 ${
         !isRead ? 'bg-gray-50 dark:bg-neutral-900' : ''
       }`}
     >
       {/* 읽지 않음 표시 - 왼쪽 라인 */}
       <div
-        className={`w-0.5 h-full min-h-[40px] rounded-full flex-shrink-0 ${!isRead ? 'bg-primary-600' : 'bg-transparent'}`}
+        className={`h-full min-h-[40px] w-0.5 flex-shrink-0 rounded-full ${!isRead ? 'bg-primary-600' : 'bg-transparent'}`}
       />
 
-      <div className="flex-grow min-w-0">
+      <div className="min-w-0 flex-grow">
         {/* 알림 타입 라벨 */}
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs text-gray-500 dark:text-neutral-400 font-medium">
+        <div className="mb-1 flex items-center gap-2">
+          <span className="text-xs font-medium text-gray-500 dark:text-neutral-400">
             {getNotificationLabel(type)}
           </span>
           <span className="text-xs text-gray-400 dark:text-neutral-500">
@@ -65,7 +65,7 @@ const NotificationItem = ({ notification }: { notification: Notification }) => {
         </div>
         {/* 알림 내용 */}
         <p
-          className={`text-sm leading-relaxed ${!isRead ? 'text-gray-900 dark:text-neutral-100 font-medium' : 'text-gray-600 dark:text-neutral-400'}`}
+          className={`text-sm leading-relaxed ${!isRead ? 'font-medium text-gray-900 dark:text-neutral-100' : 'text-gray-600 dark:text-neutral-400'}`}
         >
           {message}
         </p>
@@ -134,8 +134,8 @@ const NotificationsPage = () => {
 
     if (allNotifications.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
-          <p className="text-gray-500 dark:text-neutral-400 text-sm">
+        <div className="flex flex-col items-center justify-center px-8 py-16 text-center">
+          <p className="text-sm text-gray-500 dark:text-neutral-400">
             알림이 없습니다
           </p>
         </div>
@@ -158,9 +158,9 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="text-black dark:text-neutral-100 h-full">
-      <header className="sticky top-0 z-10 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-sm">
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-neutral-800">
+    <div className="h-full text-black dark:text-neutral-100">
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm dark:bg-neutral-950/80">
+        <div className="flex items-center justify-between border-b border-gray-200 p-4 dark:border-neutral-800">
           <h1 className="text-xl font-bold dark:text-neutral-100">알림</h1>
           <button
             onClick={handleMarkAllAsRead}

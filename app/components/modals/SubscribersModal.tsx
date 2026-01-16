@@ -48,15 +48,15 @@ export default function SubscribersModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg transition-all dark:border-neutral-700 dark:bg-neutral-900">
                 {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-200 dark:border-neutral-700 px-6 py-4">
+                <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-neutral-700">
                   <Dialog.Title className="text-lg font-semibold dark:text-neutral-100">
                     {memberName}의 구독자
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="rounded-md p-1 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                    className="rounded-md p-1 transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800"
                   >
                     <XMarkIcon className="h-6 w-6 dark:text-neutral-100" />
                   </button>
@@ -74,10 +74,10 @@ export default function SubscribersModal({
                         <Link
                           key={subscription.id}
                           href={`/@${subscription.memberUsername || subscription.memberId}`}
-                          className="flex items-center gap-3 px-6 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                          className="flex items-center gap-3 px-6 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-neutral-800"
                           onClick={onClose}
                         >
-                          <div className="relative h-12 w-12 rounded-full bg-gray-200 dark:bg-neutral-700 overflow-hidden">
+                          <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gray-200 dark:bg-neutral-700">
                             {subscription.memberProfileImageUrl ? (
                               <Image
                                 src={subscription.memberProfileImageUrl}
@@ -86,7 +86,7 @@ export default function SubscribersModal({
                                 className="object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-primary-600 text-white font-bold text-lg">
+                              <div className="flex h-full w-full items-center justify-center bg-primary-600 text-lg font-bold text-white">
                                 {subscription.memberName?.[0] || '?'}
                               </div>
                             )}
@@ -117,7 +117,7 @@ export default function SubscribersModal({
 
                 {/* Footer */}
                 {data && data.totalElements > 0 && (
-                  <div className="border-t border-gray-200 dark:border-neutral-700 px-6 py-3 text-center text-sm text-gray-500 dark:text-neutral-400">
+                  <div className="border-t border-gray-200 px-6 py-3 text-center text-sm text-gray-500 dark:border-neutral-700 dark:text-neutral-400">
                     총 {data.totalElements.toLocaleString()}명의 구독자
                   </div>
                 )}

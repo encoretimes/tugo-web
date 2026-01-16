@@ -63,13 +63,16 @@ export function openOAuthPopup(
     }, 500);
 
     // 타임아웃 (5분)
-    const timeoutTimer = setTimeout(() => {
-      cleanup();
-      if (!popup.closed) {
-        popup.close();
-      }
-      reject(new Error('Login timeout'));
-    }, 5 * 60 * 1000);
+    const timeoutTimer = setTimeout(
+      () => {
+        cleanup();
+        if (!popup.closed) {
+          popup.close();
+        }
+        reject(new Error('Login timeout'));
+      },
+      5 * 60 * 1000
+    );
 
     const cleanup = () => {
       window.removeEventListener('message', messageHandler);

@@ -14,7 +14,8 @@ import FeedTabs from './FeedTabs';
 const Feed = () => {
   const { isAuthenticated, hasHydrated } = useUserStore();
   const searchParams = useSearchParams();
-  const feedType: FeedType = searchParams.get('tab') === 'following' ? 'following' : 'recommended';
+  const feedType: FeedType =
+    searchParams.get('tab') === 'following' ? 'following' : 'recommended';
 
   const {
     data,
@@ -73,14 +74,14 @@ const Feed = () => {
     <div>
       {/* PC 전용 피드 타입 탭 - 모바일에서는 layout에서 별도 렌더링 */}
       {hasHydrated && isAuthenticated && (
-        <FeedTabs className="hidden lg:block sticky top-0 z-10 -mx-6 px-6" />
+        <FeedTabs className="sticky top-0 z-10 -mx-6 hidden px-6 lg:block" />
       )}
 
       {/* Pull-to-refresh 인디케이터 */}
       {isRefetching && (
         <div className="flex items-center justify-center py-3 text-sm text-gray-500 dark:text-neutral-400">
           <svg
-            className="animate-spin h-4 w-4 mr-2"
+            className="mr-2 h-4 w-4 animate-spin"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -126,7 +127,9 @@ const Feed = () => {
           <div className="p-8 text-center text-gray-500 dark:text-neutral-400">
             {feedType === 'following' ? (
               <div>
-                <p className="font-medium mb-2">구독 중인 크리에이터가 없습니다</p>
+                <p className="mb-2 font-medium">
+                  구독 중인 크리에이터가 없습니다
+                </p>
                 <p className="text-sm">
                   크리에이터를 구독하고 새로운 게시물을 받아보세요
                 </p>
@@ -145,7 +148,7 @@ const Feed = () => {
             {hasNextPage && (
               <div ref={ref} className="py-8">
                 {isFetchingNextPage ? (
-                  <div className="divide-y divide-gray-100 dark:divide-neutral-800 border-t border-gray-100 dark:border-neutral-800">
+                  <div className="divide-y divide-gray-100 border-t border-gray-100 dark:divide-neutral-800 dark:border-neutral-800">
                     <PostSkeleton />
                     <PostSkeleton />
                   </div>

@@ -48,10 +48,10 @@ const HomeSearchBar = () => {
 
   return (
     <div className="w-full bg-[#EDEBF0] pb-10">
-      <div className="max-w-content mx-auto flex justify-center">
+      <div className="mx-auto flex max-w-content justify-center">
         <div
           onClick={handleContainerClick}
-          className="relative w-full max-w-3xl bg-white rounded-[20px] border border-neutral-200 flex items-center px-5 py-2 cursor-text shadow-sm hover:shadow-md transition-shadow"
+          className="relative flex w-full max-w-3xl cursor-text items-center rounded-[20px] border border-neutral-200 bg-white px-5 py-2 shadow-sm transition-shadow hover:shadow-md"
         >
           {/* 입력 필드 */}
           <input
@@ -61,18 +61,18 @@ const HomeSearchBar = () => {
             onChange={(e) => setInputValue(e.target.value)}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            className="flex-1 bg-transparent outline-none text-[16px] text-black placeholder-transparent"
+            className="flex-1 bg-transparent text-[16px] text-black placeholder-transparent outline-none"
             placeholder="검색어를 입력하세요"
           />
 
           {/* 힌트 텍스트 (입력값이 없고 포커스가 아닐 때만 표시) */}
           {!inputValue && !isFocused && (
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2">
               <span
                 className={`text-[16px] text-neutral-400 transition-all duration-300 ${
                   isAnimating
-                    ? 'opacity-0 -translate-y-2'
-                    : 'opacity-100 translate-y-0'
+                    ? '-translate-y-2 opacity-0'
+                    : 'translate-y-0 opacity-100'
                 }`}
               >
                 {trendingKeywords[currentIndex]}
@@ -81,13 +81,13 @@ const HomeSearchBar = () => {
           )}
 
           {/* 검색 버튼 */}
-          <button className="ml-3 p-2 hover:bg-neutral-100 rounded-full transition-colors">
+          <button className="ml-3 rounded-full p-2 transition-colors hover:bg-neutral-100">
             <Image
               src="/system_ico/search_black.svg"
               alt="검색"
               width={24}
               height={24}
-              className="w-6 h-6"
+              className="h-6 w-6"
             />
           </button>
         </div>

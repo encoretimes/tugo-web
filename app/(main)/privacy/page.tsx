@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 export default function PrivacyPage() {
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
+    <div className="mx-auto max-w-3xl px-4 py-8">
       {/* Header */}
       <div className="mb-8 border-b border-gray-200 pb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">
           개인정보처리방침
         </h1>
         <p className="text-sm text-gray-500">
@@ -16,8 +16,8 @@ export default function PrivacyPage() {
       </div>
 
       {/* Table of Contents */}
-      <nav className="mb-10 p-4 bg-gray-50 rounded-md border border-gray-200">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">목차</h2>
+      <nav className="mb-10 rounded-md border border-gray-200 bg-gray-50 p-4">
+        <h2 className="mb-3 text-sm font-semibold text-gray-700">목차</h2>
         <ul className="space-y-2 text-sm">
           <li>
             <a href="#section-1" className="text-primary-600 hover:underline">
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
       {/* Content */}
       <div className="space-y-10">
         <section>
-          <p className="text-gray-700 leading-relaxed">
+          <p className="leading-relaxed text-gray-700">
             TUGO(이하 &quot;회사&quot;라 합니다)는 이용자의 개인정보를
             중요시하며, 「개인정보 보호법」 등 관련 법령을 준수하고 있습니다. 본
             개인정보처리방침은 회사가 제공하는 서비스 이용과 관련하여 이용자의
@@ -84,17 +84,17 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-1">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             1. 수집하는 개인정보
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="space-y-4 leading-relaxed text-gray-700">
             <p>회사는 서비스 제공을 위해 다음과 같은 개인정보를 수집합니다.</p>
 
-            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+              <h3 className="mb-2 font-semibold text-gray-900">
                 필수 수집 정보
               </h3>
-              <ul className="list-disc list-inside space-y-1 text-sm">
+              <ul className="list-inside list-disc space-y-1 text-sm">
                 <li>
                   소셜 로그인 정보 (카카오/네이버): 이메일, 이름(닉네임), 프로필
                   이미지
@@ -103,11 +103,11 @@ export default function PrivacyPage() {
               </ul>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+              <h3 className="mb-2 font-semibold text-gray-900">
                 선택 수집 정보
               </h3>
-              <ul className="list-disc list-inside space-y-1 text-sm">
+              <ul className="list-inside list-disc space-y-1 text-sm">
                 <li>프로필 정보: 자기소개, 관심 분야</li>
                 <li>
                   결제 정보: 구독 시 결제 관련 정보 (결제 대행사를 통해 처리)
@@ -118,11 +118,11 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-2">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             2. 개인정보의 수집 방법
           </h2>
-          <div className="text-gray-700 leading-relaxed">
-            <ul className="list-disc list-inside space-y-2">
+          <div className="leading-relaxed text-gray-700">
+            <ul className="list-inside list-disc space-y-2">
               <li>소셜 로그인(카카오, 네이버)을 통한 회원가입 시</li>
               <li>서비스 이용 과정에서 자동으로 생성되는 정보</li>
               <li>고객센터를 통한 문의 시</li>
@@ -132,11 +132,11 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-3">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             3. 개인정보의 이용 목적
           </h2>
-          <div className="text-gray-700 leading-relaxed">
-            <ul className="list-disc list-inside space-y-2">
+          <div className="leading-relaxed text-gray-700">
+            <ul className="list-inside list-disc space-y-2">
               <li>
                 <strong>회원 관리:</strong> 회원 식별, 가입 의사 확인, 본인
                 확인, 부정 이용 방지
@@ -160,21 +160,21 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             4. 개인정보의 보유 및 이용 기간
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="space-y-4 leading-relaxed text-gray-700">
             <p>
               회사는 원칙적으로 개인정보 수집 및 이용 목적이 달성된 후에는 해당
               정보를 지체 없이 파기합니다. 단, 관계 법령에 따라 보존이 필요한
               경우에는 해당 기간 동안 보관합니다.
             </p>
 
-            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-2">
+            <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+              <h3 className="mb-2 font-semibold text-gray-900">
                 법령에 따른 보존 기간
               </h3>
-              <ul className="list-disc list-inside space-y-1 text-sm">
+              <ul className="list-inside list-disc space-y-1 text-sm">
                 <li>계약 또는 청약철회 등에 관한 기록: 5년</li>
                 <li>대금결제 및 재화 등의 공급에 관한 기록: 5년</li>
                 <li>소비자의 불만 또는 분쟁처리에 관한 기록: 3년</li>
@@ -185,15 +185,15 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-5">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             5. 개인정보의 제3자 제공
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="space-y-4 leading-relaxed text-gray-700">
             <p>
               회사는 원칙적으로 이용자의 개인정보를 외부에 제공하지 않습니다.
               다만, 다음의 경우에는 예외로 합니다.
             </p>
-            <ul className="list-disc list-inside space-y-2">
+            <ul className="list-inside list-disc space-y-2">
               <li>이용자가 사전에 동의한 경우</li>
               <li>
                 법령의 규정에 의거하거나, 수사 목적으로 법령에 정해진 절차와
@@ -204,18 +204,18 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             6. 개인정보의 파기
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="space-y-4 leading-relaxed text-gray-700">
             <p>
               회사는 개인정보 보유 기간의 경과, 처리 목적 달성 등 개인정보가
               불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.
             </p>
 
-            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-2">파기 방법</h3>
-              <ul className="list-disc list-inside space-y-1 text-sm">
+            <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+              <h3 className="mb-2 font-semibold text-gray-900">파기 방법</h3>
+              <ul className="list-inside list-disc space-y-1 text-sm">
                 <li>전자적 파일: 복구 불가능한 방법으로 영구 삭제</li>
                 <li>종이 문서: 분쇄기로 분쇄하거나 소각</li>
               </ul>
@@ -224,12 +224,12 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-7">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             7. 이용자의 권리와 행사 방법
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="space-y-4 leading-relaxed text-gray-700">
             <p>이용자는 다음과 같은 권리를 행사할 수 있습니다.</p>
-            <ul className="list-disc list-inside space-y-2">
+            <ul className="list-inside list-disc space-y-2">
               <li>개인정보 열람 요구</li>
               <li>개인정보 정정 요구</li>
               <li>개인정보 삭제 요구</li>
@@ -243,11 +243,11 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             8. 개인정보 보호를 위한 기술적 조치
           </h2>
-          <div className="text-gray-700 leading-relaxed">
-            <ul className="list-disc list-inside space-y-2">
+          <div className="leading-relaxed text-gray-700">
+            <ul className="list-inside list-disc space-y-2">
               <li>
                 개인정보의 암호화: 비밀번호 등 중요 정보는 암호화하여 저장
               </li>
@@ -262,20 +262,20 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-9">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             9. 개인정보 보호책임자
           </h2>
-          <div className="text-gray-700 leading-relaxed">
+          <div className="leading-relaxed text-gray-700">
             <p className="mb-4">
               회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보
               처리와 관련한 이용자의 불만 처리 및 피해 구제 등을 위하여 아래와
               같이 개인정보 보호책임자를 지정하고 있습니다.
             </p>
-            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <p className="font-semibold text-gray-900 mb-2">
+            <div className="rounded-md border border-gray-200 bg-gray-50 p-4">
+              <p className="mb-2 font-semibold text-gray-900">
                 개인정보 보호책임자
               </p>
-              <ul className="text-sm space-y-1">
+              <ul className="space-y-1 text-sm">
                 <li>이메일: privacy@tugo.kr</li>
                 <li>고객센터: support@tugo.kr</li>
               </ul>
@@ -284,10 +284,10 @@ export default function PrivacyPage() {
         </section>
 
         <section id="section-10">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             10. 개인정보처리방침의 변경
           </h2>
-          <div className="text-gray-700 leading-relaxed">
+          <div className="leading-relaxed text-gray-700">
             <p>
               본 개인정보처리방침은 법령, 정책 또는 보안 기술의 변경에 따라
               내용이 추가, 삭제 및 수정될 수 있습니다. 변경 사항은 시행 7일 전에
@@ -298,8 +298,8 @@ export default function PrivacyPage() {
       </div>
 
       {/* Footer */}
-      <div className="mt-12 pt-6 border-t border-gray-200">
-        <p className="text-sm text-gray-500 text-center">
+      <div className="mt-12 border-t border-gray-200 pt-6">
+        <p className="text-center text-sm text-gray-500">
           본 개인정보처리방침에 대한 문의사항은{' '}
           <a
             href="mailto:privacy@tugo.kr"

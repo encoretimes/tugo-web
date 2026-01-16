@@ -45,9 +45,9 @@ export default function CommentInput({
             placeholder="댓글을 입력하세요..."
             rows={2}
             disabled={isPending}
-            className="w-full resize-none rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 p-2 text-sm focus:border-primary-600 dark:focus:border-primary-400 focus:outline-none"
+            className="w-full resize-none rounded-lg border border-neutral-300 bg-white p-2 text-sm text-neutral-900 focus:border-primary-600 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-primary-400"
           />
-          <div className="mt-2 flex justify-between items-center">
+          <div className="mt-2 flex items-center justify-between">
             <EmojiPickerButton
               onEmojiSelect={(emoji) => onChange(value + emoji)}
               buttonClassName="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200"

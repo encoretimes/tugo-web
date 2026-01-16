@@ -56,7 +56,7 @@ export default function MessageBubble({
     >
       {/* 상대방 메시지일 때 프로필 이미지 (그룹 첫 메시지에만 표시) */}
       {!isMyMessage && (
-        <div className="flex-shrink-0 mr-2 w-8">
+        <div className="mr-2 w-8 flex-shrink-0">
           {isFirstInGroup ? (
             otherUserProfileImage ? (
               <Image
@@ -64,11 +64,11 @@ export default function MessageBubble({
                 alt={otherUserName || '프로필'}
                 width={32}
                 height={32}
-                className="w-8 h-8 rounded-full object-cover"
+                className="h-8 w-8 rounded-full object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-neutral-700 flex items-center justify-center">
-                <span className="text-gray-600 dark:text-white text-xs font-medium">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
+                <span className="text-xs font-medium text-gray-600 dark:text-white">
                   {(otherUserName || '?')[0]}
                 </span>
               </div>
@@ -76,18 +76,18 @@ export default function MessageBubble({
           ) : null}
         </div>
       )}
-      <div className="flex flex-col max-w-[70%]">
+      <div className="flex max-w-[70%] flex-col">
         {/* 상대방 이름 (그룹 첫 메시지에만 표시) */}
         {!isMyMessage && isFirstInGroup && otherUserName && (
-          <span className="text-xs text-gray-500 dark:text-neutral-400 mb-1 ml-1 font-medium">
+          <span className="mb-1 ml-1 text-xs font-medium text-gray-500 dark:text-neutral-400">
             {otherUserName}
           </span>
         )}
         <div
           className={`${getBubbleRounding()} px-3 py-2 ${
             isMyMessage
-              ? 'bg-primary-600 dark:bg-neutral-700 text-white'
-              : 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-white'
+              ? 'bg-primary-600 text-white dark:bg-neutral-700'
+              : 'bg-white text-gray-900 dark:bg-neutral-800 dark:text-white'
           } ${isPending ? 'opacity-70' : ''}`}
         >
           <p className="whitespace-pre-wrap break-words text-sm">
@@ -97,8 +97,8 @@ export default function MessageBubble({
         {/* 시간 및 전송 상태 (그룹 마지막 메시지에만 표시) */}
         {isLastInGroup && (
           <div
-            className={`flex items-center gap-1 mt-1 ${
-              isMyMessage ? 'justify-end mr-1' : 'ml-1'
+            className={`mt-1 flex items-center gap-1 ${
+              isMyMessage ? 'mr-1 justify-end' : 'ml-1'
             }`}
           >
             <span

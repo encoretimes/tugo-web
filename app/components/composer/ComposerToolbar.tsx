@@ -23,7 +23,7 @@ export default function ComposerToolbar({
 
   return (
     <div className="flex items-center space-x-2">
-      <label className="flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg p-1.5 cursor-pointer transition-colors">
+      <label className="flex cursor-pointer items-center justify-center rounded-lg p-1.5 text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-200">
         <input
           ref={fileInputRef}
           type="file"
@@ -40,7 +40,7 @@ export default function ComposerToolbar({
         className={`flex items-center justify-center rounded-lg p-1.5 transition-colors ${
           hasPoll
             ? 'text-primary-600 dark:text-primary-400'
-            : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+            : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-200'
         }`}
         disabled={disabled}
       >

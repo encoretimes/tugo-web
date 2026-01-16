@@ -39,16 +39,16 @@ const VoteCard: React.FC<VoteCardProps> = ({ post, rank }) => {
   return (
     <Link
       href={`/@${post.author.username}/post/${post.postId}`}
-      className="block px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+      className="block px-4 py-3 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800"
     >
       <div className="flex items-start gap-3">
         {rank && (
-          <span className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5 bg-primary-600">
+          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary-600 text-xs font-bold text-white">
             {rank}
           </span>
         )}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+        <div className="min-w-0 flex-1">
+          <div className="mb-1 flex items-center gap-2">
             <Image
               src={post.author.profileImageUrl || defaultProfileImage}
               alt={post.author.nickname || post.author.name}
@@ -56,7 +56,7 @@ const VoteCard: React.FC<VoteCardProps> = ({ post, rank }) => {
               height={20}
               className="h-5 w-5 rounded-full object-cover"
             />
-            <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100 truncate">
+            <span className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
               {post.author.nickname || post.author.name}
             </span>
             <span className="text-sm text-neutral-400">·</span>
@@ -64,7 +64,7 @@ const VoteCard: React.FC<VoteCardProps> = ({ post, rank }) => {
               {getTimeRemaining()}
             </span>
           </div>
-          <p className="text-sm text-neutral-800 dark:text-neutral-200 line-clamp-2 mb-2">
+          <p className="mb-2 line-clamp-2 text-sm text-neutral-800 dark:text-neutral-200">
             {poll.question || post.contentText}
           </p>
           <div className="flex items-center gap-4 text-xs text-neutral-500 dark:text-neutral-400">

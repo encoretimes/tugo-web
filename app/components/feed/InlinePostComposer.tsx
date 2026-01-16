@@ -41,7 +41,7 @@ const InlinePostComposer = () => {
     composer.pollData !== null;
 
   return (
-    <div className="bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-[20px] mx-4 mt-4">
+    <div className="mx-4 mt-4 rounded-[20px] border border-gray-200 bg-gray-50 dark:border-neutral-700 dark:bg-neutral-950">
       <div className="p-4">
         <div className="flex gap-3">
           {/* 프로필 이미지 */}
@@ -52,17 +52,17 @@ const InlinePostComposer = () => {
                 alt={user.displayName}
                 width={48}
                 height={48}
-                className="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover"
+                className="h-10 w-10 rounded-full object-cover md:h-12 md:w-12"
               />
             ) : (
-              <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700">
-                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-neutral-400 dark:text-neutral-500" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-200 dark:bg-neutral-700 md:h-12 md:w-12">
+                <UserIcon className="h-5 w-5 text-neutral-400 dark:text-neutral-500 md:h-6 md:w-6" />
               </div>
             )}
           </div>
 
           {/* 입력 영역 */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <div
               className={`transition-all duration-200 ${
                 isExpanded ? '' : 'md:py-0'
@@ -75,7 +75,7 @@ const InlinePostComposer = () => {
                 placeholder="무슨 생각을 하고 계신가요?"
                 rows={isExpanded ? 3 : 1}
                 disabled={composer.isPending}
-                className={`w-full resize-none border-0 bg-transparent text-gray-900 dark:text-neutral-100 placeholder-gray-500 dark:placeholder-neutral-500 focus:ring-0 text-base md:text-lg leading-relaxed ${
+                className={`w-full resize-none border-0 bg-transparent text-base leading-relaxed text-gray-900 placeholder-gray-500 focus:ring-0 dark:text-neutral-100 dark:placeholder-neutral-500 md:text-lg ${
                   isExpanded ? 'py-2' : 'py-3 md:py-2'
                 }`}
               />
@@ -105,7 +105,7 @@ const InlinePostComposer = () => {
 
             {/* 하단 툴바 */}
             <div
-              className={`flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-neutral-800 ${
+              className={`mt-3 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-neutral-800 ${
                 isExpanded
                   ? 'opacity-100'
                   : 'opacity-100 md:opacity-70 md:hover:opacity-100'
@@ -116,7 +116,7 @@ const InlinePostComposer = () => {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={composer.isPending}
-                  className="p-2 text-primary-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-full transition-colors"
+                  className="rounded-full p-2 text-primary-500 transition-colors hover:bg-primary-50 hover:text-primary-600 dark:hover:bg-primary-900/30"
                   title="이미지 추가"
                 >
                   <PhotoIcon className="h-5 w-5" />
@@ -134,10 +134,10 @@ const InlinePostComposer = () => {
                 <button
                   onClick={composer.handlePollButtonClick}
                   disabled={composer.isPending}
-                  className={`p-2 rounded-md transition-colors ${
+                  className={`rounded-md p-2 transition-colors ${
                     composer.pollData
-                      ? 'text-primary-600 bg-primary-50'
-                      : 'text-primary-500 hover:text-primary-600 hover:bg-primary-50'
+                      ? 'bg-primary-50 text-primary-600'
+                      : 'text-primary-500 hover:bg-primary-50 hover:text-primary-600'
                   }`}
                   title="투표 추가"
                 >
@@ -155,7 +155,7 @@ const InlinePostComposer = () => {
               <div className="flex items-center gap-3">
                 {isExpanded && (
                   <span
-                    className={`text-xs hidden sm:inline ${
+                    className={`hidden text-xs sm:inline ${
                       composer.isOverLimit ? 'text-red-500' : 'text-gray-400'
                     }`}
                   >
@@ -166,7 +166,7 @@ const InlinePostComposer = () => {
                 <button
                   onClick={composer.handleSubmit}
                   disabled={!composer.canSubmit}
-                  className="px-4 py-1.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="rounded-lg bg-primary-600 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {composer.isPending ? '작성 중...' : '투고'}
                 </button>

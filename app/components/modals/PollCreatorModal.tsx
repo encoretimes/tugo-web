@@ -64,7 +64,7 @@ export default function PollCreatorModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all dark:bg-neutral-900">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4">
                   <Dialog.Title
@@ -75,7 +75,7 @@ export default function PollCreatorModal({
                   </Dialog.Title>
                   <button
                     onClick={handleCancel}
-                    className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 p-1"
+                    className="p-1 text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -90,17 +90,17 @@ export default function PollCreatorModal({
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-end space-x-3 border-t border-neutral-200 dark:border-neutral-700 px-6 py-4">
+                <div className="flex justify-end space-x-3 border-t border-neutral-200 px-6 py-4 dark:border-neutral-700">
                   <button
                     onClick={handleCancel}
-                    className="px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                    className="rounded-lg border border-neutral-300 px-4 py-2 text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={!currentPollData}
-                    className="px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-lg hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-lg bg-neutral-900 px-4 py-2 font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100"
                   >
                     투표 추가
                   </button>

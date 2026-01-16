@@ -86,14 +86,16 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       return { paddingBottom: `${(height / containerWidth) * 100}%` };
     } else {
       const height = Math.min(containerWidth / aspectRatio, maxHeight);
-      return { paddingBottom: `${Math.min((height / containerWidth) * 100, 100)}%` };
+      return {
+        paddingBottom: `${Math.min((height / containerWidth) * 100, 100)}%`,
+      };
     }
   };
 
   if (isSingleImage) {
     return (
       <div
-        className="relative group cursor-pointer rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 overflow-hidden"
+        className="group relative cursor-pointer overflow-hidden rounded-2xl border border-neutral-200 bg-gray-100 dark:border-neutral-700 dark:bg-neutral-800"
         onClick={() => onImageClick(0)}
       >
         <div className="relative w-full" style={getSingleImageStyle()}>
@@ -101,7 +103,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             src={images[0]}
             alt="Post image"
             fill
-            className="object-cover hover:opacity-95 transition-opacity"
+            className="object-cover transition-opacity hover:opacity-95"
             sizes="(max-width: 768px) 100vw, 600px"
           />
         </div>
@@ -110,11 +112,11 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   }
 
   return (
-    <div className="relative group">
+    <div className="group relative">
       <div
         ref={scrollContainerRef}
         onScroll={handleScrollEvent}
-        className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide rounded-2xl border border-neutral-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800"
+        className="flex snap-x snap-mandatory overflow-x-auto rounded-2xl border border-neutral-200 bg-gray-100 scrollbar-hide dark:border-neutral-700 dark:bg-neutral-800"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -123,7 +125,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         {images.map((url, index) => (
           <div
             key={index}
-            className="w-full flex-shrink-0 snap-center cursor-pointer hover:opacity-95 transition-opacity"
+            className="w-full flex-shrink-0 cursor-pointer snap-center transition-opacity hover:opacity-95"
             onClick={() => onImageClick(index)}
           >
             <div className="relative aspect-[4/5] w-full">
@@ -145,7 +147,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             e.stopPropagation();
             handleScroll('left');
           }}
-          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
           aria-label="이전 이미지"
         >
           <ChevronLeftIcon className="h-6 w-6" />
@@ -158,7 +160,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             e.stopPropagation();
             handleScroll('right');
           }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
           aria-label="다음 이미지"
         >
           <ChevronRightIcon className="h-6 w-6" />
@@ -166,21 +168,21 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       )}
 
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+        <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
           {images.map((_, index) => (
             <div
               key={index}
               className={`h-1.5 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'bg-white w-6'
-                  : 'bg-white/60 hover:bg-white/80 w-1.5'
+                  ? 'w-6 bg-white'
+                  : 'w-1.5 bg-white/60 hover:bg-white/80'
               }`}
             />
           ))}
         </div>
       )}
 
-      <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+      <div className="absolute right-3 top-3 rounded-full bg-black/60 px-2 py-1 text-xs text-white">
         {currentIndex + 1} / {images.length}
       </div>
     </div>

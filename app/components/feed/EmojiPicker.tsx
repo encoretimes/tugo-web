@@ -19,7 +19,7 @@ export default function EmojiPickerButton({
       {({ close }) => (
         <>
           <Popover.Button className={buttonClassName}>
-            <FaceSmileIcon className="w-6 h-6" />
+            <FaceSmileIcon className="h-6 w-6" />
           </Popover.Button>
 
           <Transition
@@ -31,7 +31,7 @@ export default function EmojiPickerButton({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Popover.Panel className="absolute bottom-full mb-2 left-0 z-[100] shadow-2xl rounded-lg overflow-hidden">
+            <Popover.Panel className="absolute bottom-full left-0 z-[100] mb-2 overflow-hidden rounded-lg shadow-2xl">
               <EmojiPicker
                 onEmojiClick={(emojiData) => {
                   onEmojiSelect(emojiData.emoji);
