@@ -188,7 +188,15 @@ export default function MainLayout({
 
             {/* 메인 콘텐츠 */}
             <main className="w-full min-w-0 flex-1">
-              <div className="px-0 pt-4 lg:px-6">{children}</div>
+              <div
+                className={`px-0 pt-4 lg:px-6 ${
+                  pathname.startsWith('/notes')
+                    ? 'lg:h-[calc(100dvh-1rem)]'
+                    : ''
+                }`}
+              >
+                {children}
+              </div>
             </main>
 
             {/* 우측 사이드바 */}
