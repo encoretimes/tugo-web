@@ -19,11 +19,6 @@ interface MemberResponse {
   username: string | null;
 }
 
-interface TokenResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
 function LoginContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -68,16 +63,14 @@ function LoginContent() {
           markLoginSuccess();
 
           // PWA 모드: IndexedDB에 토큰 저장 (앱 재시작 시 세션 복구용)
-          try {
-            const tokens = await apiClient.post<TokenResponse>(
-              '/api/v1/auth/token-exchange'
-            );
-            if (tokens?.accessToken && tokens?.refreshToken) {
-              await saveTokens(tokens.accessToken, tokens.refreshToken);
-              console.log('[Login] PWA tokens saved to IndexedDB');
+          // postMessage로 받은 토큰이 있으면 바로 저장 (token-exchange API 호출 불필요)
+          if (result.tokens?.accessToken && result.tokens?.refreshToken) {
+            try {
+              await saveTokens(result.tokens.accessToken, result.tokens.refreshToken);
+              console.log('[Login] PWA tokens saved to IndexedDB from postMessage');
+            } catch (tokenError) {
+              console.warn('[Login] PWA token save failed:', tokenError);
             }
-          } catch (tokenError) {
-            console.warn('[Login] PWA token save failed:', tokenError);
           }
 
           const returnUrl = sessionStorage.getItem('returnUrl');
