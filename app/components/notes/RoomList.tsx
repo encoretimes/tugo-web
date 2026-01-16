@@ -8,6 +8,7 @@ import {
 import Image from 'next/image';
 import { useState } from 'react';
 import type { RoomResponse } from '@/types/notes';
+import { formatRoomListTime } from '@/lib/date-utils';
 
 interface RoomListProps {
   selectedRoomId: number | null;
@@ -98,13 +99,7 @@ export default function RoomList({
                       {room.otherUser.username}
                     </p>
                     <span className="text-xs text-gray-500 dark:text-neutral-400">
-                      {new Date(room.lastMessageTimestamp).toLocaleTimeString(
-                        'ko-KR',
-                        {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        }
-                      )}
+                      {formatRoomListTime(room.lastMessageTimestamp)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
