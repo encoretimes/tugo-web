@@ -33,6 +33,23 @@ export default function MessageBubble({
   // 그룹 내 간격 조정
   const marginBottom = isLastInGroup ? 'mb-2' : 'mb-0.5';
 
+  // 말풍선 모서리 동적 설정 (그룹 위치에 따라)
+  const getBubbleRounding = () => {
+    if (isMyMessage) {
+      // 내 메시지: 오른쪽 하단 모서리 조정
+      if (isFirstInGroup && isLastInGroup) return 'rounded-2xl rounded-br-md';
+      if (isFirstInGroup) return 'rounded-2xl rounded-br-md';
+      if (isLastInGroup) return 'rounded-2xl rounded-tr-md rounded-br-md';
+      return 'rounded-2xl rounded-tr-md rounded-br-md';
+    } else {
+      // 상대방 메시지: 왼쪽 하단 모서리 조정
+      if (isFirstInGroup && isLastInGroup) return 'rounded-2xl rounded-bl-md';
+      if (isFirstInGroup) return 'rounded-2xl rounded-bl-md';
+      if (isLastInGroup) return 'rounded-2xl rounded-tl-md rounded-bl-md';
+      return 'rounded-2xl rounded-tl-md rounded-bl-md';
+    }
+  };
+
   return (
     <div
       className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'} ${marginBottom}`}
@@ -47,11 +64,11 @@ export default function MessageBubble({
                 alt={otherUserName || '프로필'}
                 width={32}
                 height={32}
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-neutral-900"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-neutral-700 flex items-center justify-center">
-                <span className="text-gray-500 dark:text-neutral-300 text-xs font-medium">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-neutral-600 dark:to-neutral-700 flex items-center justify-center ring-2 ring-white dark:ring-neutral-900">
+                <span className="text-gray-600 dark:text-neutral-200 text-xs font-medium">
                   {(otherUserName || '?')[0]}
                 </span>
               </div>
@@ -62,16 +79,16 @@ export default function MessageBubble({
       <div className="flex flex-col max-w-[70%]">
         {/* 상대방 이름 (그룹 첫 메시지에만 표시) */}
         {!isMyMessage && isFirstInGroup && otherUserName && (
-          <span className="text-xs text-gray-500 dark:text-neutral-400 mb-1 ml-1">
+          <span className="text-xs text-gray-500 dark:text-neutral-400 mb-1 ml-1 font-medium">
             {otherUserName}
           </span>
         )}
         <div
-          className={`rounded-2xl px-3 py-2 ${
+          className={`${getBubbleRounding()} px-3 py-2 ${
             isMyMessage
-              ? 'bg-primary-600 text-white'
-              : 'bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-neutral-100'
-          }`}
+              ? 'bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-md shadow-primary-500/20'
+              : 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100 shadow-sm'
+          } ${isPending ? 'opacity-70' : ''}`}
         >
           <p className="whitespace-pre-wrap break-words text-sm">
             {message.content}

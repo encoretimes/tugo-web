@@ -42,7 +42,7 @@ export default function NotesPage() {
   const isChatOpen = selectedUserId !== null;
 
   return (
-    <div className="flex h-[calc(100dvh-50px)] lg:h-full text-black dark:text-neutral-100 bg-white dark:bg-neutral-950 -mx-0 lg:-mx-6 -mt-4">
+    <div className="flex h-full text-black dark:text-neutral-100 bg-white dark:bg-neutral-950 -mx-0 lg:-mx-6 -mt-4">
       {/* 쪽지방 목록 */}
       <aside
         className={`${isChatOpen ? 'hidden' : 'w-full'} lg:block lg:w-80 xl:w-96 h-full border-r border-gray-200 dark:border-neutral-800 flex flex-col bg-white dark:bg-neutral-950 flex-shrink-0`}

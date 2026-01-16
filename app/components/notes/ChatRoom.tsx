@@ -207,7 +207,7 @@ export default function ChatRoom({
   return (
     <div className="flex flex-col h-full">
       {/* 헤더 */}
-      <div className="border-b border-gray-200 dark:border-neutral-800 p-4">
+      <div className="border-b border-gray-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-900">
         <div className="flex items-center gap-3">
           {/* 모바일 뒤로가기 버튼 */}
           {onBack && (
@@ -241,7 +241,7 @@ export default function ChatRoom({
       </div>
 
       {/* 메시지 목록 */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-white dark:bg-neutral-950">
+      <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-gray-50 dark:bg-neutral-950">
         {messages.length > 0 ? (
           messages.map((message, index) => {
             const prevMessage = messages[index - 1];
@@ -297,7 +297,7 @@ export default function ChatRoom({
       </div>
 
       {/* 입력 영역 */}
-      <div className="border-t border-gray-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-950">
+      <div className="border-t border-gray-200 dark:border-neutral-800 p-4 pb-safe bg-white dark:bg-neutral-900">
         <div className="flex gap-2">
           <input
             type="text"
