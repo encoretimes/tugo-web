@@ -4,17 +4,17 @@ import Image from 'next/image';
 
 const HomeBanner = () => {
   return (
-    <div className="w-full bg-[#EDEBF0] relative overflow-visible">
+    <div className="relative w-full overflow-visible bg-[#EDEBF0]">
       {/* 배경 이미지들 - 우측에 고정 배치 */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="max-w-content mx-auto h-full relative">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="relative mx-auto h-full max-w-content">
           {/* 1번 이미지 - 중간 지점 */}
           <Image
             src="/home_banne_image/1.svg"
             alt=""
             width={200}
             height={200}
-            className="absolute top-1/2 -translate-y-1/2 w-48 h-auto z-10"
+            className="absolute top-1/2 z-10 h-auto w-48 -translate-y-1/2"
             style={{ left: 'calc(50% + 50px)' }}
           />
 
@@ -24,7 +24,7 @@ const HomeBanner = () => {
             alt=""
             width={180}
             height={180}
-            className="absolute top-1/2 -translate-y-1/2 w-44 h-auto z-10"
+            className="absolute top-1/2 z-10 h-auto w-44 -translate-y-1/2"
             style={{ left: 'calc(50% + 190px)' }}
           />
 
@@ -34,7 +34,7 @@ const HomeBanner = () => {
             alt=""
             width={200}
             height={200}
-            className="absolute top-1/2 -translate-y-1/2 w-48 h-auto z-20"
+            className="absolute top-1/2 z-20 h-auto w-48 -translate-y-1/2"
             style={{ left: 'calc(50% + 290px)' }}
           />
 
@@ -44,22 +44,22 @@ const HomeBanner = () => {
             alt=""
             width={200}
             height={200}
-            className="absolute top-1/2 -translate-y-1/2 w-48 h-auto z-10"
+            className="absolute top-1/2 z-10 h-auto w-48 -translate-y-1/2"
             style={{ left: 'calc(50% + 470px)' }}
           />
         </div>
       </div>
 
       {/* 텍스트 컨텐츠 */}
-      <div className="max-w-content mx-auto py-16 lg:py-20 relative z-30">
+      <div className="relative z-30 mx-auto max-w-content py-16 lg:py-20">
         {/* TUGO 투고 */}
-        <p className="text-[24px] font-extrabold text-primary-700 mb-3">
+        <p className="mb-3 text-[24px] font-extrabold text-primary-700">
           TUGO 투고
         </p>
 
         {/* 메인 타이틀 */}
         <h1 className="mb-8">
-          <span className="block text-[40px] font-extrabold text-black leading-tight">
+          <span className="block text-[40px] font-extrabold leading-tight text-black">
             모든 우리의 정치는
           </span>
           <span className="block leading-tight">
@@ -72,7 +72,7 @@ const HomeBanner = () => {
         </h1>
 
         {/* 설명 텍스트 */}
-        <p className="text-[18px] font-medium text-black leading-relaxed whitespace-nowrap">
+        <p className="whitespace-nowrap text-[18px] font-medium leading-relaxed text-black">
           당신이 어떤 시각을 가지고 있는지, 무엇을 선택하는지 세상은 알고 싶어
           합니다.
           <br />

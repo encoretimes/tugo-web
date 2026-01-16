@@ -92,8 +92,8 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
-                <div className="flex items-center justify-between mb-4">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg border border-gray-200 bg-white p-6 text-left align-middle shadow-lg transition-all dark:border-neutral-700 dark:bg-neutral-900">
+                <div className="mb-4 flex items-center justify-between">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900 dark:text-neutral-100"
@@ -102,7 +102,7 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200"
+                    className="text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
                   >
                     <XMarkIcon className="h-6 w-6" />
                   </button>
@@ -110,19 +110,19 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                 <div className="space-y-3">
                   {/* 링크 URL 표시 및 복사 */}
-                  <div className="p-4 bg-gray-50 dark:bg-neutral-800 rounded-md border border-gray-200 dark:border-neutral-700">
+                  <div className="rounded-md border border-gray-200 bg-gray-50 p-4 dark:border-neutral-700 dark:bg-neutral-800">
                     <div className="flex items-center justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs text-gray-500 dark:text-neutral-400 mb-1">
+                      <div className="min-w-0 flex-1">
+                        <p className="mb-1 text-xs text-gray-500 dark:text-neutral-400">
                           게시물 링크
                         </p>
-                        <p className="text-sm text-gray-900 dark:text-neutral-100 truncate">
+                        <p className="truncate text-sm text-gray-900 dark:text-neutral-100">
                           {url}
                         </p>
                       </div>
                       <button
                         onClick={handleCopyLink}
-                        className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 transition-colors"
+                        className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-md bg-primary-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
                       >
                         <LinkIcon className="h-4 w-4" />
                         복사
@@ -134,9 +134,9 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     <button
                       onClick={handleShareKakao}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-yellow-400 hover:bg-yellow-500 rounded-md transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 rounded-md bg-yellow-400 p-4 transition-colors hover:bg-yellow-500"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center bg-yellow-500 rounded-full">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500">
                         <span className="text-2xl">💬</span>
                       </div>
                       <span className="text-sm font-medium text-gray-900">
@@ -146,9 +146,9 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleShareTwitter}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-sky-400 hover:bg-sky-500 rounded-md transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 rounded-md bg-sky-400 p-4 transition-colors hover:bg-sky-500"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center bg-sky-500 rounded-full">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-500">
                         <span className="text-2xl text-white">𝕏</span>
                       </div>
                       <span className="text-sm font-medium text-white">
@@ -158,9 +158,9 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleShareFacebook}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 rounded-md bg-blue-600 p-4 transition-colors hover:bg-blue-700"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center bg-blue-700 rounded-full">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-700">
                         <span className="text-2xl text-white">f</span>
                       </div>
                       <span className="text-sm font-medium text-white">
@@ -170,9 +170,9 @@ export default function ShareModal({ isOpen, onClose, url }: ShareModalProps) {
 
                     <button
                       onClick={handleCopyLink}
-                      className="flex flex-col items-center justify-center gap-2 p-4 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-md transition-colors"
+                      className="flex flex-col items-center justify-center gap-2 rounded-md bg-gray-100 p-4 transition-colors hover:bg-gray-200 dark:bg-neutral-800 dark:hover:bg-neutral-700"
                     >
-                      <div className="w-12 h-12 flex items-center justify-center bg-gray-300 dark:bg-neutral-700 rounded-full">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300 dark:bg-neutral-700">
                         <LinkIcon className="h-6 w-6 text-gray-700 dark:text-neutral-300" />
                       </div>
                       <span className="text-sm font-medium text-gray-900 dark:text-neutral-100">

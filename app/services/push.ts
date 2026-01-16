@@ -54,7 +54,9 @@ export function getPushPermissionStatus(): NotificationPermission | null {
  */
 export async function getVapidPublicKey(): Promise<string | null> {
   try {
-    const response = await apiClient.get<string>('/api/v1/push/vapid-public-key');
+    const response = await apiClient.get<string>(
+      '/api/v1/push/vapid-public-key'
+    );
     return response;
   } catch {
     console.error('Failed to fetch VAPID public key');

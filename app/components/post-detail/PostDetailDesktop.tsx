@@ -40,7 +40,7 @@ export default function PostDetailDesktop({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 p-4"
+      className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200"
       onClick={onClose}
     >
       {/* Close Button - 화면 우측 상단 */}
@@ -49,14 +49,14 @@ export default function PostDetailDesktop({
           e.stopPropagation();
           onClose();
         }}
-        className="fixed top-6 right-6 z-[60] transition-opacity hover:opacity-80"
+        className="fixed right-6 top-6 z-[60] transition-opacity hover:opacity-80"
         aria-label="닫기"
       >
         <XMarkIcon className="h-8 w-8 text-white" strokeWidth={2.5} />
       </button>
 
       <div
-        className="relative w-full max-w-6xl bg-white dark:bg-neutral-900 rounded-lg shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-200 max-h-[90vh] overflow-hidden"
+        className="animate-in zoom-in-95 slide-in-from-bottom-4 relative max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-lg bg-white shadow-2xl duration-200 dark:bg-neutral-900"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Content */}

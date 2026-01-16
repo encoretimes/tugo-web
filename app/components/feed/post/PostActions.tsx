@@ -40,7 +40,7 @@ export default function PostActions({
           className={`flex items-center gap-1 rounded-full px-3 py-1.5 transition-colors ${
             isLiked
               ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30'
-              : 'text-neutral-500 dark:text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30'
+              : 'text-neutral-500 hover:bg-red-50 hover:text-red-600 dark:text-neutral-400 dark:hover:bg-red-900/30'
           }`}
         >
           {isLiked ? (
@@ -52,7 +52,7 @@ export default function PostActions({
         </button>
         <button
           onClick={onCommentToggle}
-          className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-full px-3 py-1.5 transition-colors"
+          className="flex items-center gap-1 rounded-full px-3 py-1.5 text-neutral-500 transition-colors hover:bg-primary-50 hover:text-primary-600 dark:text-neutral-400 dark:hover:bg-primary-900/30"
         >
           <ChatBubbleOvalLeftIcon className="h-5 w-5" />
           <span className="text-sm">{commentCount}</span>
@@ -62,7 +62,7 @@ export default function PostActions({
           className={`flex items-center rounded-full p-1.5 transition-colors ${
             isSaved
               ? 'text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30'
-              : 'text-neutral-500 dark:text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30'
+              : 'text-neutral-500 hover:bg-primary-50 hover:text-primary-600 dark:text-neutral-400 dark:hover:bg-primary-900/30'
           }`}
         >
           {isSaved ? (
@@ -74,7 +74,7 @@ export default function PostActions({
       </div>
       <button
         onClick={onMenuClick}
-        className="flex items-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full p-1.5 transition-colors"
+        className="flex items-center rounded-full p-1.5 text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
       >
         <EllipsisVerticalIcon className="h-5 w-5" />
       </button>

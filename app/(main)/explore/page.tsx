@@ -17,7 +17,11 @@ import CreatorCard from '@/components/explore/CreatorCard';
 import NewsCard from '@/components/explore/NewsCard';
 import { useDebates } from '@/hooks/useDebates';
 import { usePopularCreators } from '@/hooks/useCreators';
-import { useInfiniteNews, useCategories, useNewsSources } from '@/hooks/useNews';
+import {
+  useInfiniteNews,
+  useCategories,
+  useNewsSources,
+} from '@/hooks/useNews';
 import { useTrendingKeywords } from '@/hooks/useSearch';
 
 type TabType = 'news' | 'creators' | 'votes';
@@ -206,12 +210,12 @@ export default function ExplorePage() {
     : allNews;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* 검색바 */}
-      <div className="px-4 pt-4 pb-2 relative">
+      <div className="relative px-4 pb-2 pt-4">
         <form onSubmit={handleSearch}>
           <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
+            <MagnifyingGlassIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" />
             <input
               ref={searchInputRef}
               type="text"
@@ -225,13 +229,13 @@ export default function ExplorePage() {
                   searchInputRef.current?.blur();
                 }
               }}
-              className="w-full pl-12 pr-10 py-3 bg-neutral-100 dark:bg-neutral-800 rounded-[20px] text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600"
+              className="w-full rounded-[20px] bg-neutral-100 py-3 pl-12 pr-10 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:bg-neutral-800 dark:text-neutral-100 dark:focus:ring-neutral-600"
             />
             {(searchQuery || activeSearch) && (
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-full transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
               >
                 <XMarkIcon className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
               </button>
@@ -243,12 +247,12 @@ export default function ExplorePage() {
         {showDropdown && (
           <div
             ref={dropdownRef}
-            className="absolute left-4 right-4 top-full mt-1 bg-white dark:bg-neutral-900 rounded-xl shadow-lg border border-neutral-200 dark:border-neutral-700 z-50 max-h-80 overflow-y-auto"
+            className="absolute left-4 right-4 top-full z-50 mt-1 max-h-80 overflow-y-auto rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900"
           >
             {/* 최근 검색어 */}
             {searchHistory.length > 0 && (
-              <div className="p-3 border-b border-neutral-100 dark:border-neutral-800">
-                <div className="flex items-center justify-between mb-2">
+              <div className="border-b border-neutral-100 p-3 dark:border-neutral-800">
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">
                     최근 검색어
                   </span>
@@ -264,7 +268,7 @@ export default function ExplorePage() {
                     <div
                       key={query}
                       onClick={() => handleSelectKeyword(query)}
-                      className="flex items-center justify-between py-2 px-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg cursor-pointer group"
+                      className="group flex cursor-pointer items-center justify-between rounded-lg px-2 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                     >
                       <div className="flex items-center gap-2">
                         <ClockIcon className="h-4 w-4 text-neutral-400" />
@@ -274,7 +278,7 @@ export default function ExplorePage() {
                       </div>
                       <button
                         onClick={(e) => handleRemoveHistory(e, query)}
-                        className="p-1 opacity-0 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-full transition-all"
+                        className="rounded-full p-1 opacity-0 transition-all hover:bg-neutral-200 group-hover:opacity-100 dark:hover:bg-neutral-700"
                       >
                         <XMarkIcon className="h-3 w-3 text-neutral-400" />
                       </button>
@@ -287,7 +291,7 @@ export default function ExplorePage() {
             {/* 실시간 검색어 */}
             {trendingKeywords && trendingKeywords.length > 0 && (
               <div className="p-3">
-                <div className="flex items-center gap-1 mb-2">
+                <div className="mb-2 flex items-center gap-1">
                   <FireIcon className="h-4 w-4 text-orange-500" />
                   <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400">
                     실시간 검색어
@@ -298,10 +302,10 @@ export default function ExplorePage() {
                     <div
                       key={item.keyword}
                       onClick={() => handleSelectKeyword(item.keyword)}
-                      className="flex items-center gap-3 py-2 px-2 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-lg cursor-pointer"
+                      className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                     >
                       <span
-                        className="w-5 h-5 rounded flex items-center justify-center text-xs font-bold text-white shrink-0"
+                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-xs font-bold text-white"
                         style={{
                           background:
                             index < 3
@@ -322,7 +326,7 @@ export default function ExplorePage() {
 
             {searchHistory.length === 0 &&
               (!trendingKeywords || trendingKeywords.length === 0) && (
-                <div className="p-6 text-center text-neutral-400 text-sm">
+                <div className="p-6 text-center text-sm text-neutral-400">
                   검색어를 입력해주세요
                 </div>
               )}
@@ -332,7 +336,7 @@ export default function ExplorePage() {
 
       {/* 검색 결과 표시 */}
       {activeSearch && (
-        <div className="px-4 py-2 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+        <div className="border-b border-neutral-200 bg-neutral-50 px-4 py-2 dark:border-neutral-700 dark:bg-neutral-800">
           <span className="text-sm text-neutral-600">
             &quot;{activeSearch}&quot; 검색 결과
           </span>
@@ -346,15 +350,15 @@ export default function ExplorePage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-3 text-sm font-semibold transition-colors relative ${
+              className={`relative flex-1 py-3 text-sm font-semibold transition-colors ${
                 activeTab === tab.id
                   ? 'text-neutral-900 dark:text-neutral-100'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                  : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-300'
               }`}
             >
               {tab.label}
               {activeTab === tab.id && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-neutral-900 dark:bg-neutral-100 rounded-full" />
+                <span className="absolute bottom-0 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full bg-neutral-900 dark:bg-neutral-100" />
               )}
             </button>
           ))}
@@ -367,17 +371,19 @@ export default function ExplorePage() {
         {activeTab === 'news' && (
           <div>
             {/* 카테고리 탭 */}
-            <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-700">
-              <nav className="flex gap-1 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-full w-fit">
-                {(categories || [
-                  { id: 'politics', name: '정치', hasSourceFilter: true },
-                  { id: 'economy', name: '경제', hasSourceFilter: false },
-                  { id: 'society', name: '사회', hasSourceFilter: false },
-                ]).map((cat) => (
+            <div className="border-b border-neutral-200 px-4 py-3 dark:border-neutral-700">
+              <nav className="flex w-fit gap-1 rounded-full bg-neutral-100 p-1 dark:bg-neutral-800">
+                {(
+                  categories || [
+                    { id: 'politics', name: '정치', hasSourceFilter: true },
+                    { id: 'economy', name: '경제', hasSourceFilter: false },
+                    { id: 'society', name: '사회', hasSourceFilter: false },
+                  ]
+                ).map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                    className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
                       selectedCategory === cat.id
                         ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
                         : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
@@ -391,9 +397,9 @@ export default function ExplorePage() {
 
             {/* 언론사 필터 드롭다운 (정치 카테고리에서만 표시) */}
             {currentCategory?.hasSourceFilter && (
-              <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-700">
+              <div className="border-b border-neutral-200 px-4 py-3 dark:border-neutral-700">
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+                  <Menu.Button className="inline-flex items-center gap-2 rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700">
                     <NewspaperIcon className="h-4 w-4" />
                     {selectedSource || '전체 언론사'}
                     <ChevronDownIcon className="h-4 w-4" />
@@ -401,59 +407,57 @@ export default function ExplorePage() {
 
                   <Menu.Items
                     anchor="bottom start"
-                    className="z-50 mt-2 w-48 rounded-lg bg-white dark:bg-neutral-800 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 focus:outline-none max-h-64 overflow-y-auto [--anchor-gap:8px] origin-top-left transition duration-100 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
+                    className="z-50 mt-2 max-h-64 w-48 origin-top-left overflow-y-auto rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition duration-100 ease-out [--anchor-gap:8px] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 dark:bg-neutral-800 dark:ring-neutral-700"
                   >
-                      <div className="py-1">
-                        <Menu.Item>
+                    <div className="py-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            onClick={() => setSelectedSource(null)}
+                            className={`${
+                              active ? 'bg-neutral-100 dark:bg-neutral-700' : ''
+                            } flex w-full items-center justify-between px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100`}
+                          >
+                            전체 언론사
+                            {!selectedSource && (
+                              <CheckIcon className="h-4 w-4 text-primary-600" />
+                            )}
+                          </button>
+                        )}
+                      </Menu.Item>
+                      {newsSources?.map((source) => (
+                        <Menu.Item key={source}>
                           {({ active }) => (
                             <button
-                              onClick={() => setSelectedSource(null)}
+                              onClick={() => setSelectedSource(source)}
                               className={`${
                                 active
                                   ? 'bg-neutral-100 dark:bg-neutral-700'
                                   : ''
                               } flex w-full items-center justify-between px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100`}
                             >
-                              전체 언론사
-                              {!selectedSource && (
+                              {source}
+                              {selectedSource === source && (
                                 <CheckIcon className="h-4 w-4 text-primary-600" />
                               )}
                             </button>
                           )}
                         </Menu.Item>
-                        {newsSources?.map((source) => (
-                          <Menu.Item key={source}>
-                            {({ active }) => (
-                              <button
-                                onClick={() => setSelectedSource(source)}
-                                className={`${
-                                  active
-                                    ? 'bg-neutral-100 dark:bg-neutral-700'
-                                    : ''
-                                } flex w-full items-center justify-between px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100`}
-                              >
-                                {source}
-                                {selectedSource === source && (
-                                  <CheckIcon className="h-4 w-4 text-primary-600" />
-                                )}
-                              </button>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </div>
-                    </Menu.Items>
+                      ))}
+                    </div>
+                  </Menu.Items>
                 </Menu>
               </div>
             )}
 
             {isLoadingNews ? (
-              <div className="p-4 space-y-3">
+              <div className="space-y-3 p-4">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="flex gap-3">
-                    <div className="w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-lg animate-pulse" />
+                    <div className="h-10 w-10 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
                     <div className="flex-1">
-                      <div className="h-4 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-2" />
-                      <div className="h-3 w-3/4 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+                      <div className="mb-2 h-4 w-full animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
+                      <div className="h-3 w-3/4 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
                     </div>
                   </div>
                 ))}
@@ -481,14 +485,14 @@ export default function ExplorePage() {
         {activeTab === 'creators' && (
           <div>
             {isLoadingCreators ? (
-              <div className="p-4 space-y-3">
+              <div className="space-y-3 p-4">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-neutral-200 dark:bg-neutral-700 rounded-lg animate-pulse" />
-                    <div className="w-11 h-11 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse" />
+                    <div className="h-6 w-6 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+                    <div className="h-11 w-11 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-700" />
                     <div className="flex-1">
-                      <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-1" />
-                      <div className="h-3 w-16 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+                      <div className="mb-1 h-4 w-24 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
+                      <div className="h-3 w-16 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
                     </div>
                   </div>
                 ))}
@@ -517,11 +521,11 @@ export default function ExplorePage() {
         {activeTab === 'votes' && (
           <div>
             {isLoadingDebates ? (
-              <div className="p-4 space-y-3">
+              <div className="space-y-3 p-4">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
-                    className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse"
+                    className="h-20 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800"
                   />
                 ))}
               </div>

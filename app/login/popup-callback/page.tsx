@@ -32,9 +32,9 @@ export default function PopupCallbackPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="flex min-h-screen items-center justify-center bg-white">
       <div className="text-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto mb-4" />
+        <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
         <p className="text-gray-600">로그인 완료 중...</p>
       </div>
     </div>

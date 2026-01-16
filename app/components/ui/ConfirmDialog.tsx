@@ -71,7 +71,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 p-6 shadow-lg border border-gray-200 dark:border-neutral-700 transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-lg transition-all dark:border-neutral-700 dark:bg-neutral-900">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
                     <ExclamationTriangleIcon
@@ -96,7 +96,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 <div className="mt-6 flex justify-end gap-3">
                   <button
                     type="button"
-                    className="rounded-md bg-neutral-100 dark:bg-neutral-800 px-5 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                    className="rounded-md bg-neutral-100 px-5 py-2.5 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                     onClick={onClose}
                   >
                     {cancelText}

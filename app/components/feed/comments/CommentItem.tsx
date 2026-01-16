@@ -27,7 +27,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
         </div>
       )}
       <div className="flex-1">
-        <div className="rounded-lg bg-neutral-100 dark:bg-neutral-800 p-2">
+        <div className="rounded-lg bg-neutral-100 p-2 dark:bg-neutral-800">
           <p className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
             {comment.author.nickname || comment.author.name}{' '}
             <span className="font-normal text-neutral-500 dark:text-neutral-400">
@@ -36,7 +36,7 @@ export default function CommentItem({ comment }: CommentItemProps) {
           </p>
           <MentionText
             content={comment.content}
-            className="text-sm mt-1 text-neutral-900 dark:text-neutral-100"
+            className="mt-1 text-sm text-neutral-900 dark:text-neutral-100"
           />
         </div>
         <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">

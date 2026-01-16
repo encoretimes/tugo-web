@@ -41,10 +41,10 @@ export default function ExploreCreatorsPage() {
   return (
     <div className="py-4">
       {/* 헤더 */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="mb-6 flex items-center gap-4">
         <Link
           href="/explore"
-          className="p-2 -ml-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          className="-ml-2 rounded-full p-2 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
         >
           <ArrowLeftIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
         </Link>
@@ -54,15 +54,15 @@ export default function ExploreCreatorsPage() {
       </div>
 
       {/* 정렬 버튼 */}
-      <div className="flex gap-2 mb-6">
+      <div className="mb-6 flex gap-2">
         {sortOptions.map((option) => (
           <button
             key={option.id}
             onClick={() => setSortBy(option.id)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               sortBy === option.id
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
             }`}
           >
             {option.label}
@@ -71,17 +71,17 @@ export default function ExploreCreatorsPage() {
       </div>
 
       {/* 콘텐츠 */}
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
         {isLoading ? (
           <div className="p-4">
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-neutral-200 dark:bg-neutral-700 rounded-lg animate-pulse" />
-                  <div className="w-11 h-11 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse" />
+                  <div className="h-6 w-6 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+                  <div className="h-11 w-11 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-700" />
                   <div className="flex-1">
-                    <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-1" />
-                    <div className="h-3 w-16 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+                    <div className="mb-1 h-4 w-24 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
+                    <div className="h-3 w-16 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
                   </div>
                 </div>
               ))}
@@ -113,11 +113,11 @@ export default function ExploreCreatorsPage() {
                   <div className="space-y-4 px-4">
                     {[1, 2].map((i) => (
                       <div key={i} className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-neutral-200 dark:bg-neutral-700 rounded-lg animate-pulse" />
-                        <div className="w-11 h-11 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse" />
+                        <div className="h-6 w-6 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-700" />
+                        <div className="h-11 w-11 animate-pulse rounded-full bg-neutral-200 dark:bg-neutral-700" />
                         <div className="flex-1">
-                          <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-1" />
-                          <div className="h-3 w-16 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+                          <div className="mb-1 h-4 w-24 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
+                          <div className="h-3 w-16 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" />
                         </div>
                       </div>
                     ))}

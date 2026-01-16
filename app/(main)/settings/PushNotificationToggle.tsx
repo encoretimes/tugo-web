@@ -88,9 +88,9 @@ export default function PushNotificationToggle() {
 
   if (isLoading && !isSupported) {
     return (
-      <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+      <div className="rounded-lg border border-gray-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-950">
         <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-5 w-5 border-2 border-neutral-600 dark:border-neutral-400 border-t-transparent"></div>
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-neutral-600 border-t-transparent dark:border-neutral-400"></div>
         </div>
       </div>
     );
@@ -98,9 +98,9 @@ export default function PushNotificationToggle() {
 
   if (!isSupported) {
     return (
-      <div className="bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 dark:border-neutral-800 dark:bg-neutral-950">
         <div className="flex items-center gap-3">
-          <BellSlashIcon className="w-5 h-5 text-gray-400 dark:text-neutral-500" />
+          <BellSlashIcon className="h-5 w-5 text-gray-400 dark:text-neutral-500" />
           <p className="text-sm text-gray-500 dark:text-neutral-400">
             이 브라우저는 푸시 알림을 지원하지 않습니다.
           </p>
@@ -111,9 +111,9 @@ export default function PushNotificationToggle() {
 
   if (!isServiceAvailable) {
     return (
-      <div className="bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 dark:border-neutral-800 dark:bg-neutral-950">
         <div className="flex items-center gap-3">
-          <BellSlashIcon className="w-5 h-5 text-gray-400 dark:text-neutral-500" />
+          <BellSlashIcon className="h-5 w-5 text-gray-400 dark:text-neutral-500" />
           <p className="text-sm text-gray-500 dark:text-neutral-400">
             푸시 알림 서비스가 준비 중입니다.
           </p>
@@ -124,14 +124,14 @@ export default function PushNotificationToggle() {
 
   if (permissionDenied) {
     return (
-      <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-lg p-5">
+      <div className="rounded-lg border border-red-200 bg-red-50 p-5 dark:border-red-900/50 dark:bg-red-950/30">
         <div className="flex items-center gap-3">
-          <BellSlashIcon className="w-5 h-5 text-red-500 dark:text-red-400" />
+          <BellSlashIcon className="h-5 w-5 text-red-500 dark:text-red-400" />
           <div>
             <p className="text-sm font-medium text-red-700 dark:text-red-400">
               푸시 알림이 차단되었습니다
             </p>
-            <p className="text-xs text-red-600 dark:text-red-500 mt-1">
+            <p className="mt-1 text-xs text-red-600 dark:text-red-500">
               브라우저 설정에서 알림을 허용해주세요.
             </p>
           </div>
@@ -141,10 +141,10 @@ export default function PushNotificationToggle() {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
       <div className="flex items-center justify-between p-5">
         <div className="flex items-center gap-4">
-          <div className="p-2 bg-gray-100 dark:bg-neutral-800 rounded-md">
+          <div className="rounded-md bg-gray-100 p-2 dark:bg-neutral-800">
             {isEnabled ? (
               <BellIcon className="h-5 w-5 text-neutral-900 dark:text-neutral-100" />
             ) : (
@@ -155,7 +155,7 @@ export default function PushNotificationToggle() {
             <h4 className="text-sm font-medium text-gray-900 dark:text-neutral-100">
               푸시 알림
             </h4>
-            <p className="text-xs text-gray-500 dark:text-neutral-400 mt-0.5">
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-neutral-400">
               새 쪽지와 알림을 즉시 받아보세요
             </p>
           </div>
@@ -168,12 +168,12 @@ export default function PushNotificationToggle() {
             isEnabled
               ? 'bg-neutral-900 dark:bg-neutral-100'
               : 'bg-gray-200 dark:bg-neutral-700'
-          } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 disabled:opacity-50`}
+          } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-neutral-900`}
         >
           <span
             className={`${
               isEnabled ? 'translate-x-6' : 'translate-x-1'
-            } inline-block h-4 w-4 transform rounded-full bg-white dark:bg-neutral-950 transition-transform shadow-sm`}
+            } inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform dark:bg-neutral-950`}
           />
         </Switch>
       </div>

@@ -52,15 +52,15 @@ export default function ConfirmModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 p-5 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white p-5 text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
                 <Dialog.Title
                   as="h3"
-                  className="text-base font-bold text-neutral-900 dark:text-neutral-100 mb-2"
+                  className="mb-2 text-base font-bold text-neutral-900 dark:text-neutral-100"
                 >
                   {title}
                 </Dialog.Title>
 
-                <Dialog.Description className="text-sm text-neutral-500 dark:text-neutral-400 mb-5">
+                <Dialog.Description className="mb-5 text-sm text-neutral-500 dark:text-neutral-400">
                   {description}
                 </Dialog.Description>
 
@@ -68,14 +68,14 @@ export default function ConfirmModal({
                   <button
                     onClick={onClose}
                     disabled={isLoading}
-                    className="flex-1 px-4 py-2.5 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors disabled:opacity-50"
+                    className="flex-1 px-4 py-2.5 font-medium text-primary-600 transition-colors hover:text-primary-700 disabled:opacity-50 dark:text-primary-400 dark:hover:text-primary-300"
                   >
                     {cancelText}
                   </button>
                   <button
                     onClick={onConfirm}
                     disabled={isLoading}
-                    className={`flex-1 px-4 py-2.5 rounded-xl font-medium transition-colors disabled:opacity-50 ${confirmButtonClass}`}
+                    className={`flex-1 rounded-xl px-4 py-2.5 font-medium transition-colors disabled:opacity-50 ${confirmButtonClass}`}
                   >
                     {isLoading ? '처리 중...' : confirmText}
                   </button>

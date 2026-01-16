@@ -60,14 +60,14 @@ function SortableImage({
       style={style}
       {...attributes}
       {...listeners}
-      className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
+      className={`relative h-16 w-12 flex-shrink-0 overflow-hidden rounded-lg border-2 ${
         isDragging
-          ? 'cursor-grabbing scale-105 shadow-lg border-primary-400'
+          ? 'scale-105 cursor-grabbing border-primary-400 shadow-lg'
           : 'cursor-pointer'
       } ${
         isActive
           ? 'border-primary-500 ring-2 ring-primary-500/30'
-          : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
+          : 'border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600'
       }`}
       onClick={handleClick}
     >
@@ -75,13 +75,13 @@ function SortableImage({
         src={image.url}
         alt={`Image ${index + 1}`}
         fill
-        className="object-cover pointer-events-none"
+        className="pointer-events-none object-cover"
         draggable={false}
       />
       {hasEdits && (
-        <div className="absolute top-1 right-1 w-2 h-2 bg-primary-500 rounded-full pointer-events-none" />
+        <div className="pointer-events-none absolute right-1 top-1 h-2 w-2 rounded-full bg-primary-500" />
       )}
-      <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-center pointer-events-none">
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 bg-black/60 text-center">
         <span className="text-[10px] text-white">{index + 1}</span>
       </div>
     </div>
@@ -138,16 +138,16 @@ export default function ThumbnailStrip({
 
   if (variant === 'horizontal') {
     return (
-      <div className="px-4 py-2 bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-800">
-        <div className="flex gap-2 overflow-x-auto justify-center">
+      <div className="border-t border-gray-200 bg-white px-4 py-2 dark:border-neutral-800 dark:bg-neutral-900">
+        <div className="flex justify-center gap-2 overflow-x-auto">
           {images.map((img, index) => (
             <button
               key={img.id}
               onClick={() => onImageSelect(index)}
-              className={`relative h-16 w-12 flex-shrink-0 rounded-lg overflow-hidden border-2 ${
+              className={`relative h-16 w-12 flex-shrink-0 overflow-hidden rounded-lg border-2 ${
                 index === currentIndex
                   ? 'border-primary-500 ring-2 ring-primary-500/30'
-                  : 'border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600'
+                  : 'border-gray-200 hover:border-gray-300 dark:border-neutral-700 dark:hover:border-neutral-600'
               }`}
             >
               <Image
@@ -167,7 +167,7 @@ export default function ThumbnailStrip({
   }
 
   return (
-    <div className="flex flex-col items-center w-20 bg-gray-50 dark:bg-neutral-800 border-r border-gray-200 dark:border-neutral-800 py-3 overflow-y-auto overflow-x-hidden">
+    <div className="flex w-20 flex-col items-center overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-gray-50 py-3 dark:border-neutral-800 dark:bg-neutral-800">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

@@ -20,12 +20,12 @@ const LeftSidebar = () => {
   const user = useUserStore((state) => state.user);
 
   return (
-    <aside className="relative h-full w-16 xl:w-64 flex flex-col pt-4 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-950">
+    <aside className="relative flex h-full w-16 flex-col border-r border-gray-200 bg-white pt-4 dark:border-neutral-800 dark:bg-neutral-950 xl:w-64">
       {/* 로고 */}
-      <div className="px-1 xl:px-4 mb-6">
+      <div className="mb-6 px-1 xl:px-4">
         <Link
           href="/"
-          className="flex items-center justify-center xl:justify-start p-2"
+          className="flex items-center justify-center p-2 xl:justify-start"
         >
           {/* 축소 시 T. 로고 */}
           <Image
@@ -42,7 +42,7 @@ const LeftSidebar = () => {
             alt="Tugo"
             width={120}
             height={44}
-            className="h-9 w-auto hidden xl:block"
+            className="hidden h-9 w-auto xl:block"
             priority
           />
         </Link>
@@ -50,7 +50,7 @@ const LeftSidebar = () => {
 
       {/* 상단: 메뉴 */}
       <nav className="px-1 xl:px-4">
-        <ul className="space-y-3 w-full">
+        <ul className="w-full space-y-3">
           <NavItem
             href="/"
             icon={
@@ -59,7 +59,7 @@ const LeftSidebar = () => {
                 alt="홈"
                 width={28}
                 height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
+                className="h-7 w-7 dark:brightness-200 dark:invert"
               />
             }
             label="홈"
@@ -73,7 +73,7 @@ const LeftSidebar = () => {
                 alt="탐색"
                 width={28}
                 height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
+                className="h-7 w-7 dark:brightness-200 dark:invert"
               />
             }
             label="탐색"
@@ -102,7 +102,7 @@ const LeftSidebar = () => {
                 alt="쪽지"
                 width={28}
                 height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
+                className="h-7 w-7 dark:brightness-200 dark:invert"
               />
             }
             label="쪽지"
@@ -117,7 +117,7 @@ const LeftSidebar = () => {
                 alt="알림"
                 width={28}
                 height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
+                className="h-7 w-7 dark:brightness-200 dark:invert"
               />
             }
             label="알림"
@@ -132,7 +132,7 @@ const LeftSidebar = () => {
                 alt="보관함"
                 width={28}
                 height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
+                className="h-7 w-7 dark:brightness-200 dark:invert"
               />
             }
             label="보관함"
@@ -142,9 +142,9 @@ const LeftSidebar = () => {
             <li>
               <button
                 onClick={() => setIsComposerOpen(true)}
-                className="w-full flex items-center justify-center xl:justify-start gap-3 p-3 xl:px-4 xl:py-3 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md"
+                className="flex w-full items-center justify-center gap-3 rounded-xl bg-primary-600 p-3 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-primary-700 hover:shadow-md active:bg-primary-800 xl:justify-start xl:px-4 xl:py-3"
               >
-                <PencilSquareIcon className="w-6 h-6 flex-shrink-0" />
+                <PencilSquareIcon className="h-6 w-6 flex-shrink-0" />
                 <span className="hidden xl:inline">투고하기</span>
               </button>
             </li>
@@ -153,8 +153,8 @@ const LeftSidebar = () => {
       </nav>
 
       {/* 하단: 프로필 + 설정 */}
-      <nav className="mt-auto px-1 xl:px-4 pb-2 md:pb-4">
-        <ul className="space-y-3 w-full">
+      <nav className="mt-auto px-1 pb-2 md:pb-4 xl:px-4">
+        <ul className="w-full space-y-3">
           {user ? (
             <NavItem
               href={`/@${user.username}`}
@@ -164,7 +164,7 @@ const LeftSidebar = () => {
                   alt="프로필"
                   width={28}
                   height={28}
-                  className="w-7 h-7 dark:invert dark:brightness-200"
+                  className="h-7 w-7 dark:brightness-200 dark:invert"
                 />
               }
               label="프로필"
@@ -174,7 +174,7 @@ const LeftSidebar = () => {
             <NavItem
               href="/login"
               icon={
-                <ArrowRightOnRectangleIcon className="w-7 h-7 text-neutral-700 dark:text-neutral-200" />
+                <ArrowRightOnRectangleIcon className="h-7 w-7 text-neutral-700 dark:text-neutral-200" />
               }
               label="로그인"
             />
@@ -187,7 +187,7 @@ const LeftSidebar = () => {
                 alt="설정"
                 width={28}
                 height={28}
-                className="w-7 h-7 dark:invert dark:brightness-200"
+                className="h-7 w-7 dark:brightness-200 dark:invert"
               />
             }
             label="설정"

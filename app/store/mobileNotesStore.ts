@@ -25,34 +25,34 @@ interface MobileNotesActions {
   finishChatExit: () => void;
 }
 
-export const useMobileNotesStore = create<MobileNotesState & MobileNotesActions>(
-  (set) => ({
-    isOpen: false,
-    currentView: null,
-    isListExiting: false,
-    isChatExiting: false,
-    selectedChat: null,
+export const useMobileNotesStore = create<
+  MobileNotesState & MobileNotesActions
+>((set) => ({
+  isOpen: false,
+  currentView: null,
+  isListExiting: false,
+  isChatExiting: false,
+  selectedChat: null,
 
-    openNotes: () => set({ isOpen: true, currentView: 'list' }),
+  openNotes: () => set({ isOpen: true, currentView: 'list' }),
 
-    openChat: (chat) => set({ currentView: 'chat', selectedChat: chat }),
+  openChat: (chat) => set({ currentView: 'chat', selectedChat: chat }),
 
-    goBackFromChat: () => set({ isChatExiting: true }),
+  goBackFromChat: () => set({ isChatExiting: true }),
 
-    goBackFromList: () => set({ isListExiting: true }),
+  goBackFromList: () => set({ isListExiting: true }),
 
-    finishChatExit: () =>
-      set({
-        isChatExiting: false,
-        currentView: 'list',
-        selectedChat: null,
-      }),
+  finishChatExit: () =>
+    set({
+      isChatExiting: false,
+      currentView: 'list',
+      selectedChat: null,
+    }),
 
-    finishListExit: () =>
-      set({
-        isListExiting: false,
-        isOpen: false,
-        currentView: null,
-      }),
-  })
-);
+  finishListExit: () =>
+    set({
+      isListExiting: false,
+      isOpen: false,
+      currentView: null,
+    }),
+}));

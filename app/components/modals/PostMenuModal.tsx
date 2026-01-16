@@ -67,8 +67,8 @@ export default function PostMenuModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 text-left align-middle shadow-xl transition-all">
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-neutral-700">
+              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all dark:bg-neutral-900">
+                <div className="flex items-center justify-between border-b border-gray-200 p-4 dark:border-neutral-700">
                   <Dialog.Title
                     as="h3"
                     className="text-base font-medium leading-6 text-gray-900 dark:text-neutral-100"
@@ -77,7 +77,7 @@ export default function PostMenuModal({
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200"
+                    className="text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>
@@ -87,7 +87,7 @@ export default function PostMenuModal({
                   {isAuthor && onEdit && (
                     <button
                       onClick={handleEdit}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-900 dark:text-neutral-100 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                      className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-900 transition-colors hover:bg-gray-100 dark:text-neutral-100 dark:hover:bg-neutral-800"
                     >
                       <PencilIcon className="h-5 w-5 text-gray-600 dark:text-neutral-400" />
                       <span>수정하기</span>
@@ -97,7 +97,7 @@ export default function PostMenuModal({
                   {isAuthor && onDelete && (
                     <button
                       onClick={handleDelete}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                      className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 transition-colors hover:bg-red-50 dark:hover:bg-red-900/30"
                     >
                       <TrashIcon className="h-5 w-5" />
                       <span>삭제하기</span>
@@ -106,7 +106,7 @@ export default function PostMenuModal({
 
                   <button
                     onClick={handleShare}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-900 dark:text-neutral-100 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-sm text-gray-900 transition-colors hover:bg-gray-100 dark:text-neutral-100 dark:hover:bg-neutral-800"
                   >
                     <ArrowUpOnSquareIcon className="h-5 w-5 text-gray-600 dark:text-neutral-400" />
                     <span>공유하기</span>

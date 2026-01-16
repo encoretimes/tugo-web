@@ -47,13 +47,13 @@ export default function NotesPage() {
   const isChatOpen = selectedUserId !== null;
 
   return (
-    <div className="flex h-full text-black dark:text-white bg-white dark:bg-neutral-950 lg:-mx-6 lg:-mt-4">
+    <div className="flex h-full bg-white text-black dark:bg-neutral-950 dark:text-white lg:-mx-6 lg:-mt-4">
       {/* 모바일 헤더 - 쪽지 목록용 */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-neutral-950 border-b border-gray-200 dark:border-neutral-800 pt-safe">
-        <div className="flex items-center h-14 px-4">
+      <div className="pt-safe fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 lg:hidden">
+        <div className="flex h-14 items-center px-4">
           <button
             onClick={handleGoBack}
-            className="p-1 -ml-1 mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+            className="-ml-1 mr-2 rounded-full p-1 transition hover:bg-gray-100 dark:hover:bg-neutral-800"
             aria-label="뒤로가기"
           >
             <ArrowLeftIcon className="h-6 w-6 text-gray-600 dark:text-neutral-300" />
@@ -66,13 +66,13 @@ export default function NotesPage() {
       <aside
         className={`${
           isChatOpen ? 'hidden' : 'w-full pt-14'
-        } lg:block lg:pt-0 lg:w-80 xl:w-96 h-full border-r border-gray-200 dark:border-neutral-800 flex flex-col bg-white dark:bg-neutral-950 flex-shrink-0`}
+        } flex h-full flex-shrink-0 flex-col border-r border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 lg:block lg:w-80 lg:pt-0 xl:w-96`}
       >
         {/* PC용 헤더 */}
-        <div className="hidden lg:block p-4 border-b border-gray-200 dark:border-neutral-800 flex-shrink-0">
+        <div className="hidden flex-shrink-0 border-b border-gray-200 p-4 dark:border-neutral-800 lg:block">
           <h1 className="text-xl font-bold dark:text-neutral-100">쪽지</h1>
         </div>
-        <div className="flex-1 min-h-0 overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-hidden">
           <RoomList
             selectedRoomId={selectedRoomId}
             onSelectRoom={handleSelectRoom}
@@ -85,8 +85,8 @@ export default function NotesPage() {
         className={`${
           isChatOpen
             ? 'translate-x-0 opacity-100'
-            : 'translate-x-full opacity-0 pointer-events-none'
-        } fixed inset-0 z-40 lg:relative lg:inset-auto lg:z-auto lg:translate-x-0 lg:opacity-100 lg:pointer-events-auto lg:flex-1 flex flex-col bg-white dark:bg-neutral-950 min-w-0 transition-all duration-300 ease-out`}
+            : 'pointer-events-none translate-x-full opacity-0'
+        } fixed inset-0 z-40 flex min-w-0 flex-col bg-white transition-all duration-300 ease-out dark:bg-neutral-950 lg:pointer-events-auto lg:relative lg:inset-auto lg:z-auto lg:flex-1 lg:translate-x-0 lg:opacity-100`}
       >
         {selectedUserId ? (
           <ChatRoom
@@ -96,7 +96,7 @@ export default function NotesPage() {
             onBack={handleBack}
           />
         ) : (
-          <div className="hidden lg:flex flex-col items-center justify-center h-full text-gray-500 dark:text-neutral-400">
+          <div className="hidden h-full flex-col items-center justify-center text-gray-500 dark:text-neutral-400 lg:flex">
             <UserIcon className="h-20 w-20" />
             <h2 className="mt-4 text-xl font-bold dark:text-neutral-100">
               대화를 선택하세요

@@ -153,9 +153,9 @@ const ProfileSection = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
       {/* Banner Image */}
-      <div className="relative w-full h-32 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-neutral-800 dark:to-neutral-900">
+      <div className="relative h-32 w-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-neutral-800 dark:to-neutral-900">
         {(bannerImagePreview || user?.bannerImageUrl) && (
           <Image
             src={bannerImagePreview || user?.bannerImageUrl || ''}
@@ -166,7 +166,7 @@ const ProfileSection = () => {
         )}
         <label
           htmlFor="banner-image-upload"
-          className="absolute bottom-3 right-3 p-2 bg-black/50 hover:bg-black/70 rounded-full cursor-pointer transition-colors"
+          className="absolute bottom-3 right-3 cursor-pointer rounded-full bg-black/50 p-2 transition-colors hover:bg-black/70"
         >
           <CameraIcon className="h-4 w-4 text-white" />
           <input
@@ -181,7 +181,7 @@ const ProfileSection = () => {
           <button
             type="button"
             onClick={handleRemoveBannerImage}
-            className="absolute bottom-3 right-12 p-2 bg-black/50 hover:bg-red-600/80 rounded-full transition-colors"
+            className="absolute bottom-3 right-12 rounded-full bg-black/50 p-2 transition-colors hover:bg-red-600/80"
           >
             <svg
               className="h-4 w-4 text-white"
@@ -205,7 +205,7 @@ const ProfileSection = () => {
         {/* Profile Image - Overlapping banner */}
         <div className="relative -mt-12 mb-6">
           <div className="relative inline-block">
-            <div className="h-24 w-24 rounded-full border-4 border-white dark:border-neutral-900 overflow-hidden bg-gray-100 dark:bg-neutral-800">
+            <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-white bg-gray-100 dark:border-neutral-900 dark:bg-neutral-800">
               {profileImagePreview || user?.profileImageUrl ? (
                 <Image
                   src={profileImagePreview || user?.profileImageUrl || ''}
@@ -222,7 +222,7 @@ const ProfileSection = () => {
             </div>
             <label
               htmlFor="profile-image-upload"
-              className="absolute bottom-0 right-0 p-2 bg-gray-900 dark:bg-neutral-700 hover:bg-gray-800 dark:hover:bg-neutral-600 rounded-full cursor-pointer transition-colors shadow-lg"
+              className="absolute bottom-0 right-0 cursor-pointer rounded-full bg-gray-900 p-2 shadow-lg transition-colors hover:bg-gray-800 dark:bg-neutral-700 dark:hover:bg-neutral-600"
             >
               <CameraIcon className="h-4 w-4 text-white" />
               <input
@@ -238,7 +238,7 @@ const ProfileSection = () => {
             <button
               type="button"
               onClick={handleRemoveProfileImage}
-              className="ml-4 text-sm text-gray-500 dark:text-neutral-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+              className="ml-4 text-sm text-gray-500 transition-colors hover:text-red-500 dark:text-neutral-400 dark:hover:text-red-400"
             >
               삭제
             </button>
@@ -250,7 +250,7 @@ const ProfileSection = () => {
           <div>
             <label
               htmlFor="displayName"
-              className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-neutral-300"
             >
               별명 (닉네임)
             </label>
@@ -260,7 +260,7 @@ const ProfileSection = () => {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="다른 사용자에게 표시될 이름"
-              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors placeholder:text-gray-400 dark:placeholder:text-neutral-500"
+              className="block w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-neutral-500 focus:outline-none focus:ring-0 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-neutral-500"
               required
             />
           </div>
@@ -268,7 +268,7 @@ const ProfileSection = () => {
           <div>
             <label
               htmlFor="bio"
-              className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-2"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-neutral-300"
             >
               자기소개
             </label>
@@ -278,7 +278,7 @@ const ProfileSection = () => {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="자신을 소개해주세요"
-              className="block w-full px-4 py-3 text-gray-900 dark:text-neutral-100 bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-700 rounded-md focus:border-neutral-500 dark:focus:border-neutral-500 focus:ring-0 focus:outline-none transition-colors resize-none placeholder:text-gray-400 dark:placeholder:text-neutral-500"
+              className="block w-full resize-none rounded-md border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition-colors placeholder:text-gray-400 focus:border-neutral-500 focus:outline-none focus:ring-0 dark:border-neutral-700 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-500 dark:focus:border-neutral-500"
             />
           </div>
 
@@ -286,7 +286,7 @@ const ProfileSection = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+              className="rounded-md bg-neutral-900 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
             >
               {isSubmitting ? '저장 중...' : '저장'}
             </button>

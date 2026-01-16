@@ -90,14 +90,14 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                 {/* Close Button */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 z-10 rounded-full bg-black bg-opacity-50 p-2 text-white hover:bg-opacity-70 transition-colors"
+                  className="absolute right-4 top-4 z-10 rounded-full bg-black bg-opacity-50 p-2 text-white transition-colors hover:bg-opacity-70"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
 
                 {/* Image Counter */}
                 {images.length > 1 && (
-                  <div className="absolute top-4 left-4 z-10 rounded-full bg-black bg-opacity-50 px-3 py-1 text-sm text-white">
+                  <div className="absolute left-4 top-4 z-10 rounded-full bg-black bg-opacity-50 px-3 py-1 text-sm text-white">
                     {currentIndex + 1} / {images.length}
                   </div>
                 )}
@@ -107,13 +107,13 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                   <>
                     <button
                       onClick={handlePrevious}
-                      className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black bg-opacity-50 p-3 text-white hover:bg-opacity-70 transition-colors"
+                      className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black bg-opacity-50 p-3 text-white transition-colors hover:bg-opacity-70"
                     >
                       <ChevronLeftIcon className="h-6 w-6" />
                     </button>
                     <button
                       onClick={handleNext}
-                      className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black bg-opacity-50 p-3 text-white hover:bg-opacity-70 transition-colors"
+                      className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black bg-opacity-50 p-3 text-white transition-colors hover:bg-opacity-70"
                     >
                       <ChevronRightIcon className="h-6 w-6" />
                     </button>

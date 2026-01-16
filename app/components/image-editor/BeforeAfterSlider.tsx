@@ -77,7 +77,7 @@ export default function BeforeAfterSlider({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden rounded-lg cursor-ew-resize select-none"
+      className="relative h-full w-full cursor-ew-resize select-none overflow-hidden rounded-lg"
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
     >
@@ -106,20 +106,20 @@ export default function BeforeAfterSlider({
       </div>
 
       <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg z-10"
+        className="absolute bottom-0 top-0 z-10 w-0.5 bg-white shadow-lg"
         style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
+        <div className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-lg">
           <div className="flex items-center gap-0.5">
             <svg
-              className="w-3 h-3 text-gray-600"
+              className="h-3 w-3 text-gray-600"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
             <svg
-              className="w-3 h-3 text-gray-600"
+              className="h-3 w-3 text-gray-600"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -129,10 +129,10 @@ export default function BeforeAfterSlider({
         </div>
       </div>
 
-      <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 text-white text-xs rounded">
+      <div className="absolute left-3 top-3 rounded bg-black/60 px-2 py-1 text-xs text-white">
         원본
       </div>
-      <div className="absolute top-3 right-3 px-2 py-1 bg-black/60 text-white text-xs rounded">
+      <div className="absolute right-3 top-3 rounded bg-black/60 px-2 py-1 text-xs text-white">
         편집
       </div>
     </div>

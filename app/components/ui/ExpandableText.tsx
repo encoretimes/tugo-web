@@ -75,7 +75,7 @@ export default function ExpandableText({
       {!showFullContent && needsExpansion && (
         <button
           onClick={handleMoreClick}
-          className="mt-2 text-sm text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 font-medium"
+          className="mt-2 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
         >
           {onExpand ? '더보기' : isExpanded ? '접기' : '더보기'}
         </button>

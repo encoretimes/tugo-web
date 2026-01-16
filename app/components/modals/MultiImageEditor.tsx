@@ -349,13 +349,13 @@ export default function MultiImageEditor({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-7xl h-screen flex flex-col bg-white dark:bg-neutral-900">
+              <Dialog.Panel className="flex h-screen w-full max-w-7xl flex-col bg-white dark:bg-neutral-900">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800">
+                <div className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 dark:border-neutral-800 dark:bg-neutral-900 md:px-6 md:py-4">
                   <div className="flex items-center gap-4">
                     <button
                       onClick={handleCancel}
-                      className="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 p-1 transition-colors"
+                      className="p-1 text-gray-500 transition-colors hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
                     >
                       <XMarkIcon className="h-6 w-6" />
                     </button>
@@ -374,10 +374,10 @@ export default function MultiImageEditor({
                     )}
                     <button
                       onClick={() => setShowBeforeAfter(!showBeforeAfter)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition-colors ${
                         showBeforeAfter
                           ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
                       }`}
                     >
                       <EyeIcon className="h-4 w-4" />
@@ -387,7 +387,7 @@ export default function MultiImageEditor({
                 </div>
 
                 {/* Main Content */}
-                <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+                <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
                   {/* Left: Thumbnail Strip (Desktop) */}
                   {images.length > 1 && (
                     <div className="hidden md:block">
@@ -402,12 +402,12 @@ export default function MultiImageEditor({
                   )}
 
                   {/* Center: Preview Area */}
-                  <div className="flex-1 flex flex-col bg-gray-100 dark:bg-neutral-950 min-h-0 relative">
+                  <div className="relative flex min-h-0 flex-1 flex-col bg-gray-100 dark:bg-neutral-950">
                     {/* Navigation Arrows */}
                     {images.length > 1 && currentIndex > 0 && (
                       <button
                         onClick={handlePrevious}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all"
+                        className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
                       >
                         <ChevronLeftIcon className="h-5 w-5" />
                       </button>
@@ -415,16 +415,16 @@ export default function MultiImageEditor({
                     {images.length > 1 && currentIndex < images.length - 1 && (
                       <button
                         onClick={handleNext}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all"
+                        className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-all hover:bg-black/70"
                       >
                         <ChevronRightIcon className="h-5 w-5" />
                       </button>
                     )}
 
                     {/* Image Preview */}
-                    <div className="flex-1 flex items-center justify-center p-4 md:p-6">
+                    <div className="flex flex-1 items-center justify-center p-4 md:p-6">
                       {currentImage && (
-                        <div className="w-full h-full max-w-3xl max-h-[60vh] md:max-h-[70vh] bg-white dark:bg-neutral-900 rounded-xl overflow-hidden shadow-lg">
+                        <div className="h-full max-h-[60vh] w-full max-w-3xl overflow-hidden rounded-xl bg-white shadow-lg dark:bg-neutral-900 md:max-h-[70vh]">
                           {showBeforeAfter ? (
                             <BeforeAfterSlider
                               beforeImage={currentImage.url}
@@ -478,17 +478,17 @@ export default function MultiImageEditor({
                   </div>
 
                   {/* Right: Control Panel */}
-                  <div className="w-full md:w-80 bg-white dark:bg-neutral-900 border-t md:border-t-0 md:border-l border-gray-200 dark:border-neutral-800 flex flex-col max-h-[40vh] md:max-h-none">
+                  <div className="flex max-h-[40vh] w-full flex-col border-t border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-900 md:max-h-none md:w-80 md:border-l md:border-t-0">
                     {/* Tabs */}
                     <div className="flex border-b border-gray-200 dark:border-neutral-800">
                       {tabs.map((tab) => (
                         <button
                           key={tab.id}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`flex-1 flex flex-col items-center gap-1 px-3 py-3 text-sm font-medium border-b-2 transition-colors ${
+                          className={`flex flex-1 flex-col items-center gap-1 border-b-2 px-3 py-3 text-sm font-medium transition-colors ${
                             activeTab === tab.id
                               ? 'border-primary-500 text-primary-600 dark:text-primary-400'
-                              : 'border-transparent text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200'
+                              : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200'
                           }`}
                         >
                           {tab.icon}
@@ -498,7 +498,7 @@ export default function MultiImageEditor({
                     </div>
 
                     {/* Tab Content */}
-                    <div className="flex-1 p-4 overflow-y-auto">
+                    <div className="flex-1 overflow-y-auto p-4">
                       {activeTab === 'crop' && (
                         <CropPanel
                           aspectRatio={aspectRatio}
@@ -533,17 +533,17 @@ export default function MultiImageEditor({
                     </div>
 
                     {/* Actions */}
-                    <div className="p-4 border-t border-gray-200 dark:border-neutral-800">
+                    <div className="border-t border-gray-200 p-4 dark:border-neutral-800">
                       <div className="flex gap-3">
                         <button
                           onClick={handleCancel}
-                          className="flex-1 px-4 py-3 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors font-medium"
+                          className="flex-1 rounded-xl border border-gray-300 px-4 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800"
                         >
                           취소
                         </button>
                         <button
                           onClick={handleSave}
-                          className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-medium"
+                          className="flex-1 rounded-xl bg-primary-600 px-4 py-3 font-medium text-white transition-colors hover:bg-primary-700"
                         >
                           완료
                         </button>

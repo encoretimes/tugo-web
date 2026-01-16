@@ -24,7 +24,8 @@ export const queryKeys = {
   creators: ['creators'] as const,
 
   // 뉴스 관련
-  news: (category?: string, source?: string) => ['news', category, source] as const,
+  news: (category?: string, source?: string) =>
+    ['news', category, source] as const,
   newsCategories: ['newsCategories'] as const,
   newsSources: ['newsSources'] as const,
 

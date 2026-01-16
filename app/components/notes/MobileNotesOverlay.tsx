@@ -34,17 +34,17 @@ export default function MobileNotesOverlay() {
     <div className="fixed inset-0 z-[100] lg:hidden">
       {/* 목록 패널 */}
       <div
-        className={`absolute inset-0 bg-white dark:bg-neutral-950 flex flex-col ${
+        className={`absolute inset-0 flex flex-col bg-white dark:bg-neutral-950 ${
           isListExiting ? 'animate-slide-out-right' : 'animate-slide-in-right'
         }`}
         onAnimationEnd={() => isListExiting && finishListExit()}
       >
         {/* 헤더 */}
-        <div className="flex-shrink-0 border-b border-gray-200 dark:border-neutral-800 pt-safe">
-          <div className="flex items-center h-14 px-4">
+        <div className="pt-safe flex-shrink-0 border-b border-gray-200 dark:border-neutral-800">
+          <div className="flex h-14 items-center px-4">
             <button
               onClick={goBackFromList}
-              className="p-1 -ml-1 mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+              className="-ml-1 mr-2 rounded-full p-1 transition hover:bg-gray-100 dark:hover:bg-neutral-800"
               aria-label="뒤로가기"
             >
               <ArrowLeftIcon className="h-6 w-6 text-gray-600 dark:text-neutral-300" />

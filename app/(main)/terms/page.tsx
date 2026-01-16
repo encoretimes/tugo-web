@@ -4,18 +4,18 @@ import Link from 'next/link';
 
 export default function TermsPage() {
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
+    <div className="mx-auto max-w-3xl px-4 py-8">
       {/* Header */}
       <div className="mb-8 border-b border-gray-200 pb-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">이용약관</h1>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900">이용약관</h1>
         <p className="text-sm text-gray-500">
           최종 수정일: 2025년 1월 1일 | 시행일: 2025년 1월 1일
         </p>
       </div>
 
       {/* Table of Contents */}
-      <nav className="mb-10 p-4 bg-gray-50 rounded-md border border-gray-200">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">목차</h2>
+      <nav className="mb-10 rounded-md border border-gray-200 bg-gray-50 p-4">
+        <h2 className="mb-3 text-sm font-semibold text-gray-700">목차</h2>
         <ul className="space-y-2 text-sm">
           <li>
             <a href="#article-1" className="text-primary-600 hover:underline">
@@ -78,8 +78,8 @@ export default function TermsPage() {
       {/* Content */}
       <div className="space-y-10">
         <section id="article-1">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">제1조 (목적)</h2>
-          <p className="text-gray-700 leading-relaxed">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">제1조 (목적)</h2>
+          <p className="leading-relaxed text-gray-700">
             본 약관은 TUGO(이하 &quot;회사&quot;라 합니다)가 제공하는 정치
             커뮤니티 플랫폼 서비스(이하 &quot;서비스&quot;라 합니다)의 이용과
             관련하여 회사와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한
@@ -88,10 +88,10 @@ export default function TermsPage() {
         </section>
 
         <section id="article-2">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">제2조 (정의)</h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">제2조 (정의)</h2>
+          <div className="space-y-3 leading-relaxed text-gray-700">
             <p>본 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>
                 &quot;서비스&quot;란 회사가 제공하는 정치 관련 콘텐츠 게시,
                 구독, 투표, 토론 등의 온라인 플랫폼 서비스를 말합니다.
@@ -117,11 +117,11 @@ export default function TermsPage() {
         </section>
 
         <section id="article-3">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제3조 (약관의 효력 및 변경)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>
                 본 약관은 서비스를 이용하고자 하는 모든 이용자에게 적용됩니다.
               </li>
@@ -142,11 +142,11 @@ export default function TermsPage() {
         </section>
 
         <section id="article-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제4조 (회원가입)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>
                 이용자는 회사가 정한 절차에 따라 회원가입을 신청할 수 있습니다.
               </li>
@@ -156,7 +156,7 @@ export default function TermsPage() {
               <li>
                 회사는 다음 각 호에 해당하는 경우 회원가입을 거부하거나 사후에
                 회원자격을 제한할 수 있습니다.
-                <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+                <ul className="ml-6 mt-2 list-inside list-disc space-y-1">
                   <li>타인의 정보를 도용한 경우</li>
                   <li>허위 정보를 기재한 경우</li>
                   <li>만 14세 미만인 경우</li>
@@ -168,12 +168,12 @@ export default function TermsPage() {
         </section>
 
         <section id="article-5">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제5조 (서비스의 제공)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
+          <div className="space-y-3 leading-relaxed text-gray-700">
             <p>회사는 다음과 같은 서비스를 제공합니다.</p>
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>정치 관련 콘텐츠 게시 및 열람 서비스</li>
               <li>크리에이터 구독 서비스</li>
               <li>실시간 투표 및 여론조사 서비스</li>
@@ -184,16 +184,16 @@ export default function TermsPage() {
         </section>
 
         <section id="article-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제6조 (게시물 관리)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>회원이 작성한 게시물의 저작권은 해당 회원에게 귀속됩니다.</li>
               <li>
                 회사는 다음 각 호에 해당하는 게시물을 사전 통지 없이 삭제하거나
                 노출을 제한할 수 있습니다.
-                <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+                <ul className="ml-6 mt-2 list-inside list-disc space-y-1">
                   <li>타인의 권리를 침해하는 게시물</li>
                   <li>허위 사실을 유포하는 게시물</li>
                   <li>혐오, 차별, 폭력을 조장하는 게시물</li>
@@ -206,11 +206,11 @@ export default function TermsPage() {
         </section>
 
         <section id="article-7">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제7조 (이용자의 의무)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>이용자는 본 약관 및 관계 법령을 준수해야 합니다.</li>
               <li>이용자는 타인의 권리와 명예를 존중해야 합니다.</li>
               <li>
@@ -223,12 +223,12 @@ export default function TermsPage() {
         </section>
 
         <section id="article-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제8조 (금지행위)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
+          <div className="space-y-3 leading-relaxed text-gray-700">
             <p>이용자는 다음 각 호의 행위를 해서는 안 됩니다.</p>
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>타인의 개인정보를 수집, 저장, 공개하는 행위</li>
               <li>서비스의 운영을 방해하는 행위</li>
               <li>허위 정보를 유포하거나 사기를 목적으로 하는 행위</li>
@@ -244,18 +244,18 @@ export default function TermsPage() {
         </section>
 
         <section id="article-9">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제9조 (서비스 이용제한)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>
                 회사는 이용자가 본 약관 또는 관계 법령을 위반한 경우, 서비스
                 이용을 제한할 수 있습니다.
               </li>
               <li>
                 이용 제한의 종류는 다음과 같습니다.
-                <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+                <ul className="ml-6 mt-2 list-inside list-disc space-y-1">
                   <li>경고</li>
                   <li>게시물 삭제</li>
                   <li>일정 기간 서비스 이용 정지</li>
@@ -271,11 +271,11 @@ export default function TermsPage() {
         </section>
 
         <section id="article-10">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제10조 (면책조항)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>
                 회사는 천재지변, 불가항력적 사유로 인해 서비스를 제공할 수 없는
                 경우 책임이 면제됩니다.
@@ -297,11 +297,11 @@ export default function TermsPage() {
         </section>
 
         <section id="article-11">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">
             제11조 (분쟁해결)
           </h2>
-          <div className="text-gray-700 leading-relaxed space-y-3">
-            <ol className="list-decimal list-inside space-y-2 ml-4">
+          <div className="space-y-3 leading-relaxed text-gray-700">
+            <ol className="ml-4 list-inside list-decimal space-y-2">
               <li>본 약관과 관련된 분쟁은 대한민국 법률에 따라 해석됩니다.</li>
               <li>
                 서비스 이용과 관련하여 발생한 분쟁에 대해서는 회사의 본사
@@ -313,8 +313,8 @@ export default function TermsPage() {
       </div>
 
       {/* Footer */}
-      <div className="mt-12 pt-6 border-t border-gray-200">
-        <p className="text-sm text-gray-500 text-center">
+      <div className="mt-12 border-t border-gray-200 pt-6">
+        <p className="text-center text-sm text-gray-500">
           본 약관에 대한 문의사항은{' '}
           <a
             href="mailto:support@tugo.kr"

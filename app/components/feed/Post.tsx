@@ -166,7 +166,7 @@ const Post: React.FC<PostProps> = ({
   }, [queryClient, post, author.username, router]);
 
   return (
-    <div className="px-6 lg:px-6 py-5">
+    <div className="px-6 py-5 lg:px-6">
       <PostHeader
         author={author}
         createdAt={createdAt}

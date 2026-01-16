@@ -54,9 +54,9 @@ const NotificationSection = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-8">
+      <div className="rounded-lg border border-gray-200 bg-white p-8 dark:border-neutral-800 dark:bg-neutral-950">
         <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-neutral-600 dark:border-neutral-400 border-t-transparent"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-600 border-t-transparent dark:border-neutral-400"></div>
         </div>
       </div>
     );
@@ -68,7 +68,7 @@ const NotificationSection = () => {
       <PushNotificationToggle />
 
       {/* 알림 유형별 설정 */}
-      <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
         {preferences?.map((pref, index) => {
           const config = notificationConfig[pref.notificationType];
           const Icon = config.icon;
@@ -82,14 +82,14 @@ const NotificationSection = () => {
               }`}
             >
               <div className="flex items-center gap-4">
-                <div className="p-2 bg-gray-100 dark:bg-neutral-800 rounded-md">
+                <div className="rounded-md bg-gray-100 p-2 dark:bg-neutral-800">
                   <Icon className="h-5 w-5 text-gray-600 dark:text-neutral-400" />
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-gray-900 dark:text-neutral-100">
                     {config.label}
                   </h4>
-                  <p className="text-xs text-gray-500 dark:text-neutral-400 mt-0.5">
+                  <p className="mt-0.5 text-xs text-gray-500 dark:text-neutral-400">
                     {config.description}
                   </p>
                 </div>
@@ -104,12 +104,12 @@ const NotificationSection = () => {
                   pref.enabled
                     ? 'bg-neutral-900 dark:bg-neutral-100'
                     : 'bg-gray-200 dark:bg-neutral-700'
-                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-900 disabled:opacity-50`}
+                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-neutral-900`}
               >
                 <span
                   className={`${
                     pref.enabled ? 'translate-x-6' : 'translate-x-1'
-                  } inline-block h-4 w-4 transform rounded-full bg-white dark:bg-neutral-950 transition-transform shadow-sm`}
+                  } inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform dark:bg-neutral-950`}
                 />
               </Switch>
             </div>
@@ -117,7 +117,7 @@ const NotificationSection = () => {
         })}
       </div>
 
-      <div className="bg-gray-50 dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-5">
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-5 dark:border-neutral-800 dark:bg-neutral-950">
         <p className="text-sm text-gray-500 dark:text-neutral-400">
           이메일 알림 기능은 추후 업데이트될 예정입니다
         </p>

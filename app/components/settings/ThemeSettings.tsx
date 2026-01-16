@@ -21,12 +21,12 @@ export default function ThemeSettings() {
   const { mode, setMode } = useThemeStore();
 
   return (
-    <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg p-6">
+    <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-neutral-800 dark:bg-neutral-950">
       <div className="mb-4">
         <h4 className="text-base font-medium text-gray-900 dark:text-neutral-100">
           테마
         </h4>
-        <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
+        <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
           화면 테마를 설정합니다
         </p>
       </div>
@@ -36,10 +36,10 @@ export default function ThemeSettings() {
           <button
             key={value}
             onClick={() => setMode(value)}
-            className={`flex flex-col items-center gap-2 p-4 rounded-md border transition-all ${
+            className={`flex flex-col items-center gap-2 rounded-md border p-4 transition-all ${
               mode === value
-                ? 'border-gray-400 dark:border-neutral-500 text-gray-900 dark:text-neutral-100'
-                : 'border-gray-200 dark:border-neutral-700 text-gray-500 dark:text-neutral-400 hover:border-gray-300 dark:hover:border-neutral-600'
+                ? 'border-gray-400 text-gray-900 dark:border-neutral-500 dark:text-neutral-100'
+                : 'border-gray-200 text-gray-500 hover:border-gray-300 dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600'
             }`}
           >
             <Icon className="h-6 w-6" />

@@ -28,7 +28,7 @@ export default function PostRedirectPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex h-full items-center justify-center">
         <div className="text-gray-500">게시물을 불러오는 중...</div>
       </div>
     );
@@ -36,7 +36,7 @@ export default function PostRedirectPage() {
 
   if (error || !post) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4">
+      <div className="flex h-full flex-col items-center justify-center gap-4">
         <div className="text-gray-500">게시물을 찾을 수 없습니다.</div>
         <button
           onClick={() => router.push('/')}
@@ -49,7 +49,7 @@ export default function PostRedirectPage() {
   }
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex h-full items-center justify-center">
       <div className="text-gray-500">이동 중...</div>
     </div>
   );

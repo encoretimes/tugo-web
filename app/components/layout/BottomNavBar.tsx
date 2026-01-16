@@ -87,8 +87,8 @@ const BottomNavBar: FC = () => {
   };
 
   return (
-    <nav className="relative flex-shrink-0 bg-white dark:bg-neutral-950 lg:hidden z-50 border-t border-gray-200 dark:border-neutral-800 pb-safe">
-      <ul className="flex justify-around items-center h-14">
+    <nav className="pb-safe relative z-50 flex-shrink-0 border-t border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 lg:hidden">
+      <ul className="flex h-14 items-center justify-around">
         {navItems.map(({ href, Icon, label, badge, isWriteButton }) => {
           const active = isActive(href);
 
@@ -97,11 +97,11 @@ const BottomNavBar: FC = () => {
               <li key={label}>
                 <button
                   onClick={handleWriteClick}
-                  className="flex flex-col items-center justify-center min-w-[56px] py-2"
+                  className="flex min-w-[56px] flex-col items-center justify-center py-2"
                   aria-label={label}
                 >
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--brand-primary)] text-white">
-                    <Icon className="w-5 h-5" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--brand-primary)] text-white">
+                    <Icon className="h-5 w-5" />
                   </div>
                 </button>
               </li>
@@ -112,7 +112,7 @@ const BottomNavBar: FC = () => {
             <li key={label}>
               <Link
                 href={href}
-                className={`flex flex-col items-center justify-center min-w-[56px] py-2 transition-colors ${
+                className={`flex min-w-[56px] flex-col items-center justify-center py-2 transition-colors ${
                   active
                     ? 'text-[var(--brand-primary)]'
                     : 'text-[var(--nav-icon-default)] hover:text-[var(--nav-icon-hover)]'
@@ -120,14 +120,14 @@ const BottomNavBar: FC = () => {
                 aria-label={label}
               >
                 <div className="relative">
-                  <Icon className="w-6 h-6" filled={active} />
+                  <Icon className="h-6 w-6" filled={active} />
                   {badge !== undefined && badge > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
                       {badge > 99 ? '99+' : badge}
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] mt-0.5 font-medium">{label}</span>
+                <span className="mt-0.5 text-[10px] font-medium">{label}</span>
               </Link>
             </li>
           );

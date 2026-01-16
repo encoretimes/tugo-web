@@ -8,7 +8,7 @@ const ToastContainer: React.FC = () => {
   const toasts = useToastStore((state) => state.toasts);
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full">
+    <div className="fixed right-4 top-4 z-50 flex w-full max-w-sm flex-col gap-2">
       {toasts.map((toast) => (
         <Toast key={toast.id} toast={toast} />
       ))}

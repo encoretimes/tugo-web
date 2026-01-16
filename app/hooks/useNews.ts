@@ -15,7 +15,8 @@ export const useInfiniteNews = (
 ) => {
   return useInfiniteQuery({
     queryKey: queryKeys.news(category, source),
-    queryFn: ({ pageParam = 0 }) => getNews(pageParam, pageSize, category, source),
+    queryFn: ({ pageParam = 0 }) =>
+      getNews(pageParam, pageSize, category, source),
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
     },

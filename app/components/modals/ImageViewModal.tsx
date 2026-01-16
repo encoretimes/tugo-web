@@ -64,7 +64,7 @@ const ImageViewModal: React.FC<ImageViewModalProps> = ({
                 {/* Close Button */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 z-10 rounded-full bg-black bg-opacity-50 p-2 text-white hover:bg-opacity-70 transition-colors"
+                  className="absolute right-4 top-4 z-10 rounded-full bg-black bg-opacity-50 p-2 text-white transition-colors hover:bg-opacity-70"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>

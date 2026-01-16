@@ -9,20 +9,20 @@ const HotDebates = () => {
   return (
     <section className="relative bg-white">
       {/* 헤드라인 */}
-      <div className="flex items-center justify-between px-0 lg:px-4 py-4">
-        <h2 className="font-bold text-gray-900 text-base">
+      <div className="flex items-center justify-between px-0 py-4 lg:px-4">
+        <h2 className="text-base font-bold text-gray-900">
           지금 가장 뜨거운 토론
         </h2>
       </div>
 
       {/* 토론 카드들 */}
-      <div className="flex gap-3 px-0 lg:px-4 pt-2 pb-4 overflow-x-auto scrollbar-hide">
+      <div className="flex gap-3 overflow-x-auto px-0 pb-4 pt-2 scrollbar-hide lg:px-4">
         {isLoadingDebates ? (
           <>
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="shrink-0 w-[240px] h-[180px] rounded-xl bg-gray-50 animate-pulse"
+                className="h-[180px] w-[240px] shrink-0 animate-pulse rounded-xl bg-gray-50"
               />
             ))}
           </>
@@ -32,7 +32,7 @@ const HotDebates = () => {
           <div className="w-full py-6 text-center">
             <div className="inline-flex flex-col items-center gap-2 text-gray-400">
               <svg
-                className="w-10 h-10"
+                className="h-10 w-10"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

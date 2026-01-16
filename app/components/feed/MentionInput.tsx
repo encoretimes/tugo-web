@@ -205,7 +205,7 @@ export default function MentionInput({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute z-10 mt-1 w-full max-w-xs rounded-lg bg-white dark:bg-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 dark:ring-neutral-700 max-h-60 overflow-y-auto"
+          className="absolute z-10 mt-1 max-h-60 w-full max-w-xs overflow-y-auto rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-neutral-900 dark:ring-neutral-700"
           style={{
             bottom: 'auto',
             top: '100%',
@@ -215,7 +215,7 @@ export default function MentionInput({
             <button
               key={user.memberId}
               onClick={() => insertMention(user)}
-              className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-800 ${
+              className={`flex w-full items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-800 ${
                 index === selectedIndex ? 'bg-gray-100 dark:bg-neutral-800' : ''
               }`}
             >

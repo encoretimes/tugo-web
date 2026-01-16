@@ -42,10 +42,10 @@ export default function ExploreVotesPage() {
   return (
     <div className="py-4">
       {/* 헤더 */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="mb-6 flex items-center gap-4">
         <Link
           href="/explore"
-          className="p-2 -ml-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          className="-ml-2 rounded-full p-2 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
         >
           <ArrowLeftIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
         </Link>
@@ -55,15 +55,15 @@ export default function ExploreVotesPage() {
       </div>
 
       {/* 정렬 버튼 */}
-      <div className="flex gap-2 mb-6">
+      <div className="mb-6 flex gap-2">
         {sortOptions.map((option) => (
           <button
             key={option.id}
             onClick={() => setSortBy(option.id)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               sortBy === option.id
                 ? 'bg-primary-600 text-white'
-                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
             }`}
           >
             {option.label}
@@ -72,14 +72,14 @@ export default function ExploreVotesPage() {
       </div>
 
       {/* 콘텐츠 */}
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
         {isLoading ? (
           <div className="p-8">
             <div className="space-y-4">
               {[1, 2, 3, 4, 5].map((i) => (
                 <div
                   key={i}
-                  className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse"
+                  className="h-20 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800"
                 />
               ))}
             </div>
@@ -107,7 +107,7 @@ export default function ExploreVotesPage() {
                     {[1, 2].map((i) => (
                       <div
                         key={i}
-                        className="h-20 bg-neutral-100 dark:bg-neutral-800 rounded-lg animate-pulse"
+                        className="h-20 animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800"
                       />
                     ))}
                   </div>

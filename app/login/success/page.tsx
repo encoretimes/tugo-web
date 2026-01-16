@@ -25,10 +25,7 @@ export default function LoginSuccessPage() {
       try {
         setLoading(true);
 
-        console.log(
-          'Fetching user info from:',
-          getApiUrl()
-        );
+        console.log('Fetching user info from:', getApiUrl());
         console.log('Cookies:', document.cookie);
 
         const userData =
@@ -71,10 +68,10 @@ export default function LoginSuccessPage() {
   }, [router, setUser, setLoading]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="flex min-h-screen items-center justify-center bg-white">
       <div className="text-center">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent mb-4"></div>
-        <p className="text-neutral-600 text-lg">로그인 중입니다...</p>
+        <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent"></div>
+        <p className="text-lg text-neutral-600">로그인 중입니다...</p>
       </div>
     </div>
   );

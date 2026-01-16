@@ -198,14 +198,14 @@ export default function EditProfileModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 shadow-2xl transition-all">
-                <div className="flex items-center justify-between border-b border-gray-200 dark:border-neutral-700 px-8 py-5">
+              <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-lg bg-white shadow-2xl transition-all dark:bg-neutral-900">
+                <div className="flex items-center justify-between border-b border-gray-200 px-8 py-5 dark:border-neutral-700">
                   <Dialog.Title className="text-lg font-semibold text-gray-900 dark:text-neutral-100">
                     프로필 수정
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded transition-colors"
+                    className="rounded p-1.5 transition-colors hover:bg-gray-100 dark:hover:bg-neutral-800"
                   >
                     <XMarkIcon className="h-5 w-5 text-gray-400 dark:text-neutral-500" />
                   </button>
@@ -215,13 +215,13 @@ export default function EditProfileModal({
                   <div className="space-y-8">
                     {/* 프로필 이미지 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-4">
+                      <label className="mb-4 block text-sm font-medium text-gray-700 dark:text-neutral-300">
                         프로필 사진
                       </label>
                       <div className="flex items-center gap-5">
                         <div className="relative">
                           {profilePreview || currentProfileUrl ? (
-                            <div className="relative w-20 h-20 rounded-full overflow-hidden border border-gray-200 dark:border-neutral-700">
+                            <div className="relative h-20 w-20 overflow-hidden rounded-full border border-gray-200 dark:border-neutral-700">
                               <Image
                                 src={
                                   (profilePreview ||
@@ -230,11 +230,11 @@ export default function EditProfileModal({
                                 alt="프로필"
                                 width={80}
                                 height={80}
-                                className="w-full h-full object-cover"
+                                className="h-full w-full object-cover"
                               />
                             </div>
                           ) : (
-                            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700">
+                            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-gray-200 bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800">
                               <UserIcon className="h-10 w-10 text-gray-300 dark:text-neutral-500" />
                             </div>
                           )}
@@ -243,7 +243,7 @@ export default function EditProfileModal({
                           {profilePreview || currentProfileUrl ? (
                             <>
                               <label htmlFor="profile-image-upload">
-                                <span className="inline-block px-4 py-2 text-sm font-medium bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-600 rounded-lg hover:border-gray-400 dark:hover:border-neutral-500 text-gray-700 dark:text-neutral-300 cursor-pointer transition-colors">
+                                <span className="inline-block cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-neutral-500">
                                   변경
                                 </span>
                                 <input
@@ -258,7 +258,7 @@ export default function EditProfileModal({
                               <button
                                 type="button"
                                 onClick={handleRemoveProfileImage}
-                                className="px-4 py-2 text-sm font-medium bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-600 rounded-lg hover:border-red-400 dark:hover:border-red-500 hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-neutral-300 transition-colors"
+                                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-red-400 hover:text-red-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-red-500 dark:hover:text-red-400"
                                 disabled={isLoading}
                               >
                                 삭제
@@ -266,7 +266,7 @@ export default function EditProfileModal({
                             </>
                           ) : (
                             <label htmlFor="profile-image-upload">
-                              <span className="inline-block px-4 py-2 text-sm font-medium bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-600 rounded-lg hover:border-gray-400 dark:hover:border-neutral-500 text-gray-700 dark:text-neutral-300 cursor-pointer transition-colors">
+                              <span className="inline-block cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-neutral-500">
                                 추가하기
                               </span>
                               <input
@@ -285,10 +285,10 @@ export default function EditProfileModal({
 
                     {/* 배너 이미지 */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-4">
+                      <label className="mb-4 block text-sm font-medium text-gray-700 dark:text-neutral-300">
                         배너 이미지
                       </label>
-                      <div className="relative w-full aspect-[21/9] bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg overflow-hidden group">
+                      <div className="group relative aspect-[21/9] w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-neutral-700 dark:bg-neutral-800">
                         {bannerPreview || currentBannerImageUrl ? (
                           <Image
                             src={
@@ -307,7 +307,7 @@ export default function EditProfileModal({
                           {bannerPreview || currentBannerImageUrl ? (
                             <>
                               <label htmlFor="banner-image-upload">
-                                <span className="inline-block px-4 py-2 text-sm font-medium bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-600 rounded-lg hover:border-gray-400 dark:hover:border-neutral-500 text-gray-700 dark:text-neutral-300 cursor-pointer transition-colors shadow-sm">
+                                <span className="inline-block cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-gray-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-neutral-500">
                                   변경
                                 </span>
                                 <input
@@ -322,7 +322,7 @@ export default function EditProfileModal({
                               <button
                                 type="button"
                                 onClick={handleRemoveBannerImage}
-                                className="px-4 py-2 text-sm font-medium bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-600 rounded-lg hover:border-red-400 dark:hover:border-red-500 hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-neutral-300 transition-colors shadow-sm"
+                                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-red-400 hover:text-red-600 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-red-500 dark:hover:text-red-400"
                                 disabled={isLoading}
                               >
                                 삭제
@@ -330,7 +330,7 @@ export default function EditProfileModal({
                             </>
                           ) : (
                             <label htmlFor="banner-image-upload">
-                              <span className="inline-block px-4 py-2 text-sm font-medium bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-600 rounded-lg hover:border-gray-400 dark:hover:border-neutral-500 text-gray-700 dark:text-neutral-300 cursor-pointer transition-colors shadow-sm">
+                              <span className="inline-block cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:border-gray-400 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:border-neutral-500">
                                 추가하기
                               </span>
                               <input
@@ -351,7 +351,7 @@ export default function EditProfileModal({
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-3"
+                        className="mb-3 block text-sm font-medium text-gray-700 dark:text-neutral-300"
                       >
                         이름 <span className="text-red-500">*</span>
                       </label>
@@ -360,7 +360,7 @@ export default function EditProfileModal({
                         id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:border-gray-900 dark:focus:border-neutral-400 transition-colors bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100"
+                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition-colors focus:border-gray-900 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:focus:border-neutral-400"
                         disabled={isLoading}
                         maxLength={50}
                       />
@@ -370,7 +370,7 @@ export default function EditProfileModal({
                     <div>
                       <label
                         htmlFor="introduction"
-                        className="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-3"
+                        className="mb-3 block text-sm font-medium text-gray-700 dark:text-neutral-300"
                       >
                         자기소개
                       </label>
@@ -379,27 +379,27 @@ export default function EditProfileModal({
                         value={introduction}
                         onChange={(e) => setIntroduction(e.target.value)}
                         rows={4}
-                        className="w-full px-4 py-2.5 border border-gray-300 dark:border-neutral-600 rounded-lg focus:outline-none focus:border-gray-900 dark:focus:border-neutral-400 transition-colors resize-none bg-white dark:bg-neutral-800 text-gray-900 dark:text-neutral-100"
+                        className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition-colors focus:border-gray-900 focus:outline-none dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100 dark:focus:border-neutral-400"
                         disabled={isLoading}
                         maxLength={200}
                       />
-                      <p className="mt-2 text-sm text-gray-500 dark:text-neutral-400 text-right">
+                      <p className="mt-2 text-right text-sm text-gray-500 dark:text-neutral-400">
                         {introduction.length}/200
                       </p>
                     </div>
 
                     {error && (
-                      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 text-sm rounded-lg">
+                      <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
                         {error}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex gap-3 mt-8 pt-6 border-t border-gray-100 dark:border-neutral-700">
+                  <div className="mt-8 flex gap-3 border-t border-gray-100 pt-6 dark:border-neutral-700">
                     <button
                       type="button"
                       onClick={onClose}
-                      className="flex-1 px-5 py-2.5 border border-gray-300 dark:border-neutral-600 text-gray-700 dark:text-neutral-300 font-medium hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors rounded-lg"
+                      className="flex-1 rounded-lg border border-gray-300 px-5 py-2.5 font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800"
                       disabled={isLoading}
                     >
                       취소
@@ -407,7 +407,7 @@ export default function EditProfileModal({
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="flex-1 px-5 py-2.5 bg-gray-900 dark:bg-neutral-100 hover:bg-gray-800 dark:hover:bg-white text-white dark:text-neutral-900 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
+                      className="flex-1 rounded-lg bg-gray-900 px-5 py-2.5 font-medium text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
                     >
                       {isLoading ? '저장 중...' : '저장'}
                     </button>

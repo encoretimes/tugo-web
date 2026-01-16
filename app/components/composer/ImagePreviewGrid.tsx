@@ -34,7 +34,7 @@ export default function ImagePreviewGrid({
       {images.map((file, index) => {
         const imageUrl = URL.createObjectURL(file);
         return (
-          <div key={`${file.name}-${index}`} className="relative group">
+          <div key={`${file.name}-${index}`} className="group relative">
             <div
               className="cursor-pointer overflow-hidden rounded-lg"
               onClick={() => onEdit(index)}
@@ -50,7 +50,7 @@ export default function ImagePreviewGrid({
             </div>
             <button
               onClick={() => onEdit(index)}
-              className="absolute bottom-1 left-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+              className="absolute bottom-1 left-1 rounded-full bg-black/50 p-1 text-white opacity-0 transition-opacity hover:bg-black/70 group-hover:opacity-100"
               disabled={disabled}
               title="편집"
             >
@@ -58,7 +58,7 @@ export default function ImagePreviewGrid({
             </button>
             <button
               onClick={() => onRemove(index)}
-              className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 shadow-md"
+              className="absolute -right-1 -top-1 rounded-full bg-red-500 p-1 text-white opacity-0 shadow-md transition-opacity hover:bg-red-600 group-hover:opacity-100"
               disabled={disabled}
               title="삭제"
             >

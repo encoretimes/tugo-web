@@ -171,19 +171,19 @@ export default function ProfileImageEditor({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`w-full ${imageType === 'profile' ? 'max-w-md' : 'max-w-2xl'} bg-white dark:bg-neutral-900 shadow-2xl transition-all`}
+                className={`w-full ${imageType === 'profile' ? 'max-w-md' : 'max-w-2xl'} bg-white shadow-2xl transition-all dark:bg-neutral-900`}
               >
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-neutral-800">
+                <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-neutral-800">
                   <Dialog.Title
                     as="h3"
-                    className="text-base font-semibold text-gray-900 dark:text-neutral-100 tracking-tight"
+                    className="text-base font-semibold tracking-tight text-gray-900 dark:text-neutral-100"
                   >
                     {imageType === 'profile' ? '프로필 사진' : '배경 이미지'}
                   </Dialog.Title>
                   <button
                     onClick={handleCancel}
-                    className="p-1.5 text-gray-400 dark:text-neutral-500 hover:text-gray-600 dark:hover:text-neutral-300 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                    className="p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
                   >
                     <XMarkIcon className="h-5 w-5" />
                   </button>
@@ -195,9 +195,9 @@ export default function ProfileImageEditor({
                     <>
                       {/* 프로필: 원형 가이드 오버레이 */}
                       {imageType === 'profile' && (
-                        <div className="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
+                        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
                           <div
-                            className="border-2 border-white/40 border-dashed rounded-full"
+                            className="rounded-full border-2 border-dashed border-white/40"
                             style={{
                               width: '70%',
                               aspectRatio: '1',
@@ -236,17 +236,17 @@ export default function ProfileImageEditor({
                 </div>
 
                 {/* Controls */}
-                <div className="px-5 py-4 space-y-4 border-t border-gray-100 dark:border-neutral-800">
+                <div className="space-y-4 border-t border-gray-100 px-5 py-4 dark:border-neutral-800">
                   {/* Zoom */}
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handleZoomOut}
-                      className="p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                      className="p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
                       aria-label="축소"
                     >
                       <MinusIcon className="h-4 w-4" />
                     </button>
-                    <div className="flex-1 relative">
+                    <div className="relative flex-1">
                       <input
                         type="range"
                         min="0"
@@ -254,26 +254,17 @@ export default function ProfileImageEditor({
                         step="0.05"
                         value={zoomLevel}
                         onChange={handleZoomChange}
-                        className="w-full h-1 bg-gray-200 dark:bg-neutral-700 rounded-full appearance-none cursor-pointer
-                          [&::-webkit-slider-thumb]:appearance-none
-                          [&::-webkit-slider-thumb]:w-3.5
-                          [&::-webkit-slider-thumb]:h-3.5
-                          [&::-webkit-slider-thumb]:rounded-full
-                          [&::-webkit-slider-thumb]:bg-gray-900
-                          [&::-webkit-slider-thumb]:dark:bg-neutral-100
-                          [&::-webkit-slider-thumb]:cursor-pointer
-                          [&::-webkit-slider-thumb]:transition-transform
-                          [&::-webkit-slider-thumb]:hover:scale-110"
+                        className="h-1 w-full cursor-pointer appearance-none rounded-full bg-gray-200 dark:bg-neutral-700 [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gray-900 [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110 [&::-webkit-slider-thumb]:dark:bg-neutral-100"
                       />
                     </div>
                     <button
                       onClick={handleZoomIn}
-                      className="p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                      className="p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
                       aria-label="확대"
                     >
                       <PlusIcon className="h-4 w-4" />
                     </button>
-                    <span className="text-xs text-gray-400 dark:text-neutral-500 w-10 text-right tabular-nums">
+                    <span className="w-10 text-right text-xs tabular-nums text-gray-400 dark:text-neutral-500">
                       {Math.round(zoomLevel * 100)}%
                     </span>
                   </div>
@@ -282,14 +273,14 @@ export default function ProfileImageEditor({
                   <div className="flex gap-2">
                     <button
                       onClick={handleRotateLeft}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors"
+                      className="flex flex-1 items-center justify-center gap-2 bg-gray-50 px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
                     >
                       <ArrowUturnLeftIcon className="h-4 w-4" />
                       <span>좌회전</span>
                     </button>
                     <button
                       onClick={handleRotateRight}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-gray-600 dark:text-neutral-400 bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors"
+                      className="flex flex-1 items-center justify-center gap-2 bg-gray-50 px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100 dark:bg-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-700"
                     >
                       <ArrowPathIcon className="h-4 w-4" />
                       <span>우회전</span>
@@ -297,7 +288,7 @@ export default function ProfileImageEditor({
                   </div>
 
                   {/* Helper text */}
-                  <p className="text-xs text-gray-400 dark:text-neutral-500 text-center">
+                  <p className="text-center text-xs text-gray-400 dark:text-neutral-500">
                     {imageType === 'profile'
                       ? '드래그하여 위치 조정 · 원형 영역이 프로필로 저장됩니다'
                       : '드래그하여 위치 조정'}
@@ -305,16 +296,16 @@ export default function ProfileImageEditor({
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-3 px-5 py-4 border-t border-gray-100 dark:border-neutral-800">
+                <div className="flex gap-3 border-t border-gray-100 px-5 py-4 dark:border-neutral-800">
                   <button
                     onClick={handleCancel}
-                    className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-neutral-400 border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                    className="flex-1 border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 dark:border-neutral-700 dark:text-neutral-400 dark:hover:bg-neutral-800"
                   >
                     취소
                   </button>
                   <button
                     onClick={handleSave}
-                    className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-gray-900 dark:bg-neutral-100 dark:text-neutral-900 hover:bg-gray-800 dark:hover:bg-neutral-200 transition-colors"
+                    className="flex-1 bg-gray-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
                   >
                     저장
                   </button>

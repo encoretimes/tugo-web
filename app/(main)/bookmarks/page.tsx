@@ -11,7 +11,7 @@ export default function BookmarksPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-neutral-950">
-        <div className="sticky top-0 z-10 bg-white dark:bg-neutral-950 border-b border-gray-200 dark:border-neutral-800 p-4">
+        <div className="sticky top-0 z-10 border-b border-gray-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950">
           <h1 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
             보관함
           </h1>
@@ -28,7 +28,7 @@ export default function BookmarksPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-white dark:bg-neutral-950">
-        <div className="sticky top-0 z-10 bg-white dark:bg-neutral-950 border-b border-gray-200 dark:border-neutral-800 p-4">
+        <div className="sticky top-0 z-10 border-b border-gray-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950">
           <h1 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
             보관함
           </h1>
@@ -52,11 +52,11 @@ export default function BookmarksPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
-      <div className="sticky top-0 z-10 bg-white dark:bg-neutral-950 border-b border-gray-200 dark:border-neutral-800 p-4">
+      <div className="sticky top-0 z-10 border-b border-gray-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950">
         <h1 className="text-xl font-bold text-gray-900 dark:text-neutral-100">
           보관함
         </h1>
-        <p className="text-sm text-gray-500 dark:text-neutral-400 mt-1">
+        <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400">
           {data?.totalElements || 0}개의 게시물
         </p>
       </div>
@@ -66,7 +66,7 @@ export default function BookmarksPage() {
           <p className="text-gray-600 dark:text-neutral-400">
             보관한 게시물이 없습니다.
           </p>
-          <p className="text-sm text-gray-500 dark:text-neutral-500 mt-2">
+          <p className="mt-2 text-sm text-gray-500 dark:text-neutral-500">
             게시물의 보관함 아이콘을 눌러 저장하세요.
           </p>
         </div>

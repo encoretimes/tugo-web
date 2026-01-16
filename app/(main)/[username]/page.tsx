@@ -160,10 +160,10 @@ const ProfilePage = () => {
 
   if (isUserLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-neutral-950 animate-in slide-in-from-right duration-300">
+      <div className="animate-in slide-in-from-right min-h-screen bg-white duration-300 dark:bg-neutral-950">
         <div className="flex h-96 items-center justify-center">
           <div className="text-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary-600 border-t-transparent mx-auto mb-4"></div>
+            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-primary-600 border-t-transparent"></div>
             <p className="text-gray-500">프로필을 불러오는 중...</p>
           </div>
         </div>
@@ -173,15 +173,15 @@ const ProfilePage = () => {
 
   if (userError || !user) {
     return (
-      <div className="min-h-screen bg-white dark:bg-neutral-950 animate-in slide-in-from-right duration-300">
+      <div className="animate-in slide-in-from-right min-h-screen bg-white duration-300 dark:bg-neutral-950">
         <div className="flex h-96 items-center justify-center">
           <div className="text-center">
-            <p className="text-gray-500 text-lg mb-4">
+            <p className="mb-4 text-lg text-gray-500">
               사용자를 찾을 수 없습니다.
             </p>
             <button
               onClick={handleBack}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              className="rounded-lg bg-primary-600 px-4 py-2 text-white transition-colors hover:bg-primary-700"
             >
               돌아가기
             </button>
@@ -196,13 +196,13 @@ const ProfilePage = () => {
     posts?.filter((post) => post.mediaUrls && post.mediaUrls.length > 0) || [];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 animate-in slide-in-from-right duration-300">
+    <div className="animate-in slide-in-from-right min-h-screen bg-white duration-300 dark:bg-neutral-950">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm border-b border-gray-200 dark:border-neutral-800">
+      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white/90 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/90">
         <div className="flex items-center px-4 py-3">
           <button
             onClick={handleBack}
-            className="p-2 hover:bg-primary-50 dark:hover:bg-neutral-800 hover:text-primary-600 rounded-full transition-colors"
+            className="rounded-full p-2 transition-colors hover:bg-primary-50 hover:text-primary-600 dark:hover:bg-neutral-800"
           >
             <ArrowLeftIcon className="h-6 w-6 dark:text-neutral-100" />
           </button>
@@ -220,7 +220,7 @@ const ProfilePage = () => {
       {/* Profile Header */}
       <div className="relative">
         {/* Background Image */}
-        <div className="h-48 bg-gray-200 dark:bg-neutral-800 relative overflow-hidden">
+        <div className="relative h-48 overflow-hidden bg-gray-200 dark:bg-neutral-800">
           {user.backgroundImageUrl ? (
             <Image
               src={user.backgroundImageUrl}
@@ -229,7 +229,7 @@ const ProfilePage = () => {
               className="object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-r from-primary-400 to-primary-600" />
+            <div className="h-full w-full bg-gradient-to-r from-primary-400 to-primary-600" />
           )}
         </div>
 
@@ -237,17 +237,17 @@ const ProfilePage = () => {
         <div className="px-4 pb-4">
           {/* Profile Image */}
           <div className="relative -mt-16 mb-4">
-            <div className="w-32 h-32 rounded-full border-4 border-white dark:border-neutral-900 overflow-hidden bg-gray-200 dark:bg-neutral-800">
+            <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-gray-200 dark:border-neutral-900 dark:bg-neutral-800">
               {user.profileImageUrl ? (
                 <Image
                   src={user.profileImageUrl}
                   alt={user.name}
                   width={128}
                   height={128}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-300 dark:bg-neutral-700">
+                <div className="flex h-full w-full items-center justify-center bg-gray-300 dark:bg-neutral-700">
                   <UserIcon className="h-16 w-16 text-gray-500 dark:text-neutral-400" />
                 </div>
               )}
@@ -275,7 +275,7 @@ const ProfilePage = () => {
               <div className="flex gap-2">
                 <button
                   onClick={handleShare}
-                  className="p-2 bg-transparent border border-primary-600 text-gray-900 dark:text-neutral-100 rounded-md hover:bg-primary-50 dark:hover:bg-neutral-800 transition-colors"
+                  className="rounded-md border border-primary-600 bg-transparent p-2 text-gray-900 transition-colors hover:bg-primary-50 dark:text-neutral-100 dark:hover:bg-neutral-800"
                   title="공유하기"
                 >
                   <ShareIcon className="h-4 w-4" />
@@ -283,7 +283,7 @@ const ProfilePage = () => {
                 {!isOwnProfile && (
                   <button
                     onClick={handleSendNote}
-                    className="p-2 bg-transparent border border-primary-600 text-gray-900 dark:text-neutral-100 rounded-md hover:bg-primary-50 dark:hover:bg-neutral-800 transition-colors"
+                    className="rounded-md border border-primary-600 bg-transparent p-2 text-gray-900 transition-colors hover:bg-primary-50 dark:text-neutral-100 dark:hover:bg-neutral-800"
                     title="쪽지 보내기"
                   >
                     <EnvelopeIcon className="h-4 w-4" />
@@ -292,7 +292,7 @@ const ProfilePage = () => {
                 {isOwnProfile && (
                   <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="px-3 py-1.5 text-sm bg-transparent border border-primary-600 text-gray-900 dark:text-neutral-100 font-semibold rounded-md hover:bg-primary-50 dark:hover:bg-neutral-800 transition-colors"
+                    className="rounded-md border border-primary-600 bg-transparent px-3 py-1.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-primary-50 dark:text-neutral-100 dark:hover:bg-neutral-800"
                   >
                     프로필 수정
                   </button>
@@ -355,7 +355,7 @@ const ProfilePage = () => {
         {/* Subscribe Button - only show if not own profile */}
         {!isOwnProfile && (
           <div className="px-4 pb-4">
-            <div className="bg-gray-50 dark:bg-neutral-900 rounded-xl p-4">
+            <div className="rounded-xl bg-gray-50 p-4 dark:bg-neutral-900">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-semibold dark:text-neutral-100">
@@ -370,7 +370,7 @@ const ProfilePage = () => {
                     <button
                       onClick={handleUnsubscribeClick}
                       disabled={unsubscribeMutation.isPending}
-                      className="px-4 py-2 rounded-full text-sm font-semibold bg-gray-200 dark:bg-neutral-700 text-gray-800 dark:text-neutral-200 hover:bg-gray-300 dark:hover:bg-neutral-600 disabled:opacity-50 transition-colors"
+                      className="rounded-full bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-300 disabled:opacity-50 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
                     >
                       {unsubscribeMutation.isPending ? '처리 중...' : '구독 중'}
                     </button>
@@ -378,7 +378,7 @@ const ProfilePage = () => {
                     <button
                       onClick={handleSubscribe}
                       disabled={subscribeMutation.isPending}
-                      className="px-4 py-2 rounded-full text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                      className="rounded-full bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
                     >
                       {subscribeMutation.isPending ? '처리 중...' : '구독'}
                     </button>
@@ -391,24 +391,24 @@ const ProfilePage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200 dark:border-neutral-800 sticky top-[73px] bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm z-10">
+      <div className="sticky top-[73px] z-10 border-b border-gray-200 bg-white/90 backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/90">
         <div className="flex">
           <button
             onClick={() => setActiveTab('posts')}
-            className={`flex-1 p-4 font-semibold text-center transition-colors ${
+            className={`flex-1 p-4 text-center font-semibold transition-colors ${
               activeTab === 'posts'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800'
+                ? 'border-b-2 border-primary-600 text-primary-600'
+                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200'
             }`}
           >
             게시물 {user.stats.posts}
           </button>
           <button
             onClick={() => setActiveTab('media')}
-            className={`flex-1 p-4 font-semibold text-center transition-colors ${
+            className={`flex-1 p-4 text-center font-semibold transition-colors ${
               activeTab === 'media'
-                ? 'text-primary-600 border-b-2 border-primary-600'
-                : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800'
+                ? 'border-b-2 border-primary-600 text-primary-600'
+                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200'
             }`}
           >
             미디어 {user.stats.media}
@@ -416,10 +416,10 @@ const ProfilePage = () => {
           {isOwnProfile && (
             <button
               onClick={() => setActiveTab('archives')}
-              className={`flex-1 p-4 font-semibold text-center transition-colors ${
+              className={`flex-1 p-4 text-center font-semibold transition-colors ${
                 activeTab === 'archives'
-                  ? 'text-primary-600 border-b-2 border-primary-600'
-                  : 'text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 hover:bg-gray-50 dark:hover:bg-neutral-800'
+                  ? 'border-b-2 border-primary-600 text-primary-600'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-200'
               }`}
             >
               보관함 {bookmarksData?.totalElements || 0}
@@ -434,7 +434,7 @@ const ProfilePage = () => {
           <div>
             {isUserLoading ? (
               <div className="p-8 text-center">
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent mx-auto mb-4"></div>
+                <div className="mx-auto mb-4 h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent"></div>
                 <p className="text-gray-500">게시물을 불러오는 중...</p>
               </div>
             ) : posts && posts.length > 0 ? (
@@ -461,7 +461,7 @@ const ProfilePage = () => {
                 {mediaItems.map((post) => (
                   <div
                     key={post.postId}
-                    className="aspect-square relative cursor-pointer hover:opacity-90 transition-opacity group"
+                    className="group relative aspect-square cursor-pointer transition-opacity hover:opacity-90"
                     onClick={() =>
                       router.push(`/@${username}/post/${post.postId}`)
                     }
@@ -470,11 +470,11 @@ const ProfilePage = () => {
                       src={post.mediaUrls![0]}
                       alt="Media"
                       fill
-                      className="object-cover rounded-sm"
+                      className="rounded-sm object-cover"
                     />
                     {/* 다중 이미지 표시 */}
                     {post.mediaUrls && post.mediaUrls.length > 1 && (
-                      <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded">
+                      <div className="absolute right-2 top-2 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white">
                         +{post.mediaUrls.length - 1}
                       </div>
                     )}

@@ -197,7 +197,7 @@ export default function MainLayout({
               <div
                 className={`lg:px-6 ${
                   isNotesPage
-                    ? 'h-full lg:pt-4 lg:h-[calc(100dvh-1rem)]'
+                    ? 'h-full lg:h-[calc(100dvh-1rem)] lg:pt-4'
                     : 'px-0 pt-4'
                 }`}
               >
