@@ -1,14 +1,34 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useMessages, useMarkAsRead, useSendMessage } from '@/hooks/useNotes';
 import { useNotesWebSocket } from '@/hooks/useNotesWebSocket';
 import { useUserStore } from '@/store/userStore';
 import { useQueryClient } from '@tanstack/react-query';
 import MessageBubble from './MessageBubble';
+import DateSeparator from './DateSeparator';
 import { PaperAirplaneIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import type { MessageResponse } from '@/types/notes';
+import { isSameDay, isSameMinute } from '@/lib/date-utils';
+
+/**
+ * 메시지 정렬 함수
+ * - 서버 메시지: messageId 순서로 정렬
+ * - 임시 메시지(Date.now() 범위): 항상 맨 뒤로
+ */
+const sortMessages = (messages: MessageResponse[]): MessageResponse[] => {
+  return [...messages].sort((a, b) => {
+    const aIsTemp = a.messageId > 1e12;
+    const bIsTemp = b.messageId > 1e12;
+
+    if (aIsTemp && !bIsTemp) return 1;
+    if (!aIsTemp && bIsTemp) return -1;
+    if (aIsTemp && bIsTemp) return a.messageId - b.messageId;
+
+    return a.messageId - b.messageId;
+  });
+};
 
 interface ChatRoomProps {
   otherUserId: number;
@@ -57,8 +77,8 @@ export default function ChatRoom({
   useEffect(() => {
     if (messagesData) {
       setRoomId(messagesData.roomId);
-      // 메시지를 오래된 순서로 정렬 (reverse)
-      setMessages([...messagesData.messages].reverse());
+      // 메시지를 messageId 기준으로 정렬
+      setMessages(sortMessages([...messagesData.messages].reverse()));
 
       // 읽음 처리
       if (messagesData.roomId) {
@@ -78,7 +98,8 @@ export default function ChatRoom({
         );
         if (exists) return prev;
 
-        return [...prev, newMessage];
+        // 정렬하여 반환
+        return sortMessages([...prev, newMessage]);
       });
 
       queryClient.invalidateQueries({ queryKey: ['notes', 'rooms'] });
@@ -131,7 +152,7 @@ export default function ChatRoom({
       timestamp: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, optimisticMessage]);
+    setMessages((prev) => sortMessages([...prev, optimisticMessage]));
 
     try {
       const sentMessage = await sendMessageMutation.mutateAsync({
@@ -145,9 +166,9 @@ export default function ChatRoom({
           (msg) => msg.messageId === sentMessage.messageId
         );
         if (alreadyExists) {
-          return withoutTemp;
+          return sortMessages(withoutTemp);
         }
-        return [...withoutTemp, sentMessage];
+        return sortMessages([...withoutTemp, sentMessage]);
       });
     } catch (error) {
       console.error('메시지 전송 실패:', error);
@@ -220,17 +241,51 @@ export default function ChatRoom({
       </div>
 
       {/* 메시지 목록 */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-white dark:bg-neutral-950">
+      <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-white dark:bg-neutral-950">
         {messages.length > 0 ? (
-          messages.map((message) => (
-            <MessageBubble
-              key={message.messageId}
-              message={message}
-              isMyMessage={currentUser?.id === message.senderId}
-              otherUserProfileImage={otherUserProfileImage}
-              otherUserName={otherUserName}
-            />
-          ))
+          messages.map((message, index) => {
+            const prevMessage = messages[index - 1];
+            const nextMessage = messages[index + 1];
+
+            // 날짜 구분선 표시 여부
+            const showDateSeparator =
+              index === 0 ||
+              !isSameDay(prevMessage.timestamp, message.timestamp);
+
+            // 그룹화 판단
+            const isFirstInGroup =
+              !prevMessage ||
+              prevMessage.senderId !== message.senderId ||
+              !isSameMinute(prevMessage.timestamp, message.timestamp) ||
+              showDateSeparator;
+
+            const isLastInGroup =
+              !nextMessage ||
+              nextMessage.senderId !== message.senderId ||
+              !isSameMinute(message.timestamp, nextMessage.timestamp) ||
+              (nextMessage &&
+                !isSameDay(message.timestamp, nextMessage.timestamp));
+
+            // 전송 중 상태 (임시 메시지)
+            const isPending = message.messageId > 1e12;
+
+            return (
+              <React.Fragment key={message.messageId}>
+                {showDateSeparator && (
+                  <DateSeparator date={message.timestamp} />
+                )}
+                <MessageBubble
+                  message={message}
+                  isMyMessage={currentUser?.id === message.senderId}
+                  otherUserProfileImage={otherUserProfileImage}
+                  otherUserName={otherUserName}
+                  isFirstInGroup={isFirstInGroup}
+                  isLastInGroup={isLastInGroup}
+                  isPending={isPending}
+                />
+              </React.Fragment>
+            );
+          })
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="text-gray-500 dark:text-neutral-400">
