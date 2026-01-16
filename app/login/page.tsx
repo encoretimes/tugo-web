@@ -5,30 +5,89 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
 import { getApiUrl, getConfig } from '@/config/env';
+import { apiClient, markLoginSuccess } from '@/lib/api-client';
+import { isPWAStandalone, openOAuthPopup } from '@/lib/oauth-popup';
+
+interface MemberResponse {
+  id: number;
+  email: string;
+  displayName: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  username: string | null;
+}
 
 function LoginContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { setUser } = useUserStore();
   const [isDev, setIsDev] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const returnUrl = searchParams.get('returnUrl');
     if (returnUrl) {
       sessionStorage.setItem('returnUrl', returnUrl);
     }
-    
+
     getConfig().then((config) => {
       setIsDev(config.runtimeEnv === 'development');
     });
   }, [searchParams]);
 
-  const handleSocialLogin = (provider: 'kakao' | 'naver') => {
+  const handleSocialLogin = async (provider: 'kakao' | 'naver') => {
     const apiUrl = getApiUrl();
-    if (provider === 'kakao') {
-      window.location.href = `${apiUrl}/oauth/kakao/login`;
-    } else if (provider === 'naver') {
-      window.location.href = `${apiUrl}/oauth/naver/login`;
+
+    // PWA standalone 모드에서는 팝업 사용
+    if (isPWAStandalone()) {
+      setIsLoading(true);
+      try {
+        const result = await openOAuthPopup(provider);
+
+        if (result.success) {
+          // OAuth 성공 - 사용자 정보 가져오기
+          const userData = await apiClient.get<MemberResponse>(
+            '/api/v1/members/me'
+          );
+          setUser({
+            id: userData.id,
+            displayName: userData.displayName,
+            email: userData.email,
+            role: userData.role,
+            profileImageUrl: null,
+            username: userData.username,
+          });
+
+          // 토큰 갱신 타이머 초기화
+          markLoginSuccess();
+
+          const returnUrl = sessionStorage.getItem('returnUrl');
+          if (returnUrl) {
+            sessionStorage.removeItem('returnUrl');
+            router.push(returnUrl);
+          } else {
+            router.push('/');
+          }
+        }
+      } catch {
+        // 팝업 차단 또는 취소 - 리다이렉트로 폴백
+        console.warn('[Login] Popup OAuth failed, falling back to redirect');
+        if (provider === 'kakao') {
+          window.location.href = `${apiUrl}/oauth/kakao/login`;
+        } else if (provider === 'naver') {
+          window.location.href = `${apiUrl}/oauth/naver/login`;
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      // 일반 브라우저 - 리다이렉트 사용
+      if (provider === 'kakao') {
+        window.location.href = `${apiUrl}/oauth/kakao/login`;
+      } else if (provider === 'naver') {
+        window.location.href = `${apiUrl}/oauth/naver/login`;
+      }
     }
   };
 
@@ -54,6 +113,9 @@ function LoginContent() {
         profileImageUrl: null,
         username: 'developer',
       });
+
+      // 토큰 갱신 타이머 초기화
+      markLoginSuccess();
 
       const returnUrl = sessionStorage.getItem('returnUrl');
       if (returnUrl) {
@@ -170,7 +232,8 @@ function LoginContent() {
             <div className="space-y-3 mb-8">
               <button
                 onClick={() => handleSocialLogin('kakao')}
-                className="w-full flex items-center justify-center gap-3 bg-[#FEE500] text-[#191919] font-medium py-3.5 px-6 rounded-md hover:brightness-95 transition-all"
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-3 bg-[#FEE500] text-[#191919] font-medium py-3.5 px-6 rounded-md hover:brightness-95 transition-all disabled:opacity-50"
               >
                 <svg
                   className="w-5 h-5"
@@ -179,12 +242,13 @@ function LoginContent() {
                 >
                   <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 01-1.727-.11L7.5 21l.11-2.717C4.62 16.93 1.5 14.582 1.5 11.185 1.5 6.665 6.201 3 12 3z" />
                 </svg>
-                <span>카카오로 로그인</span>
+                <span>{isLoading ? '로그인 중...' : '카카오로 로그인'}</span>
               </button>
 
               <button
                 onClick={() => handleSocialLogin('naver')}
-                className="w-full flex items-center justify-center gap-3 bg-[#03C75A] text-white font-medium py-3.5 px-6 rounded-md hover:brightness-95 transition-all"
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-3 bg-[#03C75A] text-white font-medium py-3.5 px-6 rounded-md hover:brightness-95 transition-all disabled:opacity-50"
               >
                 <svg
                   className="w-5 h-5"
@@ -193,7 +257,7 @@ function LoginContent() {
                 >
                   <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
                 </svg>
-                <span>네이버로 로그인</span>
+                <span>{isLoading ? '로그인 중...' : '네이버로 로그인'}</span>
               </button>
             </div>
 

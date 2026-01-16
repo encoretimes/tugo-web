@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, markLoginSuccess } from '@/lib/api-client';
 import { getApiUrl } from '@/config/env';
 
 interface MemberResponse {
@@ -44,6 +44,9 @@ export default function LoginSuccessPage() {
           profileImageUrl: null,
           username: userData.username,
         });
+
+        // 토큰 갱신 타이머 초기화
+        markLoginSuccess();
 
         const returnUrl = sessionStorage.getItem('returnUrl');
         if (returnUrl) {
