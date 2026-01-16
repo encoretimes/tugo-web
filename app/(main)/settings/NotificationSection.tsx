@@ -13,6 +13,7 @@ import {
   AtSymbolIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/outline';
+import PushNotificationToggle from './PushNotificationToggle';
 
 const NotificationSection = () => {
   const { data: preferences, isLoading } = useNotificationPreferences();
@@ -63,6 +64,10 @@ const NotificationSection = () => {
 
   return (
     <div className="space-y-6">
+      {/* 푸시 알림 설정 */}
+      <PushNotificationToggle />
+
+      {/* 알림 유형별 설정 */}
       <div className="bg-white dark:bg-neutral-950 border border-gray-200 dark:border-neutral-800 rounded-lg overflow-hidden">
         {preferences?.map((pref, index) => {
           const config = notificationConfig[pref.notificationType];

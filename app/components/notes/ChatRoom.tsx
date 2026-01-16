@@ -48,14 +48,11 @@ export default function ChatRoom({
   const [roomId, setRoomId] = useState<number | null>(null);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const roomIdRef = useRef<number | null>(null);
   const currentUser = useUserStore((state) => state.user);
+  const currentUserRef = useRef(currentUser);
   const queryClient = useQueryClient();
-
-  // roomId를 ref로 동기화
-  useEffect(() => {
-    roomIdRef.current = roomId;
-  }, [roomId]);
 
   // WebSocket 연결 (실시간 메시지 수신용)
   const { connected, subscribe, unsubscribe } = useNotesWebSocket();
@@ -64,7 +61,21 @@ export default function ChatRoom({
   const { data: messagesData, isLoading, error } = useMessages(otherUserId);
 
   const markAsReadMutation = useMarkAsRead();
+  const markAsReadRef = useRef(markAsReadMutation);
   const sendMessageMutation = useSendMessage();
+
+  // ref 동기화 (의존성 안정화)
+  useEffect(() => {
+    roomIdRef.current = roomId;
+  }, [roomId]);
+
+  useEffect(() => {
+    currentUserRef.current = currentUser;
+  }, [currentUser]);
+
+  useEffect(() => {
+    markAsReadRef.current = markAsReadMutation;
+  }, [markAsReadMutation]);
 
   // otherUserId가 변경되면 상태 리셋
   useEffect(() => {
@@ -88,7 +99,7 @@ export default function ChatRoom({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messagesData]);
 
-  // WebSocket 메시지 수신 핸들러
+  // WebSocket 메시지 수신 핸들러 (ref 사용으로 의존성 최소화)
   const handleWebSocketMessage = useCallback(
     (newMessage: MessageResponse) => {
       setMessages((prev) => {
@@ -104,15 +115,12 @@ export default function ChatRoom({
 
       queryClient.invalidateQueries({ queryKey: ['notes', 'rooms'] });
 
-      if (
-        currentUser &&
-        newMessage.senderId !== currentUser.id &&
-        roomIdRef.current
-      ) {
-        markAsReadMutation.mutate(roomIdRef.current);
+      const user = currentUserRef.current;
+      if (user && newMessage.senderId !== user.id && roomIdRef.current) {
+        markAsReadRef.current.mutate(roomIdRef.current);
       }
     },
-    [currentUser, queryClient, markAsReadMutation]
+    [queryClient]
   );
 
   useEffect(() => {
@@ -178,6 +186,10 @@ export default function ChatRoom({
       setInputValue(content);
     } finally {
       setIsSending(false);
+      // 전송 후 입력창에 포커스 유지
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
     }
   };
 
@@ -300,18 +312,19 @@ export default function ChatRoom({
       <div className="flex-shrink-0 border-t border-gray-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-950">
         <div className="flex gap-2 mb-safe">
           <input
+            ref={inputRef}
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="메시지를 입력하세요..."
-            className="flex-1 border border-gray-300 dark:border-neutral-700 rounded-full px-4 py-2.5 bg-gray-100 dark:bg-neutral-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            disabled={!roomId || isSending}
+            className="flex-1 border border-gray-300 dark:border-neutral-800 rounded-full px-4 py-2.5 bg-gray-100 dark:bg-neutral-950 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-neutral-400 focus:outline-none"
+            disabled={!roomId}
           />
           <button
             onClick={handleSend}
             disabled={!inputValue.trim() || !roomId || isSending}
-            className="bg-primary-600 text-white px-4 py-2.5 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition flex items-center gap-2"
+            className="bg-neutral-900 dark:bg-neutral-950 dark:border dark:border-neutral-800 text-white px-4 py-2.5 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-800 dark:hover:bg-neutral-900 transition flex items-center gap-2"
           >
             <PaperAirplaneIcon className="h-5 w-5" />
             <span className="hidden sm:inline">전송</span>
