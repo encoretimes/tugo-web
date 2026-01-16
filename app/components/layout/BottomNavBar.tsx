@@ -33,6 +33,11 @@ const BottomNavBar: FC = () => {
   const { openComposer } = useComposerStore();
   const { data: unreadCount } = useUnreadCount();
 
+  // 쪽지 페이지에서는 하단 네비게이션 숨김 (채팅 UI 공간 확보)
+  if (pathname === '/notes') {
+    return null;
+  }
+
   const profileHref = user?.username ? `/@${user.username}` : '/login';
   const notificationBadge =
     unreadCount !== undefined && unreadCount > 0 ? unreadCount : undefined;

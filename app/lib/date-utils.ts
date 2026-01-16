@@ -101,3 +101,174 @@ export function formatRelativeTime(
     return '날짜 오류';
   }
 }
+
+/**
+ * 쪽지 목록용 시간 포맷
+ *
+ * @param isoTimestamp - ISO 8601 timestamp string
+ * @returns Formatted time string for room list
+ *
+ * Format rules:
+ * - 오늘: "HH:mm" (예: "14:30")
+ * - 어제: "어제"
+ * - 올해 내: "M월 D일" (예: "1월 15일")
+ * - 작년 이전: "YYYY.M.D" (예: "2024.12.15")
+ */
+export function formatRoomListTime(
+  isoTimestamp: string | undefined | null
+): string {
+  try {
+    if (!isoTimestamp) {
+      return '';
+    }
+
+    const now = new Date();
+    const target = new Date(isoTimestamp);
+
+    if (isNaN(target.getTime())) {
+      return '';
+    }
+
+    const isToday =
+      now.getFullYear() === target.getFullYear() &&
+      now.getMonth() === target.getMonth() &&
+      now.getDate() === target.getDate();
+
+    if (isToday) {
+      const hours = target.getHours().toString().padStart(2, '0');
+      const minutes = target.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday =
+      yesterday.getFullYear() === target.getFullYear() &&
+      yesterday.getMonth() === target.getMonth() &&
+      yesterday.getDate() === target.getDate();
+
+    if (isYesterday) {
+      return '어제';
+    }
+
+    const isSameYear = now.getFullYear() === target.getFullYear();
+
+    if (isSameYear) {
+      return `${target.getMonth() + 1}월 ${target.getDate()}일`;
+    }
+
+    return `${target.getFullYear()}.${target.getMonth() + 1}.${target.getDate()}`;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * 날짜 구분선용 포맷
+ *
+ * @param isoTimestamp - ISO 8601 timestamp string
+ * @returns Formatted date string for date separator
+ *
+ * Format rules:
+ * - 오늘: "오늘"
+ * - 어제: "어제"
+ * - 올해 내: "M월 D일 요일" (예: "1월 15일 수요일")
+ * - 작년 이전: "YYYY년 M월 D일 요일" (예: "2024년 12월 15일 일요일")
+ */
+export function formatDateSeparator(isoTimestamp: string): string {
+  try {
+    const now = new Date();
+    const target = new Date(isoTimestamp);
+
+    if (isNaN(target.getTime())) {
+      return '';
+    }
+
+    const weekdays = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+    const weekday = weekdays[target.getDay()];
+
+    const isToday =
+      now.getFullYear() === target.getFullYear() &&
+      now.getMonth() === target.getMonth() &&
+      now.getDate() === target.getDate();
+
+    if (isToday) {
+      return '오늘';
+    }
+
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday =
+      yesterday.getFullYear() === target.getFullYear() &&
+      yesterday.getMonth() === target.getMonth() &&
+      yesterday.getDate() === target.getDate();
+
+    if (isYesterday) {
+      return '어제';
+    }
+
+    const isSameYear = now.getFullYear() === target.getFullYear();
+
+    if (isSameYear) {
+      return `${target.getMonth() + 1}월 ${target.getDate()}일 ${weekday}`;
+    }
+
+    return `${target.getFullYear()}년 ${target.getMonth() + 1}월 ${target.getDate()}일 ${weekday}`;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * 두 타임스탬프가 같은 날짜인지 확인
+ *
+ * @param ts1 - First ISO 8601 timestamp
+ * @param ts2 - Second ISO 8601 timestamp
+ * @returns true if both timestamps are on the same day
+ */
+export function isSameDay(ts1: string, ts2: string): boolean {
+  try {
+    const d1 = new Date(ts1);
+    const d2 = new Date(ts2);
+
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+      return false;
+    }
+
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * 두 타임스탬프가 같은 분인지 확인 (메시지 그룹화용)
+ *
+ * @param ts1 - First ISO 8601 timestamp
+ * @param ts2 - Second ISO 8601 timestamp
+ * @returns true if both timestamps are within the same minute
+ */
+export function isSameMinute(ts1: string, ts2: string): boolean {
+  try {
+    const d1 = new Date(ts1);
+    const d2 = new Date(ts2);
+
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+      return false;
+    }
+
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate() &&
+      d1.getHours() === d2.getHours() &&
+      d1.getMinutes() === d2.getMinutes()
+    );
+  } catch {
+    return false;
+  }
+}
